@@ -1,0 +1,11 @@
+seed 0 done in 1.5s; n_react=15, T=2368
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e4_het0.0.json
+seed 0 done in 1.4s; n_react=15, T=2368
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e4_het0.5.json
+seed 0 done in 1.4s; n_react=15, T=2368
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e4_het1.0.json
+seed 0 done in 1.4s; n_react=15, T=2368
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e4_het1.5.json
+seed 0 done in 1.4s; n_react=15, T=2368
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e4_het2.0.json
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e4_heterogeneity_sweep.json

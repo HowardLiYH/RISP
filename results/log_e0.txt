@@ -1,0 +1,5 @@
+crypto L1 -1.4650790540725973 % gap
+crypto L2 -0.6585575215256405 % gap
+commodities L1 -0.25307707753667175 % gap
+commodities L2 0.16393301314720637 % gap
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e0_structure_diagnostic.json

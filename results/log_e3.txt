@@ -1,0 +1,6 @@
+D=21 done
+D=63 done
+D=126 done
+D=252 done
+D=504 done
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e3_dormancy_sweep.json

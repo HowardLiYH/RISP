@@ -1,0 +1,174 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\setlist{nosep,leftmargin=1.6em}
+
+\newcommand{\gate}[1]{\textcolor{red!70!black}{\textbf{[GATE: #1]}}}
+\newcommand{\nm}{\textsc{RISP}}
+\newcommand{\est}[1]{\textcolor{blue!50!black}{\emph{#1}}}
+
+\title{\textbf{\nm{} (Idea 1) --- Next Steps, Deferred Items \& Costs,\\ and a Frank Quality Review}\\[4pt]
+\large Companion to \texttt{EXECUTION\_PLAN.md}; status as of the June 11, 2026 build}
+\author{Yuhao Li (University of Pennsylvania)}
+\date{June 11, 2026}
+
+\begin{document}
+\maketitle
+
+\section{Where the Project Stands}
+One build session produced the full first-iteration stack: theory with complete proofs
+(decomposition, eviction-rate dichotomy, KL$\to$regret Pinsker bridge, break-even
+dormancy), a seeded reproducible codebase (eleven arms, six experiment families,
+$\sim$1{,}600 lines, laptop-scale), and three compiled documents---\texttt{main.pdf}
+(19\,pp), \texttt{RISP Explainer.pdf} (18\,pp), \texttt{Deep Dive.pdf}
+(80\,pp)---with every number traced to a results JSON and a 46-point numeric audit
+passed. The headline $2{\times}2$ dissociation is confirmed in controlled markets
+(retention $-6.1\%$, $p{=}1.3{\times}10^{-3}$; invariance $-4.4\%$,
+$p{=}6.1{\times}10^{-3}$; super-additive interaction with the predicted inert cell,
+$p{=}0.88$; skyline matched at $p{=}0.72$), and three honest negative results are
+reported at full prominence (the real-data structure gate fails on available panels;
+the batching prediction was refuted; the mechanism inverts at high signal-to-noise).
+
+\section{What To Do Next (priority order)}
+\begin{enumerate}
+  \item \textbf{Submit the WRDS/CRSP request now.} The flagship claim of the roadmap
+  (post-reactivation regret on S\&P~500 constituents, 1990--2025, with
+  2000/2008/2011/2015/2018/2020/2022 as crisis episodes) is the single experiment that
+  decides whether this is an ICAIF/JFDS methodology paper or an AAAI/KDD-grade
+  result. Everything is pre-registered and the code is panel-agnostic; the binding
+  constraint is data-access lead time (typically 2--6 weeks at Penn), not engineering.
+  \gate{E0 on equities decides the paper's final framing (F1 vs.\ headline-real).}
+  \item \textbf{Re-run the E0 gate where it might pass, using data already on disk.}
+  Intraday crypto (1H/4H/15m Bybit bars are in \texttt{GAUSE/data}) multiplies episode
+  counts and changes the SNR regime; a richer feature inventory (carry, term structure,
+  cross-sectional rank features) is a free upgrade. One week of work, zero dollars.
+  An intraday pass would give a constructive real-data demonstration without WRDS.
+  \item \textbf{Harden the decision layer for generality.} Replace the solver-trivial
+  top-$k$ portfolio with (a) a true knapsack (general budgets/weights) and (b) the
+  execution-scheduling shortest-path task, via Gurobi (free academic license) or
+  OR-Tools (free). This pre-empts the predictable PnO-reviewer objection that linear
+  top-$k$ makes decision-focused learning easy. 1--2 weeks.
+  \item \textbf{The staleness trigger (E6 remedy).} The high-SNR inversion is currently
+  a measured boundary; GAUSE's staleness trigger (re-open competition on confident
+  underperformance) is the known fix. Implementing it and showing the inversion
+  shrinks would convert the audit's worst cell into a design recommendation. 1 week.
+  \item \textbf{Scale the statistical battery for submission.} 50--100 seeds on E1--E6
+  (hours of laptop time), nested walk-forward for $\beta, \eta, \lambda$, and---once
+  any real panel passes the gate---the pre-committed DSR/SPA/transaction-cost battery.
+  \item \textbf{Theory polish.} (a) Uniform-convergence version of the episode-transfer
+  lemma for linear heads (covering-number argument; removes the plug-in caveat at the
+  cost of a complexity term); (b) decide the Inv-PnCO coauthor invitation
+  \gate{by Jul 1, per roadmap}---it affects framing and theory credibility.
+  \item \textbf{Author read-through of the Deep Dive.} The 80-page document was
+  assembled from parallel-drafted parts; numbers and compilation are audited, but a
+  single careful human pass for seam consistency and voice is the remaining quality
+  step I could not substitute for.
+  \item \textbf{Packaging:} timestamped pre-registration appendix (OSF, free), public
+  repo, ICAIF-26 workshop version as the visibility play while the winter-cycle
+  (AAAI-27/KDD-27) version waits on equities.
+\end{enumerate}
+
+\section{Not Done Due to Expense (with approximate costs)}
+All prices are \est{approximate, from memory as of early 2026---verify current
+pricing before budgeting}. The build deliberately spent \$0.
+
+\begin{center}\small
+\begin{tabular}{@{}p{5.6cm}p{3.4cm}p{6.2cm}@{}}
+\toprule
+\textbf{Deferred item} & \textbf{Approx.\ cost} & \textbf{Notes / cheaper path}\\
+\midrule
+CRSP survivorship-bias-free equity panel & \est{\$0 via Penn WRDS}; commercial \est{\$5k--40k/yr} & Free path is institutional access; the real cost is 2--6 weeks lead time. This is the highest-value deferred item.\\
+Survivorship-aware equity data, no WRDS & \est{\$300--1{,}200/yr} (Norgate, Sharadar/Nasdaq Data Link, EODHD tiers) & Acceptable fallback for the constituents panel; document survivorship handling carefully.\\
+Cross-asset episodes (credit, FX, futures beyond FRED) & \est{\$0--3k/yr} free-tier to mid-tier vendors; Bloomberg/Refinitiv \est{\$25k+/yr} & The cross-asset invariance upgrade (stronger claim) needs aligned multi-asset panels; G10 FX dailies are nearly free, credit indices are not.\\
+Neural specialists (small MLP heads) at scale, 100 seeds & \est{\$200--500} cloud GPU or days on a workstation & Roadmap's own estimate; linear heads were chosen so the mechanism, not capacity of the function class, drives results---neural replication is a robustness item.\\
+Intraday tick/order-book data for execution tasks & \est{\$1k--10k+} depending on venue & Only needed if the execution-scheduling decision layer becomes a headline rather than robustness check.\\
+Large-scale ablation grid (all sweeps $\times$ both memory models $\times$ 100 seeds) & \est{\$0--100} (compute time only) & Deferred for time, not money; do before camera-ready.\\
+Professional copy-edit of the 117 combined pages & \est{\$300--800} & Optional; the author pass (item 7 above) comes first.\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Items \emph{not} deferred by cost but by scope discipline: the LLM-agent bridge to
+Idea~3 (roadmap F5 caps it at one future-work paragraph), and the class-incremental
+(label-free) variant, which GAUSE showed collapsing under real feature overlap---a
+research risk, not a line item.
+
+\section{Frank Quality Review}
+
+\subsection{What is genuinely strong}
+\begin{itemize}
+  \item \textbf{The falsifiable core held.} The $2{\times}2$ was pre-registered with a
+  distinctive signature---invariance inert in the reward-driven row---that a generic
+  ``both tricks help'' account would not predict. It confirmed at $p{=}0.88$ (inertness)
+  and the per-seed interaction CI excludes zero. Matching the hand-pinned oracle
+  ($p{=}0.72$) without being given the assignment is the single best result.
+  \item \textbf{The honesty infrastructure is real, not decorative.} Two pre-registered
+  predictions were refuted by our own ablations and are reported as findings; the E0
+  gate failed on real data and the paper ships the null prominently. The E6 inversion
+  (mechanism loses $49\%$ at high SNR) is the kind of result authors usually bury;
+  here it is an audit axis with a measured crossover. This is the part of the work I
+  would defend hardest.
+  \item \textbf{Reproducibility discipline.} Every number traces to a seeded JSON; the
+  full battery reruns in under an hour; the soft-memory bug found mid-build was fixed,
+  rerun, and documented rather than papered over.
+  \item \textbf{Theory--experiment coupling.} The decomposition's two knobs map
+  one-to-one onto the experiment's two axes, and the one place theory and data
+  disagreed (batching) is resolved in the text with the corrected mechanism story.
+\end{itemize}
+
+\subsection{Weaknesses and risks (the referee's view)}
+\begin{itemize}
+  \item \textbf{The headline is synthetic, and the real-data result is a null.} This is
+  the central limitation. As it stands the paper is a controlled-study-plus-protocol
+  contribution (roadmap fallback F1), not a demonstrated market result. A top-venue
+  reviewer can accept that framing or reject it as ``simulation paper''; the equities
+  gate decides which. \emph{It is too early to know whether the mechanism pays on any
+  real market---that question is empirically open until the intraday and equities E0
+  runs.}
+  \item \textbf{Effect sizes are modest in raw terms.} $10.3\%$ post-reactivation
+  ($38\%$ of the closable excess) is honest and statistically solid but far from
+  GAUSE's $+71\%$; daily-frequency noise floors compress everything. Reviewers
+  anchored on big numbers will need the excess-over-floor framing, which we provide,
+  but it is a framing.
+  \item \textbf{The decision layer is solver-trivial.} Linear top-$k$ keeps the PnO
+  structure but the strongest PnO reviewers will ask for a hard combinatorial layer
+  (knapsack, scheduling) before crediting generality. Planned (item 3), not done.
+  \item \textbf{Idealized theory.} The plug-in caveat on the transfer lemma, no
+  convergence theorem for the coupled winner-take-all dynamics, and an A3
+  (capital-allocator) model that practitioners could dispute as stylized. All flagged
+  in-text; none resolved.
+  \item \textbf{Single-session authorship of 117 pages.} The Deep Dive's parts were
+  drafted in parallel and machine-audited for numbers and compilation, but it has not
+  had a cover-to-cover human read; seam-level inconsistencies of voice or emphasis may
+  remain. The main paper at 19\,pp also needs restructuring into a 9--10\,pp body plus
+  appendix for any NeurIPS/AAAI-format submission.
+  \item \textbf{Smaller wrinkles, all disclosed:} the crisis regime never formally pins
+  (affinity $0.67$--$0.87$; ownership is stable, but the pin rule needs a
+  scarce-regime variant); the E1s stitching breaks cross-block dependence; the E0 null
+  is bounded to small universes, daily bars, two labelers, and one feature inventory.
+\end{itemize}
+
+\subsection{Verdict}
+The work is a \textbf{strong, unusually honest first iteration}---publishable on the
+methodology-plus-controlled-study framing at ICAIF/JFDS level now, with a credible
+path to AAAI/KDD/Management-Science level \emph{if and only if} a real panel passes
+the E0 gate and reproduces even half the synthetic dissociation. The theory, code,
+protocol, and writing are not the bottleneck; data access is. Whether it becomes the
+``masterpiece with great academic contribution'' of the original brief is therefore
+not yet knowable, and saying so plainly is part of the standard the project set for
+itself: the diagnostic-first protocol applies to the project as much as to the
+markets it studies. Recommended decision sequence: WRDS request today; intraday E0
+within two weeks; framing decision (F1 vs.\ headline-real) when both gates report;
+coauthor decision Jul~1; venue decision Aug~1.
+
+\end{document}

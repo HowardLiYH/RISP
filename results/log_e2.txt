@@ -1,0 +1,17 @@
+seed 0 done in 2.1s; n_react=15, T=2368
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e2_K1_hard.json
+seed 0 done in 2.2s; n_react=15, T=2368
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e2_K2_hard.json
+seed 0 done in 2.5s; n_react=15, T=2368
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e2_K3_hard.json
+seed 0 done in 2.1s; n_react=15, T=2368
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e2_K4_hard.json
+seed 0 done in 2.1s; n_react=15, T=2368
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e2_K1_soft.json
+seed 0 done in 2.4s; n_react=15, T=2368
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e2_K2_soft.json
+seed 0 done in 2.1s; n_react=15, T=2368
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e2_K3_soft.json
+seed 0 done in 2.1s; n_react=15, T=2368
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e2_K4_soft.json
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e2_capacity_sweep.json

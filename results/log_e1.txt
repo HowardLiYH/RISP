@@ -1,0 +1,2 @@
+seed 0 done in 3.7s; n_react=15, T=2368
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e1_synth.json

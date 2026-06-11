@@ -1,0 +1,153 @@
+\documentclass[11pt,a4paper]{article}
+
+% ============================================================================
+% PACKAGES (matching the GAUSE method deep-dive)
+% ============================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[numbers]{natbib}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,patterns,decorations.pathreplacing,shapes.geometric,arrows.meta,fit,backgrounds,intersections}
+\usepackage{colortbl}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepgfplotslibrary{fillbetween}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+% ============================================================================
+% THEOREM ENVIRONMENTS
+% ============================================================================
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{remark}{Remark}[section]
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+
+% ============================================================================
+% CUSTOM COMMANDS
+% ============================================================================
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\KL}{\mathrm{KL}}
+\newcommand{\TV}{\mathrm{TV}}
+\newcommand{\nm}{\textsc{RISP}}
+\newcommand{\Ginv}{G_{\mathrm{inv}}}
+\newcommand{\Gforget}{G_{\mathrm{forget}}}
+\newcommand{\argmax}{\operatornamewithlimits{arg\,max}}
+\newcommand{\argmin}{\operatornamewithlimits{arg\,min}}
+
+% Code listing style
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    breaklines=true,
+    captionpos=b
+}
+
+% Colored boxes for intuition
+\newtcolorbox{intuition}[1][]{
+    colback=blue!5!white,
+    colframe=blue!75!black,
+    fonttitle=\bfseries,
+    title=Intuition,
+    #1
+}
+
+\newtcolorbox{keypoint}[1][]{
+    colback=green!5!white,
+    colframe=green!50!black,
+    fonttitle=\bfseries,
+    title=Key Point,
+    #1
+}
+
+\newtcolorbox{warning}[1][]{
+    colback=red!5!white,
+    colframe=red!75!black,
+    fonttitle=\bfseries,
+    title=Important,
+    #1
+}
+
+% ============================================================================
+% DOCUMENT
+% ============================================================================
+\title{\Huge\textbf{\nm{}: A Mathematical Deep Dive}\\[0.5cm]
+\Large Retention and Invariance in Decision-Focused\\
+Strategy Pools for Non-Stationary Markets}
+
+\author{Yuhao Li\\
+University of Pennsylvania\\
+\texttt{li88@sas.upenn.edu}}
+
+\date{June 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This document is the exhaustive, ground-up mathematical companion to the
+\nm{} research paper (\emph{When the Regime Returns}) and its explanatory
+report. It develops, from first principles, every tool the framework's
+theory uses---decision-focused learning and the SPO+ surrogate,
+concentration of measure, distances between distributions and Pinsker's
+inequality, exponentiated-gradient dynamics, and invariant risk across
+environments---then assembles them into the four results that organize the
+contribution: the episode-transfer lemma (the invariance gap), the
+eviction-rate lemma (the forgetting deficit), the post-reactivation regret
+decomposition with its predicted-and-confirmed super-additive interaction,
+and the break-even-dormancy pricing of retention against carrying costs.
+The framework's central claim is that financial non-stationarity is
+two-layered---regimes \emph{recur} (so dormant expertise is worth
+retaining, and any reward-driven capacity allocator provably fails to
+retain it) and recurrences \emph{differ} (so retained expertise must be
+trained for across-episode invariance, or it faithfully preserves the last
+episode's accidents)---and that the two layers are governed by independent
+design choices whose product, but not either factor alone, recovers a
+hand-designed oracle assignment without hand design. Every theoretical
+statement is given with its full proof or an explicitly labeled sketch;
+every assumption carries an audit of its idealizations; every experimental
+number in the evidence part traces to a released result file; and the
+document reports, at full prominence, the three places where our
+pre-registered expectations were refuted by our own experiments (the
+real-data structure gate, the competition-batching story, and the
+high-signal regime where the entire mechanism inverts). \textbf{Prerequisites:}
+probability at the level of a first graduate course, linear algebra, and
+convexity basics; everything else is developed here.
+\end{abstract}
+
+\tableofcontents
+\newpage
+

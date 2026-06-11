@@ -1,0 +1,7 @@
+{
+ "covering_seeds": 20,
+ "crisis_alpha_min": 0.6684953737924849,
+ "crisis_alpha_max": 0.8700485065614078,
+ "pinned_min": 3,
+ "pinned_max": 3
+}

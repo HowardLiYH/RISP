@@ -1,0 +1,416 @@
+% ============================================================================
+% PART IV: THE THEORY IN FULL (author-written; precision-critical)
+% ============================================================================
+\part{The Theory in Full}
+
+This part assembles the foundations of Part~I into the four results that
+organize the \nm{} account: the episode-transfer lemma controlling the
+invariance gap, the eviction-rate lemma controlling the forgetting
+deficit, the decomposition proposition that yields the $2{\times}2$
+prediction (including its super-additive signature), and the break-even
+proposition that prices retention against carrying costs. We close with
+the Gaussian construction that exhibits ERM's across-episode failure in
+closed form, and with the honest remarks on what the coupled competition
+dynamics are \emph{not} proven to do. Throughout, the register is that of
+the GAUSE companion theory \cite{li2026gause}: idealized-model results
+that explain mechanisms and generate falsifiable orderings, with the
+quantitative weight carried by the controlled experiments of Part~V.
+
+\section{Assumptions, Stated and Audited}
+\label{sec:dd4-assumptions}
+
+\begin{definition}[Episode risk]
+\label{def:dd4-risk}
+For regime $r$, episode environment $\xi$ with law $P_\xi$ on
+$\mathcal{X} \times \mathcal{Y}$, and head $w$, the episode risk is
+$L_\xi(w) = \E_{(x,y) \sim P_\xi}[\rho(Xw;\, y)]$, with $\rho$ the
+decision regret of Part~I, $\rho \in [0, B]$,
+$B = 2 k\, w_{\max}\, y_{\max}$.
+\end{definition}
+
+\begin{definition}[Assumption A1: episode exchangeability]
+\label{def:dd4-a1}
+For each regime $r$ there is a hyper-distribution $Q_r$ over episode
+environments such that the historical episodes
+$\xi_{r,1}, \dots, \xi_{r,E_r}$ and the deployed episode $\xi_{r,e'}$
+are i.i.d.\ draws from $Q_r$. Write
+$\mu_r(w) = \E_{\xi \sim Q_r} L_\xi(w)$ and
+$\sigma_r^2(w) = \Var_{\xi \sim Q_r} L_\xi(w)$.
+\end{definition}
+
+\begin{warning}
+A1 idealizes twice. \emph{Independence} fails when macro memory links
+episodes (the 2011 crisis is causally downstream of 2008); \emph{identical
+distribution} fails under secular drift (market microstructure in 1998
+differs from 2020 in ways no regime label captures). We use A1 exactly as
+Inv-PnCO uses its environment assumption \cite{yan2026invpnco}: as the
+formal rendering of ``the next crisis is a fresh draw from the crisis
+distribution,'' with the experiments designed so that A1 holds by
+construction (the synthetic generator) and the limitations section of the
+companion paper carrying the real-world caveat. Nothing in this part
+silently strengthens A1.
+\end{warning}
+
+\begin{definition}[Assumption A2: dormancy and foreign updates]
+\label{def:dd4-a2}
+While regime $r$ is dormant for $D$ steps, an allocation mechanism $A$
+routes learning. $A$ is \emph{reward-driven} if the specialist holding
+$r$ is made to learn a currently active regime with per-step probability
+at least $p > 0$; $A$ is \emph{reward-independent} if the assignment of
+$r$ is measurable with respect to information independent of the
+realized reward stream and, at convergence, routes to $r$'s owner only
+regimes in its fixed niche set.
+\end{definition}
+
+The $p > 0$ clause is not vacuous bookkeeping: it is verified \emph{by
+construction} for each reward-driven arm in our inventory (the monolith
+learns the active regime with probability $1$; the router's
+$\epsilon$-greedy exploration plus reward-chasing gate gives
+$p \ge \epsilon / N$; the recent-performance allocator's softmax floor
+gives $p \ge v_{\min} > 0$), and it is exactly the quantity a fund can
+audit in its own allocator: \emph{what fraction of a losing desk's
+capacity is reassigned per period?}
+
+\section{The Invariance Gap}
+\label{sec:dd4-invgap}
+
+\begin{lemma}[Episode transfer]
+\label{lem:dd4-transfer}
+Under A1, for any fixed head $w$ and any $\delta \in (0, 1]$, with
+probability at least $1 - \delta$ over $\xi_{e'} \sim Q_r$,
+\[
+  L_{\xi_{e'}}(w) \;\le\; \mu_r(w) +
+  \sigma_r(w)\,\sqrt{\tfrac{1-\delta}{\delta}}
+  \;\le\; \mu_r(w) + \frac{\sigma_r(w)}{\sqrt{\delta}} .
+\]
+\end{lemma}
+
+\begin{proof}
+Cantelli's inequality (Part~I) applied to the real random variable
+$Z = L_\xi(w)$, $\xi \sim Q_r$, which has mean $\mu_r(w)$ and variance
+$\sigma_r^2(w)$: for $\tau > 0$,
+$\Pr[Z - \mu_r \ge \tau] \le \sigma_r^2 / (\sigma_r^2 + \tau^2)$.
+Setting the right side to $\delta$ and solving,
+$\tau = \sigma_r \sqrt{(1-\delta)/\delta}$, which is at most
+$\sigma_r / \sqrt{\delta}$. No boundedness or distributional shape is
+used; only the existence of the second moment, guaranteed by
+$Z \in [0, B]$.
+\end{proof}
+
+\begin{keypoint}
+The bound is monotone in \emph{both} $\mu_r(w)$ and $\sigma_r(w)$, and in
+nothing else. Any training objective that drives the pair
+$(\mu_r, \sigma_r)$ toward the lower-left of its Pareto frontier
+optimizes the guarantee; the \nm{} objective
+$\Var_e + \beta\,\E_e$ is the Lagrangian scalarization of exactly that
+frontier, with $\beta$ the exchange rate. For each tail level $\delta$
+there is a $\beta(\delta)$ whose minimizer over any convex model class
+attains the frontier point optimizing the Lemma's bound (standard
+scalarization; for non-convex classes the scalarization reaches the
+convex hull of the frontier, a caveat we inherit silently from every
+penalty method in the invariance literature \cite{krueger2021rex}).
+\end{keypoint}
+
+\begin{lemma}[Estimation price of few episodes]
+\label{lem:dd4-estimation}
+Fix $w$. With $E_r$ training episodes drawn i.i.d.\ from $Q_r$ and
+$\hat\mu_r(w)$, $\hat\sigma_r(w)$ the empirical mean and standard
+deviation of $\{L_{\xi_e}(w)\}_{e=1}^{E_r}$: for any
+$\delta \in (0, 1)$, with probability at least $1 - \delta$,
+\[
+  |\hat\mu_r(w) - \mu_r(w)| \;\le\; B \sqrt{\frac{\log(2/\delta)}{2 E_r}},
+  \qquad
+  |\hat\sigma_r(w) - \sigma_r(w)| \;\le\; B \sqrt{\frac{2 \log(2/\delta)}{E_r - 1}} .
+\]
+\end{lemma}
+
+\begin{proof}
+The mean bound is Hoeffding's inequality (Part~I) for i.i.d.\
+$[0, B]$-valued variables. For the deviation bound, note that the
+empirical standard deviation of $[0,B]$-bounded variables is a function
+of the sample with bounded differences: replacing one $L_{\xi_e}$ changes
+$\hat\sigma_r$ by at most $B / \sqrt{E_r - 1}$ (each summand
+$(L_e - \hat\mu)^2$ moves by at most $B^2$ terms damped by the
+$1/(E_r{-}1)$ normalization; a one-line calculation, or see
+\cite{maurer2009empirical} for the sharper empirical-Bernstein form).
+McDiarmid's inequality then gives the stated tail, and
+$\E[\hat\sigma_r] \le \sigma_r$ plus the same concentration controls the
+bias direction.
+\end{proof}
+
+\begin{warning}[title={Important: the plug-in caveat}]
+Lemmas~\ref{lem:dd4-transfer}--\ref{lem:dd4-estimation} hold for
+\emph{fixed} $w$. The trained head $\hat w_r$ is a function of the
+training episodes, so applying them at $w = \hat w_r$ is a plug-in
+heuristic, not a uniform-convergence guarantee; making it uniform costs
+a complexity term over the head class (linear heads in $d = 20$
+dimensions would admit a standard covering-number argument) that we do
+not need for the mechanism claims and therefore do not carry. This is
+the same register at which Inv-PnCO deploys its Theorem~1, and we flag
+rather than hide it. The practical content survives untouched: with
+$E_r = 6$ episodes and $B = 0.4$, the mean's estimation radius at
+$\delta = 0.1$ is $B\sqrt{\log 20 / 12} \approx 0.20$---half the regret
+range---which is the formal statement of \emph{why} crisis-grade
+invariance cannot be certified from six episodes alone and why the
+sub-episode and cross-asset enlargements of Part~II are design defaults
+rather than afterthoughts.
+\end{warning}
+
+\begin{corollary}[Bridge to divergence-style guarantees]
+\label{cor:dd4-bridge}
+If a representation $\Phi$ renders episode laws $\varepsilon$-invariant
+in KL---$\KL(P_\xi(\cdot \mid \Phi)\, \|\, \bar P_r(\cdot \mid \Phi))
+\le \varepsilon$ for $Q_r$-almost-every $\xi$---then every head $w$
+factoring through $\Phi$ satisfies
+$\sup_\xi |L_\xi(w) - \bar L_r(w)| \le B\sqrt{\varepsilon/2}$, hence
+$\sigma_r(w) \le B\sqrt{\varepsilon/2}$, and
+Lemma~\ref{lem:dd4-transfer} applies with that variance.
+\end{corollary}
+
+\begin{proof}
+Immediate from the divergence-to-regret bridge of Part~I
+($|L_P - L_{P'}| \le B\,\TV \le B\sqrt{\KL/2}$, Pinsker) applied
+between each $P_\xi$ and the mixture $\bar P_r$; a uniformly
+$c$-close-to-mean random variable has standard deviation at most $c$.
+\end{proof}
+
+This corollary is the formal connective tissue between the Inv-PnCO
+guarantee language (divergences between solution distributions
+\cite{yan2026invpnco}) and the regret currency of our decomposition: one
+Pinsker step, at the explicit and admittedly loose price $B$.
+
+\section{The Forgetting Deficit}
+\label{sec:dd4-forget}
+
+\begin{lemma}[Eviction rate under reward-driven allocation]
+\label{lem:dd4-eviction}
+Hard memory, capacity $K$; during $r$'s dormancy let $W_a \ge K$ distinct
+regimes be active, let each dormant step independently deliver a foreign
+learning assignment to $r$'s owner with probability $\ge p$, and
+conditional on an assignment let the regime be drawn from the active set
+with each regime's probability $\ge q_{\min} > 0$. Let $U_D$ be the
+number of \emph{distinct} previously-unheld regimes learned in $D$ steps.
+Then $r$'s head (and its episode buffer) is evicted on
+$\{U_D \ge K\}$, and
+\[
+  \Pr[U_D < K] \;\le\;
+  \Pr\!\big[\mathrm{Binom}(D,\ p\, q_{\min} (W_a - K + 1)) < K\big]
+  \;\le\; \exp\!\Big(\!-2 D \big(p\,q_{\min}(W_a{-}K{+}1) -
+  \tfrac{K}{D}\big)_+^2\Big),
+\]
+so $\Pr[\text{eviction}] \to 1$ exponentially in $D$. Moreover the
+expected eviction time is bounded by the coupon-collector sum
+\[
+  \E[\text{time to } U = K] \;\le\; \frac{1}{p}
+  \sum_{j=0}^{K-1} \frac{1}{q_{\min}\,(W_a - j)} .
+\]
+Under the soft model with per-foreign-update decay $\rho_{\mathrm{int}}$,
+the retained strength after $N_D$ foreign updates is
+$(1 - \rho_{\mathrm{int}})^{N_D}$, and $N_D \ge \mathrm{Binom}(D, p)$
+stochastically, so $\E[\text{strength}] \le
+(1 - p\,\rho_{\mathrm{int}})^{D} \to 0$.
+\end{lemma}
+
+\begin{proof}
+While fewer than $K$ distinct foreign regimes have been acquired, at
+least $W_a - K + 1$ of the active regimes are still unheld, so each step
+delivers a \emph{new} distinct foreign regime with probability at least
+$p\, q_{\min} (W_a - K + 1)$. The count of such successes in $D$ steps
+thus stochastically dominates the stated binomial while $U < K$, giving
+the first inequality; the second is Hoeffding's bound for the binomial
+lower tail. The waiting-time bound is the sum of the $K$ geometric means
+with success probabilities $p\, q_{\min}(W_a - j)$, $j = 0, \dots,
+K{-}1$ (the coupon-collector computation of Part~II). LRU evicts $r$
+precisely when $K$ distinct foreign heads have displaced it, since the
+dormant $r$ is by definition the least recently used. For the soft
+model, each foreign update multiplies $r$'s strength by
+$(1 - \rho_{\mathrm{int}})$; taking expectations over the binomial count
+gives the product form via $\E[(1-\rho)^{\mathrm{Binom}(D,p)}] =
+(1 - p\rho)^D$.
+\end{proof}
+
+\begin{example}[Numbers at our calibration]
+$K = 2$, $W_a = 3$ active common regimes, $p \approx 1$ (the monolith
+always learns the active regime), $q_{\min} \approx 1/3$ at block scale:
+the expected eviction time is on the order of two block lengths
+($\approx 50$--$100$ days), and at crisis dormancy $D \approx 280$ days
+the eviction probability is numerically indistinguishable from $1$. This
+is why the E3 dormancy sweep finds the retention gap already saturated
+at $D = 63$--$126$: the eviction event is binary, happens early in the
+dormancy, and cannot happen twice.
+\end{example}
+
+\begin{proposition}[Dichotomy: reward-independence zeroes the deficit]
+\label{prop:dd4-dichotomy}
+Define the forgetting deficit
+$\Phi(D; A) = \Pr[\text{$r$'s head lost at reactivation under } A]$
+(hard) or $1 - \E[\text{retained strength}]$ (soft). Then:
+(i) for any reward-driven $A$ satisfying A2,
+$\Phi(D; A) \to 1$ as $D \to \infty$ at the rate of
+Lemma~\ref{lem:dd4-eviction}; (ii) for any reward-independent covering
+$A$, $\Phi(D; A) = 0$ for all $D$ in the hard model, and in the soft
+model the owner's strength in $r$ decays only through the regime's own
+drift, with \emph{zero} contribution from foreign updates.
+\end{proposition}
+
+\begin{proof}
+(i) is the lemma. (ii): coverage gives an owner holding $r$ within
+capacity; reward-independence means the assignment map does not respond
+to the realized reward stream, so during $r$'s dormancy the owner is
+assigned only regimes in its fixed niche set. If its niche set is
+$\{r\}$ (the converged one-per-regime case) it receives no updates at
+all; if its set contains other regimes, those are by construction
+within capacity, so no eviction is triggered ($U_D = 0$ counts only
+\emph{unheld} acquisitions) and---in the implemented soft model, where
+decay attaches to foreign-\emph{regime} updates---no interference is
+triggered either. The head and the episode buffer at reactivation are
+bit-identical to their state at dormancy onset.
+\end{proof}
+
+\begin{keypoint}
+The dichotomy is qualitative, not quantitative: the two classes are
+different \emph{functions} of $D$ (one $\to 1$, one $\equiv 0$), which
+is what licenses the experimental design---arm classes, not parameter
+sweeps, separate them, and the E1 table confirms the class boundary at
+$p \sim 10^{-6}$ while E3 confirms the saturation shape. Coverage is the
+second conjunct and not decorative: random fixed niches are
+reward-independent yet retain only what they own, and their doubled seed
+variance in E1 is the measured price of leaving coverage to chance.
+\end{keypoint}
+
+\section{The Decomposition and the $2{\times}2$}
+\label{sec:dd4-decomp}
+
+\begin{definition}[Relearning cost]
+\label{def:dd4-crelearn}
+$C_{\mathrm{relearn}}$ is the expected excess of a from-prior head's
+mean probe-window regret over a converged retained head's, for the same
+regime and probe length $N_p$. It is an empirical constant of the
+learning problem (model class, optimizer, signal-to-noise), not a
+theorem; the E6 audit shows it collapsing as signal strength rises,
+which is the honest reason the entire mechanism has a signal-to-noise
+boundary.
+\end{definition}
+
+\begin{proposition}[Post-reactivation regret decomposition]
+\label{prop:dd4-decomp}
+Under A1--A2, when regime $r$ reactivates after dormancy $D$ into a
+fresh episode, served under allocation $A$ by a head trained on $E_r$
+episodes, then at tail level $\delta$, with the convention that the
+invariance terms are evaluated at the served retained head $\hat w_r$,
+\[
+  \E[\rho_{\mathrm{react}}(r)] \;\le\;
+  \underbrace{\hat\mu_r(\hat w_r) + \frac{\hat\sigma_r(\hat w_r)}{\sqrt\delta}
+  + O\!\Big(B\sqrt{\tfrac{\log(1/\delta)}{E_r}}\Big)}_{\Ginv}
+  \;+\;
+  \underbrace{\Phi(D; A)\; C_{\mathrm{relearn}}}_{\Gforget},
+\]
+where the $O(\cdot)$ collects the estimation radii of
+Lemma~\ref{lem:dd4-estimation}.
+\end{proposition}
+
+\begin{proof}
+Condition on the retention event $R$ ($\Pr[R] = 1 - \Phi$). On $R$ the
+served head is $\hat w_r$; Lemma~\ref{lem:dd4-transfer} bounds its
+fresh-episode risk by $\mu_r + \sigma_r/\sqrt\delta$, and
+Lemma~\ref{lem:dd4-estimation} converts population to empirical
+quantities at the stated radii. On $R^c$ ($\Pr = \Phi$) the served head
+is fresh; by Definition~\ref{def:dd4-crelearn} its probe regret exceeds
+the retained benchmark by $C_{\mathrm{relearn}}$ in expectation, and the
+benchmark itself is bounded by the same invariance terms. Total
+expectation: $\E[\rho_{\mathrm{react}}] \le (1-\Phi)\,\Ginv + \Phi\,
+(\Ginv + C_{\mathrm{relearn}}) = \Ginv + \Phi\, C_{\mathrm{relearn}}$.
+\end{proof}
+
+\begin{proposition}[Independent controls; super-additivity where it
+matters]
+\label{prop:dd4-additive}
+$\Gforget$ is a function of $(A, D, K, \text{memory model})$ alone and
+is zeroed by any reward-independent covering $A$
+(Proposition~\ref{prop:dd4-dichotomy}) regardless of the training
+objective; $\Ginv$ is a function of $(\text{objective}, Q_r, E_r)$ alone
+and is optimized by the variance-penalized objective
+(Lemma~\ref{lem:dd4-transfer} discussion) regardless of $A$. The
+\emph{bound} is therefore additive in the two design axes. The
+\emph{realized} interaction is predicted super-additive in one specific
+cell: under reward-driven $A$ with $\Phi \approx 1$, the served head at
+reactivation is fresh whatever objective trained the evicted one, so
+improving $\Ginv$ moves nothing observable---the invariance axis is
+inert in the reward-driven row.
+\end{proposition}
+
+\begin{remark}[The measured interaction]
+Define $I = (\text{A1} - \text{A5}) + (\text{A1} - \text{A7}) -
+(\text{A1} - \text{A6})$ on post-reactivation regret: $I = 0$ is
+additivity, $I < 0$ is synergy. The companion experiments measure
+$I = -0.0015 \pm 0.0005$ per-seed (95\% CI excluding zero), realized
+almost entirely through $\text{A1} - \text{A7} \approx 0$
+($p = 0.88$)---the inert cell, exactly where
+Proposition~\ref{prop:dd4-additive} puts it. We are careful about
+logical direction: the additive \emph{bound} motivates but does not
+entail the super-additive \emph{realization}; the prediction that A7
+specifically would sit at A1's level was pre-registered from the
+mechanism (an evicted head serves nobody) and is the account's sharpest
+falsifiable signature---a ``both tricks help'' story without the
+two-clock structure would have A7 strictly between A1 and A6.
+\end{remark}
+
+\section{Break-Even Dormancy: Pricing Retention}
+\label{sec:dd4-breakeven}
+
+\begin{proposition}[The retention window]
+\label{prop:dd4-breakeven}
+Charge carrying cost $c$ per idle specialist-day and let $V$ convert one
+unit of mean probe regret to value over the $N_p$-day probe. Over one
+dormancy--reactivation cycle of length $D$, retaining $r$'s specialist
+pays iff
+\[
+  c\, D \;\le\; \Phi(D; A_{\mathrm{rd}})\;
+  C_{\mathrm{relearn}}\, N_p\, V .
+\]
+Since $\Phi$ is increasing and saturates at $1$ while $cD$ grows
+linearly, the solution set is an interval $[D_{\min}, D_{\max}]$
+(possibly empty): $D_{\min}$ where $\Phi$ ramps (eviction becomes likely
+enough to fear), $D_{\max} = C_{\mathrm{relearn}} N_p V / c$ where
+cumulative carrying cost overtakes the one-shot saving. The window is
+empty iff $c > \max_D \Phi(D) C_{\mathrm{relearn}} N_p V / D$, i.e.,
+for carrying costs above a threshold set entirely by measurable
+quantities.
+\end{proposition}
+
+\begin{example}[At the E3 calibration]
+$C_{\mathrm{relearn}} \approx 0.004$ regret per probe day, $N_p = 15$:
+the cycle saving is $\approx 0.06\, V$. At a carrying cost of $1\%$ of
+the daily probe saving ($c = 4 \times 10^{-5} V$), $D_{\max} \approx
+1{,}500$ trading days and $D_{\min} \approx 40$--$60$ (where E3 shows
+$\Phi$ ramping); at $10\%$, $D_{\max} \approx 150$ days---tighter than
+one crisis cycle, so a fund at that cost level should \emph{not} retain
+a dedicated crisis specialist and should plan to relearn; the indifference
+threshold sits near $15\%$. The proposition's value is not a universal
+verdict but the conversion of an organizational argument
+(``keep the crisis desk?'') into three measurable numbers.
+\end{example}
+
+\section{What the Competition Dynamics Are Not Proven to Do}
+\label{sec:dd4-honesty}
+
+Two honest closings. First, \emph{we prove no convergence theorem for
+the coupled winner-take-all dynamics}: specialists' window wins depend on
+heads, heads on training, training on wins---an endogenous feedback for
+which adversarial-regret guarantees of the EG update do not apply (Part~I)
+and for which we know of no clean fixed-point argument covering the full
+mechanism. What we have is the GAUSE precedent (the same dynamics
+converge to covering one-per-regime assignments across all its domains
+and protocols \cite{li2026gause}), our own twenty-for-twenty convergence
+record with the crisis-regime affinity wrinkle reported, and the
+single-window concentration remark---whose pre-registered implication
+(batching necessary) the $W_c$ ablation \emph{refuted}, teaching the
+corrected lesson that cross-window EG accumulation is the operative
+averager. Second, \emph{the decomposition's two terms are bounds, not
+identities}: a mechanism could in principle beat the bound's additivity
+(and ours measurably does, in the predicted direction and cell). The
+theory's role is to say which knob owns which term and where each term
+vanishes---claims the eleven-arm design tests directly---not to predict
+regret to the fourth decimal. Where the theory and the experiments
+disagreed, this document reports the experiment and revises the story,
+twice (batching; the high-SNR prototype that became E6).

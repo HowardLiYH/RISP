@@ -1,0 +1,41 @@
+
+% ============================================================================
+% CONCLUSION
+% ============================================================================
+\part{Conclusion}
+
+\section*{Summary of the Deep Dive}
+
+The mathematics of \nm{} reduces to one decomposition and two
+dichotomies. The decomposition: post-reactivation decision regret splits
+into an invariance gap---mean plus variance of episode risks, controlled
+by Cantelli's inequality and priced for finite episodes by Hoeffding's---
+and a forgetting deficit---eviction probability times relearning cost.
+The first dichotomy: the forgetting deficit is identically zero for
+reward-independent covering assignments and tends exponentially to its
+maximum for reward-driven ones, because a dormant regime emits no signal
+with which a reward-driven allocator could protect it; this is a property
+of \emph{classes} of mechanisms, confirmed experimentally as a class
+boundary. The second dichotomy: the invariance gap is governed by the
+training objective alone, is provably reduced by variance penalization
+across episodes when episodes are heterogeneous draws of a stable
+decision structure, and is \emph{inert}---measurably, predictably---when
+the allocation axis has already discarded the head it trained. The
+super-additivity of the two fixes is therefore not a curiosity but the
+signature of the account: each mechanism is the other's precondition.
+
+Around these results sit the honesty obligations this research program
+treats as part of the mathematics: the plug-in caveat on every
+generalization bound applied to a trained head; the explicit looseness of
+the Pinsker bridge constant; the refusal to claim convergence theorems
+for coupled winner-take-all dynamics that we can only demonstrate; the
+estimation arithmetic showing that six crisis episodes cannot certify
+crisis-grade invariance without environment enlargement; and the three
+pre-registered expectations our own experiments refuted---reported here
+with the same care as the confirmations, because a theory of honest
+retention should itself retain what it got wrong.
+
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+
+\end{document}

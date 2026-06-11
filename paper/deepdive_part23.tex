@@ -1,0 +1,1374 @@
+% ============================================================================
+% deepdive_part23.tex -- Parts II and III of the RISP mathematical
+% deep dive. This is a FRAGMENT: it assumes the master preamble defines
+% theorem/proposition/lemma/corollary/definition/example/remark (numbered by
+% section), the tcolorbox environments intuition/keypoint/warning, and the
+% macros \R \E \Var \KL \TV \nm \argmax \argmin.
+% All labels are prefixed sec:dd2- / eq:dd2- / tab:dd2-.
+% ============================================================================
+
+% ============================================================================
+% PART II: THE ENVIRONMENT
+% ============================================================================
+\part{The Environment: Regimes, Episodes, and Dormancy}
+\label{sec:dd2-part-env}
+
+The mechanism documented in Part~III is an answer to a question posed
+entirely by the environment: regimes that arrive in persistent blocks
+(Section~\ref{sec:dd2-regimes}), episodes as the true statistical unit
+(Section~\ref{sec:dd2-episodes}), and the combinatorics of dormancy, during
+which a capacity-limited learner is quietly destroyed
+(Section~\ref{sec:dd2-dormancy}). Every design choice in \nm{} is a response
+to a quantitative fact established in this part.
+
+\section{Regime-Switching Markets}
+\label{sec:dd2-regimes}
+
+\subsection{The Regime Process}
+
+\begin{definition}[Block-structured regime process]
+\label{def:dd2-regime-process}
+Fix a finite regime set $\mathcal{R} = \{1, \ldots, R\}$. A
+\textbf{block-structured (semi-Markov) regime process} is a sequence of pairs
+\[
+(\rho_1, \ell_1),\ (\rho_2, \ell_2),\ (\rho_3, \ell_3),\ \ldots
+\qquad \rho_b \in \mathcal{R},\ \ell_b \in \{1, 2, \ldots\},
+\]
+where $\rho_b$ is the regime of the $b$-th \emph{block} and $\ell_b$ its
+duration in days, with $\rho_{b+1} \neq \rho_b$ (blocks are maximal). The
+day-level regime label $r_t$ is the piecewise-constant expansion: writing
+$T_b = \sum_{b' < b} \ell_{b'}$ for the start of block $b$,
+\begin{equation}
+\label{eq:dd2-semimarkov}
+r_t = \rho_b \qquad \text{for } T_b < t \le T_b + \ell_b .
+\end{equation}
+The process is semi-Markov when $\rho_{b+1}$ depends on the past only through
+$\rho_b$ (a transition kernel on $\mathcal{R}$) while $\ell_b$ is drawn from a
+regime-specific duration distribution $G_{\rho_b}$ on $\{1,2,\ldots\}$.
+\end{definition}
+
+Hamilton's Markov-switching model \citep{hamilton1989new}---the canonical
+formalization of regimes in econometrics---is the special case in which $r_t$
+is a first-order Markov chain: block durations are then forced to be
+geometric, $\Pr(\ell = k) = P_{rr}^{\,k-1}(1 - P_{rr})$ with mean
+$1/(1 - P_{rr})$. The semi-Markov form frees the duration law $G_r$, which
+matters because the experimental stream uses bounded, non-geometric blocks
+(25--60 days common, 15--30 days crisis) and because real regime durations
+are empirically far from geometric \citep{ang2012regime, guidolin2007asset}.
+Nothing in Part~III depends on the duration law beyond persistence itself.
+
+The concrete instantiation used throughout: $R = 4$ regimes
+$\mathcal{R} = \{\textsf{trend}, \textsf{range}, \textsf{highvol},
+\textsf{crisis}\}$; common regimes arrive in blocks of 25--60 days;
+\textsf{crisis} arrives in short blocks of 15--30 days and only on every
+\emph{fourth} cycle through the common regimes, so consecutive crisis
+episodes are separated by roughly 250--450 days of dormancy; horizon
+$T \approx 2370$ days ($\approx 9.5$ trading years); each day carries
+features $X_t \in \R^{n \times d}$ ($n = 20$ assets, $d = 20$ features per
+asset) and realized returns $y_t \in \R^{n}$.
+
+\subsection{Why Block Persistence (Not I.I.D.\ Regime Draws) Is the Whole Game}
+
+It is tempting to model regime-switching as $r_t \stackrel{iid}{\sim} \pi$
+for some distribution $\pi$ on $\mathcal{R}$. That model destroys both of the
+phenomena this project is about.
+
+\begin{proposition}[Persistence creates local stationarity and dormancy]
+\label{prop:dd2-persistence}
+Let $r_t$ be a regime process over $\mathcal{R}$.
+\begin{enumerate}
+  \item \textbf{(I.i.d.\ draws have no usable present.)} If
+        $r_t \stackrel{iid}{\sim} \pi$, the conditional law of $r_{t+1}$
+        given the entire past equals $\pi$: knowing today's regime says
+        nothing about tomorrow's, every day is a fresh mixture draw, and the
+        optimal single-day strategy is mixture-optimal, not any
+        regime-specialist.
+  \item \textbf{(I.i.d.\ draws have no dormancy.)} Under i.i.d.\ draws,
+        $\Pr(\text{regime } r \text{ dormant} > D \text{ days})
+        = (1 - \pi(r))^{D}$, exponentially small in $D$. Under the block
+        process, dormancy is the sum of intervening block durations and is
+        typically hundreds of days when $r$ sits on a long cycle---as
+        \textsf{crisis} does here ($250$--$450$ days by construction).
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) is immediate from independence. (2): with
+$\pi(\textsf{crisis}) \approx 1/13$ (one short crisis block per $\approx 12$
+common blocks), an i.i.d.\ stream would produce a 250-day crisis dormancy
+with probability $(1 - 1/13)^{250} \approx e^{-19.2} \approx 5 \times
+10^{-9}$---essentially never---whereas the block schedule produces one every
+cycle. The block construction makes long dormancy the rule rather than a
+large-deviation event.
+\end{proof}
+
+\begin{intuition}[title={Persistence is what makes specialization purchasable}]
+Persistence does two jobs at once. \emph{Within} a block, the world is locally
+stationary for 25--60 days, long enough for a specialist to be trained,
+evaluated, and trusted---this is what makes a regime a \emph{niche} worth
+owning. \emph{Between} blocks of the same regime, the world is silent about
+that regime for weeks to years---this is what makes memory a problem. Under
+i.i.d.\ draws neither holds: there is nothing to specialize in (job one fails)
+and nothing is ever dormant (job two never arises). Every result in this
+document lives in the gap between those two timescales.
+\end{intuition}
+
+\subsection{The Causal Labelers}
+\label{sec:dd2-labelers}
+
+All eleven arms of the experiment receive the regime label $\hat r_t$ from a
+shared \textbf{causal labeler}: a deterministic function of information
+available \emph{strictly before} the decision at day $t$ is made. Two labelers
+are used, deliberately spanning a simple/structured spectrum, so that no
+conclusion depends on one labeling artifact.
+
+\paragraph{Labeler L1: rolling-percentile volatility band $\times$ trend sign.}
+At day $t$, using returns $y_1, \ldots, y_{t-1}$ only:
+\begin{enumerate}
+  \item \textbf{Trailing volatility.} Realized volatility
+        $v_t = \operatorname{sd}\bigl(\bar y_{t-w_v}, \ldots, \bar y_{t-1}\bigr)$
+        over a trailing window of $w_v$ days, $\bar y_s$ the cross-sectional
+        mean return on day $s$.
+  \item \textbf{Rolling percentile thresholds.} The empirical
+        $q^{\text{high}}$- and $q^{\text{crisis}}$-quantiles
+        $\tau^{\text{high}}_t, \tau^{\text{crisis}}_t$ of the trailing
+        history $\{v_s : s \le t-1\}$---quantiles of \emph{past}
+        volatilities only, re-estimated daily from the filtration at $t-1$,
+        never from the full sample.
+  \item \textbf{Trend statistic.} A trailing trend signal $m_t$ (sign and
+        magnitude of the mean of $\bar y_{t-w_m}, \ldots, \bar y_{t-1}$, or
+        a fast-minus-slow moving-average gap), again from days $\le t-1$.
+  \item \textbf{Label.}
+        \[
+        \hat r_t =
+        \begin{cases}
+          \textsf{crisis} & v_t \ge \tau^{\text{crisis}}_t, \\
+          \textsf{highvol} & \tau^{\text{high}}_t \le v_t < \tau^{\text{crisis}}_t, \\
+          \textsf{trend} & v_t < \tau^{\text{high}}_t \text{ and } |m_t| \ge \tau^{m}, \\
+          \textsf{range} & v_t < \tau^{\text{high}}_t \text{ and } |m_t| < \tau^{m}.
+        \end{cases}
+        \]
+\end{enumerate}
+
+\paragraph{Labeler L2: forward-only filtered two-state volatility model
+$\times$ trend sign.}
+L2 replaces the percentile band with a probabilistic state model:
+\begin{enumerate}
+  \item Maintain a two-state Markov-switching volatility model (low/high-vol
+        states with state-dependent return variance), parameters estimated
+        on an expanding window through day $t-1$ and refit periodically from
+        past data only.
+  \item Run the \textbf{Hamilton filter} \citep{hamilton1989new}
+        \emph{forward only} for the one-step-ahead predictive probability
+        $p_t = \Pr(s_t = \text{high-vol} \mid \bar y_1, \ldots, \bar y_{t-1})$.
+        The Kim \emph{smoothed} probability, which conditions on the future,
+        is never computed.
+  \item Label \textsf{crisis} when $p_t$ exceeds a high threshold and
+        trailing volatility is extreme, \textsf{highvol} when $p_t$ exceeds
+        a moderate threshold, otherwise \textsf{trend}/\textsf{range} by the
+        same trend statistic $m_t$ as in L1.
+\end{enumerate}
+
+\paragraph{Leakage analysis.}
+Write $\mathcal{F}_{t-1} = \sigma(X_1, y_1, \ldots, X_{t-1}, y_{t-1}, X_t)$
+for the information legitimately available when the day-$t$ decision is
+placed (today's features are observable; today's returns are not). Both
+labelers satisfy the \textbf{causality contract}
+\begin{equation}
+\label{eq:dd2-causal}
+\hat r_t \in \mathcal{F}_{t-1}
+\qquad \text{(in fact } \hat r_t \in \sigma(y_1, \ldots, y_{t-1})\text{)},
+\end{equation}
+because every ingredient---trailing volatility, rolling quantiles, trend
+statistics, filter recursions, parameter refits---is a function of returns
+through $t-1$. Three subtler channels are also closed:
+\emph{(i) contemporaneous leak:} the label for day $t$ never uses $y_t$
+itself (a one-day embargo between the last return used and the day labeled);
+\emph{(ii) refit leak:} parameters and thresholds are re-estimated only on
+data through $t-1$, so no full-sample estimate back-propagates into early
+labels;
+\emph{(iii) smoothing leak:} L2 uses filtered, never smoothed,
+probabilities---the smoother is two-sided, and a single smoothed label can
+encode information from arbitrarily far in the future.
+
+\begin{warning}[title={Label leakage: the classic regime-paper sin}]
+A large fraction of the regime-switching literature evaluates strategies
+against regime labels that \emph{could not have been known at the time}. The
+recurring offenders:
+\begin{itemize}
+  \item \textbf{Smoothed state probabilities:} using Kim-smoothed
+        $\Pr(s_t \mid y_{1:T})$ as ``the regime at $t$''---the smoother
+        conditions on the future and labels turning points in advance.
+  \item \textbf{Full-sample thresholds:} defining \textsf{highvol} as the
+        top volatility quintile \emph{of the whole sample}---the 1990
+        boundary then depends on 2008.
+  \item \textbf{Peak/trough dating:} NBER-style bull/bear datings require
+        future data to \emph{confirm} a peak; using the dated label at the
+        peak itself is hindsight.
+  \item \textbf{Full-sample parameters with filtered probabilities:} the
+        leak hides in $\hat\theta$, not in the recursion.
+\end{itemize}
+Each inflates the apparent value of regime-conditioning for the same reason
+published return predictors decay out of sample \citep{mclean2016does}: the
+evaluation quietly conditions on information the strategy never had.
+Everything downstream---specialist training, competition windows,
+pinning---consumes only the causal label
+$\hat r_t \in \mathcal{F}_{t-1}$ of \eqref{eq:dd2-causal}; ``reactivation''
+means the \emph{causal labeler} says so, with whatever lag and
+misclassification that entails.
+\end{warning}
+
+\begin{remark}[The label is an input, not a contribution]
+\nm{} takes $\hat r_t$ as given and identical across all arms: the
+experiment isolates \emph{what to do with} a regime signal (allocation,
+training, memory), not how to detect regimes---a separate, well-studied
+problem \citep{nystrup2018dynamic, nystrup2020greedy}. A shared causal label
+removes regime-detection skill as a confound.
+\end{remark}
+
+\section{Episodes as Environments}
+\label{sec:dd2-episodes}
+
+\subsection{Episodes}
+
+\begin{definition}[Episode]
+\label{def:dd2-episode}
+For regime $r \in \mathcal{R}$, the \textbf{$e$-th episode of $r$}, written
+$(r, e)$, is the $e$-th maximal block of consecutive days on which
+$\hat r_t = r$, i.e.\ the $e$-th element of the subsequence of blocks
+$\{b : \rho_b = r\}$ in Definition~\ref{def:dd2-regime-process}. We write
+$\mathcal{T}_{r,e} \subset \{1, \ldots, T\}$ for its day set and
+$|\mathcal{T}_{r,e}| = \ell_{r,e}$ for its length.
+\end{definition}
+
+The central modeling move---inherited from invariant-prediction thinking and
+from the decision-focused learning literature
+\citep{elmachtoub2022smart, yan2026invpnco}---is to treat each episode as a
+distinct \emph{environment}: the regime fixes what is stable, the episode
+index fixes what is incidental.
+
+\begin{definition}[Hyper-distribution assumption]
+\label{def:dd2-hyper}
+Each regime $r$ carries a \textbf{hyper-distribution} $Q_r$ over environment
+parameters. Episode $(r,e)$ draws its parameter
+$\gamma_{r,e} \sim Q_r$ independently across $e$, and the days within the
+episode are then i.i.d.\ given $(r, \gamma_{r,e})$:
+\[
+\gamma_{r,e} \stackrel{iid}{\sim} Q_r, \qquad
+(X_t, y_t) \mid (r, \gamma_{r,e}) \stackrel{iid}{\sim} P_{r, \gamma_{r,e}}
+\quad \text{for } t \in \mathcal{T}_{r,e}.
+\]
+The \textbf{stable component} of regime $r$ is whatever is shared by
+$P_{r,\gamma}$ across all $\gamma$ in the support of $Q_r$; the
+\textbf{episode-specific component} is the rest.
+\end{definition}
+
+\begin{remark}[Two honest idealizations]
+\label{rem:dd2-idealizations}
+Definition~\ref{def:dd2-hyper} idealizes reality in two ways.
+\emph{(i) Macro memory.} Real episodes of the same regime are not independent
+draws: the 2008 and 2011 crises share causal machinery and participants who
+remember the previous one. Positive dependence across $e$ means the effective
+number of independent episodes is \emph{smaller} than the count---scarcity
+(Section~\ref{sec:dd2-scarcity}) is, if anything, understated.
+\emph{(ii) Secular drift.} $Q_r$ is treated as fixed over the horizon, but
+markets drift on decadal scales: predictors decay after publication
+\citep{mclean2016does}, and the ``stable'' component of a regime is stable
+only relative to the horizon. The synthetic generator below satisfies both
+idealizations exactly, so failures of an arm on synthetic data cannot be
+blamed on them; transfer to long real panels inherits both caveats.
+\end{remark}
+
+\subsection{Episode Scarcity and Its Two Mitigations}
+\label{sec:dd2-scarcity}
+
+The statistical currency of Definition~\ref{def:dd2-hyper} is the number of
+\emph{episodes} $E_r$, not the number of days: any quantity that varies at the
+episode level (an episode-mean loss, an episode-specific coefficient) is
+estimated with variance $\propto 1/E_r$, no matter how many days each episode
+contains. For common regimes $E_r$ is comfortable (dozens of 25--60-day
+blocks over $T \approx 2370$ days). For \textsf{crisis} it is brutal: in
+roughly 35 years of equity data one finds on the order of \textbf{5--7}
+crisis episodes, and fewer in shorter panels; in the synthetic stream, the
+every-fourth-cycle schedule produces a comparable handful over
+$T \approx 2370$ days. Two standard mitigations trade scarcity for
+dependence, and it is important to state exactly what dependence each one
+buys.
+
+\begin{definition}[Sub-episode blocks]
+\label{def:dd2-subepisode}
+Fix a block length $B$. The \textbf{sub-episode blocks} of episode $(r,e)$
+are the contiguous segments obtained by partitioning $\mathcal{T}_{r,e}$ into
+pieces of length $B$ (discarding or merging a short remainder). Each block is
+treated as a pseudo-episode in episode-level statistics.
+\end{definition}
+
+Sub-episode blocks multiply the apparent environment count by
+$\approx \ell_{r,e}/B$, but all blocks of one episode \emph{share the same
+draw} $\gamma_{r,e}$, so block mean losses are positively correlated through
+$\gamma$, and cross-block variance \emph{underestimates} cross-episode
+variance: the blocks inform about within-episode noise, not about $Q_r$.
+They are a variance mitigation for the stable component only; they cannot
+manufacture information about episode heterogeneity the panel does not
+contain.
+
+\begin{definition}[Cross-asset episodes]
+\label{def:dd2-crossasset}
+When the same regime episode is observed simultaneously on $A$ assets or
+markets (here $n = 20$ assets share each episode), the per-asset day records
+$\{(x_{t,i}, y_{t,i}) : t \in \mathcal{T}_{r,e}\}$ for $i = 1, \ldots, A$ may
+be treated as $A$ parallel realizations of the episode environment.
+\end{definition}
+
+Cross-asset episodes multiply the day count per episode by $A$, but
+introduce \emph{cross-sectional dependence}: assets within a day share
+common shocks (market factors, and the episode draw $\gamma_{r,e}$ itself,
+common across assets in the generator below), so the effective sample size
+per day lies between $1$ and $A$. Again: more data about the within-episode
+law, no new draws from $Q_r$.
+
+\begin{keypoint}
+Both mitigations enlarge the denominator of \emph{within-episode} estimates
+and leave the number of independent draws from $Q_r$ untouched. Whatever
+must be learned \emph{about episode heterogeneity}---in particular the
+variance-across-episodes term the INV objective penalizes---must come from
+$E_r$ genuine episodes, and for \textsf{crisis} $E_r$ is single-digit. This
+one fact sizes the episode library ($\le 6$ retained episodes suffices,
+because there are never many more) and explains the crisis-pinning wrinkle
+of Section~\ref{sec:dd2-competition}.
+\end{keypoint}
+
+\subsection{The Synthetic Generator: Heterogeneity Made Explicit}
+\label{sec:dd2-generator}
+
+The synthetic stream instantiates Definition~\ref{def:dd2-hyper} exactly. For
+day $t$ in episode $(r,e)$ and asset $i$ with feature vector
+$x_{t,i} \in \R^{20}$:
+\begin{equation}
+\label{eq:dd2-generator}
+y_{t,i} \;=\;
+\underbrace{\theta_r \cdot (x_{t,i,1},\, x_{t,i,2})}_{\text{stable, regime-level}}
+\;+\;
+\underbrace{\gamma_{r,e}\, x_{t,i,\mathrm{sp}}}_{\text{episode-specific}}
+\;+\; b_r \;+\; \varepsilon_{t,i},
+\end{equation}
+with the following calibration:
+\begin{itemize}
+  \item \textbf{Stable signal.} $\theta_r \in \R^2$, $\|\theta_r\| = 0.012$,
+        directions well-separated across regimes---so a head trained on one
+        regime is wrong (not merely stale) on another.
+  \item \textbf{Episode-specific signal.}
+        $\gamma_{r,e} \sim \mathcal{N}\bigl(0, (0.012 \cdot \mathrm{het})^2\bigr)$,
+        \emph{redrawn independently each episode}, loading on a designated
+        spurious feature $x_{\mathrm{sp}}$; $\mathrm{het} \ge 0$ is the
+        heterogeneity knob.
+  \item \textbf{Distractors.} 16 of the 20 features carry no signal in any
+        regime: overfitting bait at $n$--$d$ parity ($n = d = 20$).
+  \item \textbf{Noise.} $\varepsilon_{t,i} \sim \mathcal{N}(0, \sigma_r^2)$,
+        $\sigma_r = 0.02 \cdot (1,\, 0.75,\, 2,\, 3)$ for
+        (\textsf{trend}, \textsf{range}, \textsf{highvol}, \textsf{crisis}):
+        the rare regime is also the noisiest, by a factor of three.
+\end{itemize}
+
+\begin{example}[What $\mathrm{het} = 0$ versus $\mathrm{het} = 2$ means]
+\label{ex:dd2-het}
+The standard deviation of the episode-specific coefficient is
+$\operatorname{sd}(\gamma_{r,e}) = 0.012 \cdot \mathrm{het}$, against a stable
+coefficient magnitude of $\|\theta_r\| = 0.012$. Concretely:
+\begin{itemize}
+  \item $\mathbf{het = 0}$: $\gamma_{r,e} \equiv 0$. Every episode of regime
+        $r$ has the \emph{same} law; the spurious feature is a 17th
+        distractor; $Q_r$ is a point mass; plain ERM on pooled regime data
+        is right, and a variance-across-episodes penalty has nothing to
+        penalize.
+  \item $\mathbf{het = 1}$: $\operatorname{sd}(\gamma) = 0.012 = \|\theta_r\|$.
+        The spurious coefficient is at least as large as the stable one
+        whenever $|\gamma_{r,e}| \ge 0.012$, probability
+        $\Pr(|Z| \ge 1) \approx 0.317$ for $Z \sim \mathcal{N}(0,1)$: in
+        roughly one episode in three, the most profitable in-episode feature
+        is the one that betrays you next episode.
+  \item $\mathbf{het = 2}$: $\operatorname{sd}(\gamma) = 0.024 = 2\|\theta_r\|$.
+        Now $|\gamma_{r,e}| \ge \|\theta_r\|$ with probability
+        $\Pr(|Z| \ge 0.5) \approx 0.617$: in the \emph{majority} of episodes
+        the episode-specific signal dominates inside the episode. An
+        in-episode ERM fit loads heavily on $x_{\mathrm{sp}}$---correctly,
+        for that episode---then carries a coefficient of typical size
+        $0.024$ with a freshly randomized sign into the next episode.
+\end{itemize}
+The probe window (the first 15 days after a reactivation,
+Definition~\ref{def:dd2-probe}) is precisely where this bites: the learner
+meets a new draw of $\gamma_{r,e}$ before any in-episode data has
+accumulated, so whatever $\gamma$-chasing is baked into its head is realized
+as pure decision regret.
+\end{example}
+
+\begin{intuition}[title={The generator is a forgetting--overfitting double trap}]
+Equation~\eqref{eq:dd2-generator} arms two independent failure modes. The
+\emph{regime} structure (separated $\theta_r$, long dormancy) punishes arms
+that forget; the \emph{episode} structure ($\gamma_{r,e}$ redrawn) punishes
+arms that remember too literally---memorize the last crisis episode including
+its $\gamma$ and you import a coin-flip coefficient into the next one. In the
+eleven arms of Section~\ref{sec:dd2-arms}, the allocation axis addresses the
+first trap, the objective axis (ERM vs.\ INV) the second.
+\end{intuition}
+
+\section{Dormancy Combinatorics and Memory Models}
+\label{sec:dd2-dormancy}
+
+\subsection{Dormancy and the Probe Window}
+
+\begin{definition}[Dormancy]
+\label{def:dd2-dormancy}
+The \textbf{dormancy} of regime $r$ before episode $e+1$ is the gap
+\[
+D_r(e) \;=\; \min \mathcal{T}_{r,e+1} \;-\; \max \mathcal{T}_{r,e} \;-\; 1,
+\]
+the number of days between the end of episode $(r,e)$ and the start of
+$(r,e+1)$ during which other regimes are active. In the synthetic stream,
+common regimes have dormancies on the order of one cycle (tens of days),
+while \textsf{crisis} has $D \approx 250$--$450$ days.
+\end{definition}
+
+\begin{definition}[Probe window and forgetting deficit]
+\label{def:dd2-probe}
+A \textbf{reactivation} of $r$ is the first day of an episode $(r, e+1)$ with
+dormancy $D_r(e) \ge 90$ days. The \textbf{probe window} is the first
+$15$ days of that episode. For an arm $A$, let
+$\bar\rho_{\mathrm{probe}}(A)$ denote its mean per-day decision regret
+(Definition~\ref{def:dd2-regret}) over probe-window days. The
+\textbf{forgetting deficit} of arm $A$ at dormancy $D$ is
+\begin{equation}
+\label{eq:dd2-phi}
+\Phi(D; A) \;=\;
+\E\bigl[\bar\rho_{\mathrm{probe}}(A) \,\big|\, \text{dormancy } D\bigr]
+\;-\;
+\E\bigl[\bar\rho_{\mathrm{probe}}(A^{\circ})\bigr],
+\end{equation}
+where $A^{\circ}$ is the \emph{retention counterfactual}: the same arm
+serving the probe window with the head (and episode library) it held at the
+close of the previous episode of $r$, untouched by any intervening foreign
+training. $\Phi \approx 0$ means dormancy cost the arm nothing it had;
+$\Phi$ large means the dormancy machinery below did its damage.
+\end{definition}
+
+The probe window is 15 days: long enough to average regime noise
+($\sigma_{\textsf{crisis}} = 0.06$ per day) into a stable regret estimate,
+short enough that within-episode relearning cannot mask a cold start---it
+measures what you walked in with. All headline numbers in this document
+($0.0303$--$0.0320$) are means of $\bar\rho_{\mathrm{probe}}$ across
+reactivations and 20 seeds.
+
+\subsection{The Foreign-Update Process}
+
+During $r$'s dormancy, the stream keeps producing days from the $W_a$
+\emph{other} active regimes, and the holder of $r$'s head may be made to
+\emph{train on a foreign regime}. We abstract this as the
+\textbf{foreign-update process}: each dormancy day is a foreign-update day
+with probability $p$, where $p$ encodes the arm: $p = 1$ for a monolith that
+trains daily on whatever is active; $p \approx$ (win rate) for an unpinned
+\nm{} specialist; $p = 0$ for a pinned owner whose regime is dormant. The
+damage per foreign update is what the two memory models specify.
+
+\begin{definition}[Hard and soft memory models]
+\label{def:dd2-memory-models}
+Each specialist has capacity $K < R$: at most $K$ regime heads (linear SPO+
+heads, Section~\ref{sec:dd2-specialist}), each with an episode buffer of up to
+$6$ episodes $\times$ $40$ days.
+\begin{itemize}
+  \item \textbf{HARD (LRU eviction).} Heads occupy discrete slots ordered by
+        recency of training. Training on a held regime refreshes its recency.
+        Training on an \emph{unheld} regime at full capacity instantiates a
+        new head and \textbf{evicts} the least-recently-used head
+        \emph{together with its episode buffer}---competence and memory are
+        destroyed jointly and completely.
+  \item \textbf{SOFT (interference decay).} No head is ever evicted. Instead,
+        every foreign update multiplies \emph{all other held heads} by
+        $(1 - \rho_{\mathrm{int}})$ with $\rho_{\mathrm{int}} = 0.06$:
+        after $N$ foreign updates a dormant head retains strength
+        $(1 - \rho_{\mathrm{int}})^{N}$ of its trained weights.
+\end{itemize}
+\end{definition}
+
+The hard model is the cache-eviction picture; the soft model is the
+gradient-interference picture of catastrophic forgetting in neural networks
+\citep{french1999catastrophic, kirkpatrick2017overcoming, parisi2019continual},
+where training on task $B$ perturbs the very weights encoding task $A$.
+Progressive networks \citep{rusu2016progressive} avoid interference by
+freezing columns---a structural cousin of what pinning will achieve in
+Section~\ref{sec:dd2-competition}.
+
+\subsection{Hard Model: The Coupon-Collector Clock}
+
+Under HARD, a dormant head dies when enough \emph{distinct} foreign regimes
+have been learned to push it out of the LRU order. The clean question: a
+learner holds the dormant head and has $K$ slots; how long until it has
+trained on $K$ distinct foreign regimes (each claiming a slot, the $K$-th
+overflowing capacity and evicting the dormant head, which---having received no
+training all dormancy---is always the least recently used)?
+
+\begin{proposition}[Expected time to eviction]
+\label{prop:dd2-coupon}
+Suppose each dormancy day is independently a foreign-update day with
+probability $p$, and on an update day the active regime is uniform on the
+$W_a$ foreign regimes, independently across update days. Let $T_K$ be the
+number of days until $K$ distinct foreign regimes have been trained on
+($K \le W_a$). Then
+\begin{equation}
+\label{eq:dd2-coupon}
+\E[T_K] \;=\; \frac{1}{p} \sum_{j=0}^{K-1} \frac{W_a}{W_a - j}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Stage $j$ begins when exactly $j$ distinct foreign regimes have been
+collected, $0 \le j \le K-1$. On each day of stage $j$, the event ``collect a
+new regime today'' requires an update day (probability $p$) on which the
+active regime is one of the $W_a - j$ uncollected ones (probability
+$(W_a - j)/W_a$, by uniformity and independence). The stage-$j$ waiting time
+is therefore geometric with success probability $p (W_a - j)/W_a$ and
+expectation $W_a / \bigl(p (W_a - j)\bigr)$. The stages are traversed in
+order, so by linearity of expectation
+$\E[T_K] = \sum_{j=0}^{K-1} W_a / \bigl(p(W_a - j)\bigr)$, which is
+\eqref{eq:dd2-coupon}.
+\end{proof}
+
+\begin{example}[Worked numbers: $W_a = 3$, $K = 2$, $p = \tfrac12$]
+\label{ex:dd2-coupon}
+A learner holds the dormant \textsf{crisis} head with capacity $K = 2$; the
+$W_a = 3$ common regimes are active; it trains on the active regime every
+other day on average. By \eqref{eq:dd2-coupon},
+\[
+\E[T_2]
+= \frac{1}{0.5}\left(\frac{3}{3} + \frac{3}{2}\right)
+= 2 \times 2.5
+= 5 \text{ days}:
+\]
+$1/p = 2$ expected days for any foreign update to claim the spare slot, plus
+$3/(0.5 \times 2) = 3$ for an update from one of the remaining two regimes.
+Five days---against a crisis dormancy of $250$--$450$ days: the dormant
+head's expected lifetime is roughly $1\%$ of the dormancy it must survive.
+\end{example}
+
+How certain is eviction by day $D$? For the worked example we can compute the
+survival probability exactly.
+
+\begin{proposition}[Survival probability, exact and bounded]
+\label{prop:dd2-survival}
+In the setting of Proposition~\ref{prop:dd2-coupon} with $W_a = 3$, $K = 2$:
+\begin{equation}
+\label{eq:dd2-survival}
+\Pr(\text{head survives } D \text{ days})
+= 3\Bigl(1 - \tfrac{2p}{3}\Bigr)^{D} - 2(1 - p)^{D}.
+\end{equation}
+In general ($K \le W_a$), a union bound over which $K-1$ regimes were the
+only ones updated gives the binomial-tail bound
+\[
+\Pr(\text{survive } D)
+\;\le\; \binom{W_a}{K-1}
+\Bigl(1 - p\,\tfrac{W_a - K + 1}{W_a}\Bigr)^{D}.
+\]
+\end{proposition}
+
+\begin{proof}
+Survival through day $D$ means at most $K - 1 = 1$ distinct regime was
+trained on. Condition on $N_D \sim \mathrm{Bin}(D, p)$ update days: given
+$N_D = m \ge 1$, all $m$ uniform draws land on a single regime with
+probability $3 \cdot (1/3)^m$; given $m = 0$, survival is certain. Hence
+\[
+\Pr(\text{survive})
+= (1-p)^D + \sum_{m \ge 1} \binom{D}{m} p^m (1-p)^{D-m} \cdot 3 \cdot 3^{-m}
+= (1-p)^D + 3\Bigl[\bigl(1 - p + \tfrac{p}{3}\bigr)^{D} - (1-p)^D\Bigr],
+\]
+which is \eqref{eq:dd2-survival}. General bound: survival requires the
+updated regimes to lie in some $(K-1)$-subset $S$; for fixed $S$, each day
+avoids ``update outside $S$'' with probability $1 - p(W_a - K + 1)/W_a$;
+union over the $\binom{W_a}{K-1}$ subsets (this matches the leading term of
+\eqref{eq:dd2-survival} at $W_a = 3$, $K = 2$).
+\end{proof}
+
+\begin{example}[Eviction probabilities by dormancy length]
+With $p = 0.5$, evaluating \eqref{eq:dd2-survival} (note
+$1 - 2p/3 = 2/3$, $1 - p = 1/2$):
+
+\begin{center}
+\begin{tabular}{rccc}
+\toprule
+$D$ (days) & $3(2/3)^D$ & $2(1/2)^D$ & $\Pr(\text{evicted by } D)$ \\
+\midrule
+5  & $0.39506$ & $0.06250$  & $1 - 0.33256 = 0.667$ \\
+10 & $0.05202$ & $0.00195$  & $1 - 0.05007 = 0.950$ \\
+20 & $0.00090$ & $1.9\times 10^{-6}$ & $1 - 0.00090 = 0.9991$ \\
+40 & $2.7\times 10^{-7}$ & $1.8\times 10^{-12}$ & $1 - 2.7\times 10^{-7}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+By $D = 20$ days---half of one common-regime block---eviction is a $99.9\%$
+event; at a crisis dormancy of $D = 250$ survival is
+$3(2/3)^{250} \approx 3 \times 10^{-44}$. Under the hard model an
+unprotected crisis head \emph{does not survive dormancy}, full stop. The
+i.i.d.-day idealization is conservative here: the real stream arrives in
+persistent blocks, each delivering many updates from one regime, so
+distinct-regime collection is at least as fast at the block scale.
+\end{example}
+
+\begin{example}[LRU mechanics, step by step]
+\label{ex:dd2-lru}
+A capacity-$K{=}2$ learner ends a crisis episode holding heads for
+$\{\textsf{crisis}, \textsf{trend}\}$, with \textsf{crisis} most recent.
+The dormancy stream then activates \textsf{trend}, \textsf{range},
+\textsf{highvol}, \ldots\ and the learner trains on whatever is active. Slot
+contents (ordered LRU $\to$ MRU; each head carries its episode buffer):
+
+\begin{center}
+\begin{tabular}{clll}
+\toprule
+Event & Active regime & Action & Slots after (LRU $\to$ MRU) \\
+\midrule
+1 & \textsf{trend}   & hit: refresh recency & $[\textsf{crisis}, \textsf{trend}]$ \\
+2 & \textsf{range}   & miss at full capacity: \textbf{evict \textsf{crisis}} + buffer & $[\textsf{trend}, \textsf{range}]$ \\
+3 & \textsf{crisis} reactivates & miss: \textbf{cold start}, evict \textsf{trend} & $[\textsf{range}, \textsf{crisis}^{\,\text{new}}]$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+At event 2---the \emph{first} foreign block from an unheld regime---the
+crisis head and its entire episode library are gone. At event 3 the probe
+window is served by a freshly initialized head: full cold-start regret, then
+a 15--30-day scramble to relearn what was once known, and the cycle repeats.
+\end{example}
+
+\subsection{Soft Model: Geometric Erosion and the Half-Life}
+
+Under SOFT nothing is evicted; instead each foreign update multiplies every
+other held head by $(1 - \rho_{\mathrm{int}})$ with
+$\rho_{\mathrm{int}} = 0.06$. After $N_D$ foreign updates during a dormancy,
+the dormant head retains
+\begin{equation}
+\label{eq:dd2-soft-retention}
+\text{retained strength} \;=\; (1 - \rho_{\mathrm{int}})^{N_D} \;=\; 0.94^{N_D},
+\end{equation}
+of its trained weights (the head decays toward initialization; it is never
+refreshed because its regime emits no training days). The natural summary is
+the \textbf{half-life in foreign updates}: the $N$ solving
+$(1-\rho)^{N} = \tfrac12$,
+\begin{equation}
+\label{eq:dd2-halflife}
+N_{1/2} \;=\; \frac{\log(1/2)}{\log(1 - \rho_{\mathrm{int}})}
+\;=\; \frac{-0.693147}{\log(0.94)}
+\;=\; \frac{0.693147}{0.061875}
+\;\approx\; 11.2 \text{ foreign updates},
+\end{equation}
+using $\log(0.94) = -0.061875$. Eleven foreign updates---about two competition
+windows' worth of foreign training, or a week and a half of daily monolith
+training---halve the head. The full erosion schedule:
+
+\begin{center}
+\begin{tabular}{rcccccc}
+\toprule
+Foreign updates $N$ & 11 & 12 & 25 & 50 & 100 & 250 \\
+\midrule
+Retained $0.94^{N}$ & $0.506$ & $0.476$ & $0.213$ & $0.045$ & $0.0021$ & $1.9 \times 10^{-7}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+For a monolith that trains every day ($N_D = D$), a crisis dormancy of
+$250$--$450$ days leaves $0.94^{250} \approx 2 \times 10^{-7}$ of the head:
+a cold start without a discrete eviction event. A learner suffering one
+foreign update per 20-day window over the same dormancy takes
+$N_D \approx 12$--$22$ updates, retention $0.48$--$0.25$: degraded, not
+destroyed. The soft model grades the damage by the \emph{training cadence}
+of the allocation rule---exactly the quantity the eleven arms vary.
+
+\begin{keypoint}[title={Two models, one phenomenon, bounded from both ends}]
+HARD and SOFT bracket the same constraint---finite capacity under foreign
+training---from opposite extremes. HARD is the worst case per event: one
+overflow update destroys a head completely, at a stopping time whose law
+Propositions~\ref{prop:dd2-coupon}--\ref{prop:dd2-survival} pin down. SOFT is
+the gentlest plausible case: no single update matters, yet the geometric
+decay \eqref{eq:dd2-soft-retention} reaches the same endpoint at the
+dormancies in play ($0.94^{250} \approx 10^{-7}$). A conclusion that holds
+under \emph{both} is about bounded capacity itself, not a bookkeeping rule;
+and a mechanism that protects a head must both prevent overflow updates
+(HARD) and drive the foreign-update count to zero (SOFT). Pinning
+(Section~\ref{sec:dd2-competition}) does both at once: after a covering
+one-per-regime assignment, each specialist's foreign-update probability is
+structurally $p = 0$.
+\end{keypoint}
+
+\begin{remark}[Why $\Phi$ is defined against the retention counterfactual]
+The forgetting deficit \eqref{eq:dd2-phi} subtracts the regret of the
+arm's \emph{own frozen past self}, not of an oracle, isolating dormancy
+damage from competence: a mediocre head retained perfectly has $\Phi = 0$
+(a skill problem, not a memory problem); an excellent head lost to eviction
+has large $\Phi$ even at moderate probe regret. The eleven-arm comparison of
+Section~\ref{sec:dd2-arms} needs both coordinates---probe regret for the
+bottom line, $\Phi$ for the diagnosis.
+\end{remark}
+
+% ============================================================================
+% PART III: THE RISP MECHANISM
+% ============================================================================
+\part{The \nm{} Mechanism}
+\label{sec:dd2-part-mechanism}
+
+Part~II established the problem: regimes recur after dormancies that no
+capacity-limited, reward-chasing learner survives, while episode
+heterogeneity punishes whoever survives by memorizing too literally. This
+part builds the mechanism that answers it: specialists
+(Section~\ref{sec:dd2-specialist}), windowed competition with multiplicative
+affinity updates and an absorbing pin (Section~\ref{sec:dd2-competition}),
+and the placement of \nm{} among ten alternatives in a two-axis design space
+(Section~\ref{sec:dd2-arms}).
+
+\section{The Specialist}
+\label{sec:dd2-specialist}
+
+\subsection{State: Identity, Competence, Memory}
+
+\begin{definition}[Specialist state]
+\label{def:dd2-specialist}
+The population contains $N = 4$ specialists. Specialist $i$ at day $t$
+carries three coupled state components:
+\begin{enumerate}
+  \item \textbf{Identity: niche affinity} $\alpha_i \in \Delta^{R}$,
+        initialized uniform ($\alpha_{i,r} = 1/R = 0.25$): the specialist's
+        \emph{claim} on each regime, updated only by winning competition
+        windows (Section~\ref{sec:dd2-competition}); it controls the
+        incumbency bonus and, ultimately, pinning.
+  \item \textbf{Competence: regime heads} $\{w_{i,r} : r \in H_i(t)\}$, one
+        linear SPO+ head per \emph{held} regime, $|H_i(t)| \le K < R$,
+        mapping features to predicted returns
+        $\hat y_{t,i'} = w_{i,r} \cdot x_{t,i'}$ and thence to a decision
+        via the optimizer (Definition~\ref{def:dd2-regret}).
+  \item \textbf{Memory: episode library}
+        $\{\mathcal{B}_{i,r} : r \in H_i(t)\}$, at most $6$ episodes
+        $\times$ $40$ days per held regime of $(X_t, y_t)$ records keyed by
+        episode---created with the head and \textbf{evicted with the head}
+        (hard model); the raw material for both training variants below.
+\end{enumerate}
+\end{definition}
+
+The three components are deliberately welded together: affinity determines
+where the specialist wins; winning triggers training, which builds the head
+and writes the buffer; head and buffer determine future window performance,
+which feeds back into affinity. Identity, competence, and memory rise
+together and (under eviction) fall together.
+
+\begin{definition}[Decision regret]
+\label{def:dd2-regret}
+Fix a compact feasible decision set $\mathcal{A} \subset \R^{n}$ (a polytope
+of admissible portfolios over the $n = 20$ assets), and let
+$a^{*}(v) \in \argmax_{a \in \mathcal{A}} v^{\top} a$ with optimal value
+$z^{*}(v) = \max_{a \in \mathcal{A}} v^{\top} a$. The \textbf{per-day
+decision regret} of a prediction $\hat y_t$ against realized returns $y_t$ is
+\begin{equation}
+\label{eq:dd2-regret}
+\rho(\hat y_t,\, y_t) \;=\; z^{*}(y_t) \;-\; y_t^{\top} a^{*}(\hat y_t)
+\;\ge\; 0:
+\end{equation}
+the return foregone by acting on the prediction instead of on the truth.
+Regret depends on $\hat y_t$ only through the \emph{decision} it induces---two
+predictions with different numbers but the same induced portfolio have
+identical regret. This is the decision-focused viewpoint of
+\citet{elmachtoub2022smart}: the loss is downstream decision quality, not
+prediction error.
+\end{definition}
+
+\subsection{One Day in the Life}
+
+Each day $t$, the causal labeler emits $\hat r_t$ (visible to everyone), and
+the system follows one of two paths.
+
+\textbf{Pinned case} ($\hat r_t$ pinned to owner $o(\hat r_t)$,
+Definition~\ref{def:dd2-pin}):
+\begin{enumerate}
+  \item The owner alone serves the live decision
+        $a_t = a^{*}\bigl(\hat y^{(o)}_t\bigr)$ using $w_{o, \hat r_t}$.
+  \item The day's record $(X_t, y_t)$ is appended to the owner's buffer
+        $\mathcal{B}_{o, \hat r_t}$ (current episode, capped at $40$ days;
+        oldest of the $\le 6$ episodes rotated out when a new one opens).
+  \item On its training cadence, the owner takes a training step
+        (Section~\ref{sec:dd2-training}) on $\mathcal{B}_{o, \hat r_t}$.
+        \emph{No other specialist decides, trains, or updates anything.}
+\end{enumerate}
+
+\textbf{Unpinned case}:
+\begin{enumerate}
+  \item \textbf{Shadow decisions.} Every specialist $i$ forms
+        $\hat y^{(i)}_t$ (with $w_{i, \hat r_t}$ if held; with the
+        zero-initialized default head, hence a default decision, if not) and
+        its shadow decision $a^{(i)}_t = a^{*}(\hat y^{(i)}_t)$. The live
+        decision is served by the current best claimant (highest
+        $\alpha_{\cdot, \hat r_t}$).
+  \item \textbf{Regret accounting.} Each specialist's realized regret
+        $\rho^{(i)}_t = \rho(\hat y^{(i)}_t, y_t)$ is appended to the open
+        competition window for regime $\hat r_t$. Windows are regime-gated:
+        only days with $\hat r_t = r$ advance $r$'s window, so a window
+        spans regime interruptions without contamination.
+  \item \textbf{Window close.} When $r$'s window reaches $W_c = 20$
+        in-regime days, a winner is declared
+        (Section~\ref{sec:dd2-competition}), the winner's affinity takes one
+        exponentiated-gradient step, and \emph{the winner alone} trains on
+        the window's data (appended to its buffer for $r$; if it holds no
+        head for $r$, one is instantiated now---the moment HARD eviction or
+        SOFT interference strikes its \emph{other} heads).
+  \item \textbf{Pin check.} If $\alpha_{i^{*}, r} \ge 0.95$, regime $r$ is
+        pinned to $i^{*}$ permanently.
+\end{enumerate}
+
+\begin{intuition}[title={Why losers do not train}]
+The most consequential line in the loop is the quiet one: only the window
+winner trains. Training is simultaneously the reward (the winner improves at
+$r$) and the cost-bearer (training on $r$ is a foreign update against every
+other head the trainer holds). A specialist that keeps losing on $r$ never
+pays $r$'s interference cost---its own niche's head sits at $p = 0$ in the
+foreign-update process of Section~\ref{sec:dd2-dormancy}. Competition is not
+just selecting who improves; it is rationing who gets \emph{damaged}.
+\end{intuition}
+
+\subsection{The SPO+ Training Step}
+\label{sec:dd2-training}
+
+Training must improve \emph{decisions}, so the loss is a decision-aware
+surrogate: regret \eqref{eq:dd2-regret} itself is piecewise constant in
+$\hat y$ (it changes only when the induced $\argmax$ jumps), hence useless
+for gradients. The SPO+ surrogate of \citet{elmachtoub2022smart}, written
+here in the return-maximization convention, is
+\begin{equation}
+\label{eq:dd2-spoloss}
+\ell_{\mathrm{SPO+}}(\hat y, y)
+\;=\;
+\max_{a \in \mathcal{A}} \bigl\{ (2\hat y - y)^{\top} a \bigr\}
+\;-\; 2 \hat y^{\top} a^{*}(y)
+\;+\; z^{*}(y).
+\end{equation}
+
+\begin{lemma}[SPO+ is a convex upper bound on regret]
+\label{lem:dd2-spoplus}
+$\ell_{\mathrm{SPO+}}(\cdot, y)$ is convex in $\hat y$, satisfies
+$\ell_{\mathrm{SPO+}}(y, y) = 0$, and
+$\ell_{\mathrm{SPO+}}(\hat y, y) \ge \rho(\hat y, y)$ for all $\hat y$.
+A subgradient in $\hat y$ is
+\begin{equation}
+\label{eq:dd2-spograd}
+g(\hat y, y) \;=\; 2\bigl(a^{*}(2\hat y - y) - a^{*}(y)\bigr).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Convexity: the first term of \eqref{eq:dd2-spoloss} is a maximum of affine
+functions of $\hat y$, the rest linear or constant. At $\hat y = y$ the
+three terms are $z^{*}(y) - 2z^{*}(y) + z^{*}(y) = 0$. Upper bound:
+evaluating the max at the feasible point $a^{*}(\hat y)$,
+\[
+\ell_{\mathrm{SPO+}}(\hat y, y)
+\;\ge\; 2\hat y^{\top}\bigl(a^{*}(\hat y) - a^{*}(y)\bigr)
++ \bigl(z^{*}(y) - y^{\top} a^{*}(\hat y)\bigr),
+\]
+where the first bracket is $\ge 0$ because $a^{*}(\hat y)$ maximizes
+$\hat y^{\top} a$, and the second is exactly $\rho(\hat y, y)$.
+Subgradient: Danskin's theorem on the max term gives
+$2\,a^{*}(2\hat y - y)$; the linear term contributes $-2a^{*}(y)$.
+\end{proof}
+
+With the linear head $\hat y_{t,i} = w^{\top} x_{t,i}$, the chain rule turns
+\eqref{eq:dd2-spograd} into a gradient in $w$:
+$\nabla_{w}\, \ell_{\mathrm{SPO+}}(\hat y_t, y_t)
+= \sum_{i=1}^{n} g_i(\hat y_t, y_t)\, x_{t,i}$.
+
+\begin{example}[SPO+ arithmetic on two assets]
+\label{ex:dd2-spoplus}
+Let $\mathcal{A} = \{e_1, e_2\}$, truth $y = (0.01, -0.01)$, prediction
+$\hat y = (-0.002, 0.004)$ (ranking inverted). Then $a^{*}(y) = e_1$,
+$z^{*}(y) = 0.01$, $a^{*}(\hat y) = e_2$, so
+$\rho = 0.01 - (-0.01) = 0.02$. For SPO+:
+$2\hat y - y = (-0.014, 0.018)$, maximized by $e_2$ at $0.018$; the linear
+term is $-2\hat y^{\top} e_1 = 0.004$; hence
+$\ell_{\mathrm{SPO+}} = 0.018 + 0.004 + 0.01 = 0.032 \ge \rho = 0.02$.
+The subgradient \eqref{eq:dd2-spograd} is $g = 2(e_2 - e_1) = (-2, 2)$:
+descent pushes $\hat y_1$ up and $\hat y_2$ down---directly toward repairing
+the ranking that caused the bad decision, not toward shrinking prediction
+error per se.
+\end{example}
+
+\subsection{ERM versus INV over the Episode Library}
+\label{sec:dd2-erm-inv}
+
+A training step consumes the episode buffer
+$\mathcal{B}_{i,r} = \{B_1, \ldots, B_E\}$, $E \le 6$ episodes. Write
+\[
+\bar\ell_e(w) \;=\; \frac{1}{|B_e|} \sum_{t \in B_e}
+\ell_{\mathrm{SPO+}}\bigl(\hat y_t(w),\, y_t\bigr),
+\qquad
+\bar\ell(w) \;=\; \frac{1}{E} \sum_{e=1}^{E} \bar\ell_e(w)
+\]
+for the per-episode and pooled mean surrogate losses. The two variants:
+
+\paragraph{ERM variant.} Sample one episode $e \sim \mathrm{Unif}\{1..E\}$
+and take a subgradient step on $\bar\ell_e(w)$. In expectation this descends
+the pooled objective $\bar\ell(w)$: all episode-days are equal, and the head
+converges toward the buffer-pooled SPO+ minimizer---including whatever
+episode-specific $\gamma$ structure dominates the buffer.
+
+\paragraph{INV variant.} Descend the variance-penalized objective
+\begin{equation}
+\label{eq:dd2-invobj}
+J(w) \;=\; \Var_e\bigl[\bar\ell_e(w)\bigr] \;+\; \beta\, \E_e\bigl[\bar\ell_e(w)\bigr]
+\;=\; \frac{1}{E} \sum_{e=1}^{E} \bigl(\bar\ell_e(w) - \bar\ell(w)\bigr)^2
+\;+\; \beta\, \bar\ell(w),
+\end{equation}
+which demands not just low mean loss but \emph{evenly} low loss across
+episodes---the invariance principle transplanted into decision-focused
+learning \citep{yan2026invpnco}.
+
+\begin{proposition}[INV gradient]
+\label{prop:dd2-invgrad}
+The gradient of \eqref{eq:dd2-invobj} is
+\begin{equation}
+\label{eq:dd2-invgrad}
+\nabla_w J(w) \;=\; \frac{1}{E} \sum_{e=1}^{E}
+\Bigl[\, 2\bigl(\bar\ell_e(w) - \bar\ell(w)\bigr) + \beta \,\Bigr]\,
+\nabla_w \bar\ell_e(w).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Differentiate the variance term of \eqref{eq:dd2-invobj}:
+\[
+\nabla_w \Var_e
+= \frac{1}{E} \sum_{e} 2\bigl(\bar\ell_e - \bar\ell\bigr)
+\bigl(\nabla \bar\ell_e - \nabla \bar\ell\bigr)
+= \frac{2}{E} \sum_{e} \bigl(\bar\ell_e - \bar\ell\bigr) \nabla \bar\ell_e
+\;-\; \frac{2}{E} \nabla \bar\ell \underbrace{\sum_{e} \bigl(\bar\ell_e - \bar\ell\bigr)}_{=\,0}.
+\]
+The cross term vanishes identically because the centered residuals
+$\bar\ell_e - \bar\ell$ sum to zero by definition of $\bar\ell$---this is the
+one step worth seeing explicitly, as it is why the INV gradient is a clean
+\emph{reweighting} of per-episode gradients rather than a new object. Adding
+$\beta \nabla \bar\ell = (\beta/E) \sum_e \nabla \bar\ell_e$ and collecting
+terms gives \eqref{eq:dd2-invgrad}.
+\end{proof}
+
+\begin{intuition}[title={Reading the INV weights}]
+Equation~\eqref{eq:dd2-invgrad} gives episode $e$ the gradient weight
+$2(\bar\ell_e - \bar\ell) + \beta$: an episode at the buffer average gets
+weight $\beta$ (plain ERM); a worse-than-average episode gets weight
+$> \beta$; and a better-than-average episode with
+$\bar\ell_e < \bar\ell - \beta/2$ gets a \emph{negative} weight---gradient
+\emph{ascent} on episodes served suspiciously well. That last case is the
+anti-overfitting tooth. In the generator \eqref{eq:dd2-generator}, loading
+on the stable direction $\theta_r$ lowers all $\bar\ell_e$ roughly equally
+(no variance contribution), while loading on $x_{\mathrm{sp}}$ helps the
+episodes whose $\gamma_{r,e}$ sign matches and hurts the rest---pumping the
+variance term. INV strips $\gamma$-chasing weight while keeping
+$\theta$-weight: the objective-level answer to the het trap of
+Example~\ref{ex:dd2-het}, complementary to the allocation-level answer
+(pinning). At $\mathrm{het} = 0$ the penalty has nothing real to penalize
+and INV pays a small price---which is why the experiment carries both A5
+(ERM) and A6 (INV) rather than declaring a winner a priori.
+\end{intuition}
+
+\section{Competition Dynamics}
+\label{sec:dd2-competition}
+
+\subsection{Windows, Winners, and the Exponentiated-Gradient Update}
+
+\begin{definition}[Competition window and winner]
+\label{def:dd2-window}
+For an unpinned regime $r$, the competition window collects, for each
+specialist $i$, its shadow decision regrets over $W_c = 20$ in-regime days.
+At window close the \textbf{winner} is
+\begin{equation}
+\label{eq:dd2-winner}
+i^{*} \;=\; \argmin_{i \in \{1..N\}} \;
+\Bigl[\, \bar\rho^{(i)}_{\mathrm{win}}
+\;-\; \lambda \bigl(\alpha_{i,r} - \tfrac{1}{R}\bigr) \Bigr],
+\qquad \lambda = 0.3,
+\end{equation}
+where $\bar\rho^{(i)}_{\mathrm{win}}$ is $i$'s mean window regret: lowest
+regret wins, with an \textbf{incumbency bonus} $\lambda(\alpha_{i,r} - 1/R)$
+subtracted for affinity above uniform. The winner then applies one
+\textbf{exponentiated-gradient (EG) step} to its own affinity vector,
+\begin{equation}
+\label{eq:dd2-eg}
+\alpha_{i^{*}, r} \;\leftarrow\; \alpha_{i^{*}, r}\, e^{\eta},
+\qquad \text{then renormalize } \alpha_{i^{*}} \text{ over } \Delta^{R},
+\qquad \eta = 0.6,
+\end{equation}
+and trains on the window's data. Losers' affinity vectors are untouched.
+\end{definition}
+
+Two structural remarks. First, the bonus is centered at $1/R$, so an
+uncommitted specialist gets zero bonus, and since
+$\sum_r (\alpha_{i,r} - 1/R) = 0$, incumbency advantages across regimes are
+\emph{zero-sum}: claiming $r$ harder structurally weakens the claim
+everywhere else. Second, \eqref{eq:dd2-eg} belongs to the
+multiplicative-update family of exponentiated gradient
+\citep{kivinen1997exponentiated}, Hedge \citep{freund1997decision}, and
+multiplicative weights \citep{arora2012multiplicative}---inverted: each
+\emph{specialist} runs the update over \emph{regimes} (what shall I be?),
+rather than a master algorithm weighting experts (whom shall I trust?).
+
+Because only the $r$-coordinate is multiplied and the rest are renormalized
+proportionally, the update has a two-point reduction: writing
+$\alpha = \alpha_{i^{*}, r}$ before the win,
+\begin{equation}
+\label{eq:dd2-egclosed}
+\alpha' \;=\; \frac{\alpha\, e^{\eta}}{\alpha\, e^{\eta} + (1 - \alpha)},
+\qquad \text{equivalently} \qquad
+\underbrace{\log \frac{\alpha'}{1 - \alpha'}}_{\text{log-odds}}
+= \log \frac{\alpha}{1 - \alpha} + \eta .
+\end{equation}
+Each win adds exactly $\eta$ to the log-odds of regime $r$ within the
+winner's identity. Affinity is a win counter, read through a sigmoid.
+
+\begin{example}[Worked EG trace: uniform to pinned in seven wins]
+\label{ex:dd2-egtrace}
+Start at $\alpha = 1/R = 0.25$ and let the same specialist win consecutive
+windows for $r$ (winning nothing else in between). With $\eta = 0.6$,
+$e^{0.6} = 1.82212$. First win, by \eqref{eq:dd2-egclosed}:
+\[
+\alpha_1 = \frac{0.25 \times 1.82212}{0.25 \times 1.82212 + 0.75}
+= \frac{0.45553}{1.20553} = 0.37787.
+\]
+Second win:
+\[
+\alpha_2 = \frac{0.37787 \times 1.82212}{0.37787 \times 1.82212 + 0.62213}
+= \frac{0.68852}{1.31065} = 0.52533.
+\]
+Iterating (all values rounded from full-precision iteration):
+
+\begin{center}
+\begin{tabular}{lccccccccc}
+\toprule
+Wins $k$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\
+\midrule
+$\alpha_k$ & $0.250$ & $0.378$ & $0.525$ & $0.668$ & $0.786$ & $0.870$ & $0.924$ & $\mathbf{0.957}$ & $0.976$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The pin threshold $0.95$ is crossed at win $7$. The closed form confirms it:
+$\alpha_k \ge 0.95$ iff the odds satisfy
+$\tfrac{\alpha_0}{1-\alpha_0} e^{\eta k} = \tfrac13 e^{0.6k} \ge 19$, i.e.\
+$e^{0.6k} \ge 57$, i.e.\ $k \ge \ln 57 / 0.6 = 4.043/0.6 = 6.74$, so
+$k = 7$. Seven clean wins---$7 \times 20 = 140$ in-regime days, roughly three
+to four common-regime episodes---separate a cold uniform specialist from
+permanent ownership.
+\end{example}
+
+\subsection{Rich-Get-Richer: The Symmetry-Breaking Engine}
+
+The EG update alone would make ownership a random walk among near-identical
+specialists. What breaks the symmetry is the coupling to training:
+\emph{winners train $\Rightarrow$ training improves the head and deepens the
+buffer $\Rightarrow$ a better head wins the next window more often
+$\Rightarrow$ winners win again.}
+
+Formally, let $q_m$ be the probability that the current leader on regime $r$
+wins window $m$. Early on, heads are near-identical and $q_m \approx$ the
+tie-breaking rate, but the first (possibly lucky) win hands the winner a
+window's worth of training on $r$; under the separated-$\theta_r$ generator
+this lowers its expected window regret, so $q_{m+1} > q_m$; and the affinity
+bonus in \eqref{eq:dd2-winner} adds a deterministic tilt
+$\lambda(\alpha_{i,r} - \alpha_{j,r})$ on top. The win process is a
+reinforcing urn: the leader's log-odds climb at rate $\eta$ per win, while
+losers---who do not train on $r$---suffer no foreign updates from it. Once
+one specialist leads on each regime, the system is in the basin of the
+covering one-per-regime assignment.
+
+This is competitive exclusion in the sense of \citet{li2026gause}: one
+species per niche at equilibrium, with reward competition as the exclusion
+force---and the empirical record matches the mechanism's prediction exactly:
+in \textbf{all 20 seeds}, the population converges to a covering
+one-specialist-per-regime assignment, with each common regime pinned at
+$\alpha \ge 0.95$.
+
+\subsection{The Batching Question: A Pre-Registered Prediction and Its Refutation}
+\label{sec:dd2-batching}
+
+How large must $W_c$ be? The pre-registered reasoning was a single-window
+concentration argument. Suppose two specialists' true mean per-day regrets
+on $r$ differ by $\Delta > 0$, with per-day regrets bounded in $[0, B]$. The
+window comparison errs when the worse specialist posts the lower sample
+mean; by Hoeffding's inequality on the per-day regret differences (range
+$2B$, mean $\Delta$),
+\begin{equation}
+\label{eq:dd2-hoeffding}
+\Pr\bigl(\text{wrong winner}\bigr)
+\;\le\; \exp\!\left( - \frac{W_c\, \Delta^2}{2 B^2} \right),
+\qquad \text{so} \qquad
+W_c \;\ge\; \frac{2 B^2}{\Delta^2} \ln \frac{1}{\delta}
+\end{equation}
+guarantees error $\le \delta$. Early in competition $\Delta$ is small by
+construction (symmetric initialization), so \eqref{eq:dd2-hoeffding} blows
+up, and the natural prediction follows: \emph{small windows produce noisy
+winners, noisy winners scatter the EG updates, and specialization should
+require large $W_c$}---batching looked necessary, with $W_c = 1$ expected to
+fail outright.
+
+\begin{keypoint}[title={The empirical refutation, stated plainly}]
+The pre-registered prediction was wrong. Sweeping
+$W_c \in \{1, 5, 20, 60\}$ over 20 seeds, post-reactivation regret is
+\textbf{flat}: $0.0303$--$0.0309$ across the sweep, with $W_c = 1$
+\emph{marginally best}. Batching within the window is not necessary for
+convergence, and the analysis that said otherwise mislocated where the
+averaging happens.
+\end{keypoint}
+
+The corrected mechanism story. Inequality \eqref{eq:dd2-hoeffding} bounds the
+error of a \emph{single} comparison, but nothing in the architecture consumes
+single comparisons: the EG recursion \eqref{eq:dd2-egclosed} sums
+$\eta \cdot \mathbf{1}\{\text{win}\}$ in log-odds space across windows, and
+reaching the pin requires $\approx \ln 57 / \eta \approx 6.7$ \emph{net}
+wins, not one correct vote. If the better specialist wins each window with
+probability $q$ above its rivals' rates, its lead in win counts---hence in
+log-odds---grows linearly in the number of windows with noise
+$O(\sqrt{\text{windows}})$: the law of large numbers operates \emph{across}
+windows, in $\alpha$-space, regardless of $W_c$. Shrinking $W_c$ from 20 to 1
+makes each vote noisier but delivers $20\times$ more votes per regime-day,
+and the two effects approximately cancel; small windows also start the
+rich-get-richer training loop earlier (the first win arrives after 1 day, not
+20), the plausible source of $W_c = 1$'s marginal edge. The affinity is
+already an exponentially-weighted tally of the win history---the EG
+accumulation \emph{is} the cross-window averaging---so a second averaging
+layer inside the window was redundant.
+
+\begin{warning}[title={Do not quietly upgrade the corrected story to a prediction}]
+The flat $W_c$ sweep is an empirical result on this stream (synthetic
+generator, $R = 4$, $N = 4$, $\eta = 0.6$), not a theorem. The corrected
+account is a post-hoc narrative consistent with the data and with standard
+multiplicative-weights analyses
+\citep{freund1997decision, arora2012multiplicative}, but the experiment that
+would test \emph{it} (varying $\eta$ jointly with $W_c$) was not
+pre-registered. One box above records a refuted prediction; this box keeps
+the replacement story from enjoying a credibility it has not yet earned.
+\end{warning}
+
+\subsection{Pinning}
+\label{sec:dd2-pinning}
+
+\begin{definition}[Pin]
+\label{def:dd2-pin}
+When a window winner's updated affinity satisfies
+$\alpha_{i^{*}, r} \ge 0.95$, regime $r$ is \textbf{pinned} to owner
+$o(r) = i^{*}$, permanently: thereafter $r$'s live decisions are served by
+$o(r)$ alone, training on $r$-days goes to $o(r)$ alone, and the competition
+machinery for $r$ (shadow decisions, windows, EG updates) shuts down.
+\end{definition}
+
+What changes at the pin is the \emph{modality} of protection. Before it, the
+owner-apparent is protected statistically: it keeps winning, so it keeps
+being the one who trains, but a bad run could in principle let a rival in.
+After it, protection is structural: ownership no longer consults the reward
+stream at all---the assignment becomes reward-independent, not as an
+assumption but as a phase the dynamics enter and cannot leave. Once all
+regimes are pinned one-per-specialist (the observed endpoint in every seed),
+each specialist trains only on its own regime: $p = 0$, so under HARD it
+never overflows and under SOFT it suffers zero interference. The
+coupon-collector clock of Proposition~\ref{prop:dd2-coupon} never starts; the
+half-life \eqref{eq:dd2-halflife} never ticks. Dormancy becomes silence, with
+the head and the six-episode library untouched---a distributed persistent
+memory.
+
+Two ablations calibrate how much of the benefit is the pin itself versus the
+competition that produces it:
+\begin{itemize}
+  \item \textbf{Never-pin:} disabling Definition~\ref{def:dd2-pin} costs
+        $0.0320$ versus $0.0307$ pinned post-reactivation regret---the
+        residual price of merely statistical protection: perpetual shadow
+        competition occasionally hands windows, hence foreign training, to
+        non-owners, and serving can flicker at reactivations.
+  \item \textbf{No incumbency bonus:} $\lambda = 0$ yields $0.0314$ versus
+        $0.0307$. The bonus \emph{accelerates} convergence to ownership but
+        does not cause it---the rich-get-richer loop breaks symmetry on its
+        own. Causality lives in the win--train coupling; $\lambda$ is a
+        catalyst.
+\end{itemize}
+
+\paragraph{The crisis wrinkle.}
+The rare regime exposes a quantization effect in the pin rule. A crisis
+episode lasts $15$--$30$ days and yields at most one complete $W_c = 20$
+window---often zero---and crisis episodes are themselves few
+(Section~\ref{sec:dd2-scarcity}). Across the 20 seeds, the crisis regime's
+top affinity reaches only $\alpha \in [0.67, 0.87]$: by the trace of
+Example~\ref{ex:dd2-egtrace}, exactly $3$--$5$ EG wins from uniform
+($\alpha_3 = 0.668$, $\alpha_5 = 0.870$)---the affinity arithmetic
+independently confirms that the stream does not contain the $\approx 7$
+complete crisis windows formal pinning requires. The substantive outcome is
+nonetheless clean: in every seed the crisis regime has a \emph{stable unique
+owner}, so the covering assignment is achieved; only the formal threshold is
+starved. The deployment lesson: pin on \emph{ownership stability} (the same
+specialist winning a regime's windows across $k$ consecutive episodes), not
+on the raw $\alpha \ge 0.95$ threshold, whose win-count requirement assumes
+window-rich regimes. For rare regimes, windows---not days, not
+episodes---are the binding currency.
+
+\section{The Eleven Arms as Points in Design Space}
+\label{sec:dd2-arms}
+
+The companion experiment runs eleven arms. They are not eleven competing
+architectures; they are a factorial probe of a two-axis design space, and
+each arm exists to occupy a cell or test an edge.
+
+\paragraph{Axis 1: allocation reward-coupling.} How does the regime
+$\to$ learner assignment respond to the \emph{current} reward stream?
+Three positions: \textbf{coupled} (chases recent performance forever),
+\textbf{transient-then-structural} (\nm{}: coupled during competition,
+independent after the pin), and \textbf{independent} (lottery or oracle).
+Part~II showed why this axis governs forgetting: coupled allocation keeps
+every learner's foreign-update probability $p > 0$ during dormancy, and both
+memory models convert $p > 0$ over $250$--$450$ days into a destroyed head.
+
+\paragraph{Axis 2: training objective.} Pooled \textbf{ERM} or the
+variance-penalized \textbf{INV} of \eqref{eq:dd2-invobj} on the buffered
+episodes. This axis governs the het trap of Example~\ref{ex:dd2-het}: ERM
+imports episode-specific $\gamma$-weight into the probe window; INV strips
+it.
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+Arm & Allocation rule & Coupling & Objective \\
+\midrule
+A1 & monolith: train on whatever is active & coupled (degenerate) & ERM \\
+A2 & MoE learned router & coupled & ERM \\
+A3 & recent-performance capital shares & coupled (smooth) & ERM \\
+A4 & random fixed niches & independent & ERM \\
+A5 & \nm{} competition $\to$ pin & transient $\to$ structural & ERM \\
+A6 & \nm{} competition $\to$ pin & transient $\to$ structural & INV \\
+A7 & monolith & coupled (degenerate) & INV \\
+A8a & Hedge over fixed strategies & coupled (weights only) & none (no training) \\
+A8b & Hedge over learning experts & coupled & ERM \\
+A9 & oracle assignment from day 1 & independent & ERM \\
+A10 & oracle assignment from day 1 & independent & INV \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{A1 (monolith-ERM).} One capacity-$K$ learner; the allocation rule
+is the degenerate \emph{always me}: it serves and trains on whatever
+$\hat r_t$ is active. Its foreign-update process during any dormancy has
+$p = 1$: under HARD it is the learner of Example~\ref{ex:dd2-lru}, evicted
+within one foreign block; under SOFT it retains
+$0.94^{250} \approx 2 \times 10^{-7}$ over a crisis dormancy.
+\emph{Prediction:} catastrophic forgetting under both memory models;
+worst-tier probe regret.
+
+\paragraph{A2 (MoE learned router).} $N$ experts plus a gate matrix
+$G \in \R^{R \times N}$; on each day the gate serves expert
+$j_t = \argmax_j G[\hat r_t, j]$ with probability $0.9$ and a uniformly
+random expert with probability $\epsilon = 0.1$ ($\epsilon$-greedy); the
+served expert trains on the day; the gate updates
+\[
+G[\hat r_t, j_t] \;\mathrel{+}=\; \mathrm{lr} \cdot
+\bigl(\text{baseline} - \rho_{t}\bigr),
+\]
+with the baseline a running mean regret---below-baseline performance raises
+the routing weight. This is reward-coupled allocation \emph{forever}, and
+exploration alone guarantees damage: during a crisis dormancy of $D$ days
+the crisis expert is dragged into foreign training at rate
+$\ge \epsilon/N$ per day, so
+$\E[\text{foreign updates}] \ge \epsilon D / N
+= 0.1 \times (250\text{--}450)/4 = 6.25\text{--}11.25$---about one full
+half-life \eqref{eq:dd2-halflife} before counting routing churn; under HARD
+a single explored foreign block can evict. MoE routing in continual settings
+is studied in \citet{li2024moecl}; the failure here is not expressiveness
+but the absence of any reward-independent protection phase.
+\emph{Prediction:} forgets despite having one expert per regime available.
+
+\paragraph{A3 (recent-performance allocator).} All learners persist; capital
+shares are a softmax of recent performance, and each learner's
+\emph{training intensity equals its share}. The instructive feature is the
+\textbf{softmax floor}: a softmax is strictly positive, so every learner
+receives a minimum share $s_{\min} > 0$ of every day's training, foreign
+days included. The floor \emph{is} the erosion rate: a dormant regime's
+natural owner accrues foreign updates at rate $\ge s_{\min}$ per day,
+retention $\approx 0.94^{\,s_{\min} D}$ under SOFT---graded and unavoidable.
+\emph{Prediction:} graded (not cliff-like) forgetting; better than A1/A2,
+worse than any covering reward-independent arm.
+
+\paragraph{A4 (random fixed niches).} Each specialist is assigned a regime
+by lottery at $t = 0$, fixed forever: perfectly reward-independent, zero
+foreign updates, $\Phi \approx 0$ on every \emph{covered} regime. The defect
+is coverage: with $N = R = 4$ and independent uniform draws, all four
+regimes are covered with probability $4!/4^4 = 24/256 \approx 9.4\%$---in
+over $90\%$ of lotteries some regime has no owner and is served at
+default-decision quality forever. Reward-independence is necessary but not
+sufficient: the assignment must also cover.
+\emph{Prediction:} bimodal---oracle-grade retention on covered regimes,
+worst-case service on uncovered ones.
+
+\paragraph{A5 / A6 (\nm{}-ERM / \nm{}-INV).} The mechanism of
+Sections~\ref{sec:dd2-specialist}--\ref{sec:dd2-competition}, differing only
+in the buffer objective (ERM step vs.\ INV gradient \eqref{eq:dd2-invgrad}).
+\nm{} sits at the distinguished point of axis 1: reward-coupled
+\emph{exactly long enough} to discover a covering assignment (solving A4's
+coverage failure), then structurally independent (solving A1--A3's
+protection failure). \emph{Predictions:} both converge to covering pinned
+assignments and retain through dormancy (confirmed: 20/20 seeds, common
+regimes pinned $\ge 0.95$, pinned regret $0.0307$); A6 outperforms A5 on
+probe windows as $\mathrm{het}$ grows, since the probe meets a fresh
+$\gamma_{r,e}$ (Example~\ref{ex:dd2-het}).
+
+\paragraph{A7 (monolith-INV).} A1's allocation with A6's objective, blocking
+a confound: if \nm{}-INV beats the monolith, is it the mechanism or just the
+better loss? INV reshapes \emph{what} is learned from the buffer, but the
+buffer itself is evicted (HARD) or the head eroded (SOFT) by the allocation;
+no objective can preserve parameters it does not control.
+\emph{Prediction:} A7 $\approx$ A1 on retention---the objective axis cannot
+rescue a failure on the allocation axis.
+
+\paragraph{A8a / A8b (Hedge over fixed / learning experts).} A8a runs Hedge
+\citep{freund1997decision} over a pool of \emph{fixed} strategies: weights
+$w_i \propto \exp(-\eta_H \sum_s \rho^{(i)}_s)$, no training anywhere. The
+allocation is reward-coupled, but with nothing trainable there is nothing to
+forget: A8a is structurally immune to dormancy, and bounded by the best
+fixed strategy rather than the best learned head. A8b keeps the Hedge
+allocation but lets the weighted experts train on the days they are trusted
+with: trainability returns, and with it the foreign-update process.
+\emph{A8a vs.\ A8b isolates whether dormancy damage comes from
+reward-coupled allocation per se or from training under it} (the latter).
+\emph{Predictions:} A8a immune to forgetting but capped within episodes;
+A8b recovers in-episode adaptation and re-imports forgetting.
+
+\paragraph{A9 / A10 (oracle assignment, ERM / INV).} The regime $\to$
+specialist map is given correctly at $t = 0$---pinning before day one---and
+each owner trains only on its regime, with ERM (A9) or INV (A10). These are
+the ceilings: reward-independent, covering, zero discovery cost. The
+A5/A6 vs.\ A9/A10 gap prices the \emph{discovery phase} (contested serving,
+occasional wrong winners, foreign training before ownership settles); the
+A9 vs.\ A10 gap reads off the pure objective effect with allocation held
+perfect, mirroring A5 vs.\ A6.
+
+\begin{keypoint}[title={The arms are an experiment about classes, not architectures}]
+Each arm represents a \emph{cell} in (coupling $\times$ objective) space,
+and every headline conclusion is a contrast between cells with one axis held
+fixed: A5 vs.\ A2/A3 tests allocation class at fixed objective; A6 vs.\ A5
+and A10 vs.\ A9 test objective class at fixed allocation; A7 shows the
+objective axis cannot compensate for the allocation axis; A8a vs.\ A8b shows
+the damage mechanism is training-under-coupling, not coupling itself; A4
+shows reward-independence without coverage is not enough; A9/A10 price
+discovery. Substituting a different router, softmax temperature, or fixed
+pool would not move any cell. The claim under test is never ``\nm{} beats
+architecture X''; it is that \emph{retention through dormancy requires an
+assignment that is both reward-independent and covering, and
+competition-then-pinning is a cheap emergent source of exactly that
+conjunction}---with the objective axis an orthogonal dial governing
+probe-window robustness to episode heterogeneity, not retention.
+\end{keypoint}
+
+\begin{remark}[Where the empirical record currently stands]
+The companion experiments confirm the \nm{} cell directly: 20/20 seeds reach
+a covering one-per-regime assignment; common regimes pin at
+$\alpha \ge 0.95$; crisis acquires a stable unique owner at
+$\alpha \in [0.67, 0.87]$ without a formal pin; never-pinning costs $0.0320$
+vs.\ $0.0307$; $\lambda = 0$ costs $0.0314$ vs.\ $0.0307$; and the $W_c$
+sweep is flat at $0.0303$--$0.0309$ with $W_c = 1$ marginally best---the
+latter refuting the pre-registered batching prediction of
+Section~\ref{sec:dd2-batching}. The refutation is reported with the same
+prominence as the confirmations; a design-space map is only as trustworthy
+as its falsified cells.
+\end{remark}

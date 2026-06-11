@@ -1,0 +1,234 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\setlist{nosep,leftmargin=1.6em}
+
+\newcommand{\gate}[1]{\textcolor{red!70!black}{\textbf{[GATE: #1]}}}
+\newcommand{\risp}{\textsc{RISP}}
+
+\title{\textbf{Idea 1 --- Full Paper Design \& Roadmap}\\[4pt]
+\large \emph{When the Regime Returns: Retention and Invariance in\\ Decision-Focused Strategy Pools for Non-Stationary Markets}}
+\author{Yuhao Li (University of Pennsylvania)\\
+\small Source assets: GAUSE (Li, 2026) $+$ Inv-PnCO (Yan, Geng, \dots, Li, et al., TPAMI 2026)}
+\date{June 10, 2026}
+
+\begin{document}
+\maketitle
+
+\section{Paper Title}
+\textbf{Primary title:} \emph{``When the Regime Returns: Retention and Invariance in Decision-Focused Strategy Pools for Non-Stationary Markets.''}
+
+\medskip\noindent\textbf{Alternatives} (pick at submission based on venue culture):
+\begin{enumerate}[label=(\alph*)]
+  \item ``Invariant Regime Specialists: Reward-Independent Capital Allocation for Decision-Focused Learning under Regime Switching''
+  \item ``Two Kinds of Non-Stationarity: Decomposing Retention and Invariance in Regime-Switching Strategy Pools''
+  \item ``\risp: Regime-Invariant Specialist Pools --- Surviving Both Dormancy and Drift in Financial Decision-Making''
+\end{enumerate}
+\textbf{Framework name} (use throughout paper and code): \risp{} (\emph{Regime-Invariant Specialist Pools}).
+
+\section{Thesis: The Single Falsifiable Claim}
+Financial markets exhibit \textbf{two orthogonal kinds of non-stationarity} that existing strategy-allocation methods conflate:
+\begin{description}[leftmargin=1.6em]
+  \item[(N1) Between-regime switching.] Regimes (trend / range / high-vol / crisis) recur on irregular schedules with long dormancy. A reward-chasing capital allocator (recent-P\&L weighting, learned MoE router) starves and overwrites the dormant-regime specialist, paying a full recalibration cost exactly when the regime returns [GAUSE Principle~1].
+  \item[(N2) Within-regime drift.] Each occurrence of a regime is a different draw from the regime's environment distribution (the 2008 crisis $\neq$ 2020 $\neq$ 2022). A retained specialist trained by ERM on one episode still fails OOD on the next episode [Inv-PnCO motivation].
+\end{description}
+
+\noindent\textbf{Thesis statement.} A population of capacity-bounded strategy specialists, (i)~assigned to regimes by winner-take-all competition so that the converged regime-to-specialist map is \emph{reward-independent} (solving N1 --- the crisis specialist idles through calm markets and retains its calibration by identity, not P\&L), and (ii)~each trained with a decision-focused \emph{invariance} objective (mean $+$ variance of SPO-style regret loss across historical episodes of its own regime, solving N2 --- the specialist learns the invariant decision-oriented factors common to all episodes of its regime rather than overfitting one), achieves strictly lower post-reactivation decision regret than (a)~recent-performance capital allocators, (b)~capacity-matched regime-conditioned monoliths, (c)~learned MoE routers, and (d)~retained-but-ERM specialists --- and the gain decomposes additively into a \textsc{retention} term and an \textsc{invariance} term.
+
+\medskip\noindent\textbf{Scope statement (preempting the sleeping-experts deflation).} The contribution concerns capacity-bounded \emph{learners}, not combinations of fixed experts. Sleeping-experts / adaptive-regret schemes also freeze dormant experts' state --- but only because their experts are \emph{static strategies} with nothing to forget. The problem \risp{} solves arises precisely when specialists must keep \emph{learning} within their niche under bounded capacity, so that reward-driven reallocation causes destructive interference across regimes. State this scope in the introduction, or a knowledgeable online-learning reviewer deflates the paper in one paragraph.
+
+\medskip\noindent\textbf{The paper in one picture (Figure~1 of the paper).} A $2\times2$ grid. Rows: allocation mechanism $\{$reward-driven, reward-independent$\}$. Columns: specialist training $\{$ERM, invariant$\}$. Cell value: post-reactivation regret. Prediction: monotone improvement along both axes, near-additive interaction. \emph{This $2\times2$ is the contribution} --- nobody has separated these two failure modes before.
+
+\section{Novelty Claims (intro contributions list, near-verbatim)}
+\begin{description}[leftmargin=1.6em]
+  \item[C1 --- Problem decomposition.] First work to formally decompose non-stationary financial decision error into a between-regime \emph{forgetting} term and a within-regime \emph{invariance gap}, and to show they are addressed by independent mechanisms (allocation vs.\ training objective).
+  \item[C2 --- Method.] \risp: the first strategy-pool architecture combining reward-independent (emergent, competition-driven) capacity assignment with decision-focused invariant learning per niche. No gate to train, no freezing schedule, no hand-set regime-to-desk map.
+  \item[C3 --- Theory.] A post-reactivation regret bound of the form
+  \[
+    \mathrm{Regret}_{\text{react}} \;\le\; G_{\mathrm{inv}}(\beta,\ \text{episode heterogeneity}) \;+\; G_{\mathrm{forget}}(D,\ \text{allocation mechanism}),
+  \]
+  where $G_{\mathrm{forget}}=0$ for any reward-independent assignment (extends GAUSE Observation~1 to the PnO/regret setting) and $G_{\mathrm{inv}}$ is controlled by the Inv-PnCO variance penalty (adapts Inv-PnCO Theorem~1 to regime-indexed environment families). See \S\ref{sec:theory}.
+  \item[C4 --- Evaluation protocol.] A new evaluation standard for regime-aware financial ML: \emph{post-reactivation regret} measured in a probe window of the first $N$ trading days after each regime reactivation, with leakage-free regime labeling, deflated performance statistics, and a pre-registered structure diagnostic (GAUSE \S8.6) run \emph{before} claiming gains.
+  \item[C5 --- Honest audit.] Conditions under which \risp{} does \emph{not} pay: unlimited capacity, no regime structure, regimes that never go dormant --- plus the financial analogue: when carrying costs of idle specialists exceed reactivation savings. Quantify the \emph{break-even dormancy length}.
+\end{description}
+
+\section{Positioning \& Related-Work Map}
+\begin{description}[leftmargin=1.6em]
+  \item[Bucket A --- Regime-switching finance.] Hamilton (1989) Markov-switching; Ang \& Timmermann (2012); Guidolin \& Timmermann; recent ML regime-aware portfolios, HMM$+$RL hybrids, statistical jump models (Nystrup et al.). \emph{Differentiation:} these detect regimes and condition \emph{one} model; none address bounded capacity $+$ dormancy-driven forgetting of the specialist itself. Our monolith arm is this literature's best case.
+  \item[Bucket B --- Decision-focused learning / PnO.] SPO (Elmachtoub \& Grigas), SPO-relax (Mandi et al.), LODL, LTR-PnO, Inv-PnCO. \emph{Differentiation:} all assume stationary or one-shot OOD environments; none handle \emph{recurring} environments with dormancy under bounded predictor capacity.
+  \item[Bucket C --- Online learning / ensembles.] Hedge/MWU over strategies; universal portfolios; online portfolio selection (Li \& Hoi); \textbf{adaptive regret / sleeping experts is the closest formal relative --- must be addressed head-on}. Crucial nuance: sleeping experts \emph{also} retain dormant experts' state, but only because its experts are fixed strategies with nothing to forget. The differentiation is the scope statement of \S2: \risp{} addresses capacity-bounded \emph{learning} specialists, where reward-driven allocation causes cross-regime interference. Accordingly, baseline A8 ships in \emph{two} variants: (A8a) sleeping experts over fixed strategies (expected to retain but underperform within-regime, since it cannot adapt), and (A8b) sleeping experts over capacity-bounded learning experts (expected to inherit the interference/forgetting failure). This pair turns the most dangerous related work into a supporting experiment.
+  \item[Bucket D --- MoE / continual learning.] Li et al.\ (ICLR 2025) MoE-CL theory (gate freezing); EWC. Used exactly as in GAUSE: corroborating theory, complementary regime.
+  \item[Bucket E --- Multi-strategy fund practice (motivation).] Strategy-decay literature (McLean \& Pontiff), crisis-alpha / tail-hedge literature. Grounds the ``crisis playbooks decay during calm'' claim of GAUSE \S9.2.
+\end{description}
+
+\section{Formal Problem Setup (Paper \S3)}
+\textbf{Data stream.} $t=1,\dots,T$; observable features $x_t$ (returns, vol, term structure, breadth, flows, \dots), unknown coefficients $y_t$ (next-period returns/costs), latent regime $r_t\in\{1,\dots,R\}$. Regimes recur; dormancy $D(r)$ is the length of inactive spells.
+
+\medskip\noindent\textbf{Episodes as environments.} The $e$-th historical occurrence of regime $r$ defines environment $(r,e)$ with distribution $p(x,y\mid r,e)$. \textbf{Assumption} (Inv-PnCO Assumption~1, regime-indexed): within each regime $r$ there exist invariant decision-oriented factors $f_r$ such that $p(z\mid f_r, e)=p(z\mid f_r)$ across episodes $e$ --- the \emph{optimal decision structure} of a crisis is stable across crises even though surface features drift (flight-to-quality correlations, vol clustering, liquidity spirals recur structurally).
+
+\medskip\noindent\textbf{Episode-scarcity mitigation (statistical viability of the variance penalty).} Crisis regimes yield only 5--7 historical episodes in 35 years of equities; $\mathrm{Var}_e[\mathcal L]$ over 5 noisy samples is fragile. Two mitigations are part of the \emph{default} design, not afterthoughts: (i)~\emph{sub-episode environments} --- bootstrapped non-overlapping blocks within episodes enlarge the environment set while preserving between-episode heterogeneity (block length sensitivity reported); (ii)~\emph{cross-asset episodes} --- the same crisis observed in equities, credit, FX, and commodities counts as distinct environments. Mitigation~(ii) is a feature, not a patch: it upgrades the claim to \emph{invariance across asset classes within a regime}, which is both stronger and more interesting than within-asset invariance, and it directly exploits the multi-asset data plan of E6.
+
+\medskip\noindent\textbf{Decision layer} (kept combinatorial to inherit PnCO):
+\begin{itemize}
+  \item \emph{Primary:} cardinality-constrained long-only portfolio
+  \[
+    \max_z \; y_t^\top z \quad \text{s.t.} \quad \textstyle\sum_i z_i \le \text{budget},\;\; \|z\|_0 \le k,\;\; z \in \{0, w_{\min},\dots,w_{\max}\}\ \text{(grid)},
+  \]
+  knapsack-like, solvable with Gurobi; regret well-defined as $\mathrm{Regret}(t)=|F(z^\ast,y_t)-F(\hat z, y_t)|$ [Inv-PnCO Eq.~4].
+  \item \emph{Secondary (robustness):} (i)~asset-selection knapsack; (ii)~optimal execution scheduling as shortest path (symmetry with Inv-PnCO's SP task).
+\end{itemize}
+
+\noindent\textbf{Population.} $N$ specialists, each with capacity $K<R$ (a specialist keeps $\le K$ regimes calibrated). Implement both GAUSE memory models: hard LRU on regime-specific heads, and soft interference decay via per-regime adapters that decay when untouched.
+
+\medskip\noindent\textbf{\risp{} mechanism (batched competition cycle).}
+\begin{enumerate}
+  \item All specialists produce predictions $\hat y_i$ and decisions $\hat z_i$ for the current regime $r_t$.
+  \item Score: quality $q_i=-\mathrm{Regret}_i$ (normalized); competitive score $q_i+\lambda(\alpha_{i,r_t}-1/R)$.
+  \item \textbf{Batched winner-take-all (default).} Per-period financial regret is noise-dominated (daily return signal-to-noise is tiny), so per-step competition risks converging to noise. The winner is therefore decided over rolling competition windows of $W_c\approx 20$ trading days of \emph{cumulative} within-regime regret; the window winner applies one EG affinity update ($\eta\approx0.6$). The per-step variant is retained as an ablation, with a $W_c$ sweep ($1, 5, 20, 60$ days) characterizing the noise--responsiveness trade-off. (This is the financial-data adaptation GAUSE's cleaner prediction-error domains did not need.)
+  \item Specialists holding $r_t$ within capacity update their predictive model for $r_t$ with the Inv-PnCO loss over that regime's episode buffer:
+  \[
+    \min\; \mathrm{Var}_e\!\left[\mathcal L_{\mathrm{SPO}}(r_t)\right] + \beta\, \mathbb E_e\!\left[\mathcal L_{\mathrm{SPO}}(r_t)\right],
+  \]
+  where $e$ ranges over stored episodes of $r_t$ (bounded episode memory counts toward $K$).
+  \item After convergence (affinities $>0.95$): \emph{pin} the assignment (GAUSE deployment recipe, step~5); re-open competition only if the regime inventory changes (structure-diagnostic drift).
+\end{enumerate}
+
+\noindent\textbf{Regime labeling} (critical; three causal, leakage-free schemes; report all, headline under L1):
+L1 volatility-band $+$ trend-sign rule; L2 HMM fit on past data only with online filtered states; L3 statistical jump model.
+
+\section{Experiment Design (Paper \S5)}
+\subsection{E0 --- Structure diagnostic (pre-registered gate, runs first)}
+GAUSE \S8.6 oracle test per asset class: does regime-conditioning with true labels beat shuffled labels \emph{on the decision-regret metric}? Only passing asset classes enter the headline; failures are reported. Note: GAUSE found crypto/commodities lack exploitable structure under the \emph{prediction} metric --- but prediction-optimal $\neq$ decision-optimal (the core PnO lesson), so structure may reappear under regret. This re-test is itself a publishable finding.
+
+\subsection{E1 --- Headline: the $2\times2$ dissociation (post-reactivation regret)}
+Arms (capacity-matched, same method/feature inventory):
+
+\begin{center}\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+Arm & Description & Allocation & Training\\
+\midrule
+A1 & Monolith (capacity $K$, regime-conditioned) & reward-driven & ERM\\
+A2 & MoE router (gate trained on realized regret) & reward-driven & ERM\\
+A3 & Recent-Sharpe capital allocator (12m lookback; \emph{industry baseline}) & reward-driven & ERM\\
+A4 & Random fixed niches & reward-indep. & ERM\\
+A5 & \risp-ERM (competition allocation, ERM training) & reward-indep. & ERM\\
+A6 & \risp-full (competition $+$ Inv-PnCO loss) & reward-indep. & INV\\
+A7 & Monolith $+$ Inv-PnCO loss & reward-driven & INV\\
+A8a & Sleeping experts over \emph{fixed} strategies & adaptive & none\\
+A8b & Sleeping experts over capacity-bounded \emph{learning} experts & adaptive & ERM\\
+\bottomrule
+\end{tabular}
+\end{center}
+\noindent\emph{Note on A8a/A8b:} this pair operationalizes the scope statement of \S2 --- A8a is expected to retain but underperform within-regime (fixed experts cannot adapt); A8b is expected to inherit the interference failure. Together they localize \risp's advantage to the bounded-learner setting.
+
+\noindent\textbf{Metrics:} overall regret; \emph{post-reactivation regret} (first $N{=}15$ days after each reactivation, mirroring the GAUSE probe window); net-of-cost Sharpe in probe windows; max drawdown around transitions; relearning half-life.
+
+\medskip\noindent\textbf{Pre-registered predictions} (the falsifiable core): post-reactivation regret
+$\text{A6} < \text{A5} \approx \text{A4 (with coverage gaps)} \ll \text{A2} \approx \text{A3} \approx \text{A1}$; A7 beats A1 overall but still fails post-reactivation (invariance cannot rescue a forgotten specialist); the A6--A5 gap grows with episode heterogeneity.
+
+\subsection{E2--E5 --- Sweeps and ablations}
+\begin{itemize}
+  \item \textbf{E2 Capacity sweep:} $K=1,\dots,R$, both memory models. Expect GAUSE Fig.~7 shape: reward-independent arms flat in $K$; reward-driven close only as $K\to R$.
+  \item \textbf{E3 Dormancy-length sweep (semi-synthetic):} regime-stitched bootstrap of real per-regime blocks into controlled schedules, $D\in\{1\text{m},6\text{m},1\text{y},3\text{y},5\text{y}\}$. Yields the \emph{break-even dormancy length} for the cost audit (C5).
+  \item \textbf{E4 Episode-heterogeneity sweep} (isolates the invariance axis): hold allocation fixed at \risp; vary training episodes per regime and inject controlled covariate shift between episodes. ERM degrades with heterogeneity; invariant specialist flat (mirrors Inv-PnCO Fig.~9c).
+  \item \textbf{E5 Ablations:} $\lambda=0$ and $\lambda$ sweep; $\beta$ sweep; \emph{without} variance term (expect the Inv-PnCO Table-7 failure: worse than ERM); competition-window sweep $W_c\in\{1,5,20,60\}$ days (per-step vs.\ batched); episodes-as-environments vs.\ random-split environments; pinned vs.\ never-pinned; decision-layer swap (portfolio / knapsack / execution-SP); L1 vs.\ L2 vs.\ L3 labels.
+\end{itemize}
+
+\subsection{E6 --- Data}
+\begin{itemize}
+  \item \textbf{Crypto:} Bybit daily (have; 8{,}766 bars) $+$ top-20 universe for cross-sectional portfolios.
+  \item \textbf{Commodities:} FRED (have) $+$ futures continuous series.
+  \item \textbf{Equities (flagship):} S\&P~500 constituents daily, 1990--2025 (CRSP via WRDS if available; else free survivorship-aware sources). Covers 2000, 2008, 2011, 2015, 2018, 2020, 2022 stress episodes $\Rightarrow$ 5--7 crisis ``environments'' --- enough episodes per regime for the invariance loss.
+  \item \textbf{FX (optional):} G10 daily.
+\end{itemize}
+Walk-forward protocol: expanding window, strict $t{+}1$ execution, embargo gaps at regime boundaries to kill label leakage.
+
+\subsection{E7 --- Statistical rigor (preempting the backtest-overfitting attack)}
+20--30 seeds per stochastic component; 95\% CIs; Welch tests with Holm--Bonferroni (the GAUSE protocol); Deflated Sharpe Ratio (Bailey \& L\'opez de Prado) for any Sharpe claim; Hansen SPA / White Reality Check across the arm family; transaction costs at 5/10/25\,bps plus borrow costs (net-of-cost everywhere); idle-specialist carrying-cost model for break-even analysis; \emph{no} hyperparameter tuned on the test period (nested walk-forward for $\beta,\eta,\lambda$).
+
+\section{Theory Component (Paper \S4) --- Proposition Sketches}\label{sec:theory}
+\begin{description}[leftmargin=1.6em]
+  \item[Prop.~1 (Regret decomposition).] Under the regime-indexed invariance assumption, for a pool with assignment map $A$ and per-specialist hypothesis $q$, expected probe-window regret after reactivation of regime $r$ with dormancy $D$ satisfies
+  \[
+    \mathbb E\!\left[\mathrm{Regret}_{\text{react}}(r)\right] \;\le\; C_1 \sqrt{\mathrm{Var}_e\!\left[\mathcal L_e(q_r)\right]} \;+\; C_2\,\Phi(D; A),
+  \]
+  (invariance gap $+$ forgetting deficit). \emph{Proof plan:} term~1 by adapting Inv-PnCO Lemma~2 $+$ Theorem~1 (episodes $=$ environments; test episode $=e'$); term~2 by GAUSE Observation~1 (hard model: $\Phi = \Pr[\ge K \text{ distinct regimes hit specialist during } D]\times$ full relearn cost; soft model: $\Phi = (1-(1-\rho)^D)\times$ cost).
+  \item[Prop.~2 (Reward-independence zeroes forgetting).] If $A$ is independent of the realized reward process (pinned converged competition, random fixed, frozen gate), the specialist for $r$ receives zero foreign updates during dormancy and $\Phi(D;A)=0$ for all $D$ (hard model; soft model: bounded by the regime's own drift). Reward-driven $A$ has $\Phi\to$ full cost as $D$ grows.
+  \item[Prop.~3 (Interaction).] The two terms are minimized by independent design choices; corollary: the $2\times2$ of E1 is predicted monotone in both axes.
+\end{description}
+\noindent\textbf{Scope honesty:} idealized-model results (as in GAUSE); do \emph{not} claim adversarial-regret guarantees for the coupled winner-take-all dynamics.
+
+\medskip\noindent\textbf{Known technical gap (budget time for it).} Inv-PnCO Theorem~1 bounds a \emph{KL divergence} between solution distributions, not regret. Bridging KL $\to$ regret in Prop.~1 requires an additional step (bounded objective values $+$ a Pinsker-type inequality, with constants depending on the objective range). This is standard but not free: budget $+2$ weeks of theory time, and keep the scoped-down fallback of stating Prop.~1 in the KL metric (still sufficient for the decomposition message) if the regret-metric constants become ugly.
+
+\section{Anticipated Reviewer Attacks \& Prepared Responses}
+\begin{description}[leftmargin=1.6em]
+  \item[R1 ``Backtest overfitting / no real alpha.''] We claim \emph{regret reduction and retention}, not alpha discovery; DSR $+$ SPA tests; semi-synthetic dormancy sweeps with known ground truth; the $2\times2$ dissociation is a mechanism claim robust to absolute P\&L levels.
+  \item[R2 ``Regime labels arbitrary / lookahead.''] Three causal labeling schemes; embargo at boundaries; shuffled-label control.
+  \item[R3 ``Just retrain quickly at reactivation.''] The probe-window cost \emph{is} the relearning cost; in crises the first 15 days are when relearning is most expensive. E3 quantifies it; adaptive baseline A8 included and loses in proportion to regime complexity.
+  \item[R4 ``Isn't this sleeping experts / adaptive regret?''] The scope statement (\S2) $+$ the A8a/A8b pair answer this constructively: sleeping experts over fixed strategies retains but cannot adapt within-regime (A8a); over capacity-bounded learning experts it inherits the interference failure (A8b). \risp's contribution is localized to the bounded-learner setting, where adaptive-regret machinery does not help. Shown empirically, with a dedicated related-work paragraph.
+  \item[R5 ``Funds already silo desks by regime.''] Yes --- \risp{} shows the silo structure can \emph{emerge}, and shows precisely when recent-P\&L capital allocation \emph{across} silos (which funds do use) destroys the siloing benefit. The target is the allocator, not the org chart.
+  \item[R6 ``Invariance assumption untestable in finance.''] E4 tests its consequences; the without-variance ablation shows the assumption does work; stated with the same status as Inv-PnCO Assumption~1.
+  \item[R7 ``Capacity bound $K$ is artificial for software strategies.''] The soft interference model (shared backbone $+$ decaying per-regime adapters) reflects real parameter interference; the ops-cost framing (calibration staleness, infra, attention) is industry reality (GAUSE \S9.2). Both models give the same dissociation.
+\end{description}
+
+\section{Fallback Plans (decision tree)}
+\begin{description}[leftmargin=1.6em]
+  \item[F1] If E0 finds no exploitable regime structure on the decision metric in any real asset class $\Rightarrow$ pivot headline to semi-synthetic regime-stitched markets $+$ real data as ``structure diagnostic in the wild''; retitle toward ``\dots A Controlled Study''; the diagnostic-first methodology becomes a co-equal contribution (still ICAIF/AAAI-publishable).
+  \item[F2] If retention is real but invariance adds nothing (A6 $\approx$ A5) $\Rightarrow$ the $2\times2$ with a null cell is still a finding (``retention dominates; invariance does not transfer to the allocation problem''); shrink invariance to an ablation; expand theory $+$ dormancy sweeps; consider merging with the theory-companion paper.
+  \item[F3] If invariance helps but retention is weak on real data (dormancy too short in sample) $\Rightarrow$ pivot application to \emph{risk-model committees} (GAUSE \S9.2(iii)): retention measured on stress-VaR calibration error after long calm stretches --- dormancy is years long and measurable without P\&L. Venue shifts toward risk journals $+$ ICAIF.
+  \item[F4] If the decision layer bottlenecks $\Rightarrow$ drop to pure knapsack on a 50-asset universe (Inv-PnCO scale ran on one RTX~2080).
+  \item[F5] If reviewers want LLM-era relevance $\Rightarrow$ one future-work paragraph bridging to Idea~3 (\risp{} allocating memory across LLM analyst agents). Do not let it grow.
+\end{description}
+
+\section{Roadmap \& Timeline}
+\textbf{Primary target (staggered plan): AAAI-27 / KDD-27 winter cycle}, with ICLR~2027 ($\sim$Sept~2026; verify exact dates) as the stretch option decided Aug~1. Backups: ICAIF-26 workshop track for visibility; AISTATS-27 (Oct).
+
+\begin{center}\small
+\begin{tabular}{@{}llp{9.2cm}@{}}
+\toprule
+Phase & Window & Milestones\\
+\midrule
+1 & Jun 10--24 & Freeze formalization in a 4-page tech note; port GAUSE population loop; add Gurobi decision layer $+$ regret metrics; assemble equities panel (submit WRDS request \emph{now}); implement labelers L1--L3 with causality tests; run E0. \gate{E0 go/no-go}\\
+2 & Jun 24--Jul 15 & Implement 8 arms; replicate GAUSE-style retention on financial data (sanity); implement Inv-PnCO loss with episodes-as-environments (reuse \texttt{hygeng/PTO} SPO machinery); first full E1 on equities. \gate{$2\times2$ ordering; if wrong, diagnose $\le 2$ weeks then trigger F1/F2/F3}\\
+3 & Jul 15--Aug 19 & E2/E3/E4 sweeps; E5 ablations (incl.\ $W_c$ competition-window sweep); write Props.~1--3 with proofs, \emph{including the KL$\to$regret bridge} ($+2$ weeks budgeted; decide by Jul~1 whether to invite an Inv-PnCO coauthor for theory review); statistical battery (DSR, SPA, costs).\\
+4 & Aug 19--Sept 9 & Figures (Fig.~1 $2\times2$; Fig.~2 architecture; Fig.~3 capacity sweep; Fig.~4 dormancy sweep; Fig.~5 retention timeline with real crisis dates); full draft; red-team against \S8 attack list.\\
+5 & Sept 9--deadline & Reproducibility package; timestamped pre-registration appendix of E1 predictions; submit to the winter cycle (KDD-27 research / AAAI-27 if dates align; the $+2$-week theory buffer is absorbed by the staggered plan).\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\textbf{Post-submission:} workshop version to ICAIF-26 / NeurIPS-26 workshops; journal long version to \emph{Quantitative Finance} or \emph{Journal of Financial Data Science}.
+
+\section{Resources \& Dependencies}
+\begin{itemize}
+  \item \textbf{Compute:} modest --- Inv-PnCO ran on one RTX~2080; GAUSE is light. One workstation or \$200--500 cloud. Gurobi academic license (free with Penn email).
+  \item \textbf{Data:} Yahoo/Stooq for prototyping; CRSP via Wharton WRDS for the flagship equity panel (request early; lead time is the risk).
+  \item \textbf{Code reuse:} \texttt{HowardLiYH/GAUSE} $+$ \texttt{hygeng/PTO} (branch \texttt{Rethink1.0}).
+  \item \textbf{Authorship:} solo-feasible; recommended to invite one Inv-PnCO coauthor for theory credibility (decide early --- affects framing).
+\end{itemize}
+
+\section{Field Classification}
+\begin{description}[leftmargin=1.6em]
+  \item[Primary field:] Machine Learning for Quantitative Finance / Decision-Focused Learning (PnO).
+  \item[Secondary:] Multi-agent learning; continual learning; online learning.
+  \item[Venues:] ICLR / AAAI / KDD (ML framing); ICAIF (finance framing). Journals: \emph{Management Science}, \emph{Quantitative Finance}, \emph{JFDS}.
+  \item[Keywords:] decision-focused learning; regime switching; catastrophic forgetting; invariant learning; portfolio optimization; emergent specialization; non-stationarity.
+\end{description}
+
+\section{Abstract Draft (v0 --- refine after E1)}
+\begin{quote}\small
+Financial markets are non-stationary in two distinct ways: regimes switch and recur on irregular schedules, and each recurrence of a regime is distributionally different from the last. We show that these two kinds of non-stationarity defeat existing strategy-allocation methods through two independent mechanisms --- reward-chasing capital allocation forgets dormant-regime expertise, and ERM-trained specialists fail out-of-distribution within their own regime --- and that each is solved by a different design choice. We propose \risp{} (Regime-Invariant Specialist Pools), in which capacity-bounded strategy specialists acquire regimes through winner-take-all competition, yielding a converged regime-to-specialist assignment that is independent of current P\&L (so crisis specialists idle through calm markets and retain calibration), while each specialist trains with a decision-focused invariance objective across historical episodes of its regime (so retained specialists generalize to the next occurrence, not the last one). We prove a post-reactivation regret bound that decomposes into a forgetting term --- zero for any reward-independent assignment --- and an invariance gap controlled by an episode-variance penalty, and we verify the predicted $2\times2$ dissociation across equities, crypto, and commodities under three leakage-free regime labelings, with deflated performance statistics and explicit transaction-cost and break-even-dormancy analyses. An honest audit maps exactly when the mechanism pays: bounded capacity, recurring dormancy, and verifiable regime structure --- a diagnostic we run before, not after, claiming gains.
+\end{quote}
+
+\end{document}

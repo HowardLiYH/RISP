@@ -1,0 +1,1960 @@
+% ============================================================================
+% PART I: MATHEMATICAL FOUNDATIONS (fragment; preamble lives in master file)
+% ============================================================================
+\part{Mathematical Foundations}
+
+Before describing the \nm{} mechanism itself, we assemble the mathematical
+toolkit its theory rests on. Four ingredients recur throughout. First,
+\emph{decision-focused learning}: \nm{} never scores a forecast by how close it
+is to the truth, but by the portfolio decision it induces, so we need the exact
+geometry of the decision layer, the induced regret, and a trainable surrogate
+(SPO+). Second, \emph{concentration of measure}: every retention and transfer
+claim ultimately reduces to ``a quantity estimated from $5$--$7$ episodes is
+close to its mean,'' and we must be honest about what such small samples can
+and cannot certify. Third, \emph{distances between distributions}: the
+regime-conditional guarantees we import are stated in divergence
+(KL/total-variation) terms, and a small but load-bearing ``Pinsker bridge''
+converts them into statements about bounded decision regret. Fourth,
+\emph{online learning on the simplex}: the gate that routes episodes to niches
+is an exponentiated-gradient update, and we must understand both what its
+classical regret theory gives us and---just as importantly---what it does
+\emph{not} give us once losses become endogenous. The final section formalizes
+why pooled empirical risk minimization fails across non-stationary episodes and
+why an across-episode variance penalty detects exactly the failure mode,
+positioning the \nm{} objective inside the invariant-risk literature.
+
+% ============================================================================
+\section{Decision-Focused Learning from First Principles}
+\label{sec:dd1-dfl}
+
+\subsection{Prediction Versus Decision: the Predict-then-Optimize Pipeline}
+\label{sec:dd1-pto}
+
+Classical supervised learning evaluates a forecast $\hat{y}$ of an unknown
+quantity $y$ by a \emph{prediction loss} such as the squared error
+$\|\hat{y}-y\|_2^2$. But in \nm{}---as in a large class of operational
+problems---the forecast is not the product. The forecast is an
+\emph{intermediate input} to an optimization problem whose solution is the
+actual decision, and the decision is what earns or loses money. This is the
+\textbf{predict-then-optimize} pipeline \cite{elmachtoub2022smart,
+mandi2020smart, mandi2024decision}:
+\begin{equation}
+\label{eq:dd1-pipeline}
+x \;\xrightarrow{\ \text{model}\ }\; \hat{y} = f_\theta(x)
+\;\xrightarrow{\ \text{optimizer}\ }\; z^*(\hat{y}) \in \argmax_{z \in Z}
+F(z, \hat{y})
+\;\xrightarrow{\ \text{nature reveals } y\ }\; \text{realized value } F(z^*(\hat{y}), y).
+\end{equation}
+Here $x$ are observable features (market state), $y \in \R^n$ is the unknown
+parameter vector (next-period asset returns), $Z \subseteq \R^n$ is a known
+feasible set of decisions (portfolios), and $F : Z \times \R^n \to \R$ is the
+objective.
+
+\begin{definition}[Linear-objective decision layer]
+\label{def:dd1-linear-layer}
+A decision layer is \textbf{linear-objective} if $F(z, y) = y^\top z$, i.e.\
+the unknown parameter enters the objective linearly, while all problem
+structure (combinatorics, budgets, bounds) is carried by the feasible set $Z$,
+which does not depend on $y$. We write
+\begin{equation}
+\label{eq:dd1-oracle-def}
+z^*(y) \in \argmax_{z \in Z} \, y^\top z, \qquad
+V(y) := \max_{z \in Z} \, y^\top z ,
+\end{equation}
+and call the map $y \mapsto z^*(y)$ the \textbf{decision oracle} and $V$ the
+\textbf{support function} of $Z$.
+\end{definition}
+
+\begin{remark}
+Linearity of the objective in $y$ is a genuine restriction, but it covers
+shortest paths, assignment, knapsack relaxations, and---our case---linear
+portfolio construction. It buys us two things: the optimal value $V(y)$ is a
+maximum of linear functions of $y$ and hence \emph{convex} in $y$, and the SPO+
+surrogate of Section~\ref{sec:dd1-spoplus} exists in closed form.
+\end{remark}
+
+\nm{}'s decision layer is a cardinality-constrained, long-only allocation.
+
+\begin{definition}[Cardinality-constrained long-only portfolio]
+\label{def:dd1-portfolio}
+Fix the universe size $n \in \N$, a per-asset cap $w_{\max} > 0$, a gross
+budget $W > 0$, and a cardinality $k \in \{1, \dots, n\}$. The feasible set is
+\begin{equation}
+\label{eq:dd1-Z}
+Z \;=\; \Bigl\{\, z \in [0, w_{\max}]^n \;:\; \textstyle\sum_{i=1}^n z_i \le W,
+\;\; \|z\|_0 \le k \,\Bigr\},
+\end{equation}
+where $\|z\|_0 = |\{i : z_i \neq 0\}|$ counts nonzero positions. The objective
+is the portfolio return $F(z, y) = y^\top z$ for a return vector $y \in \R^n$.
+\end{definition}
+
+Note that $Z$ is \emph{nonconvex} (the $\ell_0$ constraint carves the box into
+$\binom{n}{k}$-many faces), so generic convex-optimization machinery does not
+apply. Fortunately the problem admits an exact, closed-form, sort-based
+solution.
+
+\begin{theorem}[Exact decision oracle]
+\label{thm:dd1-oracle}
+Assume $W \ge k\, w_{\max}$ (the budget never binds before the cap and the
+cardinality do). For $y \in \R^n$ let
+\[
+P(y) = \{ i : y_i > 0 \}, \qquad
+S^*(y) = \text{the } \min\{k, |P(y)|\} \text{ indices of } P(y) \text{ with
+largest } y_i,
+\]
+with ties broken toward the smaller index. Then
+\begin{equation}
+\label{eq:dd1-oracle-form}
+z^*(y)_i \;=\; w_{\max} \,\mathbf{1}\{ i \in S^*(y) \}
+\end{equation}
+is an optimal solution of $\max_{z \in Z} y^\top z$, with optimal value
+$V(y) = w_{\max} \sum_{i \in S^*(y)} y_i \ge 0$.
+\end{theorem}
+
+\begin{proof}
+\emph{Feasibility.} The vector in \eqref{eq:dd1-oracle-form} has entries in
+$\{0, w_{\max}\} \subseteq [0, w_{\max}]$, support size $|S^*(y)| \le k$, and
+gross exposure $|S^*(y)|\, w_{\max} \le k\, w_{\max} \le W$. So
+$z^*(y) \in Z$.
+
+\emph{Optimality.} Let $z \in Z$ be arbitrary with support
+$T = \{i : z_i > 0\}$, so $|T| \le k$. Using $0 \le z_i \le w_{\max}$ and
+writing $(u)_+ = \max\{u, 0\}$,
+\[
+y^\top z \;=\; \sum_{i \in T} y_i z_i
+\;\le\; \sum_{i \in T} (y_i)_+ \, z_i
+\;\le\; w_{\max} \sum_{i \in T} (y_i)_+ .
+\]
+The first inequality holds termwise: if $y_i \le 0$ then $y_i z_i \le 0 =
+(y_i)_+ z_i$; if $y_i > 0$ the two sides agree. Now
+$\sum_{i \in T} (y_i)_+$ is a sum of at most $k$ of the nonnegative numbers
+$\{(y_i)_+\}_{i=1}^n$, hence is at most the sum of the $k$ largest of them,
+which equals $\sum_{i \in S^*(y)} y_i$ (indices outside $P(y)$ contribute
+$(y_i)_+ = 0$ and are never needed). Therefore
+$y^\top z \le w_{\max} \sum_{i \in S^*(y)} y_i = y^\top z^*(y)$. Finally
+$V(y) \ge 0$ because $z = 0 \in Z$.
+\end{proof}
+
+\begin{keypoint}
+The oracle is a \textbf{sort}: rank the forecast coordinates, keep the top $k$
+strictly positive ones, allocate the cap $w_{\max}$ to each. It costs
+$O(n \log n)$, is exact (no relaxation gap despite the nonconvex $\ell_0$
+constraint), and will be called \emph{twice per gradient step} by the SPO+
+subgradient of Section~\ref{sec:dd1-spoplus}. The standing assumption
+$W \ge k\, w_{\max}$ is maintained throughout the document; when it fails the
+oracle becomes a fractional-knapsack rule and only the boundary case changes.
+\end{keypoint}
+
+Throughout, we fix the tie-breaking rule above so that $z^*(\cdot)$ is a
+well-defined \emph{function} (not a set-valued map); all statements below are
+for this selection.
+
+\subsection{Decision Regret and Its Geometry}
+\label{sec:dd1-regret}
+
+\begin{definition}[Decision regret]
+\label{def:dd1-regret}
+For a forecast $\hat{y} \in \R^n$ and realized returns $y \in \R^n$, the
+\textbf{decision regret} (also: SPO loss \cite{elmachtoub2022smart}) is
+\begin{equation}
+\label{eq:dd1-regret}
+\rho(\hat{y}; y) \;=\; F\bigl(z^*(y), y\bigr) - F\bigl(z^*(\hat{y}), y\bigr)
+\;=\; y^\top z^*(y) - y^\top z^*(\hat{y}).
+\end{equation}
+It is the return given up by acting on the forecast instead of acting on the
+truth.
+\end{definition}
+
+\begin{proposition}[Range of the regret]
+\label{prop:dd1-regret-range}
+Suppose $\|y\|_\infty \le y_{\max}$. Then for every $\hat{y} \in \R^n$,
+\begin{equation}
+\label{eq:dd1-B}
+0 \;\le\; \rho(\hat{y}; y) \;\le\; B, \qquad B := 2\, k\, w_{\max}\, y_{\max}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+\emph{Lower bound.} $z^*(\hat{y}) \in Z$, and $z^*(y)$ maximizes $y^\top z$
+over $Z$ (Theorem~\ref{thm:dd1-oracle}), so
+$y^\top z^*(y) \ge y^\top z^*(\hat{y})$.
+
+\emph{Upper bound.} For any $z \in Z$ with support $T$, $|T| \le k$ and
+$0 \le z_i \le w_{\max}$, so
+\[
+\bigl| y^\top z \bigr| \;\le\; \sum_{i \in T} |y_i|\, z_i
+\;\le\; k\, w_{\max}\, y_{\max}.
+\]
+Hence $y^\top z^*(y) \le k\, w_{\max}\, y_{\max}$ and
+$y^\top z^*(\hat{y}) \ge -\,k\, w_{\max}\, y_{\max}$; subtracting gives
+$\rho \le 2 k\, w_{\max}\, y_{\max}$.
+\end{proof}
+
+\begin{remark}
+The constant $B$ is attained only in a worst case where the forecast selects
+$k$ assets that each lose $y_{\max}$ while the best portfolio gains $y_{\max}$
+on each of $k$ assets. With daily equity returns this is astronomically
+pessimistic; we return to this honestly in
+Remark~\ref{rem:dd1-B-loose} when $B$ enters the Pinsker bridge.
+\end{remark}
+
+The next observation is small but conceptually central: the decision layer
+destroys all information about the \emph{scale} of the forecast.
+
+\begin{proposition}[Positive scale invariance; regret is a ranking loss]
+\label{prop:dd1-scale-invariance}
+For every $c > 0$ and $\hat{y} \in \R^n$:
+\begin{enumerate}
+\item $z^*(c\,\hat{y}) = z^*(\hat{y})$, and consequently
+$\rho(c\,\hat{y}; y) = \rho(\hat{y}; y)$.
+\item More generally, $\rho(\hat{y}; y)$ depends on $\hat{y}$ only through
+the sign pattern $(\mathrm{sign}(\hat{y}_i))_{i}$ and the relative order of
+the positive coordinates of $\hat{y}$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) Multiplication by $c > 0$ preserves the positivity set,
+$P(c\hat{y}) = P(\hat{y})$, and preserves all pairwise comparisons
+$c\hat{y}_i > c\hat{y}_j \iff \hat{y}_i > \hat{y}_j$ (including ties, which
+are broken by the same index rule). Hence $S^*(c\hat{y}) = S^*(\hat{y})$ and,
+by \eqref{eq:dd1-oracle-form}, $z^*(c\hat{y}) = z^*(\hat{y})$. The regret
+\eqref{eq:dd1-regret} depends on $\hat{y}$ only through $z^*(\hat{y})$.
+
+(2) Inspecting Theorem~\ref{thm:dd1-oracle}: the selected set $S^*(\hat{y})$
+is determined by which coordinates are strictly positive and by the ordering
+among those, and nothing else. Since $\rho(\cdot\,; y)$ factors through
+$S^*(\hat{y})$, the claim follows.
+\end{proof}
+
+\begin{intuition}
+The optimizer asks the forecast exactly one question: \emph{``which $k$ assets
+do you like, and do you like them at all?''} Calibration, magnitude, even the
+gap between the best and second-best asset are invisible to the decision. A
+loss that trains the forecaster should therefore reward correct
+\emph{rankings}, not small residuals---this is the entire raison d'\^etre of
+decision-focused learning \cite{elmachtoub2022smart, shah2022lodl}.
+\end{intuition}
+
+\begin{example}[Zero MSE correlation with regret: a 4-asset case]
+\label{ex:dd1-mse-vs-regret}
+Let $n = 4$, $k = 2$, $w_{\max} = 0.5$, $W = 1$, and realized returns
+\[
+y = (0.05,\; 0.03,\; -0.02,\; 0.01).
+\]
+The oracle selects the two largest positive coordinates: $S^*(y) = \{1, 2\}$,
+$z^*(y) = (0.5, 0.5, 0, 0)$, and the optimal value is
+$V(y) = 0.5\,(0.05 + 0.03) = 0.04$.
+
+\textbf{Forecast A (high MSE, zero regret).} Take $\hat{y}^A = 10\,y =
+(0.5, 0.3, -0.2, 0.1)$, a wildly miscalibrated forecast. Its squared error is
+\[
+\mathrm{MSE}(\hat{y}^A)
+= \tfrac{1}{4}\bigl(0.45^2 + 0.27^2 + 0.18^2 + 0.09^2\bigr)
+= \tfrac{1}{4}(0.2025 + 0.0729 + 0.0324 + 0.0081)
+\approx 0.0790 .
+\]
+But by Proposition~\ref{prop:dd1-scale-invariance},
+$z^*(\hat{y}^A) = z^*(y)$, so $\rho(\hat{y}^A; y) = 0$: the decision is
+\emph{perfect}.
+
+\textbf{Forecast B (tiny MSE, large regret).} Take
+$\hat{y}^B = (0.025,\; 0.030,\; -0.020,\; 0.031)$. Its squared error is
+\[
+\mathrm{MSE}(\hat{y}^B)
+= \tfrac{1}{4}\bigl(0.025^2 + 0^2 + 0^2 + 0.021^2\bigr)
+= \tfrac{1}{4}(0.000625 + 0.000441)
+\approx 0.000267,
+\]
+about $296$ times smaller than forecast A's. Yet the induced ranking puts
+assets $4$ and $2$ on top: $S^*(\hat{y}^B) = \{4, 2\}$,
+$z^*(\hat{y}^B) = (0, 0.5, 0, 0.5)$, realized value
+$y^\top z^*(\hat{y}^B) = 0.5\,(0.03 + 0.01) = 0.02$, and
+\[
+\rho(\hat{y}^B; y) = 0.04 - 0.02 = 0.02,
+\]
+i.e.\ \emph{half} the achievable return is forfeited. MSE ranks B far above
+A; the decision ranks A strictly above B.
+\end{example}
+
+\begin{warning}
+Example~\ref{ex:dd1-mse-vs-regret} is not a pathological corner case. In a
+cross-section of assets the return differences that determine the top-$k$ set
+are routinely smaller than the irreducible noise level, so an MSE-optimal
+forecast spends its capacity matching magnitudes that the decision layer
+ignores, while leaving the decision-relevant orderings to chance. This is the
+failure that the SPO family of losses is designed to repair.
+\end{warning}
+
+\subsection{The SPO Loss, Its Pathologies, and the SPO+ Surrogate}
+\label{sec:dd1-spoplus}
+
+The natural training loss is the regret itself, viewed as a function of the
+prediction: $\ell_{\mathrm{SPO}}(\hat{y}; y) := \rho(\hat{y}; y)$. It is,
+unfortunately, almost unusable directly.
+
+\begin{example}[Discontinuity and nonconvexity of the SPO loss]
+\label{ex:dd1-spo-discont}
+Let $n = 2$, $k = 1$, $w_{\max} = 1$, $W \ge 1$, $y = (0.04, 0.02)$, and
+consider the forecast family $\hat{y}(t) = (t, 0.02)$ for $t \in \R$. The
+oracle picks asset $1$ iff $t > 0.02$ (at $t = 0.02$ the tie-break also picks
+asset $1$), and asset $2$ for $0 < t < 0.02$. Hence
+\[
+\ell_{\mathrm{SPO}}\bigl(\hat{y}(t); y\bigr) =
+\begin{cases}
+0, & t \ge 0.02 \quad (\text{decision } z = e_1,\ \text{value } 0.04),\\[2pt]
+0.02, & t < 0.02 \quad (\text{decision } z = e_2,\ \text{value } 0.02),
+\end{cases}
+\]
+a step function: \textbf{discontinuous} at $t = 0.02$, with derivative $0$
+everywhere else. Any nonconstant function that is piecewise constant is
+nonconvex (a finite convex function on $\R$ is continuous, and a continuous
+piecewise-constant function is constant), so $\ell_{\mathrm{SPO}}$ is also
+\textbf{nonconvex} in $\hat{y}$. Gradient-based training receives either no
+signal (zero gradient) or an undefined one (at the jump).
+\end{example}
+
+The remedy of \cite{elmachtoub2022smart} is a convex surrogate, SPO+. Their
+derivation is stated for cost \emph{minimization}; \nm{} maximizes return, so
+we derive the maximization form explicitly via the substitution $c = -y$.
+
+\paragraph{Derivation.} In the minimization convention one has cost vectors
+$c$, decisions $w^*(c) \in \argmin_{w \in Z} c^\top w$, and the SPO+ loss
+\begin{equation}
+\label{eq:dd1-spoplus-min}
+\ell_{\mathrm{SPO+}}^{\min}(\hat{c}; c)
+\;=\; \max_{w \in Z}\,\bigl\{ (c - 2\hat{c})^\top w \bigr\}
+\;+\; 2\,\hat{c}^\top w^*(c) \;-\; c^\top w^*(c),
+\end{equation}
+obtained from the SPO loss by a duality relaxation and the (provably
+tightest) scaling $\hat{c} \mapsto 2\hat{c}$ \cite{elmachtoub2022smart}.
+Substituting $c = -y$ and $\hat{c} = -\hat{y}$, and noting that
+$\argmin_{w} (-y)^\top w = \argmax_{z} y^\top z$ so $w^*(c) = z^*(y)$, the
+three terms of \eqref{eq:dd1-spoplus-min} become
+$\max_z (2\hat{y} - y)^\top z$, $-2\hat{y}^\top z^*(y)$, and
+$+\,y^\top z^*(y)$. We adopt the result as our definition.
+
+\begin{definition}[SPO+ loss, maximization form]
+\label{def:dd1-spoplus}
+For forecast $\hat{y}$ and realized returns $y$,
+\begin{equation}
+\label{eq:dd1-spoplus}
+\ell_{\mathrm{SPO+}}(\hat{y}; y)
+\;=\; \underbrace{\max_{z \in Z}\, (2\hat{y} - y)^\top z}_{\textstyle
+= \,V(2\hat{y} - y)}
+\;-\; 2\,\hat{y}^\top z^*(y)
+\;+\; y^\top z^*(y).
+\end{equation}
+Both extremal problems are instances of the same oracle
+(Theorem~\ref{thm:dd1-oracle}), applied to the \emph{perturbed} vector
+$2\hat{y} - y$ and to the true vector $y$.
+\end{definition}
+
+A reassuring sanity check: at the truth, the surrogate vanishes,
+\[
+\ell_{\mathrm{SPO+}}(y; y) = V(y) - 2\,y^\top z^*(y) + y^\top z^*(y)
+= V(y) - y^\top z^*(y) = 0 .
+\]
+
+\begin{proposition}[Convexity in the prediction]
+\label{prop:dd1-spoplus-convex}
+For every fixed $y$, the map $\hat{y} \mapsto \ell_{\mathrm{SPO+}}(\hat{y}; y)$
+is convex on $\R^n$ (indeed, piecewise affine).
+\end{proposition}
+
+\begin{proof}
+The first term is $\hat{y} \mapsto V(2\hat{y} - y) =
+\max_{z \in Z} \{ 2 z^\top \hat{y} - z^\top y \}$, a pointwise maximum of
+affine functions of $\hat{y}$, hence convex (a supremum of convex functions is
+convex, and affine functions are convex). The second term
+$-2\,\hat{y}^\top z^*(y)$ is affine in $\hat{y}$ ($z^*(y)$ is a constant once
+$y$ is fixed), and the third term is a constant. A sum of convex functions is
+convex. Since $Z$ has finitely many extreme points (each coordinate of an
+optimal $z$ is $0$ or $w_{\max}$ on one of finitely many supports), the
+maximum is over finitely many affine functions, so the loss is piecewise
+affine.
+\end{proof}
+
+\begin{proposition}[Majorization: SPO+ upper-bounds the decision regret]
+\label{prop:dd1-spoplus-majorize}
+For all $\hat{y}, y \in \R^n$,
+\begin{equation}
+\label{eq:dd1-majorize}
+\rho(\hat{y}; y) \;\le\; \ell_{\mathrm{SPO+}}(\hat{y}; y).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Lower-bound the maximum in \eqref{eq:dd1-spoplus} by the particular feasible
+point $z = z^*(\hat{y})$:
+\[
+\ell_{\mathrm{SPO+}}(\hat{y}; y)
+\;\ge\; (2\hat{y} - y)^\top z^*(\hat{y}) - 2\,\hat{y}^\top z^*(y)
++ y^\top z^*(y)
+\;=\; 2\,\hat{y}^\top z^*(\hat{y}) - y^\top z^*(\hat{y})
+- 2\,\hat{y}^\top z^*(y) + y^\top z^*(y).
+\]
+Now $z^*(\hat{y})$ maximizes $\hat{y}^\top z$ over $Z$, so
+$\hat{y}^\top z^*(\hat{y}) \ge \hat{y}^\top z^*(y)$, i.e.\
+$2\,\hat{y}^\top z^*(\hat{y}) - 2\,\hat{y}^\top z^*(y) \ge 0$. Dropping this
+nonnegative quantity,
+\[
+\ell_{\mathrm{SPO+}}(\hat{y}; y)
+\;\ge\; y^\top z^*(y) - y^\top z^*(\hat{y})
+\;=\; \rho(\hat{y}; y). \qedhere
+\]
+\end{proof}
+
+Combining Propositions~\ref{prop:dd1-regret-range} and
+\ref{prop:dd1-spoplus-majorize}: minimizing the convex surrogate pushes down
+the true (discontinuous) regret. The surrogate is moreover statistically
+faithful in the following sense.
+
+\begin{theorem}[Fisher consistency of SPO+; \cite{elmachtoub2022smart}, stated
+without proof]
+\label{thm:dd1-fisher}
+Suppose the conditional distribution of $y$ given $x$ is continuous, centrally
+symmetric about its mean $\bar{y}(x) = \E[y \mid x]$, and assigns the optimal
+decision uniquely for almost every realization. Then the minimizer of the
+conditional SPO+ risk $\E\bigl[\ell_{\mathrm{SPO+}}(\hat{y}; y) \mid x\bigr]$
+over $\hat{y} \in \R^n$ is $\hat{y} = \bar{y}(x)$; in particular, minimizing
+SPO+ risk also minimizes the true SPO (regret) risk.
+\end{theorem}
+
+\paragraph{Subgradient.} Convexity (Proposition~\ref{prop:dd1-spoplus-convex})
+gives the loss a nonempty subdifferential everywhere; the support-function
+structure makes one element of it available in closed form. We first record
+the elementary lemma usually attributed to Danskin in this finite setting.
+
+\begin{lemma}[Subgradient of a support function]
+\label{lem:dd1-danskin}
+Let $h(u) = \max_{z \in Z} u^\top z$ with $Z$ compact, and let
+$\bar{z} \in \argmax_{z \in Z} u^\top z$. Then $\bar{z} \in \partial h(u)$,
+i.e.\ $h(u') \ge h(u) + \bar{z}^\top (u' - u)$ for all $u'$.
+\end{lemma}
+
+\begin{proof}
+$h(u') \ge u'^\top \bar{z} = u^\top \bar{z} + (u' - u)^\top \bar{z}
+= h(u) + \bar{z}^\top (u' - u)$, where the first step holds because $\bar{z}$
+is feasible for the maximization defining $h(u')$ and the last because
+$\bar{z}$ attains $h(u)$.
+\end{proof}
+
+\begin{proposition}[SPO+ subgradient and the linear-model chain rule]
+\label{prop:dd1-spoplus-grad}
+Fix $y$ and let $\hat{y} \in \R^n$. Then
+\begin{equation}
+\label{eq:dd1-subgrad}
+g(\hat{y}; y) \;:=\; 2\,\Bigl( z^*\bigl(2\hat{y} - y\bigr) - z^*(y) \Bigr)
+\;\in\; \partial_{\hat{y}}\, \ell_{\mathrm{SPO+}}(\hat{y}; y),
+\end{equation}
+so a subgradient-descent step moves the forecast in the direction
+\begin{equation}
+\label{eq:dd1-descent-dir}
+-\,g(\hat{y}; y) \;=\; 2\,\Bigl( z^*(y) - z^*\bigl(2\hat{y} - y\bigr) \Bigr),
+\end{equation}
+i.e.\ \emph{toward} the assets the truth selects and \emph{away from} the
+assets the perturbed forecast selects. If the forecast is produced by a linear
+model $\hat{y} = \Theta x$ with $\Theta \in \R^{n \times d}$ and features
+$x \in \R^d$, then by the affine chain rule for subgradients,
+\begin{equation}
+\label{eq:dd1-chain}
+g(\Theta x; y)\, x^\top \;\in\; \partial_{\Theta}\,
+\ell_{\mathrm{SPO+}}(\Theta x;\, y) \;\subseteq\; \R^{n \times d},
+\end{equation}
+and for a batch $\{(x_s, y_s)\}_{s=1}^m$ the subgradient of the average loss
+is $\frac{1}{m} \sum_s g(\Theta x_s; y_s)\, x_s^\top$.
+\end{proposition}
+
+\begin{proof}
+Write $\ell_{\mathrm{SPO+}}(\hat{y}; y) = h(2\hat{y} - y) - 2\,\hat{y}^\top
+z^*(y) + \text{const}$, with $h$ the support function of $Z$. By
+Lemma~\ref{lem:dd1-danskin}, $z^*(2\hat{y} - y) \in \partial h(2\hat{y} - y)$
+(our oracle applied to the vector $2\hat{y} - y$ is exactly an argmax for
+$h$). The map $\hat{y} \mapsto 2\hat{y} - y$ is affine with Jacobian $2 I$, so
+by the affine chain rule $2\,z^*(2\hat{y} - y)$ is a subgradient of
+$\hat{y} \mapsto h(2\hat{y} - y)$. The term $-2\,\hat{y}^\top z^*(y)$ is
+differentiable with gradient $-2\,z^*(y)$. Subdifferentials of sums of convex
+functions (one of them differentiable) add, giving \eqref{eq:dd1-subgrad}.
+The chain rule \eqref{eq:dd1-chain} is the same affine-composition rule
+applied to $\Theta \mapsto \Theta x$: for any $\Theta'$,
+$\ell(\Theta' x) \ge \ell(\Theta x) + g^\top(\Theta' - \Theta)x
+= \ell(\Theta x) + \langle g x^\top, \Theta' - \Theta\rangle_F$.
+\end{proof}
+
+\begin{remark}[Sign conventions]
+\label{rem:dd1-sign}
+In the cost-minimization convention of \cite{elmachtoub2022smart} the same
+object reads $2\bigl(w^*(c) - w^*(2\hat{c} - c)\bigr)$. Under $c = -y$ the two
+expressions map onto each other; the expression
+$2\bigl(z^*(y) - z^*(2\hat{y} - y)\bigr)$ that appears in informal
+descriptions of \nm{} is the \emph{descent direction}
+\eqref{eq:dd1-descent-dir} of the maximization form, not the subgradient
+itself. Both conventions produce the identical parameter update; only the
+bookkeeping differs.
+\end{remark}
+
+\begin{intuition}
+The update \eqref{eq:dd1-descent-dir} has a ``contrastive'' reading. The
+oracle is run on the truth $y$ and on the reflection $2\hat{y} - y$ of the
+truth through the forecast (the point such that $\hat{y}$ is the midpoint of
+$y$ and $2\hat{y} - y$; the reflection exaggerates the forecast's deviation
+from the truth). Assets selected by the truth but not by the exaggerated
+forecast get their predicted returns pushed \emph{up} by $2 w_{\max} \eta$ per
+step; assets selected only by the exaggerated forecast get pushed \emph{down}
+by the same amount; assets on which both agree (or both pass) receive no
+gradient. The loss is exactly zero gradient when the exaggerated forecast
+already makes the right selection---training stops adjusting magnitudes the
+moment the ranking is robustly correct, which is precisely the
+scale-invariance of Proposition~\ref{prop:dd1-scale-invariance} made
+operational.
+\end{intuition}
+
+\begin{example}[One SPO+ gradient step on four assets]
+\label{ex:dd1-spoplus-step}
+Continue with $n = 4$, $k = 2$, $w_{\max} = 0.5$, $W = 1$, true returns
+$y = (0.05, 0.03, -0.02, 0.01)$, and current forecast
+\[
+\hat{y} = (0.02,\; 0.01,\; 0.04,\; 0.00).
+\]
+
+\emph{Step 1: the two oracle calls.} The truth selects
+$S^*(y) = \{1, 2\}$, so $z^*(y) = (0.5, 0.5, 0, 0)$. The perturbed vector is
+\[
+2\hat{y} - y = (0.04 - 0.05,\; 0.02 - 0.03,\; 0.08 + 0.02,\; 0 - 0.01)
+= (-0.01,\; -0.01,\; 0.10,\; -0.01),
+\]
+whose only positive coordinate is the third, so
+$S^*(2\hat{y} - y) = \{3\}$ and $z^*(2\hat{y} - y) = (0, 0, 0.5, 0)$.
+
+\emph{Step 2: loss value.} By \eqref{eq:dd1-spoplus},
+\[
+\ell_{\mathrm{SPO+}} = \underbrace{0.10 \times 0.5}_{V(2\hat y - y) = 0.05}
+\;-\; \underbrace{2\,(0.02 + 0.01)(0.5)}_{2\hat{y}^\top z^*(y) = 0.03}
+\;+\; \underbrace{0.04}_{y^\top z^*(y)} \;=\; 0.06 .
+\]
+For comparison, the true regret of $\hat{y}$: the forecast selects its top
+two positive coordinates $S^*(\hat{y}) = \{3, 1\}$, realized value
+$0.5\,(-0.02 + 0.05) = 0.015$, so
+$\rho(\hat{y}; y) = 0.04 - 0.015 = 0.025 \le 0.06$, consistent with
+Proposition~\ref{prop:dd1-spoplus-majorize}.
+
+\emph{Step 3: subgradient and update.} By \eqref{eq:dd1-subgrad},
+\[
+g = 2\bigl( (0, 0, 0.5, 0) - (0.5, 0.5, 0, 0) \bigr)
+= (-1,\; -1,\; 1,\; 0).
+\]
+A descent step with rate $\eta = 0.02$ gives
+\[
+\hat{y}' = \hat{y} - \eta\, g
+= (0.02 + 0.02,\; 0.01 + 0.02,\; 0.04 - 0.02,\; 0.00)
+= (0.04,\; 0.03,\; 0.02,\; 0.00).
+\]
+The new forecast ranks the assets $1 \succ 2 \succ 3 \succ 4$, selects
+$S^*(\hat{y}') = \{1, 2\}$, and achieves $\rho(\hat{y}'; y) = 0$: one step
+flipped the decision from losing $0.025$ to optimal. Note what the step did
+\emph{not} do: it made the forecast magnitudes \emph{less} accurate for asset
+$3$ in MSE terms en route to fixing the ranking.
+\end{example}
+
+\begin{keypoint}
+Summary of the decision-focused toolkit used by \nm{}:
+\begin{itemize}
+\item the decision layer is an $O(n \log n)$ sort oracle
+      (Theorem~\ref{thm:dd1-oracle});
+\item the quantity that matters is the regret
+      $\rho \in [0, B]$, a bounded \emph{ranking} loss
+      (Propositions~\ref{prop:dd1-regret-range},
+      \ref{prop:dd1-scale-invariance});
+\item $\rho$ itself is untrainable
+      (Example~\ref{ex:dd1-spo-discont}), so each niche head is trained on
+      the convex majorant $\ell_{\mathrm{SPO+}}$
+      (Definition~\ref{def:dd1-spoplus}), whose subgradient costs two oracle
+      calls (Proposition~\ref{prop:dd1-spoplus-grad}).
+\end{itemize}
+Every ``episode risk'' appearing later in the document is an average of
+$\ell_{\mathrm{SPO+}}$ (for training) or of $\rho$ (for evaluation) over the
+days of an episode.
+\end{keypoint}
+
+% ============================================================================
+\section{Concentration of Measure}
+\label{sec:dd1-concentration}
+
+\nm{}'s retention and transfer arguments repeatedly take the form: ``the
+average regret of niche head $r$ over its $E_r$ stored episodes is small;
+therefore its regret on a fresh episode of the same regime is small with high
+probability.'' Since $E_r$ is tiny ($5$--$7$ in the companion experiments),
+we need the sharpest available finite-sample inequalities---and an honest
+accounting of how weak even those are at such sample sizes.
+
+\subsection{Markov, Chebyshev, and Cantelli}
+
+\begin{theorem}[Markov's inequality]
+\label{thm:dd1-markov}
+Let $X \ge 0$ be a random variable with $\E[X] < \infty$. For every $t > 0$,
+\begin{equation}
+\label{eq:dd1-markov}
+\Pr\bigl( X \ge t \bigr) \;\le\; \frac{\E[X]}{t}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Since $X \ge 0$, the pointwise inequality
+$t\,\mathbf{1}\{X \ge t\} \le X$ holds on every outcome: if $X \ge t$ the left
+side is $t \le X$; otherwise the left side is $0 \le X$. Taking expectations
+and using monotonicity and linearity,
+$t\,\Pr(X \ge t) = \E\bigl[t\,\mathbf{1}\{X \ge t\}\bigr] \le \E[X]$.
+Divide by $t$.
+\end{proof}
+
+\begin{corollary}[Chebyshev's inequality]
+\label{cor:dd1-chebyshev}
+Let $X$ have mean $\mu$ and variance $\sigma^2 < \infty$. For every $t > 0$,
+\begin{equation}
+\label{eq:dd1-chebyshev}
+\Pr\bigl( |X - \mu| \ge t \bigr) \;\le\; \frac{\sigma^2}{t^2}.
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Apply Theorem~\ref{thm:dd1-markov} to the nonnegative variable
+$(X - \mu)^2$ at level $t^2$:
+$\Pr(|X - \mu| \ge t) = \Pr\bigl((X - \mu)^2 \ge t^2\bigr)
+\le \E[(X-\mu)^2] / t^2 = \sigma^2 / t^2$.
+\end{proof}
+
+Chebyshev is two-sided. When only one direction of deviation is harmful---a
+niche head performing \emph{worse} on a fresh episode than on its stored
+ones---we can do strictly better.
+
+\begin{theorem}[Cantelli's one-sided inequality]
+\label{thm:dd1-cantelli}
+Let $X$ have mean $\mu$ and variance $\sigma^2 < \infty$. For every $t > 0$,
+\begin{equation}
+\label{eq:dd1-cantelli}
+\Pr\bigl( X - \mu \ge t \bigr) \;\le\; \frac{\sigma^2}{\sigma^2 + t^2}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Let $Y = X - \mu$, so $\E[Y] = 0$ and $\E[Y^2] = \sigma^2$. Fix an arbitrary
+auxiliary constant $u > 0$. On the event $\{Y \ge t\}$ we have
+$Y + u \ge t + u > 0$, hence $(Y + u)^2 \ge (t + u)^2$ there, and
+$(Y+u)^2 \ge 0$ everywhere. Therefore
+\[
+\Pr( Y \ge t )
+\;=\; \Pr\bigl( Y + u \ge t + u \bigr)
+\;\le\; \Pr\bigl( (Y + u)^2 \ge (t + u)^2 \bigr)
+\;\le\; \frac{\E\bigl[(Y + u)^2\bigr]}{(t + u)^2}
+\;=\; \frac{\sigma^2 + u^2}{(t + u)^2},
+\]
+where the middle step is Markov (Theorem~\ref{thm:dd1-markov}) applied to the
+nonnegative variable $(Y + u)^2$, and the last step expands
+$\E[(Y+u)^2] = \E[Y^2] + 2u\,\E[Y] + u^2 = \sigma^2 + u^2$.
+
+The bound holds for every $u > 0$, so we minimize the right-hand side. Let
+$\varphi(u) = (\sigma^2 + u^2)/(t + u)^2$. Then
+\[
+\varphi'(u)
+= \frac{2u\,(t+u)^2 - 2(t+u)(\sigma^2 + u^2)}{(t+u)^4}
+= \frac{2\bigl[u(t + u) - (\sigma^2 + u^2)\bigr]}{(t+u)^3}
+= \frac{2\,(ut - \sigma^2)}{(t+u)^3},
+\]
+which vanishes at $u^* = \sigma^2 / t$, is negative for $u < u^*$ and positive
+for $u > u^*$; so $u^*$ is the global minimizer on $(0, \infty)$.
+Substituting,
+\[
+\varphi(u^*)
+= \frac{\sigma^2 + \sigma^4/t^2}{\bigl(t + \sigma^2/t\bigr)^2}
+= \frac{\sigma^2\,(t^2 + \sigma^2)/t^2}{(t^2 + \sigma^2)^2 / t^2}
+= \frac{\sigma^2}{\sigma^2 + t^2}. \qedhere
+\]
+\end{proof}
+
+\begin{remark}[Why one-sidedness matters for the episode-transfer lemma]
+\label{rem:dd1-onesided}
+In the transfer argument of Part II, the certified quantity is the average
+regret of a niche head over its stored episodes, and the failure event is
+one-directional: the fresh-episode regret exceeding that average by more than
+a tolerance $t$. A fresh episode on which the head does \emph{better} than
+its certificate is a windfall, not a failure. Cantelli prices exactly the
+harmful tail: at $t = \sigma$, Chebyshev gives the vacuous bound $1$ split
+across two tails (effectively $1/2$ per side by symmetry heuristics, but with
+no valid one-sided guarantee better than $1$), while Cantelli gives
+$\sigma^2/(2\sigma^2) = 1/2$ \emph{as a theorem}, and at $t = 2\sigma$ gives
+$1/5$ versus Chebyshev's two-sided $1/4$. Moreover Cantelli requires no
+boundedness and no symmetry---only a variance---which suits regret
+distributions that are skewed by construction (they live in $[0, B]$ and pile
+up near $0$ for a well-adapted head).
+\end{remark}
+
+\subsection{Hoeffding's Inequality}
+
+Variance-based bounds decay polynomially in $t$. For \emph{bounded} variables
+---and the regret is bounded in $[0, B]$ by
+Proposition~\ref{prop:dd1-regret-range}---exponential tails are available.
+The engine is a bound on the moment generating function.
+
+\begin{lemma}[Hoeffding's lemma; proof sketch]
+\label{lem:dd1-hoeffding-lemma}
+Let $X \in [a, b]$ almost surely, with $\E[X] = 0$. Then for all
+$\lambda \in \R$,
+\begin{equation}
+\label{eq:dd1-hoeffding-lemma}
+\E\bigl[ e^{\lambda X} \bigr] \;\le\;
+\exp\!\Bigl( \frac{\lambda^2 (b - a)^2}{8} \Bigr).
+\end{equation}
+\end{lemma}
+
+\begin{proof}[Proof sketch]
+Define the cumulant generating function $\psi(\lambda) = \log \E[e^{\lambda
+X}]$, which is finite for all $\lambda$ (boundedness) and twice
+differentiable. Direct computation gives $\psi(0) = 0$ and
+$\psi'(0) = \E[X] = 0$. The second derivative is
+\[
+\psi''(\lambda) = \E_\lambda[X^2] - \bigl(\E_\lambda[X]\bigr)^2
+= \Var_\lambda(X),
+\]
+the variance of $X$ under the exponentially tilted law
+$d\Pr_\lambda \propto e^{\lambda X}\, d\Pr$ (this is the step we do not carry
+out in full detail; it is a one-line differentiation under the expectation,
+legitimate by dominated convergence on a bounded variable). The tilted law is
+still supported in $[a, b]$, and \emph{any} random variable $V \in [a, b]$
+satisfies
+\[
+\Var(V) \;\le\; \E\Bigl[\Bigl(V - \tfrac{a + b}{2}\Bigr)^2\Bigr]
+\;\le\; \Bigl(\tfrac{b - a}{2}\Bigr)^2,
+\]
+where the first inequality holds because the variance minimizes the expected
+squared deviation over all centering constants, and the second because
+$|V - (a+b)/2| \le (b-a)/2$ pointwise. Hence
+$\psi''(\lambda) \le (b - a)^2 / 4$ for all $\lambda$, and Taylor's theorem
+with the exact remainder gives, for some $\xi$ between $0$ and $\lambda$,
+\[
+\psi(\lambda) = \psi(0) + \lambda\,\psi'(0)
++ \tfrac{\lambda^2}{2}\,\psi''(\xi)
+\;\le\; \frac{\lambda^2 (b-a)^2}{8}.
+\]
+Exponentiate.
+\end{proof}
+
+\begin{theorem}[Hoeffding's inequality]
+\label{thm:dd1-hoeffding}
+Let $X_1, \dots, X_n$ be independent with $X_i \in [a_i, b_i]$ almost surely,
+and let $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$, $\mu = \E[\bar{X}]$. Then for
+every $t > 0$,
+\begin{equation}
+\label{eq:dd1-hoeffding}
+\Pr\bigl( \bar{X} - \mu \ge t \bigr)
+\;\le\; \exp\!\Bigl( - \frac{2 n^2 t^2}{\sum_{i=1}^n (b_i - a_i)^2} \Bigr),
+\end{equation}
+and the same bound holds for $\Pr(\mu - \bar{X} \ge t)$; a union bound gives
+the two-sided version with an extra factor $2$. In particular, if
+$X_i \in [0, B]$ for all $i$, then with probability at least $1 - \delta$,
+\begin{equation}
+\label{eq:dd1-hoeffding-radius}
+\bigl| \bar{X} - \mu \bigr| \;\le\; B \sqrt{ \frac{\ln(2/\delta)}{2n} }.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Let $S = \sum_i (X_i - \E X_i)$, so $\{\bar{X} - \mu \ge t\} =
+\{S \ge nt\}$. For any $\lambda > 0$, by Markov's inequality applied to the
+nonnegative variable $e^{\lambda S}$ (the Chernoff step) and independence,
+\[
+\Pr( S \ge nt ) \;\le\; e^{-\lambda n t}\, \E\bigl[ e^{\lambda S} \bigr]
+\;=\; e^{-\lambda n t} \prod_{i=1}^n \E\bigl[ e^{\lambda (X_i - \E X_i)}
+\bigr]
+\;\le\; \exp\!\Bigl( -\lambda n t + \frac{\lambda^2}{8} \sum_{i=1}^n
+(b_i - a_i)^2 \Bigr),
+\]
+using Lemma~\ref{lem:dd1-hoeffding-lemma} for each centered $X_i - \E X_i \in
+[a_i - \E X_i,\, b_i - \E X_i]$, an interval of the same width $b_i - a_i$.
+The exponent $-\lambda n t + \frac{\lambda^2}{8}\sum_i (b_i - a_i)^2$ is a
+convex parabola in $\lambda$, minimized at
+$\lambda^* = 4nt / \sum_i (b_i - a_i)^2 > 0$, with minimum value
+$-2 n^2 t^2 / \sum_i (b_i - a_i)^2$. This proves \eqref{eq:dd1-hoeffding};
+the lower tail follows by applying the result to $-X_i$. For
+\eqref{eq:dd1-hoeffding-radius}, set $a_i = 0$, $b_i = B$, equate the
+two-sided bound $2\exp(-2nt^2/B^2)$ to $\delta$, and solve for $t$.
+\end{proof}
+
+\subsection{Empirical Bernstein: Paying the Observed Variance, Not the Range}
+
+Hoeffding's radius \eqref{eq:dd1-hoeffding-radius} scales with the worst-case
+range $B$, no matter how concentrated the data actually are. When the sample
+is tiny this is painful, because $B$ for the decision regret is a gross
+worst-case constant (Proposition~\ref{prop:dd1-regret-range}). Bernstein-type
+inequalities replace $B$ by the standard deviation, but the classical
+Bernstein bound needs the \emph{true} variance, which is unknown. The
+empirical-Bernstein inequality of Maurer and Pontil
+\cite{maurer2009empirical} closes the loop by using the \emph{sample}
+variance, at the price of a lower-order $B/n$ term.
+
+\begin{theorem}[Empirical Bernstein inequality \cite{maurer2009empirical};
+stated without proof]
+\label{thm:dd1-empbernstein}
+Let $X_1, \dots, X_n$ ($n \ge 2$) be i.i.d.\ with values in $[0, B]$, sample
+mean $\bar{X}$, and sample variance
+$V_n = \frac{1}{n - 1}\sum_{i=1}^n (X_i - \bar{X})^2$. Then with probability
+at least $1 - \delta$,
+\begin{equation}
+\label{eq:dd1-empbernstein}
+\mu \;\le\; \bar{X} \;+\; \sqrt{ \frac{2\, V_n \ln(2/\delta)}{n} }
+\;+\; \frac{7\, B \ln(2/\delta)}{3\,(n - 1)} .
+\end{equation}
+\end{theorem}
+
+\begin{intuition}
+Read \eqref{eq:dd1-empbernstein} as: \emph{you pay the spread you actually
+observed} (the $\sqrt{V_n/n}$ term), plus a \emph{fixed entrance fee}
+proportional to $B/n$ for the privilege of estimating the variance from the
+same data. When the observations are tightly clustered ($\sqrt{V_n} \ll B$)
+and $n$ is moderate, the first term is far below Hoeffding's
+$B\sqrt{\ln(2/\delta)/2n}$ and the entrance fee is negligible. When $n$ is
+very small, the entrance fee dominates everything.
+\end{intuition}
+
+\begin{remark}[Why this matters at $E_r = 5$--$7$ episodes]
+\label{rem:dd1-small-n}
+In \nm{}, the per-niche certificate averages the episode risks of the
+$E_r \in \{5, \dots, 7\}$ episodes stored in niche $r$'s memory. The entire
+design of the niche structure---episodes are routed to a niche precisely
+because the niche head's decision behavior on them is similar---aims to make
+the \emph{within-niche} spread of episode risks small, i.e.\ $V_n \ll B^2$.
+Empirical Bernstein is the inequality that can, in principle, convert that
+design property into a tighter certificate, because it is the only one in
+this family whose radius adapts to the realized within-niche concentration.
+Hoeffding cannot see the clustering at all. The sobering quantitative reality
+at $n \in \{5, \dots, 7\}$ is worked out in the next example.
+\end{remark}
+
+\begin{example}[Estimation radii with $6$ episodes]
+\label{ex:dd1-radius}
+Take $n = 6$ episodes, regret range $B = 0.4$, confidence $\delta = 0.1$, so
+$\ln(2/\delta) = \ln 20 \approx 2.9957$.
+
+\emph{Hoeffding.} The two-sided radius \eqref{eq:dd1-hoeffding-radius} is
+\[
+B \sqrt{\frac{\ln(2/\delta)}{2n}}
+= 0.4 \times \sqrt{\frac{2.9957}{12}}
+= 0.4 \times \sqrt{0.24964}
+= 0.4 \times 0.49964
+\approx 0.1999 \approx 0.20 .
+\]
+The certificate is ``mean regret within $\pm 0.20$''---\emph{half the entire
+range} $[0, 0.4]$. As a quantitative guarantee this is nearly vacuous.
+
+\emph{Empirical Bernstein.} Suppose the six stored episode regrets are
+tightly clustered with sample standard deviation $\sqrt{V_n} = 0.05$. The
+variance term of \eqref{eq:dd1-empbernstein} is
+\[
+\sqrt{\frac{2 \times 0.0025 \times 2.9957}{6}}
+= \sqrt{0.0024964} \approx 0.050,
+\]
+a four-fold improvement---but the entrance fee is
+\[
+\frac{7 \times 0.4 \times 2.9957}{3 \times 5}
+= \frac{8.388}{15} \approx 0.559,
+\]
+which alone exceeds the whole range $B$. At $n = 6$ the empirical-Bernstein
+certificate is \emph{worse} than Hoeffding's; the variance adaptivity only
+pays once $n$ is large enough that the $B/(n-1)$ term recedes (here, roughly
+$n \gtrsim 40$ for these constants).
+\end{example}
+
+\begin{warning}
+Example~\ref{ex:dd1-radius} is the honest small-sample accounting that frames
+every finite-sample statement in this document: at $E_r = 5$--$7$ episodes,
+\emph{no} distribution-free concentration inequality certifies the per-niche
+mean regret to a useful tolerance. The role of these bounds in the \nm{}
+theory is therefore \emph{structural}, not numerical: they identify
+\emph{which} quantities control transfer (the within-niche mean and
+variance of episode risk, and only those), and they predict the correct
+\emph{qualitative} ordering of mechanisms (lower within-niche variance
+$\Rightarrow$ tighter transfer). That prediction is exactly what the
+variance-penalized objective of Section~\ref{sec:dd1-invariance} acts on, and
+it is tested empirically rather than certified theoretically.
+\end{warning}
+
+% ============================================================================
+\section{Distances Between Distributions and the Pinsker Bridge}
+\label{sec:dd1-distances}
+
+\nm{} inherits from the invariant predict-and-optimize line of work
+\cite{yan2026invpnco} guarantees of the form ``within a regime, the
+divergence between the training mixture of episodes and a deployment episode
+is at most $\epsilon$.'' Such statements are about \emph{distributions}; what
+we need are statements about \emph{regret}. This section builds the standard
+bridge: total variation converts distributional closeness into closeness of
+bounded expectations, and Pinsker's inequality converts KL divergence into
+total variation.
+
+Throughout, $P$ and $Q$ are probability measures on a common measurable space
+$(\Omega, \mathcal{F})$, and we fix a dominating $\sigma$-finite measure
+$\mu$ (e.g.\ $\mu = P + Q$) with densities $p = dP/d\mu$, $q = dQ/d\mu$. All
+statements are independent of the choice of $\mu$.
+
+\subsection{Total Variation Distance}
+
+\begin{definition}[Total variation]
+\label{def:dd1-tv}
+The \textbf{total variation distance} between $P$ and $Q$ is
+\begin{equation}
+\label{eq:dd1-tv-def}
+\TV(P, Q) \;=\; \sup_{A \in \mathcal{F}} \bigl| P(A) - Q(A) \bigr|.
+\end{equation}
+\end{definition}
+
+\begin{proposition}[Variational and $L_1$ characterizations]
+\label{prop:dd1-tv-variational}
+With $p, q$ as above,
+\begin{equation}
+\label{eq:dd1-tv-three}
+\TV(P, Q)
+\;=\; \frac{1}{2} \int_\Omega |p - q| \, d\mu
+\;=\; \sup_{g : \Omega \to [0, 1]} \Bigl| \E_P[g] - \E_Q[g] \Bigr|,
+\end{equation}
+where the supremum is over all measurable functions $g$ with values in
+$[0,1]$, and is attained at $g = \mathbf{1}_{A^*}$ with
+$A^* = \{p \ge q\}$.
+\end{proposition}
+
+\begin{proof}
+Write $\Delta = p - q$ and note the key cancellation
+\begin{equation}
+\label{eq:dd1-cancellation}
+\int_\Omega \Delta \, d\mu = \int p \, d\mu - \int q \, d\mu = 1 - 1 = 0
+\quad\Longrightarrow\quad
+\int_{A^*} \Delta \, d\mu \;=\; \int_{(A^*)^c} (-\Delta) \, d\mu ,
+\end{equation}
+where $A^* = \{\Delta \ge 0\}$; both sides of the implication equal
+$\frac{1}{2}\int |\Delta| \, d\mu$ since
+$\int |\Delta| = \int_{A^*} \Delta + \int_{(A^*)^c} (-\Delta)$.
+
+\emph{Step 1: every $[0,1]$-valued $g$ is dominated.} For any such $g$,
+\[
+\E_P[g] - \E_Q[g] = \int g\, \Delta \, d\mu
+= \int_{A^*} g\, \Delta \, d\mu + \int_{(A^*)^c} g\, \Delta \, d\mu
+\;\le\; \int_{A^*} 1 \cdot \Delta \, d\mu + \int_{(A^*)^c} 0 \cdot \Delta \,
+d\mu
+= \tfrac{1}{2} \textstyle\int |\Delta| \, d\mu,
+\]
+using $0 \le g \le 1$, $\Delta \ge 0$ on $A^*$, and $\Delta < 0$ on
+$(A^*)^c$. Applying the same bound to $1 - g$ (also $[0,1]$-valued) gives
+$\E_Q[g] - \E_P[g] \le \frac{1}{2}\int|\Delta|$ as well (note
+$\E_Q[g]-\E_P[g] = \E_P[1-g]-\E_Q[1-g]$). Hence
+$\sup_g |\E_P g - \E_Q g| \le \frac{1}{2}\int |\Delta|\, d\mu$.
+
+\emph{Step 2: attainment.} The choice $g = \mathbf{1}_{A^*}$ achieves
+$\E_P[g] - \E_Q[g] = \int_{A^*} \Delta\, d\mu = \frac{1}{2}\int|\Delta|\,
+d\mu$ by \eqref{eq:dd1-cancellation}. So the supremum over $[0,1]$-valued $g$
+\emph{equals} $\frac{1}{2}\int |\Delta|$.
+
+\emph{Step 3: events.} Indicators $\mathbf{1}_A$ are particular
+$[0,1]$-valued functions, so
+$\sup_A |P(A) - Q(A)| \le \sup_g |\E_P g - \E_Q g|$; and the optimizer found
+in Step 2 \emph{is} an indicator, so the two suprema coincide, and both equal
+$\frac{1}{2}\int|p - q|\,d\mu$.
+\end{proof}
+
+\begin{intuition}
+$\TV$ answers: \emph{over all bounded tests normalized to $[0,1]$, how
+differently can the two distributions score?} The optimal test is the
+likelihood-ratio region $\{p \ge q\}$. The $[0,1]$-function form---rather
+than the events-only form---is the one we will actually use, because a
+bounded loss rescaled into $[0,1]$ is such a function but is not an
+indicator.
+\end{intuition}
+
+\subsection{KL Divergence and Gibbs' Inequality}
+
+\begin{definition}[Kullback--Leibler divergence]
+\label{def:dd1-kl}
+If $P \ll Q$ (i.e.\ $q = 0 \Rightarrow p = 0$, $\mu$-a.e.),
+\begin{equation}
+\label{eq:dd1-kl-def}
+\KL(P \,\|\, Q) \;=\; \int_{\{p > 0\}} p \,\log \frac{p}{q} \, d\mu
+\;=\; \E_P\Bigl[ \log \frac{p}{q} \Bigr],
+\end{equation}
+with the conventions $0 \log 0 = 0$; if $P \not\ll Q$ we set
+$\KL(P\|Q) = +\infty$.
+\end{definition}
+
+\begin{proposition}[Gibbs' inequality / non-negativity]
+\label{prop:dd1-gibbs}
+$\KL(P \| Q) \ge 0$, with equality if and only if $P = Q$.
+\end{proposition}
+
+\begin{proof}
+Assume $P \ll Q$ (otherwise $\KL = \infty > 0$). Then
+\[
+-\KL(P\|Q) = \E_P\Bigl[ \log \frac{q}{p} \Bigr]
+\;\le\; \log \E_P\Bigl[ \frac{q}{p} \Bigr]
+= \log \int_{\{p > 0\}} q \, d\mu
+\;\le\; \log 1 = 0,
+\]
+where the first inequality is Jensen's inequality for the concave function
+$\log$, and the second uses $\int_{\{p>0\}} q\, d\mu \le \int q \, d\mu = 1$.
+For the equality case: $\log$ is \emph{strictly} concave, so Jensen is an
+equality iff $q/p$ is $P$-a.s.\ constant; combined with
+$\int_{\{p>0\}} q = 1$ (forced by the second inequality being tight) the
+constant is $1$, i.e.\ $p = q$ $\mu$-a.e., i.e.\ $P = Q$.
+\end{proof}
+
+\subsection{Pinsker's Inequality}
+
+We give the classical proof \cite{tsybakov2009introduction} in two moves: a
+data-processing (two-point) reduction via the log-sum inequality, then the
+scalar inequality for Bernoulli pairs.
+
+\begin{lemma}[Log-sum inequality]
+\label{lem:dd1-logsum}
+For nonnegative reals $a_1, \dots, a_m$ and positive reals
+$b_1, \dots, b_m$,
+\begin{equation}
+\label{eq:dd1-logsum}
+\sum_{i=1}^m a_i \log \frac{a_i}{b_i}
+\;\ge\; \Bigl( \sum_{i=1}^m a_i \Bigr)
+\log \frac{\sum_{i=1}^m a_i}{\sum_{i=1}^m b_i},
+\end{equation}
+with the convention $0 \log 0 = 0$. The same holds with sums replaced by
+integrals of nonnegative functions.
+\end{lemma}
+
+\begin{proof}
+Let $\phi(t) = t \log t$ for $t > 0$, $\phi(0) = 0$; $\phi$ is convex on
+$[0, \infty)$ since $\phi''(t) = 1/t > 0$. Set $b = \sum_i b_i$ and apply
+Jensen's inequality with weights $b_i / b$ to the points $t_i = a_i / b_i$:
+\[
+\sum_{i=1}^m \frac{b_i}{b}\, \phi\Bigl( \frac{a_i}{b_i} \Bigr)
+\;\ge\; \phi\Bigl( \sum_{i=1}^m \frac{b_i}{b} \cdot \frac{a_i}{b_i} \Bigr)
+= \phi\Bigl( \frac{\sum_i a_i}{b} \Bigr).
+\]
+Multiplying both sides by $b$ and expanding $\phi$:
+\[
+\sum_i b_i \cdot \frac{a_i}{b_i} \log\frac{a_i}{b_i}
+= \sum_i a_i \log \frac{a_i}{b_i}
+\;\ge\; b \cdot \frac{\sum_i a_i}{b} \log \frac{\sum_i a_i}{b}
+= \Bigl(\sum_i a_i\Bigr) \log \frac{\sum_i a_i}{\sum_i b_i}.
+\]
+The integral version is Jensen for the same $\phi$ with the normalized
+measure $b(\omega)\,d\mu / \int b \, d\mu$.
+\end{proof}
+
+\begin{lemma}[Two-point (data-processing) reduction]
+\label{lem:dd1-dataproc}
+For any event $A \in \mathcal{F}$, writing $a = P(A)$, $b = Q(A)$ and
+$\mathrm{kl}(a \,\|\, b) = a \log\frac{a}{b} + (1-a)\log\frac{1-a}{1-b}$ for
+the Bernoulli KL,
+\begin{equation}
+\label{eq:dd1-dataproc}
+\KL(P \,\|\, Q) \;\ge\; \mathrm{kl}\bigl( P(A) \,\|\, Q(A) \bigr).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Split the defining integral over the partition $\{A, A^c\}$ and apply the
+integral log-sum inequality (Lemma~\ref{lem:dd1-logsum}) on each cell:
+\[
+\KL(P\|Q)
+= \int_A p \log \frac{p}{q}\, d\mu + \int_{A^c} p \log \frac{p}{q}\, d\mu
+\;\ge\; \Bigl(\int_A p\Bigr) \log \frac{\int_A p}{\int_A q}
++ \Bigl(\int_{A^c} p\Bigr) \log \frac{\int_{A^c} p}{\int_{A^c} q}
+= \mathrm{kl}\bigl(P(A) \| Q(A)\bigr). \qedhere
+\]
+\end{proof}
+
+\begin{lemma}[Scalar Pinsker]
+\label{lem:dd1-scalar-pinsker}
+For all $a, b \in [0, 1]$ (with $\mathrm{kl}(a\|b) = \infty$ when undefined),
+\begin{equation}
+\label{eq:dd1-scalar-pinsker}
+\mathrm{kl}(a \,\|\, b) \;\ge\; 2\,(a - b)^2 .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+If $b \in \{0, 1\}$ and $a \neq b$ the left side is $+\infty$ and the claim
+is trivial; if $a = b$ both sides vanish. So fix $b \in (0,1)$ and define on
+$(0,1)$ (extending continuously to the endpoints where finite)
+\[
+f(a) \;=\; \mathrm{kl}(a \| b) - 2 (a - b)^2
+\;=\; a \log\frac{a}{b} + (1 - a)\log\frac{1-a}{1-b} - 2(a-b)^2 .
+\]
+Then $f(b) = 0$, and differentiating in $a$:
+\[
+f'(a) = \log \frac{a}{b} - \log \frac{1-a}{1-b} - 4(a - b),
+\qquad f'(b) = 0,
+\]
+\[
+f''(a) = \frac{1}{a} + \frac{1}{1 - a} - 4 = \frac{1}{a(1-a)} - 4 \;\ge\; 0,
+\]
+since $a(1-a) \le 1/4$ for $a \in (0,1)$ (AM--GM: $a(1-a) \le
+\bigl(\frac{a + (1-a)}{2}\bigr)^2 = \frac14$). Thus $f'$ is nondecreasing
+and vanishes at $a = b$: $f' \le 0$ on $(0, b]$ and $f' \ge 0$ on $[b, 1)$,
+so $f$ attains its minimum over $(0,1)$ at $a = b$, where it is $0$. Hence
+$f(a) \ge 0$ for all $a$, which is \eqref{eq:dd1-scalar-pinsker}.
+\end{proof}
+
+\begin{theorem}[Pinsker's inequality]
+\label{thm:dd1-pinsker}
+For all probability measures $P, Q$,
+\begin{equation}
+\label{eq:dd1-pinsker}
+\TV(P, Q) \;\le\; \sqrt{ \tfrac{1}{2}\, \KL(P \,\|\, Q) } .
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+If $\KL(P\|Q) = \infty$ there is nothing to prove. Otherwise let
+$A^* = \{p \ge q\}$, so that by
+Proposition~\ref{prop:dd1-tv-variational}, $\TV(P, Q) = P(A^*) - Q(A^*)$.
+Chaining Lemmas~\ref{lem:dd1-dataproc} and \ref{lem:dd1-scalar-pinsker},
+\[
+\KL(P \| Q)
+\;\ge\; \mathrm{kl}\bigl(P(A^*) \,\|\, Q(A^*)\bigr)
+\;\ge\; 2\,\bigl(P(A^*) - Q(A^*)\bigr)^2
+\;=\; 2\, \TV(P, Q)^2 .
+\]
+Rearranging gives \eqref{eq:dd1-pinsker}.
+\end{proof}
+
+\subsection{The Pinsker Bridge: from Divergence to Regret}
+
+\begin{theorem}[Bounded-loss transfer / Pinsker bridge]
+\label{thm:dd1-bridge}
+Let $\ell : \Omega \to [0, B]$ be any measurable loss, and write
+$L_P = \E_P[\ell]$, $L_Q = \E_Q[\ell]$. Then
+\begin{equation}
+\label{eq:dd1-bridge}
+\bigl| L_P - L_Q \bigr|
+\;\le\; B \cdot \TV(P, Q)
+\;\le\; B \, \sqrt{ \tfrac{1}{2} \,\KL(P \,\|\, Q) } .
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The function $g = \ell / B$ takes values in $[0, 1]$, so by the variational
+characterization (Proposition~\ref{prop:dd1-tv-variational}),
+\[
+\bigl| L_P - L_Q \bigr| = B \,\bigl| \E_P[g] - \E_Q[g] \bigr|
+\;\le\; B \sup_{g' : 0 \le g' \le 1} \bigl| \E_P[g'] - \E_Q[g'] \bigr|
+= B \cdot \TV(P, Q).
+\]
+The second inequality in \eqref{eq:dd1-bridge} is Pinsker
+(Theorem~\ref{thm:dd1-pinsker}).
+\end{proof}
+
+\begin{keypoint}
+\textbf{Role in the \nm{} theory.} Fix a regime $r$ and apply
+Theorem~\ref{thm:dd1-bridge} with: $\Omega$ the space of (feature, return)
+days; $\ell(\omega) = \rho(\hat{y}_\theta(x_\omega); y_\omega)$ the decision
+regret of niche head $\theta$, bounded by $B = 2 k\, w_{\max}\, y_{\max}$
+(Proposition~\ref{prop:dd1-regret-range}); $P$ the mixture of the niche's
+stored training episodes; $Q$ a fresh deployment episode of the same regime.
+An Inv-PnCO-style assumption \cite{yan2026invpnco}---that episodes of one
+regime are divergence-close, $\KL(Q \| P) \le \epsilon_r$ (or
+$\TV \le \tau_r$)---then yields a \emph{regret} transfer guarantee:
+\[
+\text{fresh-episode regret}
+\;\le\; \text{stored-episode regret} + B\sqrt{\epsilon_r / 2},
+\]
+which composes with the concentration bounds of
+Section~\ref{sec:dd1-concentration} (controlling the stored-episode average)
+to give the episode-transfer lemma of Part II. The bridge is what lets a
+statement about \emph{data distributions} (checkable by regime statistics)
+control a statement about \emph{money} (regret of induced portfolios), for
+\emph{any} head simultaneously---no union bound over heads is needed because
+\eqref{eq:dd1-bridge} is deterministic given the divergence.
+\end{keypoint}
+
+\begin{remark}[Honest looseness accounting]
+\label{rem:dd1-B-loose}
+Every appearance of $B = 2 k\, w_{\max}\, y_{\max}$ in
+\eqref{eq:dd1-bridge} imports the worst case of
+Proposition~\ref{prop:dd1-regret-range}: the forecast shorting itself into
+the $k$ worst assets while the oracle rides the $k$ best, all at the extreme
+return $y_{\max}$. Empirically observed decision regrets in the companion
+experiments range roughly \emph{fifty times smaller} than $B$. The bridge's
+\emph{form}---transfer error scaling as
+$(\text{regret scale}) \times \sqrt{\text{divergence}}$---is the content we
+rely on; its \emph{constant} should be read as a certificate of structure,
+not of magnitude. Tightening $B$ to a high-probability regret envelope (e.g.\
+a quantile of the realized regret distribution) is possible but converts the
+deterministic bridge into a probabilistic one; we keep the loose constant and
+flag it.
+\end{remark}
+
+% ============================================================================
+\section{Online Learning: Hedge, Exponentiated Gradient, and Their Limits}
+\label{sec:dd1-online}
+
+The \nm{} gate maintains a probability vector over niches and updates it
+multiplicatively in observed decision quality. This update has three classical
+pedigrees---Hedge \cite{freund1997decision}, exponentiated gradient
+\cite{kivinen1997exponentiated}, and multiplicative weights
+\cite{arora2012multiplicative}---and one classical guarantee, the
+$O(\sqrt{T \log N})$ adversarial regret bound \cite{cesa2006prediction}. This
+section develops all of it, and then states precisely why the classical
+guarantee does \emph{not} cover \nm{}'s use of the update.
+
+\subsection{The Experts Problem and the Hedge Update}
+
+\begin{definition}[Prediction with expert advice]
+\label{def:dd1-experts}
+There are $N$ \textbf{experts}. At each round $t = 1, \dots, T$: the learner
+chooses a distribution $p_t \in \Delta_N = \{p \in [0,1]^N : \sum_i p_i =
+1\}$; an adversary simultaneously chooses a loss vector
+$\ell_t \in [0, 1]^N$; the learner suffers $\langle p_t, \ell_t \rangle$ and
+observes all of $\ell_t$. The learner's \textbf{regret} is
+\begin{equation}
+\label{eq:dd1-experts-regret}
+R_T \;=\; \sum_{t=1}^T \langle p_t, \ell_t \rangle
+\;-\; \min_{i \in [N]} \sum_{t=1}^T \ell_{t,i},
+\end{equation}
+the gap to the best \emph{single} expert in hindsight.
+\end{definition}
+
+\begin{definition}[Hedge / multiplicative weights]
+\label{def:dd1-hedge}
+Fix a learning rate $\eta > 0$. Initialize $w_{1,i} = 1$ for all $i$ and
+$p_1 = (1/N, \dots, 1/N)$. After observing $\ell_t$,
+\begin{equation}
+\label{eq:dd1-hedge}
+w_{t+1, i} = w_{t, i}\, e^{-\eta\, \ell_{t,i}},
+\qquad
+p_{t+1, i} = \frac{w_{t+1, i}}{\sum_{j=1}^N w_{t+1, j}}
+= \frac{p_{t,i}\, e^{-\eta \ell_{t,i}}}{\sum_j p_{t,j}\, e^{-\eta
+\ell_{t,j}}}.
+\end{equation}
+\end{definition}
+
+This lineage runs through universal portfolio selection
+\cite{cover1991universal} and online portfolio optimization
+\cite{li2014online}: there, the ``experts'' are constant-rebalanced
+portfolios or trading strategies and the weights track wealth shares. In
+\nm{} the experts are niche heads and the weights drive both selection and
+training-resource allocation---a difference we return to in
+Section~\ref{sec:dd1-online-limits}.
+
+\subsection{Exponentiated Gradient as Mirror Descent with Entropy}
+
+The exponential form \eqref{eq:dd1-hedge} is not an ad hoc choice: it is the
+\emph{exact} solution of a regularized linear step where the regularizer is
+the KL divergence on the simplex \cite{kivinen1997exponentiated}.
+
+\begin{proposition}[EG update solves the KL-regularized linear step]
+\label{prop:dd1-eg-mirror}
+Fix $p_t$ in the relative interior of $\Delta_N$ and $\eta > 0$. The unique
+solution of
+\begin{equation}
+\label{eq:dd1-mirror-step}
+p_{t+1} \;=\; \argmin_{p \in \Delta_N}
+\Bigl\{ \eta\, \langle \ell_t, p \rangle + \KL(p \,\|\, p_t) \Bigr\},
+\qquad
+\KL(p \| p_t) = \sum_{i=1}^N p_i \log \frac{p_i}{p_{t,i}},
+\end{equation}
+is exactly the Hedge update \eqref{eq:dd1-hedge}.
+\end{proposition}
+
+\begin{proof}
+The objective $J(p) = \eta \langle \ell_t, p\rangle + \KL(p\|p_t)$ is
+strictly convex on $\Delta_N$ ($\langle \ell_t, \cdot\rangle$ is linear and
+$\KL(\cdot \| p_t)$ is strictly convex, being a sum of strictly convex scalar
+functions $p_i \mapsto p_i \log(p_i / p_{t,i})$), so the minimizer is unique.
+Moreover the entropy term's derivative blows up at the boundary
+($\partial_{p_i} p_i \log p_i = \log p_i + 1 \to -\infty$ as $p_i \to 0^+$),
+which forces the minimizer into the relative interior; hence the
+nonnegativity constraints are inactive and we may use a Lagrangian with only
+the equality constraint. Set
+\[
+\mathcal{L}(p, \lambda)
+= \sum_{i=1}^N \Bigl[ \eta\, \ell_{t,i}\, p_i
++ p_i \log \frac{p_i}{p_{t,i}} \Bigr]
++ \lambda \Bigl( \sum_{i=1}^N p_i - 1 \Bigr).
+\]
+Stationarity in each coordinate:
+\[
+\frac{\partial \mathcal{L}}{\partial p_i}
+= \eta\, \ell_{t,i} + \log \frac{p_i}{p_{t,i}} + 1 + \lambda = 0
+\quad\Longleftrightarrow\quad
+p_i = p_{t,i}\, e^{-\eta \ell_{t,i}}\, e^{-(1 + \lambda)} .
+\]
+The factor $e^{-(1+\lambda)}$ is a positive constant independent of $i$;
+the constraint $\sum_i p_i = 1$ pins it to
+$\bigl(\sum_j p_{t,j} e^{-\eta \ell_{t,j}}\bigr)^{-1}$. This is precisely
+\eqref{eq:dd1-hedge}.
+\end{proof}
+
+\begin{intuition}
+The step \eqref{eq:dd1-mirror-step} balances two pulls: ``move mass toward
+low-loss coordinates'' (the linear term) against ``do not move far from where
+you are, measured \emph{multiplicatively}'' (the KL term). Measuring movement
+by KL rather than Euclidean distance is what makes the update respect the
+simplex geometry: probabilities can shrink toward zero but never jump across
+it, weights never go negative, and a coordinate's \emph{relative} change
+$p_{t+1,i}/p_{t,i}$ depends only on its own loss and the normalizer. This is
+the precise sense in which the \nm{} gate is a ``well-behaved simplex
+ascent'': bounded relative updates, invariance to common loss shifts, and no
+projection step that could zero out a niche in one round.
+\end{intuition}
+
+\subsection{The Classical Regret Guarantee}
+
+\begin{theorem}[Hedge regret bound \cite{freund1997decision,
+cesa2006prediction}]
+\label{thm:dd1-hedge-regret}
+For losses $\ell_t \in [0,1]^N$ and any $\eta > 0$, Hedge guarantees
+\begin{equation}
+\label{eq:dd1-hedge-bound}
+R_T \;\le\; \frac{\ln N}{\eta} + \frac{\eta\, T}{8},
+\end{equation}
+and with the tuned rate $\eta = \sqrt{8 \ln N / T}$,
+$R_T \le \sqrt{(T/2) \ln N} = O(\sqrt{T \log N})$.
+\end{theorem}
+
+\begin{proof}[Proof (potential-function argument)]
+Let $W_t = \sum_{i=1}^N w_{t,i}$ with the weights of
+Definition~\ref{def:dd1-hedge}, and consider the potential $\ln W_t$.
+
+\emph{Per-round drop.} Since $p_{t,i} = w_{t,i} / W_t$,
+\[
+\ln \frac{W_{t+1}}{W_t}
+= \ln \sum_{i=1}^N \frac{w_{t,i}}{W_t}\, e^{-\eta \ell_{t,i}}
+= \ln \E_{i \sim p_t}\bigl[ e^{-\eta \ell_{t,i}} \bigr]
+\;\le\; -\eta\, \E_{i \sim p_t}[\ell_{t,i}] + \frac{\eta^2}{8}
+= -\eta\, \langle p_t, \ell_t \rangle + \frac{\eta^2}{8},
+\]
+where the inequality is Hoeffding's lemma
+(Lemma~\ref{lem:dd1-hoeffding-lemma}) applied to the random variable
+$-\eta\,(\ell_{t,I} - \E\ell_{t,I})$, $I \sim p_t$, supported on an interval
+of width $\eta \cdot 1$. Summing over $t$ and telescoping,
+\begin{equation}
+\label{eq:dd1-potential-upper}
+\ln W_{T+1} - \ln W_1
+\;\le\; -\eta \sum_{t=1}^T \langle p_t, \ell_t \rangle + \frac{\eta^2 T}{8}.
+\end{equation}
+
+\emph{Comparator floor.} For any fixed expert $i^*$, since all weights are
+positive,
+\begin{equation}
+\label{eq:dd1-potential-lower}
+\ln W_{T+1} \;\ge\; \ln w_{T+1, i^*}
+= \ln\Bigl( 1 \cdot \prod_{t=1}^T e^{-\eta \ell_{t, i^*}} \Bigr)
+= -\eta \sum_{t=1}^T \ell_{t, i^*},
+\end{equation}
+while $\ln W_1 = \ln N$.
+
+\emph{Combine.} Chaining \eqref{eq:dd1-potential-lower} $\le \ln W_{T+1}$
+with \eqref{eq:dd1-potential-upper}:
+\[
+-\eta \sum_t \ell_{t, i^*} - \ln N
+\;\le\; -\eta \sum_t \langle p_t, \ell_t \rangle + \frac{\eta^2 T}{8}
+\;\;\Longrightarrow\;\;
+\sum_t \langle p_t, \ell_t \rangle - \sum_t \ell_{t, i^*}
+\;\le\; \frac{\ln N}{\eta} + \frac{\eta T}{8}.
+\]
+Taking $i^*$ to be the best expert gives \eqref{eq:dd1-hedge-bound};
+substituting the tuned $\eta$ gives
+$2\sqrt{(\ln N)(T)/8} = \sqrt{(T/2)\ln N}$.
+\end{proof}
+
+Remarkably, the bound holds against an adversary who sees the learner's
+distribution before choosing losses---but, crucially, an adversary whose
+losses are \emph{handed to fixed experts}, a point we scrutinize below.
+
+\subsection{The Replicator Limit}
+
+For small $\eta$, the discrete multiplicative update becomes the replicator
+dynamics of evolutionary game theory---the lens through which the
+winner-take-all niche competition of \nm{} (and of GAUSE before it
+\cite{li2026gause}) is analyzed.
+
+\begin{proposition}[Small-$\eta$ replicator limit]
+\label{prop:dd1-replicator}
+For the Hedge update \eqref{eq:dd1-hedge} with bounded losses,
+\begin{equation}
+\label{eq:dd1-replicator}
+p_{t+1, i} - p_{t, i}
+\;=\; \eta\, p_{t,i} \bigl( \langle p_t, \ell_t \rangle - \ell_{t,i} \bigr)
+\;+\; O(\eta^2),
+\end{equation}
+so as $\eta \to 0$ the rescaled-time trajectories solve the replicator ODE
+$\dot{p}_i = p_i (\bar{f} - f_i)$ with ``fitness'' $f_i = \ell_{t,i}$ (lower
+loss = higher fitness, $\bar{f} = \langle p, \ell\rangle$ the population
+mean).
+\end{proposition}
+
+\begin{proof}
+Expand the exponentials to first order: $e^{-\eta \ell_{t,i}} = 1 - \eta
+\ell_{t,i} + O(\eta^2)$, uniformly in $i$ by boundedness. The normalizer is
+\[
+\sum_j p_{t,j} e^{-\eta \ell_{t,j}}
+= 1 - \eta \langle p_t, \ell_t \rangle + O(\eta^2),
+\qquad\text{so}\qquad
+\Bigl( \sum_j p_{t,j} e^{-\eta \ell_{t,j}} \Bigr)^{-1}
+= 1 + \eta \langle p_t, \ell_t \rangle + O(\eta^2).
+\]
+Multiplying,
+\[
+p_{t+1,i} = p_{t,i} \bigl(1 - \eta \ell_{t,i}\bigr)
+\bigl(1 + \eta \langle p_t, \ell_t\rangle\bigr) + O(\eta^2)
+= p_{t,i}\Bigl[ 1 + \eta\bigl( \langle p_t, \ell_t \rangle - \ell_{t,i}
+\bigr) \Bigr] + O(\eta^2). \qedhere
+\]
+\end{proof}
+
+\begin{intuition}
+A niche grows in gate weight iff it beats the \emph{current
+weighted average} of all niches; the growth rate is proportional to both its
+advantage and its current weight. This is exactly the dynamics under which
+competitive exclusion and niche differentiation are usually derived---and it
+is a \emph{dynamical-systems} object (fixed points, basins, exclusion), not a
+regret object.
+\end{intuition}
+
+\subsection{What the Classical Guarantee Does Not Cover}
+\label{sec:dd1-online-limits}
+
+\begin{warning}
+\textbf{The adversarial regret bound does not transfer to \nm{}.}
+Theorem~\ref{thm:dd1-hedge-regret} compares the learner to the best
+\emph{fixed} expert under loss sequences that are \emph{exogenous}: expert
+$i$'s loss at round $t$ does not depend on how much weight the learner has
+been giving expert $i$. In \nm{} both premises fail, for the same reason they
+fail in GAUSE \cite{li2026gause}:
+\begin{enumerate}
+\item \emph{Losses are endogenous.} Niche $i$'s decision quality at round $t$
+depends on its head parameters, which were trained with data and gradient
+budget allocated \emph{in proportion to past gate weights}. The loss sequence
+$\ell_{t,i}$ is a functional of the learner's own trajectory
+$p_{1:t-1}$---outside the oblivious- and even the standard adaptive-adversary
+model, where ``expert $i$'s loss'' must remain well-defined independently of
+the comparison.
+\item \emph{The comparator is meaningless.} ``The best fixed niche in
+hindsight'' is not a coherent benchmark when the niche's identity (its
+trained parameters) is itself an artifact of the weight history; under a
+different weight history the ``same'' niche would be a different predictor.
+A regret bound against an incoherent comparator is vacuous even if formally
+true.
+\item \emph{Winner-take-all coupling.} The \nm{} assignment concentrates
+training on high-weight niches, which is the very mechanism that creates
+specialization; this positive feedback is what the replicator analysis
+(Proposition~\ref{prop:dd1-replicator}) studies and what a worst-case regret
+analysis is designed to neutralize.
+\end{enumerate}
+Accordingly, \nm{} uses the EG/Hedge update for its \emph{structural}
+virtues established in Proposition~\ref{prop:dd1-eg-mirror} and the
+intuition following it---a strictly interior, multiplicatively bounded,
+geometry-respecting ascent on the simplex---and \emph{not} for the bound
+\eqref{eq:dd1-hedge-bound}. Every stability claim about the coupled dynamics
+is proved separately in Part II; none is inherited from
+Theorem~\ref{thm:dd1-hedge-regret}.
+\end{warning}
+
+\subsection{Sleeping Experts and Adaptive Regret: the Gap \nm{} Addresses}
+\label{sec:dd1-sleeping}
+
+Non-stationarity has its own classical formalisms, and it is important to
+locate precisely where they stop short of the \nm{} setting.
+
+\begin{definition}[Sleeping experts \cite{freund1997sleeping}]
+\label{def:dd1-sleeping}
+In the sleeping-experts (specialists) problem, at each round $t$ an
+adversary additionally reveals an \textbf{awake set} $A_t \subseteq [N]$;
+only awake experts make predictions, the learner must put its mass on $A_t$,
+and asleep experts are unevaluated. The standard guarantee is per-expert: for
+every expert $i$,
+\begin{equation}
+\label{eq:dd1-sleeping-regret}
+\sum_{t \,:\, i \in A_t} \langle p_t, \ell_t \rangle
+\;-\; \sum_{t \,:\, i \in A_t} \ell_{t,i}
+\;\le\; O\bigl( \sqrt{ T_i \,\log N } \bigr),
+\qquad T_i = |\{ t : i \in A_t \}|,
+\end{equation}
+i.e.\ the learner competes with each specialist \emph{on the rounds where
+that specialist is awake}.
+\end{definition}
+
+\begin{definition}[Adaptive and strongly adaptive regret
+\cite{hazan2009adaptive, daniely2015strongly}]
+\label{def:dd1-adaptive}
+The \textbf{adaptive regret} of an algorithm is its worst regret over any
+contiguous interval,
+\begin{equation}
+\label{eq:dd1-adaptive-regret}
+\mathrm{AR}_T \;=\; \max_{1 \le s \le e \le T}
+\Bigl[ \sum_{t=s}^{e} \langle p_t, \ell_t \rangle
+- \min_{i} \sum_{t=s}^{e} \ell_{t,i} \Bigr];
+\end{equation}
+an algorithm is \textbf{strongly adaptive} \cite{daniely2015strongly} if for
+every interval length $\tau$ its regret on every length-$\tau$ interval is
+$O(\mathrm{poly}(\log T) \cdot \sqrt{\tau})$. Such algorithms track the best
+expert \emph{per regime segment} rather than globally.
+\end{definition}
+
+\begin{keypoint}
+\textbf{Why dormant \emph{fixed} experts retain trivially.} In both
+frameworks an expert is a fixed function (or a fixed external advisor). When
+expert $i$ sleeps for a thousand rounds, nothing happens to it: its
+parameters do not exist or do not change, and when it wakes its predictions
+are exactly what they would have been. Retention of dormant competence is
+\emph{free}---it is an assumption, not an achievement. The guarantees
+\eqref{eq:dd1-sleeping-regret} and \eqref{eq:dd1-adaptive-regret} are
+therefore statements purely about the \emph{weighting} layer: how fast the
+learner re-concentrates on the right expert after a regime switch.
+\end{keypoint}
+
+\begin{remark}[The precise gap]
+\label{rem:dd1-gap}
+\nm{} operates in a setting these formalisms do not model:
+\textbf{capacity-bounded \emph{learning} experts under reward-driven
+training allocation}. Formally: each expert $i$ carries parameters
+$\theta_{t,i}$ in a bounded-capacity class; at each round a shared training
+budget is divided according to (a function of) the gate weights $p_t$, and
+$\theta_{t+1, i}$ is produced by gradient steps on data weighted by expert
+$i$'s allocation; the loss $\ell_{t,i} = \ell(\theta_{t,i};\,
+\text{episode}_t)$ is thereby a functional of the entire weight history. In
+this setting dormancy is no longer safe by assumption: an expert that
+receives weight (hence budget, hence gradient updates on
+\emph{out-of-niche} data, or no updates while the shared feature extractor
+drifts) can have its dormant competence \emph{overwritten}---the
+continual-learning failure mode studied for mixture-of-experts learners in
+\cite{li2024moecl} and in the GAUSE retention analysis \cite{li2026gause}.
+The sleeping-experts guarantee says nothing here because the premise ``the
+specialist's awake-round losses are fixed targets'' is false; strongly
+adaptive algorithms recover the right \emph{weights} quickly but have no
+mechanism to ensure there remains a competent expert to weight. \nm{}'s
+contribution lives exactly in this gap: the niche memory and the
+variance-penalized per-niche objective are mechanisms for making the
+``expert exists and is still competent when its regime returns'' premise
+\emph{true}, after which adaptive-weighting logic can do its classical job.
+\end{remark}
+
+% ============================================================================
+\section{Invariant Risk and the Failure of ERM Across Environments}
+\label{sec:dd1-invariance}
+
+The last foundation explains \emph{what is being learned inside each niche}.
+A niche head sees a handful of episodes of ``its'' regime; those episodes
+share the regime's stable structure but differ in incidental, episode-specific
+correlations. Pooled empirical risk minimization (ERM) over the episodes is
+the default---and it fails in a precise, derivable way: it loads on the
+incidental correlations exactly in proportion to how unbalanced the small
+sample of episodes happens to be. This section sets up the standard
+two-feature construction, derives the failure quantitatively, shows that the
+\emph{across-episode variance of per-episode loss} is a statistic that detects
+exactly the failure, and positions the \nm{} per-niche objective in the
+invariant-risk literature \cite{arjovsky2019irm, krueger2021rex,
+peters2016causal}.
+
+\subsection{Environments, Episodes, and Pooled ERM}
+
+\begin{definition}[Multi-environment learning]
+\label{def:dd1-environments}
+Data arrive grouped into \textbf{episodes} (environments)
+$e \in \mathcal{E}$; episode $e$ carries a distribution $P_e$ over
+observation--target pairs. A training set consists of samples from $E$
+episodes $e_1, \dots, e_E$ drawn from an environment distribution
+$\mathcal{Q}$; at deployment a \emph{fresh} episode $e' \sim \mathcal{Q}$ is
+encountered. For a predictor $h$ and loss $\ell$, write
+$L_e(h) = \E_{P_e}[\ell(h(x), y)]$ for the per-episode risk. \textbf{Pooled
+ERM} minimizes $\frac{1}{E}\sum_{j=1}^E L_{e_j}(h)$ (empirically); the
+\textbf{invariant} ideal is a predictor whose risk---and whose optimality---is
+stable across all $e$ in the support of $\mathcal{Q}$.
+\end{definition}
+
+In \nm{}, $\mathcal{E}$ is the set of episodes routed to one niche, $E = E_r
+\in \{5, \dots, 7\}$, and $\ell$ is the SPO+ surrogate of
+Section~\ref{sec:dd1-spoplus}; for the analysis of this section we use the
+squared loss, where everything is exactly computable, and return to the SPO+
+case at the end.
+
+\subsection{The Two-Feature Construction}
+
+\begin{definition}[Invariant vs.\ spurious feature model]
+\label{def:dd1-twofeature}
+Within episode $e$, independent draws are generated as
+\begin{equation}
+\label{eq:dd1-sem}
+x_{\mathrm{inv}} \sim \N(0, 1), \qquad
+\varepsilon \sim \N(0, \sigma_\varepsilon^2), \qquad
+y = \theta\, x_{\mathrm{inv}} + \varepsilon, \qquad
+x_{\mathrm{sp}} = \gamma_e\, y + \nu, \quad \nu \sim \N(0, \sigma_\nu^2),
+\end{equation}
+with $x_{\mathrm{inv}}, \varepsilon, \nu$ mutually independent. The
+\textbf{invariant} coefficient $\theta$ is the same in every episode; the
+\textbf{spurious} (anti-causal) coefficient $\gamma_e$ is drawn once per
+episode, i.i.d.\ across episodes with $\E[\gamma] = 0$ and
+$\Var[\gamma] = \sigma_\gamma^2 > 0$. Write $s^2 := \Var(y) = \theta^2 +
+\sigma_\varepsilon^2$. A linear predictor is
+$h_{a,b}(x) = a\, x_{\mathrm{inv}} + b\, x_{\mathrm{sp}}$, and the
+\textbf{invariant predictor} is $h_{\theta, 0}$.
+\end{definition}
+
+\begin{intuition}
+$x_{\mathrm{inv}}$ is a genuine driver of $y$ (a stable regime
+characteristic); $x_{\mathrm{sp}}$ is a symptom---it is generated \emph{from}
+$y$, with an episode-specific gain $\gamma_e$ (an incidental correlation:
+e.g.\ a factor that happened to co-move with returns during those particular
+weeks). Because $x_{\mathrm{sp}}$ is correlated with $y$ within each episode,
+regression happily uses it; because the correlation's sign and size are
+episode-specific accidents, doing so buys in-sample fit with out-of-episode
+fragility. Averaging the $\gamma_e$'s over infinitely many episodes would
+cancel them ($\E\gamma = 0$); the problem is that a niche has $5$--$7$
+episodes, and the empirical mean $\bar{\gamma} = \frac{1}{E}\sum_j
+\gamma_{e_j}$ is a $\Theta(\sigma_\gamma E^{-1/2})$-sized accident that does
+\emph{not} cancel.
+\end{intuition}
+
+\begin{proposition}[Pooled-OLS limit loads on the spurious feature]
+\label{prop:dd1-pooled-ols}
+Consider pooled least squares over $E$ training episodes with equal weights
+and infinite within-episode samples (so all second moments are exact). Write
+$\bar{\gamma} = \frac{1}{E}\sum_{j} \gamma_{e_j}$,
+$\widehat{m}_2 = \frac{1}{E}\sum_j \gamma_{e_j}^2$,
+$\widehat{\sigma}_\gamma^2 = \widehat{m}_2 - \bar{\gamma}^2$. The pooled OLS
+coefficients $(\widehat{a}, \widehat{b}) = \argmin_{a, b} \frac{1}{E}
+\sum_j L_{e_j}(h_{a,b})$ are
+\begin{equation}
+\label{eq:dd1-pooled-limit}
+\widehat{b}
+= \frac{\bar{\gamma}\, \sigma_\varepsilon^2}{D},
+\qquad
+\widehat{a}
+= \theta \cdot \frac{\sigma_\nu^2 + s^2\, \widehat{\sigma}_\gamma^2}{D},
+\qquad
+D := \sigma_\nu^2 + s^2\, \widehat{\sigma}_\gamma^2
++ \bar{\gamma}^2 \sigma_\varepsilon^2 \;>\; 0.
+\end{equation}
+In particular $\widehat{b} \neq 0$ whenever $\bar{\gamma} \neq 0$: the pooled
+solution loads on $x_{\mathrm{sp}}$ \emph{in proportion to the empirical mean
+of the episode coefficients}, which for small $E$ is nonzero with
+probability one (for continuous $\gamma$) and of typical size
+$\sigma_\gamma / \sqrt{E}$.
+\end{proposition}
+
+\begin{proof}
+Within episode $e$, using \eqref{eq:dd1-sem} and independence:
+\[
+\E[x_{\mathrm{inv}}^2] = 1, \quad
+\E[x_{\mathrm{inv}} x_{\mathrm{sp}}] = \gamma_e \E[x_{\mathrm{inv}} y]
+= \gamma_e \theta, \quad
+\E[x_{\mathrm{sp}}^2] = \gamma_e^2 s^2 + \sigma_\nu^2, \quad
+\E[x_{\mathrm{inv}} y] = \theta, \quad
+\E[x_{\mathrm{sp}} y] = \gamma_e s^2 .
+\]
+Pooling with equal weights averages these moments over the $E$ training
+episodes, so the pooled normal equations
+$\bar{\Sigma} (\widehat a, \widehat b)^\top = \bar v$ have
+\[
+\bar{\Sigma} = \begin{pmatrix} 1 & \bar{\gamma}\theta \\
+\bar{\gamma}\theta & \widehat{m}_2 s^2 + \sigma_\nu^2 \end{pmatrix},
+\qquad
+\bar v = \begin{pmatrix} \theta \\ \bar{\gamma} s^2 \end{pmatrix}.
+\]
+The determinant is
+\[
+\det \bar{\Sigma}
+= \widehat{m}_2 s^2 + \sigma_\nu^2 - \bar{\gamma}^2 \theta^2
+= \sigma_\nu^2 + s^2(\widehat{m}_2 - \bar{\gamma}^2)
++ \bar{\gamma}^2 (s^2 - \theta^2)
+= \sigma_\nu^2 + s^2 \widehat{\sigma}_\gamma^2
++ \bar{\gamma}^2 \sigma_\varepsilon^2 = D > 0 .
+\]
+By Cramer's rule,
+\[
+\widehat{b} = \frac{1 \cdot \bar{\gamma} s^2 - \bar{\gamma}\theta \cdot
+\theta}{D} = \frac{\bar{\gamma}(s^2 - \theta^2)}{D}
+= \frac{\bar{\gamma}\, \sigma_\varepsilon^2}{D},
+\qquad
+\widehat{a} = \frac{(\widehat{m}_2 s^2 + \sigma_\nu^2)\theta -
+\bar{\gamma}\theta \cdot \bar{\gamma} s^2}{D}
+= \frac{\theta\bigl( \sigma_\nu^2 + s^2 \widehat{\sigma}_\gamma^2
+\bigr)}{D}. \qedhere
+\]
+\end{proof}
+
+Note the mechanism: $\widehat{b} \propto \bar{\gamma}$, an average of
+mean-zero accidents that a law of large numbers would kill---\emph{if $E$
+were large}. ERM is not wrong asymptotically; it is wrong at $E = 5$--$7$,
+which is the only regime \nm{} lives in. Pooled ERM also genuinely
+\emph{prefers} this loading in-sample:
+
+\begin{lemma}[ERM strictly descends into the spurious direction]
+\label{lem:dd1-erm-descends}
+The per-episode risk of $h_{a,b}$ is
+\begin{equation}
+\label{eq:dd1-Le}
+L_e(h_{a,b})
+= \bigl( \theta - a - b\gamma_e\theta \bigr)^2
++ \bigl( 1 - b\gamma_e \bigr)^2 \sigma_\varepsilon^2
++ b^2 \sigma_\nu^2,
+\end{equation}
+and at the invariant predictor $(a, b) = (\theta, 0)$ the pooled risk has
+$\frac{\partial}{\partial b}\, \frac{1}{E}\sum_j L_{e_j} =
+-2\bar{\gamma}\sigma_\varepsilon^2$. Hence whenever $\bar{\gamma} \neq 0$,
+moving $b$ slightly in the direction of $\operatorname{sign}(\bar\gamma)$
+strictly reduces pooled training risk below the invariant predictor's.
+\end{lemma}
+
+\begin{proof}
+The residual is $y - a x_{\mathrm{inv}} - b x_{\mathrm{sp}}
+= (\theta - a - b\gamma_e \theta) x_{\mathrm{inv}} + (1 - b\gamma_e)
+\varepsilon - b \nu$ (substitute $x_{\mathrm{sp}} = \gamma_e(\theta
+x_{\mathrm{inv}} + \varepsilon) + \nu$); squaring and using independence and
+unit/known variances gives \eqref{eq:dd1-Le}. Differentiate in $b$:
+\[
+\frac{\partial L_e}{\partial b}
+= -2\gamma_e\theta\,(\theta - a - b\gamma_e\theta)
+- 2\gamma_e \sigma_\varepsilon^2 (1 - b\gamma_e) + 2 b \sigma_\nu^2
+\;\xrightarrow{\;(a,b) = (\theta, 0)\;}\;
+0 - 2\gamma_e \sigma_\varepsilon^2 + 0 .
+\]
+Averaging over the training episodes gives $-2\bar\gamma
+\sigma_\varepsilon^2$, nonzero iff $\bar\gamma \neq 0$.
+\end{proof}
+
+\begin{proposition}[Expected excess risk on a fresh episode]
+\label{prop:dd1-excess}
+For any fixed predictor $h_{a,b}$ and a fresh episode $e' \sim \mathcal{Q}$
+(i.e.\ $\gamma_{e'}$ a fresh draw with mean $0$ and variance
+$\sigma_\gamma^2$, independent of the training episodes),
+\begin{equation}
+\label{eq:dd1-excess}
+\E_{\gamma_{e'}}\bigl[ L_{e'}(h_{a,b}) \bigr] - L_{e'}(h_{\theta, 0})
+= (\theta - a)^2 \;+\; b^2 \bigl( \sigma_\nu^2 + s^2 \sigma_\gamma^2 \bigr)
+\;\ge\; 0,
+\end{equation}
+with equality iff $(a,b) = (\theta, 0)$; note $L_{e'}(h_{\theta,0}) =
+\sigma_\varepsilon^2$ deterministically. For the pooled-OLS solution
+\eqref{eq:dd1-pooled-limit}, the leading term for small $|\bar\gamma|$ is
+\begin{equation}
+\label{eq:dd1-excess-rate}
+\widehat{b}^{\,2}\bigl( \sigma_\nu^2 + s^2\sigma_\gamma^2 \bigr)
+= \frac{\bar{\gamma}^2\, \sigma_\varepsilon^4 \,(\sigma_\nu^2 +
+s^2\sigma_\gamma^2)}{D^2},
+\qquad
+\E\bigl[\bar{\gamma}^2\bigr] = \frac{\sigma_\gamma^2}{E},
+\end{equation}
+while $(\theta - \widehat a)^2 = O(\bar\gamma^4)$. The expected damage of
+pooling thus decays only as $1/E$---negligible for hundreds of episodes,
+material for $E = 5$--$7$.
+\end{proposition}
+
+\begin{proof}
+Take the expectation of \eqref{eq:dd1-Le} over $\gamma_{e'}$ with
+$\E\gamma_{e'} = 0$, $\E\gamma_{e'}^2 = \sigma_\gamma^2$:
+\[
+\E\bigl[(\theta - a - b\gamma_{e'}\theta)^2\bigr]
+= (\theta - a)^2 + b^2\theta^2\sigma_\gamma^2,
+\qquad
+\E\bigl[(1 - b\gamma_{e'})^2\bigr]\sigma_\varepsilon^2
+= \sigma_\varepsilon^2 + b^2 \sigma_\varepsilon^2 \sigma_\gamma^2 .
+\]
+Summing with $b^2\sigma_\nu^2$ and subtracting
+$L_{e'}(h_{\theta,0}) = \sigma_\varepsilon^2$ (immediate from
+\eqref{eq:dd1-Le} at $(\theta, 0)$) gives \eqref{eq:dd1-excess}, using
+$\theta^2 + \sigma_\varepsilon^2 = s^2$. For the rate: $\widehat b =
+\bar\gamma \sigma_\varepsilon^2 / D$ from
+Proposition~\ref{prop:dd1-pooled-ols}, and $\theta - \widehat a =
+\theta \bar\gamma^2 \sigma_\varepsilon^2 / D$ (subtract
+\eqref{eq:dd1-pooled-limit} from $\theta$), whose square is $O(\bar\gamma^4)$.
+Finally $\E[\bar\gamma^2] = \Var(\bar\gamma) = \sigma_\gamma^2 / E$ for
+i.i.d.\ mean-zero $\gamma_{e_j}$.
+\end{proof}
+
+\begin{example}[Numbers at niche scale]
+\label{ex:dd1-pooled-numbers}
+Take $\theta = 1$, $\sigma_\varepsilon^2 = 0.5$ (so $s^2 = 1.5$),
+$\sigma_\nu^2 = 1$, and $E = 6$ training episodes with
+$\gamma = (0.4, -0.2, 0.3, -0.1, 0.2, 0.0)$---a sample from a mean-zero law
+that happens, as small samples do, to lean positive: $\bar\gamma = 0.1$,
+$\widehat{m}_2 = 0.34/6 \approx 0.0567$, $\widehat\sigma_\gamma^2 \approx
+0.0467$. Then $D = 1 + 1.5 \times 0.0467 + 0.01 \times 0.5 \approx 1.075$ and
+\[
+\widehat{b} = \frac{0.1 \times 0.5}{1.075} \approx 0.047, \qquad
+\widehat{a} \approx 1 \times \frac{1.070}{1.075} \approx 0.995 .
+\]
+With true $\sigma_\gamma^2 = 0.05$, the expected fresh-episode excess
+\eqref{eq:dd1-excess} is approximately $0.047^2 (1 + 1.5 \times 0.05) +
+0.005^2 \approx 0.0023$---about $0.5\%$ of the irreducible risk
+$\sigma_\varepsilon^2 = 0.5$ per fresh episode, incurred systematically, with
+the sign of the error flipping adversarially on episodes where
+$\gamma_{e'}$ opposes $\bar\gamma$.
+\end{example}
+
+\subsection{The Variance Statistic Detects Exactly the Loading}
+
+The decisive structural fact about the construction is visible in
+\eqref{eq:dd1-Le}: the per-episode risk depends on the episode \emph{only
+through the products $b\gamma_e$}. A predictor that ignores the spurious
+feature has the \emph{same} risk in every episode; a predictor that uses it
+has episode-dependent risk. Across-episode variance is therefore a
+\emph{detector} of spurious loading.
+
+\begin{proposition}[Variance identifies invariance]
+\label{prop:dd1-variance-detects}
+Let $\Var_e[\,\cdot\,]$ denote the empirical variance across the training
+episodes $e_1, \dots, e_E$, and suppose at least two of the
+$\gamma_{e_j}$ are distinct. Then for the model
+\eqref{eq:dd1-sem}:
+\begin{enumerate}
+\item If $b = 0$, then $L_{e_j}(h_{a, 0}) = (\theta - a)^2 +
+\sigma_\varepsilon^2$ for every $j$, so $\Var_e\bigl[ L_e(h_{a,0}) \bigr] =
+0$.
+\item If $b \neq 0$, then $\Var_e\bigl[ L_e(h_{a,b}) \bigr] > 0$, except for
+at most finitely many exceptional values of $(a, b)$ (those making the
+quadratic $\gamma \mapsto L(\gamma)$ in \eqref{eq:dd1-Le} take equal values
+at all the distinct observed $\gamma_{e_j}$, possible only when fewer than
+three distinct values are observed and $(a,b)$ is tuned to the pair).
+With three or more distinct $\gamma_{e_j}$, $b \neq 0$ implies
+$\Var_e[L_e] > 0$ without exception.
+\end{enumerate}
+Consequently the population of zero-variance predictors is exactly the
+$b = 0$ axis (generically), on which the pooled mean risk is minimized at
+the invariant predictor $a = \theta$: minimizing
+$\Var_e[L_e] + \beta\, \E_e[L_e]$ with $\beta > 0$ and a sufficiently large
+variance weight recovers $h_{\theta, 0}$, whereas pooled ERM
+($\beta$-only) strictly prefers $\widehat b \neq 0$ by
+Lemma~\ref{lem:dd1-erm-descends}.
+\end{proposition}
+
+\begin{proof}
+(1) Set $b = 0$ in \eqref{eq:dd1-Le}: every $\gamma_e$-dependent term carries
+a factor $b$, leaving $(\theta - a)^2 + \sigma_\varepsilon^2$, constant
+across episodes; the empirical variance of a constant list is $0$.
+
+(2) Regard \eqref{eq:dd1-Le} as a polynomial in $\gamma$:
+\[
+L(\gamma) = \underbrace{b^2\theta^2 \,\gamma^2 - 2b\theta(\theta - a)\gamma
++ (\theta - a)^2}_{\text{first term}}
++ \underbrace{\sigma_\varepsilon^2 b^2 \gamma^2 - 2\sigma_\varepsilon^2 b
+\gamma + \sigma_\varepsilon^2}_{\text{second term}} + b^2\sigma_\nu^2,
+\]
+with leading coefficient $b^2(\theta^2 + \sigma_\varepsilon^2) = b^2 s^2 > 0$
+when $b \neq 0$: a nondegenerate quadratic. The empirical variance vanishes
+iff $L(\gamma_{e_j})$ is the same number for all $j$. A nondegenerate
+quadratic takes any given value at most twice, so if three or more distinct
+$\gamma_{e_j}$ are observed, equality of all values is impossible and
+$\Var_e[L_e] > 0$. With exactly two distinct values $\gamma \neq \gamma'$,
+equality forces the quadratic's axis of symmetry to bisect them, i.e.\ pins
+one algebraic relation between $a$ and $b$---the finitely-many-exceptions
+caveat. The final claims restate Lemma~\ref{lem:dd1-erm-descends} and part
+(1) together with the strict positivity in part (2): for large variance
+weight, any $b \neq 0$ is dominated by its $b = 0$ projection, and among
+$b = 0$ predictors the mean term selects $a = \theta$.
+\end{proof}
+
+\begin{keypoint}
+The variance statistic is not a generic regularizer; in this construction it
+is a \emph{consistent test} for the precise pathology of
+Proposition~\ref{prop:dd1-pooled-ols}. Pooled ERM cannot see the difference
+between fitting structure and fitting accidents, because both reduce mean
+training risk (Lemma~\ref{lem:dd1-erm-descends}); the across-episode variance
+sees \emph{only} the accidents, because structure---by definition of being
+shared across the niche's episodes---contributes nothing to it
+(Proposition~\ref{prop:dd1-variance-detects}). This is also exactly the
+quantity the small-sample transfer story of
+Section~\ref{sec:dd1-concentration} wants minimized: a smaller
+across-episode spread is what would tighten an empirical-Bernstein-style
+certificate (Remark~\ref{rem:dd1-small-n}) and what shrinks the variance in
+Cantelli's one-sided bound (Theorem~\ref{thm:dd1-cantelli}).
+\end{keypoint}
+
+\subsection{Relation to IRM, REx, and Causal Invariance; the \nm{} Objective}
+
+Three strands of the invariance literature meet here.
+\textbf{Invariant causal prediction} \cite{peters2016causal} formalizes the
+target: under interventions that vary across environments, the conditional
+distribution of the response given its \emph{causal parents} is invariant,
+and (under conditions) the causal feature set is identifiable as the one
+producing invariant residuals. In Definition~\ref{def:dd1-twofeature},
+$x_{\mathrm{inv}}$ is a parent and $x_{\mathrm{sp}}$ a child of $y$; the
+invariant predictor is the causal one.
+\textbf{IRM} \cite{arjovsky2019irm} pursues this target through a bilevel
+program---learn a representation such that one classifier on top of it is
+simultaneously per-environment optimal---in practice relaxed to a gradient
+penalty $\sum_e \|\nabla_{w \mid w = 1} L_e(w \cdot h)\|^2$.
+\textbf{REx} \cite{krueger2021rex} observes that a simpler scalarization
+often suffices and is better behaved: penalize the spread of per-environment
+risks directly, minimizing
+$\mathrm{Var}_e[L_e(h)] + \beta\, \E_e[L_e(h)]$-type objectives (V-REx);
+robustness to the spread of risks extrapolates to environments whose
+``accidents'' are larger than any seen in training.
+
+The \nm{} per-niche objective is the V-REx scalarization applied to a
+\emph{decision-focused} episode risk. For niche $r$ with stored episodes
+$\mathcal{E}_r$ and head parameters $\theta_r$, define the SPO+ episode risk
+$R_e(\theta_r) = \frac{1}{|e|}\sum_{(x, y) \in e}
+\ell_{\mathrm{SPO+}}\bigl( \hat y_{\theta_r}(x);\, y \bigr)$ and train by
+\begin{equation}
+\label{eq:dd1-nm-objective}
+J_r(\theta_r)
+\;=\; \Var_{e \in \mathcal{E}_r}\bigl[ R_e(\theta_r) \bigr]
+\;+\; \beta\; \E_{e \in \mathcal{E}_r}\bigl[ R_e(\theta_r) \bigr],
+\qquad \beta > 0 .
+\end{equation}
+Two substitutions distinguish \eqref{eq:dd1-nm-objective} from textbook REx.
+First, the risk inside the variance is the SPO+ \emph{decision} risk, so
+``invariance'' is demanded of the quantity that matters
+(Section~\ref{sec:dd1-dfl}): a head may have episode-varying \emph{forecast}
+error and still be exactly invariant in decision quality, and the objective
+correctly declines to punish it. Second, the environments are not given
+exogenously but are the episodes routed to the niche---the regime-indexed
+environment structure of the invariant predict-and-optimize formulation
+\cite{yan2026invpnco}---so the variance is computed within a (putative)
+regime, where invariance is actually achievable, rather than across all of
+history, where it is not.
+
+\begin{warning}
+\textbf{Variance alone ($\beta = 0$) is degenerate.} The zero-variance set
+contains far more than invariant-and-good predictors: \emph{any} head whose
+episode risks are constant achieves $J_r = 0$ at $\beta = 0$, including
+uniformly terrible ones. Concretely, a head whose forecasts induce the same
+fixed bad portfolio in all states has $R_e \equiv$ (the same poor value) on
+every episode---zero variance, maximal complacency; in the squared-loss model
+of Proposition~\ref{prop:dd1-variance-detects}, the entire plane $b = 0$ is
+zero-variance regardless of how wrong $a$ is. The mean term is therefore not
+a tuning nicety but a load-bearing component: it is the only part of
+\eqref{eq:dd1-nm-objective} that distinguishes invariant-good from
+invariant-bad. This degeneracy predicts, qualitatively and in advance, the
+$\beta = 0$ collapse observed in the companion experiments: post-reactivation
+decision regret $0.0356$ for the variance-only objective versus $0.0321$ for
+plain retained ERM---the ablation does not merely lose the invariance
+benefit, it underperforms doing nothing clever at all, exactly as a
+degenerate objective should.
+\end{warning}
+
+\begin{remark}[What carries over from squared loss to SPO+]
+\label{rem:dd1-carryover}
+The exact algebra of
+Propositions~\ref{prop:dd1-pooled-ols}--\ref{prop:dd1-variance-detects} is
+special to squared loss, where risks are quadratics in $\gamma_e$. What
+transfers to the SPO+ risk is the structural trichotomy, none of whose
+ingredients used quadraticity: (i) pooled ERM's first-order preference for
+episode-specific signal scales with the \emph{empirical mean} of the
+accident process and is therefore $\Theta(E^{-1/2})$-sized at niche scale;
+(ii) any loading on episode-specific signal makes the per-episode risk
+\emph{episode-dependent}, hence visible to the across-episode variance;
+(iii) zero variance plus low mean jointly---and only jointly---certify
+``invariantly good.'' These three facts, with SPO+ risks in place of squared
+risks and with the boundedness $R_e$-analogues supplied by
+Proposition~\ref{prop:dd1-regret-range}, are the form in which Part II uses
+this section.
+\end{remark}
+
+This completes the toolkit. Part II assembles it: the decision layer and
+SPO+ machinery of Section~\ref{sec:dd1-dfl} define what each niche head
+optimizes \eqref{eq:dd1-nm-objective}; the EG gate of
+Section~\ref{sec:dd1-online} allocates episodes and training resources to
+niches, deliberately forgoing the adversarial guarantee
+(Section~\ref{sec:dd1-online-limits}) in favor of analyzable replicator
+dynamics; and the retention and transfer theorems combine the concentration
+inequalities of Section~\ref{sec:dd1-concentration} with the Pinsker bridge
+of Section~\ref{sec:dd1-distances} to state precisely when a dormant niche's
+certified competence survives until its regime returns---the capability gap,
+identified in Remark~\ref{rem:dd1-gap}, that the sleeping-experts literature
+leaves open and \nm{} is built to close.

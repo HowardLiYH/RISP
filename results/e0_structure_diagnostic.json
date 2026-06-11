@@ -1,0 +1,66 @@
+{
+ "crypto": {
+  "L1": {
+   "real_mean_regret": 0.012196072479599205,
+   "shuffled_mean_regret": 0.01201997041079034,
+   "shuffled_sd": 0.0002669873288345212,
+   "pooled_mean_regret": 0.011947575424155981,
+   "gap_pct": -1.4650790540725973,
+   "z_vs_shuffled": -0.6595896101811728,
+   "n_days_eval": 562,
+   "regime_counts": {
+    "0": 385,
+    "1": 403,
+    "2": 163,
+    "3": 173
+   }
+  },
+  "L2": {
+   "real_mean_regret": 0.012116450033161526,
+   "shuffled_mean_regret": 0.012037178290145735,
+   "shuffled_sd": 0.0004674688564760724,
+   "pooled_mean_regret": 0.011947575424155981,
+   "gap_pct": -0.6585575215256405,
+   "z_vs_shuffled": -0.16957652204638973,
+   "n_days_eval": 562,
+   "regime_counts": {
+    "0": 517,
+    "1": 517,
+    "2": 31,
+    "3": 59
+   }
+  }
+ },
+ "commodities": {
+  "L1": {
+   "real_mean_regret": 0.008339489257033044,
+   "shuffled_mean_regret": 0.008318437199269878,
+   "shuffled_sd": 0.0001537841681753721,
+   "pooled_mean_regret": 0.008164714335986848,
+   "gap_pct": -0.25307707753667175,
+   "z_vs_shuffled": -0.13689352991307605,
+   "n_days_eval": 1270,
+   "regime_counts": {
+    "0": 892,
+    "1": 907,
+    "2": 371,
+    "3": 370
+   }
+  },
+  "L2": {
+   "real_mean_regret": 0.008364747011913322,
+   "shuffled_mean_regret": 0.008378482110094038,
+   "shuffled_sd": 8.738960283932086e-05,
+   "pooled_mean_regret": 0.008164714335986848,
+   "gap_pct": 0.16393301314720637,
+   "z_vs_shuffled": 0.1571708484452018,
+   "n_days_eval": 1270,
+   "regime_counts": {
+    "0": 1006,
+    "1": 1068,
+    "2": 257,
+    "3": 209
+   }
+  }
+ }
+}

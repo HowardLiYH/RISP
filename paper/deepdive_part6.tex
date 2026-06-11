@@ -1,0 +1,700 @@
+% ============================================================================
+% PART VI: IMPLEMENTATION WALKTHROUGH
+% LaTeX fragment -- no preamble; relies on master preamble (lstset python
+% style, tcolorboxes intuition/keypoint/warning, theorem family, \R \E \Var \nm)
+% ============================================================================
+
+\part{Implementation Walkthrough}
+\label{sec:dd6-part}
+
+The preceding parts developed the theory at the blackboard. This part walks
+the actual code. The entire system---decision layer, synthetic market,
+schedules, capacity-bounded specialists, all nine allocation arms, the run
+loop, and the statistics---is roughly 900 lines of seeded \texttt{numpy}
+across three files: \texttt{risp.py} (decision layer, market, schedules,
+\texttt{Specialist}, arms \texttt{A1}--\texttt{A10}, \texttt{run\_arm},
+statistics), \texttt{realdata.py} (loaders, causal labelers, features, block
+library, stitched market), and \texttt{run\_experiments.py} (drivers
+\texttt{e0}--\texttt{e6}).
+There is no GPU, no deep-learning framework, and no external optimizer. The
+full experimental battery reruns from scratch in under an hour on a laptop,
+and every number quoted in the paper traces to a specific JSON file written
+by a specific driver function (Section~\ref{sec:dd6-repro}).
+
+\begin{keypoint}
+Smallness is a feature, not a budget constraint. Because the predictors are
+linear, the decision oracle is a sort, and the surrogate is SPO+, every
+mechanism claimed in the theory---interference under capacity, dormancy
+starvation, episode-spurious overfitting, reward-decoupled niche
+assignment---is visible in the code as a handful of lines, and nothing else
+is present that could secretly produce the effects.
+\end{keypoint}
+
+
+% ============================================================================
+\section{The Decision Layer in Code}
+\label{sec:dd6-decision}
+
+The decision set is the cardinality-constrained long-only portfolio
+$\mathcal{Z} = \{ z \in [0, w_{\max}]^n : \mathbf{1}^\top z \le W,\;
+\nm{z}_0 \le k \}$ with linear utility $F(z, y) = y^\top z$. With the budget
+non-binding ($W \ge k\, w_{\max}$), the exact maximizer puts $w_{\max}$ on
+the $k$ largest \emph{positive} coordinates of the score vector. The whole
+decision layer is three functions:
+
+\begin{lstlisting}[caption={The decision layer: exact oracle, regret, and the SPO+ subgradient (\texttt{risp.py}).},label={lst:dd6-decision}]
+def solve_topk(y_hat: np.ndarray, k: int, w_max: float) -> np.ndarray:
+    """Exact solution of max_z y_hat^T z over Z. O(n log n)."""
+    n = y_hat.shape[0]
+    z = np.zeros(n)
+    idx = np.argsort(-y_hat)[:k]
+    pos = idx[y_hat[idx] > 0.0]
+    z[pos] = w_max
+    return z
+
+
+def regret(y_hat: np.ndarray, y: np.ndarray, k: int, w_max: float) -> float:
+    """Decision regret rho(y_hat; y) = F(z*(y), y) - F(z(y_hat), y) >= 0."""
+    z_star = solve_topk(y, k, w_max)
+    z_hat = solve_topk(y_hat, k, w_max)
+    return float(y @ z_star - y @ z_hat)
+
+
+def spo_plus_loss_grad(w: np.ndarray, X: np.ndarray, y: np.ndarray,
+                       k: int, w_max: float):
+    """SPO+ loss and subgradient for the linear predictor y_hat = X w.
+
+    Cast as minimization with cost c = -y, c_hat = -X w.
+    l_SPO+(c_hat, c) = max_z (c - 2 c_hat)^T z + 2 c_hat^T z*(c) - c^T z*(c)
+    d l / d c_hat = 2 (z*(c) - z*(2 c_hat - c));  d c_hat / d w = -X.
+    """
+    y_hat = X @ w
+    z_star = solve_topk(y, k, w_max)            # argmin c^T z = argmax y^T z
+    # z*(2 c_hat - c) = argmin (2 c_hat - c)^T z = argmax (2 y_hat - y)^T z
+    z_alt = solve_topk(2.0 * y_hat - y, k, w_max)
+    # loss value (for monitoring / variance penalty)
+    loss = float((2.0 * y_hat - y) @ z_alt - 2.0 * y_hat @ z_star + y @ z_star)
+    grad_chat = 2.0 * (z_star - z_alt)
+    grad_w = -X.T @ grad_chat
+    return loss, grad_w
+\end{lstlisting}
+
+\paragraph{Line-by-line.}
+\begin{itemize}
+  \item \texttt{solve\_topk}: \texttt{np.argsort(-y\_hat)[:k]} selects the
+        $k$ largest scores; the filter \texttt{y\_hat[idx] > 0.0} drops any
+        of them that are negative (a long-only book never holds an asset it
+        expects to lose money on); the survivors receive weight
+        $w_{\max}$. This is the exact $\arg\max_{z \in \mathcal{Z}}
+        \hat{y}^\top z$, in $O(n \log n)$.
+  \item \texttt{regret}: two oracle calls---one on the realized $y$ (the
+        hindsight-optimal book $z^*(y)$), one on the prediction $\hat y$ (the
+        served book)---and the difference of realized utilities. This is the
+        SPO decision regret $\rho(\hat y; y) \ge 0$ used as the metric
+        \emph{everywhere}: it is the per-day loss in \texttt{run\_arm}, the
+        gate signal in the router, the competition score in RISP, and
+        the weight signal in both Hedge arms.
+  \item \texttt{spo\_plus\_loss\_grad}: the minimization-form bookkeeping.
+        SPO+ is stated for cost \emph{minimization}, so we set $c = -y$ and
+        $\hat c = -Xw$. The loss
+        \[
+          \ell_{\mathrm{SPO+}}(\hat c, c)
+          = \max_{z \in \mathcal{Z}} (c - 2\hat c)^\top z
+            + 2 \hat c^\top z^*(c) - c^\top z^*(c)
+        \]
+        translates, under the sign flip, into exactly the line computing
+        \texttt{loss}: the inner max over $(c - 2\hat c)$ becomes a max over
+        $(2\hat y - y)$ (the comment on \texttt{z\_alt} spells this out), and
+        the remaining two terms become $-2\hat y^\top z^* + y^\top z^*$.
+  \item The subgradient requires \emph{two oracle calls}: one at the true
+        cost ($z^*(c)$, i.e.\ \texttt{z\_star}) and one at the reflected
+        cost $2\hat c - c$ (i.e.\ \texttt{z\_alt}). Then
+        $\partial \ell / \partial \hat c = 2(z^*(c) - z^*(2\hat c - c))$
+        is \texttt{grad\_chat}, and the chain rule through
+        $\hat c = -Xw$ contributes the $-X^\top$ in \texttt{grad\_w}. Note
+        the two sign flips cancel into readable code: a head that
+        under-ranks an asset the hindsight book holds gets pushed
+        \emph{toward} it.
+\end{itemize}
+
+\begin{keypoint}
+\textbf{No Gurobi needed.} Because the feasible set is a cardinality
+polytope with a non-binding budget and the objective is linear, the oracle
+is exact and costs one sort. Both the loss and the subgradient of SPO+ only
+ever touch the optimization problem through the oracle
+$z^*(\cdot)$---\texttt{solve\_topk} is called twice per gradient, never
+differentiated through. If the decision problem were upgraded (transaction
+costs, sector constraints, integer lots), the \emph{only} change is to swap
+\texttt{solve\_topk} for a general solver call; \texttt{regret} and
+\texttt{spo\_plus\_loss\_grad} are already written against the oracle
+interface and would not change by a character.
+\end{keypoint}
+
+
+% ============================================================================
+\section{Markets and Schedules}
+\label{sec:dd6-markets}
+
+\subsection{The synthetic generator}
+\label{sec:dd6-synth}
+
+The synthetic market implements the structural model of Part~II: per-regime
+invariant loadings $\theta_r$, per-episode spurious loadings
+$\gamma_{r,e}$, distractor features, and regime-dependent noise.
+
+\begin{lstlisting}[caption={\texttt{SynthConfig} and the day generator (\texttt{risp.py}).},label={lst:dd6-synth}]
+@dataclass
+class SynthConfig:
+    n_assets: int = 20
+    d: int = 20                     # x1,x2 invariant; x3 spurious; 16 distractors; const
+    k: int = 4
+    w_max: float = 0.25
+    R: int = R_DEFAULT
+    noise: float = 0.02
+    het: float = 1.0                # episode heterogeneity scale (E4 sweep)
+    gamma_scale: float = 0.012
+    theta_scale: float = 0.012     # |theta_r| ~ realistic daily alpha scale
+    vol_mult: tuple = (1.0, 0.75, 2.0, 3.0)  # per-regime noise multiplier
+    snr_mult: float = 1.0           # audit sweep: scales signal vs noise
+
+    # ... inside SyntheticMarket ...
+    def day(self, r: int, e: int):
+        """One day's (X, y) in regime r, episode e."""
+        c = self.cfg
+        X = np.ones((c.n_assets, c.d))
+        X[:, :c.d - 1] = self.rng.normal(0, 1, (c.n_assets, c.d - 1))
+        g = self.gamma_for(r, e)
+        mean = X[:, :2] @ self.theta[r] + g * X[:, 2] + self.b[r]
+        y = mean + self.rng.normal(0, c.noise * c.vol_mult[r], c.n_assets)
+        return X, y
+\end{lstlisting}
+
+Each configuration field maps onto a quantity from the theory:
+\begin{itemize}
+  \item \texttt{theta\_scale} and the constructor loop (not shown) place the
+        invariant loadings $\theta_r = \texttt{theta\_scale} \cdot
+        (\cos(2\pi r/R + 0.4), \sin(2\pi r/R + 0.4))$ on well-separated
+        directions of the unit circle. This is what makes cross-regime
+        interference \emph{real}: a head dragged toward regime $q$'s optimum
+        genuinely loses regime $r$'s.
+  \item \texttt{gamma\_scale} and \texttt{het} control the episode weather
+        $\gamma_{r,e} \sim \mathcal{N}(0, (\texttt{het} \cdot
+        \texttt{gamma\_scale})^2)$, drawn lazily and memoized in
+        \texttt{gamma\_for} so that revisiting episode $e$ of regime $r$
+        replays the same weather. The spurious feature is column
+        \texttt{X[:, 2]} in the mean: an ERM learner profitably loads on it
+        within an episode, then pays at the next episode when $\gamma$ is
+        redrawn. \texttt{het} is the dial swept in E4.
+  \item Columns $3$ through $d-2$ are pure distractors---they enter $X$ but
+        never the mean---so the predictor has plenty of rope to overfit
+        noise, and column $d-1$ is the constant absorbing the regime
+        intercept \texttt{b[r]}.
+  \item \texttt{vol\_mult} multiplies the noise s.d.\ per regime
+        ($3{\times}$ in crisis), so the hard regimes are hard both because
+        they are rare \emph{and} because they are noisy.
+  \item \texttt{snr\_mult} scales $\theta_r$ and $\gamma_{r,e}$ jointly
+        against fixed noise; it is the dial for the E6 audit (at what SNR
+        does retention stop mattering because relearning is instant?).
+\end{itemize}
+
+\subsection{Schedules and reactivation bookkeeping}
+\label{sec:dd6-schedules}
+
+A \texttt{Schedule} is four aligned arrays: the regime id per day, the
+episode index per day, a \texttt{block\_start} flag, and---only meaningful
+on block starts---the \texttt{dormancy} length that preceded the block.
+
+\begin{lstlisting}[caption={Schedule builders and dormancy bookkeeping (\texttt{risp.py}).},label={lst:dd6-sched}]
+def make_schedule(rng: np.random.Generator, R: int = R_DEFAULT,
+                  n_cycles: int = 18, block_len=(25, 60),
+                  crisis_every: int = 4, crisis_len=(15, 30)) -> Schedule:
+    """Common regimes (0,1,2) alternate in blocks; crisis (R-1) appears only
+    every `crisis_every` cycles -> long dormancy, recurring reactivations."""
+    seq = []
+    cyc = 0
+    common = [0, 1, 2] if R >= 4 else list(range(R - 1))
+    while cyc < n_cycles:
+        order = rng.permutation(common)
+        for r in order:
+            L = int(rng.integers(block_len[0], block_len[1] + 1))
+            seq.append((int(r), L))
+        cyc += 1
+        if cyc % crisis_every == 0:
+            L = int(rng.integers(crisis_len[0], crisis_len[1] + 1))
+            seq.append((R - 1, L))
+    return _seq_to_schedule(seq, R)
+
+
+def make_dormancy_schedule(rng: np.random.Generator, D: int,
+                           R: int = R_DEFAULT, n_react: int = 8,
+                           block_len=(25, 60), crisis_len: int = 20) -> Schedule:
+    """E3: focal regime R-1 reactivates every ~D days of dormancy exactly."""
+    seq = []
+    common = [0, 1, 2] if R >= 4 else list(range(R - 1))
+    # initial training occurrences of focal regime
+    for r in [R - 1, 0, R - 1, 1, R - 1, 2]:
+        L = crisis_len if r == R - 1 else int(rng.integers(*block_len))
+        seq.append((int(r), L))
+    for _ in range(n_react):
+        filler = 0
+        while filler < D:
+            r = int(rng.choice(common))
+            L = int(rng.integers(block_len[0], block_len[1] + 1))
+            seq.append((r, L))
+            filler += L
+        seq.append((R - 1, crisis_len))
+    return _seq_to_schedule(seq, R)
+\end{lstlisting}
+
+Both builders emit a list of \texttt{(regime, length)} pairs and hand it to
+\texttt{\_seq\_to\_schedule}, which does the bookkeeping that the
+reactivation metric depends on: for each block it increments the per-regime
+episode counter, sets \texttt{block\_start[t]} on the first day, and records
+\texttt{dormancy[t] = t - last\_seen[r]}, where \texttt{last\_seen[r]} is
+the \emph{final day} of the regime's previous block. The method
+\begin{lstlisting}
+    def reactivation_days(self, min_dormancy: int):
+        """Days that begin a block whose regime was dormant >= min_dormancy."""
+        out = []
+        for t in range(self.T):
+            if self.block_start[t] and self.dormancy[t] >= min_dormancy:
+                out.append(t)
+        return out
+\end{lstlisting}
+is then the single source of truth for which days count as reactivations:
+\texttt{run\_arm} masks the first \texttt{probe} (default 15) days after
+each such $t$ as the post-reactivation window, and only windows in the
+second half of the run ($t \ge T/2$) enter the headline metric, so warm-up
+episodes never contaminate it. \texttt{make\_schedule} gives irregular
+dormancy by rationing crisis to every fourth cycle;
+\texttt{make\_dormancy\_schedule} gives \emph{controlled} dormancy of
+$\approx D$ days for E3, with three training occurrences of the focal
+regime up front so there is expertise to forget.
+
+\subsection{Causal labels on real data}
+\label{sec:dd6-labels}
+
+On real data the regimes are not given; they are computed by labelers that
+must not leak day-$t$ information into the day-$t$ label, because the label
+selects which head serves the day-$t$ decision. The L1 labeler is worth
+quoting in full:
+
+\begin{lstlisting}[caption={The L1 causal labeler (\texttt{realdata.py}).},label={lst:dd6-l1}]
+def label_L1(panel: pd.DataFrame, vol_win=20, trend_win=50,
+             vol_pct_win=252) -> np.ndarray:
+    """Vol band (rolling-percentile of trailing vol) x trend sign. Causal:
+    every input is shifted one day so day t uses data through t-1."""
+    px = panel.mean(axis=1) if panel.shape[1] > 1 else panel.iloc[:, 0]
+    # equal-weight index in log space to avoid scale domination
+    px = np.log(panel).mean(axis=1)
+    ret = px.diff()
+    vol = ret.rolling(vol_win).std().shift(1)
+    vol_rank = vol.rolling(vol_pct_win, min_periods=60).rank(pct=True)
+    trend = (px.shift(1) - px.shift(trend_win + 1))
+    high_vol = (vol_rank > 0.7).astype(int)
+    up = (trend > 0).astype(int)
+    lab = high_vol * 2 + (1 - up)        # 0 calm-up 1 calm-down 2 vol-up 3 vol-down
+    return lab.values
+\end{lstlisting}
+
+The leakage prevention is the \texttt{.shift(1)} discipline, and each
+occurrence matters:
+\begin{itemize}
+  \item \texttt{vol = ret.rolling(vol\_win).std().shift(1)}: the rolling
+        window ending at $t$ would include the day-$t$ return $r_t$---which
+        is the prediction target. The \texttt{shift(1)} moves the window end
+        to $t-1$, so the volatility used to label day $t$ is the s.d.\ of
+        $r_{t-20}, \dots, r_{t-1}$.
+  \item \texttt{vol\_rank}: the percentile rank is computed over the
+        already-shifted \texttt{vol} series, so the trailing-year band
+        threshold ($>0.7$) also sees nothing past $t-1$. Ranking rather
+        than thresholding in absolute units keeps the band meaningful across
+        the secular volatility decay of the crypto sample.
+  \item \texttt{trend = px.shift(1) - px.shift(trend\_win + 1)}: the 50-day
+        trend ends at the close of $t-1$ (note the matching $+1$ on
+        \emph{both} shifts: the window is $[t-51, t-1]$, length 50, never
+        touching $t$).
+\end{itemize}
+The same convention governs the features in \texttt{build\_xy}
+(\texttt{mom5} $=$ \texttt{lp.shift(1) - lp.shift(6)}, \texttt{vol20} $=$
+\texttt{r1.rolling(20).std().shift(1)}, etc.): all features are functions of
+information through $t-1$, while the target \texttt{y = r1} is the day-$t$
+return. The L2 labeler is causal by construction rather than by shifting: it
+is a forward-only two-state Hamilton filter whose update at day $t$ uses
+\texttt{ret[t - 1]} (``yesterday's return only,'' as the inline comment
+says), crossed with the same shifted trend sign.
+
+\begin{intuition}
+The block-shuffle control in E0 (\texttt{block\_shuffle} in
+\texttt{run\_experiments.py}) is the converse check: it keeps the block
+\emph{structure} of the labels but randomizes block \emph{identities}. If
+regime-conditioned models beat block-shuffled ones on decision regret, the
+labels carry real conditional structure, not just autocorrelation.
+\end{intuition}
+
+
+% ============================================================================
+\section{The Specialist and Memory Models}
+\label{sec:dd6-specialist}
+
+A \texttt{Specialist} is a dictionary of at most $K$ linear heads (one per
+held regime), an episode-indexed replay buffer per held regime, and a
+training rule (ERM or invariance). Memory pressure is implemented in
+\texttt{\_touch}:
+
+\begin{lstlisting}[caption={Memory bookkeeping: hard LRU and soft interference (\texttt{risp.py}).},label={lst:dd6-touch}]
+    def _touch(self, r: int):
+        self.t += 1
+        if r not in self.heads:
+            if len(self.heads) >= self.K:
+                lru = min(self.heads, key=lambda q: self.heads[q].last_used)
+                del self.heads[lru]
+                self.buf.pop(lru, None)
+            self.heads[r] = Head(w=np.zeros(self.d))
+            self.buf[r] = {}
+        self.heads[r].last_used = self.t
+        if self.memory == "soft":
+            for q, h in self.heads.items():
+                if q != r:
+                    h.strength *= (1.0 - self.rho_int)
+                    h.w *= (1.0 - self.rho_int)
+            self.heads[r].strength = 1.0
+\end{lstlisting}
+
+\paragraph{Hard model.} When a new regime arrives at a full specialist
+($\texttt{len(self.heads)} \ge K$), the least-recently-used head is deleted
+\emph{together with its buffer}: \texttt{self.buf.pop(lru, None)}. This is
+the line that makes forgetting total in the hard model---knowledge lost is
+data lost, so the evicted regime must be relearned from scratch at its next
+reactivation, with no replay shortcut. The fresh head starts at
+$w = 0$, which under \texttt{solve\_topk} means a near-random book (the
+\texttt{predict} fallback for unheld regimes is an explicit
+$10^{-6}$-scale random tiebreaker for the same reason: zero scores would
+deterministically pick no assets).
+
+\paragraph{Soft model.} Under \texttt{memory == "soft"}, every training day
+on regime $r$ multiplies every \emph{other} held head's weights and strength
+by $(1 - \rho_{\mathrm{int}})$, with $\rho_{\mathrm{int}} = 0.06$ by
+default. Untouched expertise decays geometrically toward zero at a rate set
+by how often its owner trains on something else---the continuous analogue of
+LRU eviction, matching the interference operator of Part~II. The active
+head's strength snaps back to $1$.
+
+Training itself lives in \texttt{learn}:
+
+\begin{lstlisting}[caption={ERM vs.\ invariance training over the episode buffer (\texttt{risp.py}).},label={lst:dd6-learn}]
+    def learn(self, X, y, r: int, e: int, n_steps: int = 2):
+        """One observation: store, touch memory, take SGD steps on the
+        regime-r objective over the episode buffer."""
+        self._touch(r)
+        self.store(X, y, r, e)
+        h = self.heads[r]
+        eps = self.buf[r]
+        for _ in range(n_steps):
+            if self.mode == "erm" or len(eps) < 2:
+                # plain ERM on pooled buffer
+                keys = list(eps.keys())
+                ekey = keys[int(self.rng.integers(len(keys)))]
+                Xb, yb = ep_sample(eps[ekey], self.rng)
+                _, g = spo_plus_loss_grad(h.w, Xb, yb, self.k, self.w_max)
+                h.w -= self.lr * g / max(1, Xb.shape[0])
+            else:
+                # invariance: Var_e[lbar_e] + beta * E_e[lbar_e]
+                losses, grads = [], []
+                for ekey in eps:
+                    Xb, yb = ep_sample(eps[ekey], self.rng)
+                    l, g = spo_plus_loss_grad(h.w, Xb, yb, self.k, self.w_max)
+                    losses.append(l / max(1, Xb.shape[0]))
+                    grads.append(g / max(1, Xb.shape[0]))
+                E = len(losses)
+                lbar = float(np.mean(losses))
+                g_tot = np.zeros(self.d)
+                for l, g in zip(losses, grads):
+                    g_tot += (2.0 * (l - lbar) + self.beta) * g / E
+                h.w -= self.lr * g_tot
+\end{lstlisting}
+
+\paragraph{Line-by-line.}
+\begin{itemize}
+  \item The buffer \texttt{self.buf[r]} maps episode index $e$ to a list of
+        stored $(X, y)$ days, capped at \texttt{buf\_days}~$=40$ days per
+        episode and \texttt{buf\_episodes}~$=6$ episodes per regime
+        (\texttt{store} evicts oldest-first on both axes). Episode identity
+        is the unit the invariance objective averages over.
+  \item \emph{ERM branch}: sample one episode uniformly at random, draw a
+        minibatch of up to 8 stored days from it (\texttt{ep\_sample}), take
+        one SPO+ step. Over many steps this pools episodes---exactly the
+        estimator that cannot distinguish $\theta_r$ from the episode
+        weather $\gamma_{r,e}$.
+  \item \emph{INV branch}: evaluate the per-episode mean losses $\bar\ell_e$
+        and mean gradients $g_e$ on a fresh minibatch from \emph{every}
+        buffered episode, then assemble the gradient of
+        $\Var_e[\bar\ell_e] + \beta\, \E_e[\bar\ell_e]$. The identity used
+        is
+        \[
+          \nabla_w \Var_e[\bar\ell_e]
+          = \frac{2}{E} \sum_e (\bar\ell_e - \bar\ell)\,
+            \big(g_e - \bar g\big)
+          = \frac{2}{E} \sum_e (\bar\ell_e - \bar\ell)\, g_e,
+        \]
+        where the $\bar g$ term vanishes because
+        $\sum_e (\bar\ell_e - \bar\ell) = 0$; adding
+        $\nabla_w \beta \E_e[\bar\ell_e] = \frac{\beta}{E}\sum_e g_e$ gives
+        \[
+          \nabla_w \big[\Var_e + \beta \E_e\big]
+          = \sum_e \frac{\big(2(\bar\ell_e - \bar\ell) + \beta\big)\, g_e}{E},
+        \]
+        which is verbatim the accumulation line
+        \texttt{g\_tot += (2.0 * (l - lbar) + self.beta) * g / E}. Episodes
+        whose loss is above the cross-episode mean get their gradients
+        up-weighted; episodes below the mean can have \emph{negative}
+        effective weight when $\bar\ell - \bar\ell_e > \beta/2$, actively
+        pushing the head away from solutions that win on one episode's
+        weather at others' expense.
+  \item The guard \texttt{len(eps) < 2} falls back to ERM until a second
+        episode exists---a one-episode variance is identically zero, so the
+        INV objective is undefined before then.
+\end{itemize}
+
+\begin{keypoint}
+Eviction travels with the buffer. A head that loses the LRU competition
+loses its replay data in the same statement, so no arm can cheat the
+capacity constraint by quietly relearning from a retained buffer. Capacity
+$K$ bounds \emph{retained regimes}, in both parameters and data.
+\end{keypoint}
+
+
+% ============================================================================
+\section{The Arms}
+\label{sec:dd6-arms}
+
+All arms share one interface: \texttt{decide(X, r) -> y\_hat} produces the
+prediction that is converted into the served book, and
+\texttt{observe(X, y, r, e, served\_regret)} performs all internal updates.
+Signature-level summary:
+
+\begin{itemize}
+  \item \texttt{MonolithArm} (A1 ERM / A7 INV): one capacity-$K$ specialist
+        that always learns the active regime; \texttt{observe} is a single
+        \texttt{self.s.learn(X, y, r, e)}. This is the canonical
+        reward-driven allocation---capacity follows activity, so dormant
+        regimes are first in the LRU queue.
+  \item \texttt{RecentPerfArm} (A3): the industry baseline. Capital shares
+        are a softmax (temperature $0.02$) of trailing 60-day negative
+        regret per specialist; the served decision is the top-capital
+        specialist's; in \texttt{observe}, \emph{every} specialist trains on
+        the active regime with probability equal to its capital share, so
+        starved specialists drift into the active regime at the
+        capital-floor rate.
+  \item \texttt{FixedNicheArm} (A4 random / A9, A10 oracle): a
+        reward-independent owner map \texttt{self.owner[r]} fixed at
+        construction (random claims, or hand-pinned $r \mapsto r \bmod N$
+        for the oracle skyline); \texttt{observe} trains the owner only.
+  \item \texttt{HedgeFixedArm} (A8a): exponential weights over $2(d-1)$
+        fixed $\pm$ unit-direction strategies, weights decayed by realized
+        regret; no learning. \texttt{HedgeLearnersArm} (A8b): Hedge over $N$
+        learning specialists, where the current top-weight learner trains on
+        the active regime---training follows the weight, so it is
+        reward-coupled like the monolith, just with a softer selector.
+  \item \texttt{RouterArm} (A2) and \texttt{RISPArm} (A5 ERM / A6 INV):
+        quoted in full below; they are the two poles of the paper's central
+        contrast.
+\end{itemize}
+
+\subsection{RouterArm: where reward-coupling enters}
+\label{sec:dd6-router}
+
+\begin{lstlisting}[caption={\texttt{RouterArm.observe}: the reward-driven gate (\texttt{risp.py}).},label={lst:dd6-router}]
+    def observe(self, X, y, r, e, served_regret):
+        j = self._route(r, explore=True)
+        ex = self.experts[j]
+        rg = regret(ex.predict(X, r), y, ex.k, ex.w_max)
+        b = self.base.get(r, rg)
+        self.base[r] = 0.95 * b + 0.05 * rg
+        self.G[r, j] += self.gate_lr * (b - rg)      # reward-driven gate
+        ex.learn(X, y, r, e)
+\end{lstlisting}
+
+Each day, the gate $\varepsilon$-greedily routes the active regime to expert
+$j$ (10\% exploration), scores that expert's regret, and updates a running
+per-regime baseline $b_r$ by EWMA. The annotated line is where
+reward-coupling \emph{enters} the allocation: the gate logit
+\texttt{G[r, j]} moves by \texttt{gate\_lr * (b - rg)}---an advantage
+update, positive when the routed expert beat the regime's recent baseline.
+Crucially, the update is indexed by the \emph{active} regime $r$: a dormant
+regime emits no gate gradient at all (Observation~1 of Part~III), so its
+routing column \texttt{G[r, :]} is frozen while the experts it points to
+are being retrained---and possibly LRU-evicted---by the regimes that are
+active. The routed expert then trains on the day
+(\texttt{ex.learn}), which is the second coupling: training mass also
+follows activity.
+
+\subsection{RISPArm: where reward-coupling exits}
+\label{sec:dd6-risp}
+
+\begin{lstlisting}[caption={\texttt{RISPArm.observe}: window accumulation and the pinning short-circuit (\texttt{risp.py}).},label={lst:dd6-nmobserve}]
+    def observe(self, X, y, r, e, served_regret):
+        if r in self.pinned:
+            self.specs[self.pinned[r]].learn(X, y, r, e)
+            return
+        if self.win_regime is not None and r != self.win_regime:
+            self._close_window()
+        self.win_regime = r
+        for i, sp in enumerate(self.specs):
+            self.win_quality[i] += regret(sp.predict(X, r), y,
+                                          self.k, self.w_max)
+        self.win_data.append((X, y, e))
+        self.win_days += 1
+        if self.win_days >= self.Wc:
+            self._close_window()
+\end{lstlisting}
+
+The first two lines are where reward-coupling \emph{exits}: once a regime is
+pinned, \texttt{observe} routes the day's data to the pinned owner and
+\texttt{return}s. No competition, no affinity update, no gate
+gradient---the owner map for that regime is permanently
+reward-independent from that day on, exactly the fixed-assignment regime of
+the theory. Until pinning, days accumulate into a competition window: every
+specialist is scored on the day (counterfactually---only the owner's
+prediction was \emph{served}), the day's data is parked in
+\texttt{win\_data}, and the window closes after $W_c = 20$ days or at a
+regime switch. Window closing does the actual allocation work:
+
+\begin{lstlisting}[caption={\texttt{RISPArm.\_close\_window}: EG update, winner-trains, pinning (\texttt{risp.py}).},label={lst:dd6-nmclose}]
+    def _close_window(self):
+        if self.win_days == 0 or self.win_regime is None:
+            return
+        r = self.win_regime
+        score = -self.win_quality / self.win_days \
+            + self.lam * (self.alpha[:, r] - 1.0 / self.R)
+        i_star = int(np.argmax(score))
+        # EG / Hedge update on the winner's affinity row
+        a = self.alpha[i_star].copy()
+        a[r] *= np.exp(self.eta)
+        self.alpha[i_star] = a / a.sum()
+        # winner trains on the window's data
+        for (X, y, e) in self.win_data:
+            self.specs[i_star].learn(X, y, r, e, n_steps=1)
+        # pinning
+        if self.pin_enabled and r not in self.pinned \
+                and self.alpha[i_star, r] >= self.pin_thresh:
+            self.pinned[r] = i_star
+        self.win_quality = np.zeros(self.N)
+        self.win_days = 0
+        self.win_data = []
+\end{lstlisting}
+
+The winner is the specialist with the best (lowest) mean window regret plus
+a niche bonus $\lambda(\alpha_{i,r} - 1/R)$ that rewards already-declared
+affinity---the incumbency term that prevents ownership thrash. The winner's
+affinity row gets a multiplicative EG/Hedge update
+($\alpha_{i^*, r} \mathrel{*}= e^{\eta}$, then renormalize over regimes;
+since rows are simplexes over regimes, boosting $r$ implicitly taxes
+$i^*$'s claim on every other regime---winning here means withdrawing
+elsewhere). \emph{Only the winner} trains, on the whole window's parked
+data, with \texttt{n\_steps=1} per day to keep total gradient work
+comparable to the streaming arms. When the winner's affinity crosses
+\texttt{pin\_thresh}~$=0.95$, the regime is pinned and the
+\texttt{observe} short-circuit takes over forever.
+
+\begin{intuition}
+Read the two \texttt{observe} methods side by side. The router updates its
+allocation \emph{every day a regime is active and never otherwise}---it is
+reward-coupled by construction, and dormancy starves it. RISP uses
+realized regret only as a \emph{transient} signal to discover who should own
+what; the moment ownership is settled, the signal is disconnected. The
+allocation converges \emph{to} reward-independence. The E5(d) ablation
+(\texttt{pinned} vs.\ \texttt{never}) isolates exactly the value of that
+disconnection.
+\end{intuition}
+
+
+% ============================================================================
+\section{Reproducibility Map}
+\label{sec:dd6-repro}
+
+Every quantitative claim in the paper traces to a JSON file in
+\texttt{results/}, written by one driver in \texttt{run\_experiments.py}.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{p{4.6cm} l l}
+\hline
+\textbf{Paper artifact} & \textbf{Driver} & \textbf{Results JSON} \\
+\hline
+Real-data structure diagnostic (regime labels vs.\ block-shuffled controls,
+crypto + commodities) & \texttt{e0()} & \texttt{e0\_structure\_diagnostic.json} \\
+Headline $2{\times}2$ dissociation table; Welch/Holm $p$-values; overall /
+post-reactivation / steady-state regret, all arms & \texttt{e1()} &
+\texttt{e1\_synth.json} \\
+Stitched-crypto replication of the headline table & \texttt{e1s()} &
+\texttt{e1s\_stitched\_crypto.json} \\
+Capacity sweep ($K \in \{1,2,3,4\}$, hard vs.\ soft memory) & \texttt{e2()}
+& \texttt{e2\_K\{K\}\_\{mem\}.json}, \texttt{e2\_capacity\_sweep.json} \\
+Dormancy sweep ($D \in \{21, 63, 126, 252, 504\}$) & \texttt{e3()} &
+\texttt{e3\_dormancy\_sweep.json} \\
+Episode-heterogeneity sweep (\texttt{het} $\in \{0, 0.5, 1, 1.5, 2\}$, ERM
+vs.\ INV at fixed allocation) & \texttt{e4()} &
+\texttt{e4\_het\{h\}.json}, \texttt{e4\_heterogeneity\_sweep.json} \\
+Ablations: $\beta$ sweep (incl.\ variance-only $\beta{=}0$), $W_c$ sweep,
+$\lambda$ on/off, pinned vs.\ never-pinned & \texttt{e5()} &
+\texttt{e5\_ablations.json} \\
+SNR audit (break-even relearning speed) & \texttt{e6()} &
+\texttt{e6\_snr\_audit.json} \\
+\hline
+\end{tabular}
+\caption{Map from paper artifacts to experiment drivers and output files.}
+\label{tab:dd6-repromap}
+\end{table}
+
+\paragraph{Seeding discipline.} Within a seed $s$, three independent RNG
+streams are used, and they are constructed so that \emph{all arms see
+identical data}:
+\begin{itemize}
+  \item \emph{Schedule stream}: \texttt{np.random.default\_rng(1000 + s)}
+        builds the schedule once per seed (E3 uses $3000 + s$, E1s uses
+        $2000 + s$), before any arm runs.
+  \item \emph{Market stream}: the market is \emph{reconstructed per arm}
+        with the same seed---\texttt{SyntheticMarket(cfg, seed=5000 + s)}
+        inside the arm loop ($7000 + s$ in E3)---so every arm replays the
+        identical sequence of $(X_t, y_t)$ days. Comparisons across arms
+        within a seed are therefore paired, not merely matched in
+        distribution.
+  \item \emph{Arm stream}: each arm receives a fresh
+        \texttt{np.random.default\_rng(99 * s + 7)} ($13s+5$ in E3,
+        $55s+3$ in E1s). Multi-specialist arms then spawn one sub-RNG per
+        specialist via \texttt{np.random.default\_rng(rng.integers(2**31))}
+        in their constructors, so each specialist owns a private stream
+        derived from the order of construction-time draws.
+\end{itemize}
+
+\paragraph{Rerunning.} From the \texttt{code/} directory:
+\begin{lstlisting}[language=bash,numbers=none]
+python run_experiments.py e1            # headline table, 20 seeds
+python run_experiments.py e1 --seeds 5  # quick smoke run
+python run_experiments.py e0            # real-data diagnostic (needs GAUSE/data)
+for e in e1s e2 e3 e4 e5 e6; do python run_experiments.py $e; done
+\end{lstlisting}
+The only external dependencies are \texttt{numpy}, \texttt{scipy} (Welch
+tests), and \texttt{pandas} (real-data loaders); \texttt{e0}/\texttt{e1s}
+additionally require the Bybit and FRED CSVs under \texttt{GAUSE/data/}.
+Each driver prints the absolute path of every JSON it saves.
+
+\begin{warning}
+\textbf{The one nondeterminism trap.} All randomness flows from explicit
+seeds, but the \emph{construction-time draw order} is part of the
+specification. Each arm's top-level RNG is freshly seeded
+(\texttt{99*s + 7} for all arms in E1), so adding or removing arms from the
+run list is safe; what is \emph{not} safe is changing what an arm does with
+that RNG at construction. Every sub-specialist seed comes from a sequential
+\texttt{rng.integers(2**31)} call in the constructor, so reordering the arm
+factories' internals, changing $N$, or inserting an extra draw in any
+\texttt{\_\_init\_\_} silently shifts every downstream stream of that
+arm---exploration choices, minibatch sampling, tie-breaking
+predictions---and the rerun will no longer bit-match an archived JSON even
+though nothing statistically meaningful changed. When validating against
+archived results, leave \texttt{ARM\_FACTORIES} and all arm constructors
+untouched; when changing them deliberately, regenerate \emph{all} JSONs and
+re-archive.
+\end{warning}

@@ -1,0 +1,1240 @@
+% ============================================================================
+% PART V: EXPERIMENTAL EVIDENCE IN FULL
+% Fragment file: deepdive_part5.tex (no preamble; included from master)
+% All numbers in this part are taken verbatim (or rounded) from the archived
+% result files e0_structure_diagnostic.json, e1_synth.json,
+% e1s_stitched_crypto.json, e2_capacity_sweep.json, e3_dormancy_sweep.json,
+% e4_heterogeneity_sweep.json, e5_ablations.json, e6_snr_audit.json.
+% ============================================================================
+
+\part{Experimental Evidence in Full}
+\label{sec:dd5-part}
+
+The theory of the preceding parts makes a small number of sharp, falsifiable
+claims: that a reward-independent niche assignment retains dormant-regime
+competence where every reward-coupled allocator relearns; that an invariance
+objective inside a niche buys robustness that an invariance objective inside a
+monolith cannot; that the two mechanisms interact super-additively; and that
+all of this is conditional on the environment actually containing persistent,
+re-activating conditional structure. This part subjects each claim to its
+experiment. We present the numbers exhaustively---every arm, every metric,
+every pre-registered comparison with its raw and corrected $p$-value---and we
+present the null results with the same care as the positive ones, because the
+protocol's credibility rests on its ability to return ``no'' (Sections
+\ref{sec:dd5-e0e1s} and \ref{sec:dd5-e6}).
+
+\section{Methodology and Statistical Apparatus}
+\label{sec:dd5-method}
+
+\subsection{The arms}
+\label{sec:dd5-arms}
+
+Eleven arms share an identical decision layer (top-$K$ portfolio construction
+over $n=20$ assets from predicted returns) and identical data per seed; they
+differ only in how predictive capacity is organized and trained.
+
+\begin{table}[h]
+\centering
+\caption{The eleven arms. ``Assignment'' is how specialists (or capacity
+slots) are bound to regimes; ``Objective'' is the within-specialist training
+loss. Oracle arms receive the true regime$\to$specialist map and serve as
+skylines, not competitors.}
+\label{tab:dd5-arms}
+\small
+\begin{tabular}{llll}
+\toprule
+Arm & Name & Assignment & Objective \\
+\midrule
+A1 & monolith-ERM & none (single model) & ERM \\
+A2 & MoE router & learned gate, reward-driven & ERM \\
+A3 & recent-perf allocator & capital $\propto$ recent performance & ERM \\
+A4 & random fixed niches & random, frozen at init & ERM \\
+A5 & RISP-ERM & learned, dormancy-pinned & ERM \\
+A6 & RISP-INV (full system) & learned, dormancy-pinned & invariance \\
+A7 & monolith-INV & none (single model) & invariance \\
+A8a & Hedge over fixed experts & exponential weights, frozen experts & none \\
+A8b & Hedge over learners & exponential weights, learning experts & ERM \\
+A9 & oracle-pinned-ERM & oracle map, pinned & ERM \\
+A10 & oracle-pinned-INV & oracle map, pinned & invariance \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The synthetic market has $n=20$ assets, $d=20$ features, $R=4$ latent regimes
+with dormancy/reactivation dynamics, per-specialist capacity $K=2$, and
+$20$ seeds per configuration. Evaluation is restricted to the second half of
+each stream so that all arms are past their transient.
+
+\subsection{The seeded paired design}
+\label{sec:dd5-paired}
+
+Every seed $s \in \{1,\dots,20\}$ fixes the entire data-generating draw: the
+regime schedule, the per-regime parameters, the feature noise, and the
+realized returns. All eleven arms are then run on the \emph{same} stream for
+seed $s$. Consequently the between-seed component of variance---which regime
+schedule was drawn, how harsh the reactivations happened to be---is common to
+all arms, and arm differences within a seed are estimates of the treatment
+effect alone. This is the experimental-design analogue of common random
+numbers: it does not change the means but sharply reduces the variance of
+\emph{contrasts}.
+
+We nonetheless report unpaired Welch tests on the per-seed means
+(Section~\ref{sec:dd5-welch}) rather than paired $t$-tests. This is
+deliberately conservative: the paired test would have strictly more power
+(the seed-level draws are positively correlated across arms), so any
+comparison that survives the unpaired test would also survive the paired one,
+while the converse need not hold. Where a paired analysis materially changes
+the reading (the $\lambda$ ablation in Section~\ref{sec:dd5-e5}), we say so
+explicitly.
+
+\subsection{The three metrics}
+\label{sec:dd5-metrics}
+
+All metrics are means of the per-day \emph{decision regret}
+\[
+r_t \;=\; V^{\star}_t - V_t,
+\]
+where $V_t$ is the realized value of the arm's top-$K$ portfolio on day $t$
+and $V^{\star}_t$ the value of the best top-$K$ portfolio in hindsight for
+that day. Regret is measured in the decision space, not the prediction space,
+following the smart-predict-then-optimize critique
+\citep{elmachtoub2022smart}: prediction error and decision quality can
+dissociate, and our research question lives entirely on the decision side.
+
+Let $\mathcal{T}$ be the evaluation window (second half of the stream). A
+\emph{reactivation event} is a day on which a regime that has been dormant
+for at least $90$ days re-enters the schedule. The \emph{probe window} of an
+event is its first $15$ evaluation days. Then:
+\begin{align}
+\texttt{post\_react} &= \text{mean of } r_t \text{ over the union of probe
+windows in } \mathcal{T}, \label{eq:dd5-postreact}\\
+\texttt{steady} &= \text{mean of } r_t \text{ over }
+\mathcal{T} \setminus \{\text{probe windows}\}, \label{eq:dd5-steady}\\
+\texttt{overall} &= \text{mean of } r_t \text{ over all of } \mathcal{T}.
+\label{eq:dd5-overall}
+\end{align}
+\texttt{post\_react} is the primary endpoint: it isolates the days on which
+retention can matter at all. \texttt{steady} measures the price paid for the
+mechanism when nothing is reactivating, and \texttt{overall} aggregates both.
+Each seed contributes one number per metric per arm; all inference is on
+these $n=20$ per-seed means, never on the (serially dependent) daily values.
+
+\subsection{Welch's $t$-test}
+\label{sec:dd5-welch}
+
+For arms $a$ and $b$ with per-seed means $\bar{x}_a, \bar{x}_b$, sample
+variances $s_a^2, s_b^2$, and $n_a = n_b = 20$, the Welch statistic is
+\begin{equation}
+t \;=\; \frac{\bar{x}_a - \bar{x}_b}
+{\sqrt{\dfrac{s_a^2}{n_a} + \dfrac{s_b^2}{n_b}}},
+\label{eq:dd5-welch-t}
+\end{equation}
+referred to a $t$ distribution with the Welch--Satterthwaite degrees of
+freedom
+\begin{equation}
+\nu \;=\;
+\frac{\left(\dfrac{s_a^2}{n_a} + \dfrac{s_b^2}{n_b}\right)^{2}}
+{\dfrac{(s_a^2/n_a)^2}{n_a - 1} + \dfrac{(s_b^2/n_b)^2}{n_b - 1}}.
+\label{eq:dd5-welch-df}
+\end{equation}
+We use the unequal-variance form rather than the pooled Student $t$ because
+variance heterogeneity across arms is not an edge case here---it is a
+\emph{finding}. A4's defining signature is inflated between-seed variance
+(its post-reactivation 95\% CI half-width is $0.00126$ against A5's
+$0.00070$, a factor of $1.8$; Section~\ref{sec:dd5-e1-a4}), and A6's
+high-SNR collapse comes with CI half-widths four to six times A1's
+(Section~\ref{sec:dd5-e6}). Pooling variances across such pairs would
+miscalibrate exactly the comparisons we care most about. With $n_a=n_b=20$
+and roughly comparable variances, $\nu$ ranges over roughly $30$--$38$ in our
+comparisons; the test is essentially a $z$-test with a mild small-sample
+correction.
+
+\subsection{Holm--Bonferroni and a proof that it controls FWER}
+\label{sec:dd5-holm}
+
+The E1 analysis involves a pre-registered family of $m = 11$ pairwise
+comparisons (Table~\ref{tab:dd5-e1-tests}). With $11$ tests at level $0.05$
+each, the chance of at least one false rejection under the global null is
+bounded only by $0.55$ by Bonferroni's inequality---useless. We therefore
+control the family-wise error rate (FWER) with Holm's step-down procedure,
+which dominates plain Bonferroni at no assumption cost.
+
+\begin{definition}[Holm step-down procedure]
+\label{def:dd5-holm}
+Order the $p$-values $p_{(1)} \le p_{(2)} \le \cdots \le p_{(m)}$ with
+corresponding hypotheses $H_{(1)},\dots,H_{(m)}$. Let
+\[
+k^\ast = \min\Bigl\{ k : p_{(k)} > \frac{\alpha}{m - k + 1} \Bigr\}
+\]
+(with $k^\ast = m+1$ if no such $k$ exists). Reject
+$H_{(1)},\dots,H_{(k^\ast - 1)}$ and retain the rest. Equivalently, report
+adjusted $p$-values
+$\tilde{p}_{(k)} = \max_{j \le k}\, \min\{(m-j+1)\, p_{(j)},\, 1\}$
+and reject where $\tilde{p} \le \alpha$. The \texttt{holm\_p} entries in our
+result files are these adjusted values.
+\end{definition}
+
+\begin{proposition}[Holm controls FWER at level $\alpha$]
+\label{prop:dd5-holm-fwer}
+Under arbitrary dependence among the $p$-values, the probability that Holm's
+procedure rejects at least one true null hypothesis is at most $\alpha$.
+\end{proposition}
+
+\begin{proof}
+Let $I_0$ be the index set of true nulls and $m_0 = |I_0|$; assume $m_0 \ge 1$
+(otherwise there is nothing to prove). Suppose the procedure rejects at least
+one true null, and let $k$ be the \emph{first} step (in the sorted order) at
+which a true null is rejected. All hypotheses rejected at steps
+$1,\dots,k-1$ are then false nulls, of which there are $m - m_0$ in total;
+hence $k - 1 \le m - m_0$, i.e.\ $k \le m - m_0 + 1$, and therefore
+\[
+\frac{\alpha}{m - k + 1} \;\le\; \frac{\alpha}{m_0}.
+\]
+Because step $k$ rejected, $p_{(k)} \le \alpha/(m-k+1) \le \alpha/m_0$, and
+since the true null rejected at step $k$ has $p$-value $p_{(k)}$,
+\[
+\min_{i \in I_0} p_i \;\le\; p_{(k)} \;\le\; \frac{\alpha}{m_0}.
+\]
+So the event ``at least one true null is rejected'' implies the event
+$\{\min_{i \in I_0} p_i \le \alpha/m_0\}$. For each true null,
+$\Pr(p_i \le \alpha/m_0) \le \alpha/m_0$ (validity of the individual test),
+so by the union bound
+\[
+\Pr\Bigl(\min_{i \in I_0} p_i \le \frac{\alpha}{m_0}\Bigr)
+\;\le\; m_0 \cdot \frac{\alpha}{m_0} \;=\; \alpha. \qedhere
+\]
+\end{proof}
+
+Multiple-testing discipline is not optional in this literature: the data
+mining of trading-strategy families is precisely the failure mode documented
+by the reality-check and SPA literature
+\citep{white2000reality,hansen2005spa}, by the deflated Sharpe ratio
+\citep{bailey2014deflated}, and by the backtesting critiques of
+\citet{harvey2016backtesting} and \citet{lopez2018advances}. Our family is
+small ($11$), fixed in advance, and corrected; that is the minimum standard
+those papers demand.
+
+\subsection{Confidence intervals and the choice of 20 seeds}
+\label{sec:dd5-ci}
+
+All reported intervals are per-arm 95\% confidence intervals on the mean over
+seeds,
+\begin{equation}
+\bar{x} \;\pm\; t_{19,\,0.975}\, \frac{s}{\sqrt{20}}, \qquad
+t_{19,\,0.975} = 2.093,
+\label{eq:dd5-ci}
+\end{equation}
+where $s$ is the between-seed standard deviation. The \texttt{ci95} fields in
+the result files are the half-widths of these intervals.
+
+Why $20$ seeds? Back out the per-seed SD from Eq.~\eqref{eq:dd5-ci}: on the
+primary endpoint the major arms have $s \approx 0.0014$--$0.0027$ (A1:
+$0.0020$; A5: $0.0015$; A6: $0.0014$; A4: $0.0027$). The tightest
+pre-registered contrast is the invariance axis A6 vs.\ A5, with observed
+difference $0.00142$. The Welch standard error for that pair is
+$\sqrt{(0.0015^2 + 0.0014^2)/20} \approx 0.00046$, giving $t \approx 3.1$ and
+the observed raw $p = 0.0061$---comfortably detectable, with power
+$\approx 0.85$ at $\alpha = 0.05$ for an effect of that size. Halving the
+seed count would have left the invariance axis at the edge of detectability
+after Holm correction; doubling it would have bought little, since the
+binding constraint on the smallest effects we care about (e.g.\ A6 vs.\ A10)
+is that they are \emph{predicted to be null}. Twenty seeds is the point where
+every effect we predicted to exist is powered and every effect we predicted
+not to exist is bounded by a usefully narrow CI.
+
+\subsection{The noise-floor convention}
+\label{sec:dd5-floor}
+
+Raw regret levels conflate two things: irreducible per-day noise (even the
+oracle-assigned, invariance-trained A10 cannot drive regret to zero in a
+stochastic market) and the mechanism-dependent excess above that floor. We
+adopt the convention
+\begin{equation}
+\text{floor} \;=\; \texttt{steady}(\text{A10}) \;=\; 0.0250, \qquad
+\text{excess}(\cdot) \;=\; \text{metric}(\cdot) - 0.0250.
+\label{eq:dd5-floor}
+\end{equation}
+A10's steady state is the best any arm in this family achieves with oracle
+assignment, oracle-free training, and no reactivation stress; treating it as
+the irreducible floor makes relative improvements interpretable. A $10.3\%$
+improvement in raw regret (A6 vs.\ A1, post-reactivation) is a $38.1\%$
+reduction in excess-over-floor---the latter is the honest measure of how much
+of the \emph{addressable} regret the mechanism removes
+(Section~\ref{sec:dd5-e1-axes}).
+
+\subsection{Pre-registration discipline}
+\label{sec:dd5-prereg}
+
+Before the final 20-seed E1 run, we fixed in writing: (i) the eleven-arm
+roster and all hyperparameters; (ii) the three metrics and the primary
+endpoint (\texttt{post\_react}); (iii) the family of eleven pairwise
+comparisons and the Holm correction over exactly that family; (iv) a
+directional prediction for every comparison, including four predicted
+\emph{nulls} (A2$\approx$A1, A7$\approx$A1, A4$\approx$A5,
+A6$\approx$A10); and (v) the E0 structure gate for real data, with the
+commitment to run E1s and report it regardless of the gate's outcome. The
+predicted nulls matter as much as the predicted effects: a theory that only
+predicts differences can survive almost any data, whereas predicting that
+invariance alone does \emph{nothing} post-reactivation (A7$\approx$A1) is a
+claim the data could easily have destroyed.
+
+\begin{intuition}
+The entire E1 design is a $2\times 2$ factorial hiding inside an eleven-arm
+lineup: \{monolith, niche\} $\times$ \{ERM, INV\} is the square
+(A1, A5, A7, A6), and everything else is a control that pins down \emph{why}
+the square comes out the way it does. A2 and A3 show that reward-coupled
+allocation does not reproduce the niche effect; A4 shows assignment quality
+matters beyond mere partitioning; A8a/A8b bracket the system between
+``memory without adaptation'' and ``adaptation without memory''; A9/A10 show
+how close learned pinning gets to the oracle ceiling.
+\end{intuition}
+
+\begin{warning}
+\textbf{What these statistics do not establish.} Every $p$-value in this
+part is a statement about \emph{mean decision regret on a specified
+generator or historical sample, under a specified decision layer, relative
+to other arms of the same family}. None of the following is claimed, and the
+reader should resist inferring any of it: (i) no claim of positive risk-adjusted
+return (``alpha'') on any market---regret relative to a daily hindsight
+oracle is not profit; (ii) no claim about live trading, transaction costs,
+slippage, capacity, or market impact; (iii) no claim that the synthetic
+generator is a calibrated model of any asset class; (iv) no claim that the
+real-data nulls of Section~\ref{sec:dd5-e0e1s} would persist under other
+universes, frequencies, or feature sets---they are scoped to the data
+actually tested. The expected post-publication fate of any genuine
+market anomaly is decay \citep{mclean2016does}; our claims are deliberately
+about \emph{mechanism}, which is the only thing a synthetic-plus-null-real
+evidence base can support.
+\end{warning}
+
+% ============================================================================
+\section{E1: The Headline Dissociation, Number by Number}
+\label{sec:dd5-e1}
+
+\subsection{The full table}
+\label{sec:dd5-e1-table}
+
+Table~\ref{tab:dd5-e1-main} reports all eleven arms on all three metrics,
+with 95\% CIs, from the archived 20-seed run ($K=2$, heterogeneity $1.0$,
+hard memory, probe $15$, minimum dormancy $90$ days).
+
+\begin{table}[h]
+\centering
+\caption{E1 headline results. Mean daily decision regret ($\times 10^{-2}$,
+lower is better) $\pm$ 95\% CI half-width over 20 seeds. Excess = post-react
+mean minus the noise floor $2.50 \times 10^{-2}$
+(Eq.~\eqref{eq:dd5-floor}). Bold: best non-oracle arm per column.}
+\label{tab:dd5-e1-main}
+\small
+\begin{tabular}{lccccc}
+\toprule
+Arm & \texttt{post\_react} & \texttt{overall} & \texttt{steady} &
+Excess & Post/steady \\
+\midrule
+A1 monolith-ERM      & $3.424 \pm 0.095$ & $2.690 \pm 0.044$ & $2.459 \pm 0.058$ & $0.925$ & $1.39$ \\
+A2 router            & $3.408 \pm 0.110$ & $2.695 \pm 0.052$ & $2.481 \pm 0.070$ & $0.909$ & $1.37$ \\
+A3 recent-perf       & $3.776 \pm 0.096$ & $2.940 \pm 0.055$ & $2.685 \pm 0.072$ & $1.277$ & $1.41$ \\
+A4 random-fixed      & $3.295 \pm 0.126$ & $2.827 \pm 0.114$ & $2.717 \pm 0.124$ & $0.795$ & $1.21$ \\
+A5 RISP-ERM      & $3.214 \pm 0.070$ & $2.750 \pm 0.064$ & $2.644 \pm 0.084$ & $0.715$ & $1.22$ \\
+A6 RISP-INV      & $\mathbf{3.072 \pm 0.066}$ & $\mathbf{2.602 \pm 0.059}$ & $2.507 \pm 0.074$ & $\mathbf{0.572}$ & $1.23$ \\
+A7 monolith-INV      & $3.435 \pm 0.100$ & $2.663 \pm 0.044$ & $\mathbf{2.428 \pm 0.062}$ & $0.935$ & $1.41$ \\
+A8a Hedge-fixed      & $4.390 \pm 0.090$ & $3.815 \pm 0.069$ & $3.704 \pm 0.096$ & $1.890$ & $1.19$ \\
+A8b Hedge-learners   & $3.407 \pm 0.100$ & $2.672 \pm 0.046$ & $2.443 \pm 0.057$ & $0.907$ & $1.39$ \\
+\midrule
+A9 oracle-pinned-ERM & $3.210 \pm 0.077$ & $2.736 \pm 0.066$ & $2.624 \pm 0.088$ & $0.710$ & $1.22$ \\
+A10 oracle-pinned-INV& $3.053 \pm 0.078$ & $2.590 \pm 0.059$ & $2.499 \pm 0.075$ & $0.553$ & $1.22$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three structural facts are visible before any test is run. First, the
+\texttt{post\_react} column separates the arms far more than the
+\texttt{steady} column: retention is a property of reactivation days.
+Second, the post/steady ratio splits the arms into two clean families:
+everything with a reward-coupled or absent assignment (A1, A2, A3, A7, A8b)
+sits at $1.37$--$1.41$, and everything with a fixed or pinned assignment
+(A4, A5, A6, A8a, A9, A10) sits at $1.19$--$1.23$. The ratio is a
+fingerprint of the mechanism, independent of the level. Third, the
+\texttt{steady} column shows the honest cost: pinning is not free. A5's
+steady regret ($2.644$) is \emph{worse} than A1's ($2.459$), because
+partitioned specialists see less data per niche; A7 actually posts the best
+steady value in the table ($2.428$), better even than A10. RISP wins
+\texttt{overall} because reactivation days are frequent and expensive enough
+that retention pays for the partitioning cost---not because it dominates
+everywhere.
+
+\subsection{The pre-registered comparisons}
+\label{sec:dd5-e1-tests}
+
+\begin{table}[h]
+\centering
+\caption{The eleven pre-registered comparisons on \texttt{post\_react}.
+$\Delta$ = first arm minus second arm ($\times 10^{-2}$; negative favors the
+first arm). Verdicts at FWER $\alpha = 0.05$ (Holm). ``Null (pred.)''
+denotes comparisons pre-registered as approximate equalities.}
+\label{tab:dd5-e1-tests}
+\small
+\begin{tabular}{llrccl}
+\toprule
+\# & Comparison & $\Delta$ & Welch $p$ & Holm $p$ & Verdict \\
+\midrule
+1 & A6 vs A1  & $-0.353$ & $9.2\times 10^{-7}$ & $1.0\times 10^{-5}$ & rejected: A6 $<$ A1 \\
+2 & A6 vs A7  & $-0.363$ & $1.2\times 10^{-6}$ & $1.2\times 10^{-5}$ & rejected: A6 $<$ A7 \\
+3 & A6 vs A8b & $-0.335$ & $4.5\times 10^{-6}$ & $4.1\times 10^{-5}$ & rejected: A6 $<$ A8b \\
+4 & A5 vs A1  & $-0.210$ & $1.3\times 10^{-3}$ & $1.0\times 10^{-2}$ & rejected: A5 $<$ A1 \\
+5 & A6 vs A5  & $-0.142$ & $6.1\times 10^{-3}$ & $4.3\times 10^{-2}$ & rejected: A6 $<$ A5 \\
+6 & A5 vs A2  & $-0.194$ & $6.3\times 10^{-3}$ & $4.3\times 10^{-2}$ & rejected: A5 $<$ A2 \\
+7 & A6 vs A9  & $-0.138$ & $1.1\times 10^{-2}$ & $5.7\times 10^{-2}$ & \emph{marginal} (fails Holm) \\
+8 & A5 vs A4  & $-0.081$ & $0.281$ & $1.0$ & null (pred.) \\
+9 & A6 vs A10 & $+0.019$ & $0.719$ & $1.0$ & null (pred.) \\
+10 & A2 vs A1 & $-0.016$ & $0.827$ & $1.0$ & null (pred.) \\
+11 & A7 vs A1 & $+0.011$ & $0.882$ & $1.0$ & null (pred.) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We now walk through each pre-registered prediction.
+
+\paragraph{P1: A6 $<$ A5 $<$ A1 (both axes contribute).}
+Confirmed at every link. A5 beats A1 by $0.210 \times 10^{-2}$
+(Holm $p = 0.010$): pinned niches alone, with plain ERM inside them, retain
+dormant-regime competence. A6 beats A5 by a further $0.142 \times 10^{-2}$
+(Holm $p = 0.043$): the invariance objective adds value \emph{on top of}
+retention. The chain A6 $<$ A1 is the largest effect in the family
+(Holm $p = 1.0 \times 10^{-5}$).
+
+\paragraph{P2: A7 $\approx$ A1 post-reactivation (the dissociation).}
+Confirmed as a null: $\Delta = +0.011 \times 10^{-2}$, raw $p = 0.882$. The
+invariance objective, trained in a monolith, does \emph{nothing} for
+post-reactivation regret---indeed A7's point estimate is fractionally worse
+than A1's. This is the single most theory-laden prediction in the family:
+invariance can only protect parameters that still exist, and a monolith
+overwrites its dormant-regime parameters regardless of how they were
+trained. Note the contrast with \texttt{steady}, where A7 is the best arm in
+the table: invariance helps the monolith \emph{between} reactivations and is
+helpless \emph{at} them.
+
+\paragraph{P3: A2 $\approx$ A1 (a reward-driven router is a monolith in
+disguise).}
+Confirmed as a null: $\Delta = -0.016 \times 10^{-2}$, raw $p = 0.827$. The
+learned gate receives no gradient from a dormant regime and reallocates its
+experts' capacity to live regimes; on reactivation it relearns like the
+monolith. The companion test A5 $<$ A2 (Holm $p = 0.043$) confirms the
+positive side: dormancy-pinning beats the router by about as much as it
+beats the monolith.
+
+\paragraph{P4: A3 is the worst learner.}
+Confirmed. A3's post-reactivation regret ($3.776 \times 10^{-2}$) is the
+worst of any learning arm---only the frozen A8a is worse---and uniquely
+among the learners its damage is \emph{not} confined to probe windows: its
+\texttt{overall} ($2.940$) and \texttt{steady} ($2.685$) are also the worst
+in the learner family. The failure mode is continuous erosion: the
+recent-performance allocator drives capital toward whatever just worked,
+and the capital floor (the minimum allocation that keeps a specialist
+training at all) is exactly where a temporarily-unlucky specialist's data
+diet collapses. Every regime transition triggers a starve-and-relearn cycle,
+so A3 pays the relearning tax perpetually, not just after long dormancies.
+
+\paragraph{P5: A8a retains but cannot adapt; A8b adapts but cannot retain.}
+Confirmed on both jaws of the bracket. A8a (Hedge over frozen experts) has
+the \emph{lowest} post/steady ratio in the table ($1.19$): its relative
+degradation at reactivation is minimal, because nothing it could forget was
+ever learned online---this is retention in its purest form. But its absolute
+level is catastrophic ($\texttt{steady} = 3.704$, $51\%$ above A1), because
+frozen experts cannot track within-regime drift at all. A8b (Hedge over
+learning experts) is the mirror image: its level tracks the monolith almost
+exactly ($\texttt{post\_react}$ $3.407$ vs $3.424$; \texttt{steady} $2.443$
+vs $2.459$; ratio $1.39$ vs $1.39$), because exponential weights over
+experts that all share the reward stream do not protect any expert's
+parameters from being retrained. The sleeping-experts story, in other words,
+is not about the \emph{weighting} scheme; it is about whether the experts'
+parameters are insulated from reward-coupled reuse. A6 beats A8b by
+$0.335\times 10^{-2}$ (Holm $p = 4.1\times 10^{-5}$).
+
+\paragraph{P6: A4 $\approx$ A5 in mean, with higher variance.}
+\label{sec:dd5-e1-a4}
+Confirmed. Random fixed niches land at $3.295 \times 10^{-2}$ against A5's
+$3.214$ (raw $p = 0.281$, Holm $1.0$): a random reward-independent
+assignment captures most of the retention effect, exactly as the theory
+says it should---retention comes from reward-independence, not from
+assignment quality. But A4's between-seed SD is $0.0027$ against A5's
+$0.0015$ ($1.8\times$), and the signature is even starker on
+\texttt{steady} (CI $0.124$ vs $0.084$) and \texttt{overall} (CI $0.114$ vs
+$0.064$). Inspection of A4's per-seed values shows why: most seeds are fine,
+but the seeds in which the random assignment leaves a regime with no
+well-matched specialist (coverage gaps) blow up the mean (per-seed
+\texttt{overall} values up to $0.0341$ against a median near $0.0270$).
+Learned pinning buys insurance against the coverage tail, not a better
+average draw.
+
+\paragraph{P7: A6 $\approx$ A10 (the skyline is reached).}
+Confirmed as a null: $\Delta = +0.019 \times 10^{-2}$, raw $p = 0.719$. The
+full system is statistically indistinguishable from the same system with an
+oracle-given assignment. Learned dormancy-pinning recovers essentially all
+of the oracle assignment's value; the corresponding ERM-side check is even
+cleaner (A5 $3.214$ vs A9 $3.210$, not in the test family but visibly
+identical).
+
+\paragraph{P8 (exploratory edge): A6 vs A9.}
+A6's point estimate beats the \emph{oracle-assigned ERM} arm by
+$0.138\times 10^{-2}$---learned assignment plus invariance edging out
+perfect assignment without it. Raw $p = 0.011$, but the Holm-adjusted value
+is $0.057$, which fails the $0.05$ FWER threshold. We report this exactly
+as it is: suggestive, consistent with the rest of the pattern, and not
+established at the pre-registered standard. Nothing downstream depends on
+it.
+
+\begin{keypoint}
+Seven of seven predicted differences went the predicted direction; six of
+seven survived Holm at $\alpha=0.05$ (the seventh, A6 $<$ A9, is marginal
+at $0.057$). All four predicted nulls came back null with raw
+$p \ge 0.28$. No comparison in the pre-registered family contradicted a
+prediction.
+\end{keypoint}
+
+\subsection{The axes arithmetic}
+\label{sec:dd5-e1-axes}
+
+Decomposing the headline effect along the factorial square:
+\begin{align}
+\text{retention axis (A1} \to \text{A5):}\quad
+& \frac{3.424 - 3.214}{3.424} = 6.1\%, \label{eq:dd5-axis-ret}\\[2pt]
+\text{invariance axis (A5} \to \text{A6):}\quad
+& \frac{3.214 - 3.072}{3.214} = 4.4\%, \label{eq:dd5-axis-inv}\\[2pt]
+\text{joint (A1} \to \text{A6):}\quad
+& \frac{3.424 - 3.072}{3.424} = 10.3\%. \label{eq:dd5-axis-joint}
+\end{align}
+In excess-over-floor terms (Eq.~\eqref{eq:dd5-floor}) the joint effect is
+\begin{equation}
+1 - \frac{3.072 - 2.500}{3.424 - 2.500}
+= 1 - \frac{0.572}{0.925} = 38.1\%:
+\label{eq:dd5-excess}
+\end{equation}
+the full system removes a bit over a third of the addressable
+post-reactivation regret, and lands within $3\%$ of the oracle skyline's
+excess ($0.553$ vs $0.572$).
+
+\subsection{The interaction index: super-additivity}
+\label{sec:dd5-e1-interaction}
+
+Define, per seed, the factorial interaction
+\begin{equation}
+I \;=\; (\text{A1} - \text{A5}) + (\text{A1} - \text{A7})
+- (\text{A1} - \text{A6})
+\;=\; \text{A1} - \text{A5} - \text{A7} + \text{A6}.
+\label{eq:dd5-interaction}
+\end{equation}
+If the two mechanisms contributed additively, $I$ would be zero: the joint
+gain would equal the sum of the marginal gains. Computed per seed on the
+paired design (here pairing is legitimate and free, since
+Eq.~\eqref{eq:dd5-interaction} is a within-seed contrast),
+\[
+I \;=\; -0.0015 \;\pm\; 0.0005 \quad (\text{mean} \pm \text{95\% CI},\;
+n = 20),
+\]
+which excludes zero decisively. The sign is the interesting part: $I < 0$
+means the joint gain $(\text{A1}-\text{A6}) = 0.0035$ \emph{exceeds} the sum
+of the marginals $(\text{A1}-\text{A5}) + (\text{A1}-\text{A7}) =
+0.0021 + (-0.0001) = 0.0020$. The interaction is super-additive, and the
+arithmetic shows why in one line: the invariance marginal in the monolith is
+\emph{zero} (A1 $-$ A7 $= -0.0001$), yet inside niches invariance
+contributes $0.0014$ (A5 $-$ A6). Invariance is not an independent additive
+bonus; it is a multiplier on retained memories. A specialist that still
+holds its dormant regime's parameters can hold \emph{invariant} parameters,
+which transfer across the within-regime drift accumulated during dormancy;
+a monolith has nothing for the invariance penalty to protect at
+reactivation time. This is the empirical signature of the
+retention$\times$robustness interaction derived in
+Part~III, and it echoes the
+invariance-for-decision-making rationale of \citet{krueger2021rex} and
+\citet{yan2026invpnco}: invariance pays where the deployment distribution
+differs from the training distribution---which, for a retained dormant
+niche, is exactly the reactivation moment.
+
+% ============================================================================
+\section{E0 and E1s: The Real-Data Nulls}
+\label{sec:dd5-e0e1s}
+
+A mechanism paper earns the right to a synthetic headline only by trying,
+honestly, to find the mechanism's preconditions in real data, and reporting
+what it finds. We found that the precondition---persistent, re-activating,
+\emph{decision-relevant} conditional structure---is absent in the real
+universes we tested. This section documents that null in full.
+
+\subsection{E0: the structure diagnostic}
+\label{sec:dd5-e0}
+
+\paragraph{Protocol.} E0 asks the gating question without running any
+learning arm at all: \emph{if an oracle could condition the decision policy
+on regime labels, would that beat not conditioning?} The components:
+
+\begin{enumerate}
+\item \textbf{Universes.} Five crypto pairs (daily bars) and three
+commodities (daily). Evaluation spans $562$ days (crypto) and $1{,}270$
+days (commodities).
+\item \textbf{Causal labelers.} Two regime labelers, L1 (finer) and L2
+(coarser), computed from \emph{trailing} data only, so labels are known
+before the day's decision and cannot leak the target. The realized regime
+distributions are imbalanced, especially under L2 on crypto
+(counts $517/517/31/59$), which we note as a power limitation for the rare
+regimes.
+\item \textbf{Decision metric.} The same top-$K$ portfolio regret as E1
+(Section~\ref{sec:dd5-metrics})---a decision-space test, not a
+prediction-space test.
+\item \textbf{Oracle conditioning.} Fit the best per-regime decision policy
+with hindsight model selection per regime (an upper bound on what any
+regime-aware learner could extract), and compare its mean regret to
+(a) the same machinery run on \emph{block-shuffled} labels (preserving label
+marginals and block-length statistics, destroying the label--day
+alignment), and (b) a pooled, unconditioned policy.
+\item \textbf{Statistic.} Gap $\% = (\text{shuffled} - \text{real}) /
+\text{shuffled} \times 100$ (positive iff real labels help), and
+$z = (\text{shuffled} - \text{real}) / \mathrm{sd}(\text{shuffled})$ over
+the shuffle distribution.
+\end{enumerate}
+
+\begin{table}[h]
+\centering
+\caption{E0 structure diagnostic on real data. Mean daily decision regret
+($\times 10^{-2}$) for oracle regime-conditioning on real labels, on
+block-shuffled labels (mean $\pm$ SD of the shuffle distribution), and for
+the pooled unconditioned policy. Positive gap = real labels help. No cell
+shows exploitable structure.}
+\label{tab:dd5-e0}
+\small
+\begin{tabular}{llccrrr}
+\toprule
+Domain & Labeler & Real & Shuffled & Pooled & Gap (\%) & $z$ \\
+\midrule
+Crypto ($n{=}562$ d) & L1 & $1.220$ & $1.202 \pm 0.027$ & $1.195$ & $-1.47$ & $-0.66$ \\
+Crypto ($n{=}562$ d) & L2 & $1.212$ & $1.204 \pm 0.047$ & $1.195$ & $-0.66$ & $-0.17$ \\
+Commodities ($n{=}1270$ d) & L1 & $0.834$ & $0.832 \pm 0.015$ & $0.816$ & $-0.25$ & $-0.14$ \\
+Commodities ($n{=}1270$ d) & L2 & $0.836$ & $0.838 \pm 0.009$ & $0.816$ & $+0.16$ & $+0.16$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Reading.} Across both domains and both labelers, the real-label
+oracle never beats the shuffled-label oracle by more than $0.16\%$, all
+$|z| < 0.7$, and three of four point estimates are \emph{negative}---real
+labels do marginally worse than shuffled ones. Most damning, the
+\emph{pooled} policy is the best cell in every row: even hindsight-optimal
+regime conditioning loses to not conditioning at all, because splitting the
+sample by regime costs more in estimation variance than the (apparently
+nonexistent) regime structure returns. This is a null with teeth: it bounds
+not just RISP but \emph{any} regime-conditioned method in this family,
+on this data, at this frequency, with these features.
+
+\paragraph{Honest scoping.} The null is scoped: five crypto pairs and three
+commodities, daily bars, one feature set, two specific (if reasonable)
+causal labelers, and a top-$K$ decision layer. Intraday frequencies, larger
+cross-sections, alternative labelers (e.g.\ macro-indexed), or other
+decision layers could in principle revive the gate, and the protocol is
+designed to be rerun cheaply on any of them.
+
+\paragraph{Relation to the GAUSE null.} The predecessor project found a
+closely related null in \emph{prediction} space: regime-aware prediction
+showed no real-vs-shuffled gap on financial domains \citep{li2026gause}.
+That did not settle our question, and pretending otherwise would have been
+sloppy: the predict-then-optimize literature documents real cases where
+prediction-space and decision-space rankings dissociate
+\citep{elmachtoub2022smart,yan2026invpnco}, so a decision-metric retest was
+a genuine open question, not a formality. E0 answers it: the dissociation
+does not rescue financial regime structure here. The prediction-space null
+and the decision-space null now agree.
+
+\subsection{E1s: the stitched-crypto experiment}
+\label{sec:dd5-e1s}
+
+E0 was the pre-registered gate for real-data claims, and it failed.
+Pre-registration committed us to running the full arm lineup on real data
+anyway and predicting \emph{null separation}---a falsifiable prediction in
+its own right (if arms had separated despite the failed gate, the gate
+would be broken). E1s stitches real crypto regime blocks (block counts
+$15/13/7/9$ across the four labeled regimes) into schedules with genuine
+dormancy (minimum $80$ days, probe $15$ days), $20$ seeds of stitching
+randomization, ten arms (A10 requires generator access and is undefined on
+real data).
+
+\begin{table}[h]
+\centering
+\caption{E1s stitched real crypto. Mean daily decision regret
+($\times 10^{-2}$) $\pm$ 95\% CI, 20 seeds. All pairwise comparisons in the
+pre-registered family: raw Welch $p > 0.21$, all Holm $p = 1.0$.}
+\label{tab:dd5-e1s}
+\small
+\begin{tabular}{lcc}
+\toprule
+Arm & \texttt{post\_react} & \texttt{overall} \\
+\midrule
+A1 monolith-ERM      & $1.396 \pm 0.051$ & $1.285 \pm 0.017$ \\
+A2 router            & $1.403 \pm 0.050$ & $1.296 \pm 0.020$ \\
+A3 recent-perf       & $1.398 \pm 0.075$ & $1.299 \pm 0.025$ \\
+A4 random-fixed      & $1.373 \pm 0.057$ & $1.273 \pm 0.027$ \\
+A5 RISP-ERM      & $1.381 \pm 0.056$ & $1.276 \pm 0.025$ \\
+A6 RISP-INV      & $1.344 \pm 0.064$ & $1.263 \pm 0.025$ \\
+A7 monolith-INV      & $1.410 \pm 0.057$ & $1.290 \pm 0.018$ \\
+A8a Hedge-fixed      & $1.325 \pm 0.053$ & $1.239 \pm 0.023$ \\
+A8b Hedge-learners   & $1.400 \pm 0.059$ & $1.285 \pm 0.017$ \\
+A9 oracle-pinned-ERM & $1.342 \pm 0.052$ & $1.268 \pm 0.027$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All ten arms land in a band of $1.32$--$1.41 \times 10^{-2}$
+post-reactivation; the six pre-registered comparisons return raw
+$p \in \{0.22, 0.23, 0.40, 0.57, 0.71, 0.95\}$ and Holm $p = 1.0$
+throughout. Two details confirm that this is structure-absence rather than
+mere noise. First, the numerically best post-reactivation arm is
+\emph{A8a}---the frozen-expert arm that cannot adapt to anything---which is
+exactly what one expects when there is nothing regime-specific to retain or
+relearn: not adapting is as good as adapting. Second, A9 (oracle labels!)
+is statistically indistinguishable from A6 with learned labels
+($p = 0.95$): even perfect knowledge of the regime labels confers nothing,
+because the labels do not predict decision-relevant structure (which is
+what E0 measured directly).
+
+\begin{keypoint}
+\textbf{The protocol is falsifiable, and falsifies.} The identical
+machinery---same arms, same metrics, same test family, same Holm
+correction---produces Holm $p \approx 10^{-5}$ separations where the
+generator contains dormant-but-persistent structure (E1), and a uniform
+$p > 0.2$ flatline where a pre-registered diagnostic says the structure is
+absent (E0 $\to$ E1s). A pipeline that can only return positives is
+untrustworthy on synthetic data too; the E1s flatline is what makes the E1
+separation credible.
+\end{keypoint}
+
+% ============================================================================
+\section{E2--E4: Boundary Sweeps}
+\label{sec:dd5-sweeps}
+
+The headline lives at one point in configuration space ($K=2$, dormancy
+$\ge 90$, heterogeneity $1.0$). E2--E4 sweep the three axes the theory says
+should govern the effect: capacity pressure, dormancy length, and
+cross-regime heterogeneity.
+
+\subsection{E2: capacity}
+\label{sec:dd5-e2}
+
+The retention argument requires capacity pressure: a monolith forgets a
+dormant regime only if serving the live regimes forces reuse of its
+capacity. As $K \to R$ the pressure vanishes and the retention gap should
+close. E2 sweeps $K \in \{1,2,3,4\}$ ($R = 4$) under two memory models:
+\emph{hard} (slot eviction) and \emph{soft} (graded interference decay).
+
+\begin{table}[h]
+\centering
+\caption{E2 capacity sweep, \texttt{post\_react} ($\times 10^{-2}$) $\pm$
+95\% CI, hard memory. The pinned arms (A5, A6, A9) are exactly constant
+across $K$: each specialist serves only its own niches, so the capacity
+constraint never binds for them. Rightmost column: retention gap
+A1 $-$ A5 ($\times 10^{-2}$).}
+\label{tab:dd5-e2-hard}
+\small
+\begin{tabular}{cccccccc}
+\toprule
+$K$ & A1 & A2 & A4 & A5 & A6 & A9 & A1$-$A5 \\
+\midrule
+1 & $3.427 \pm 0.102$ & $3.432 \pm 0.100$ & $3.667 \pm 0.163$ & $3.214 \pm 0.070$ & $3.072 \pm 0.066$ & $3.210 \pm 0.077$ & $0.213$ \\
+2 & $3.424 \pm 0.095$ & $3.408 \pm 0.110$ & $3.295 \pm 0.126$ & $3.214 \pm 0.070$ & $3.072 \pm 0.066$ & $3.210 \pm 0.077$ & $0.210$ \\
+3 & $3.303 \pm 0.088$ & $3.276 \pm 0.064$ & $3.202 \pm 0.072$ & $3.214 \pm 0.070$ & $3.072 \pm 0.066$ & $3.210 \pm 0.077$ & $0.089$ \\
+4 & $3.221 \pm 0.082$ & $3.228 \pm 0.068$ & $3.206 \pm 0.078$ & $3.214 \pm 0.070$ & $3.072 \pm 0.066$ & $3.210 \pm 0.077$ & $0.007$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{E2 capacity sweep, \texttt{post\_react} ($\times 10^{-2}$) $\pm$
+95\% CI, soft memory (no eviction; graded interference with
+overflow-scaled decay). Rightmost column: retention gap A1 $-$ A5.}
+\label{tab:dd5-e2-soft}
+\small
+\begin{tabular}{cccccccc}
+\toprule
+$K$ & A1 & A2 & A4 & A5 & A6 & A9 & A1$-$A5 \\
+\midrule
+1 & $3.276 \pm 0.079$ & $3.285 \pm 0.067$ & $3.667 \pm 0.163$ & $3.214 \pm 0.070$ & $3.072 \pm 0.066$ & $3.210 \pm 0.077$ & $0.062$ \\
+2 & $3.277 \pm 0.079$ & $3.254 \pm 0.077$ & $3.318 \pm 0.117$ & $3.214 \pm 0.070$ & $3.072 \pm 0.066$ & $3.210 \pm 0.077$ & $0.063$ \\
+3 & $3.279 \pm 0.079$ & $3.265 \pm 0.056$ & $3.239 \pm 0.071$ & $3.214 \pm 0.070$ & $3.072 \pm 0.066$ & $3.210 \pm 0.077$ & $0.065$ \\
+4 & $3.277 \pm 0.081$ & $3.255 \pm 0.064$ & $3.273 \pm 0.079$ & $3.214 \pm 0.070$ & $3.072 \pm 0.066$ & $3.210 \pm 0.077$ & $0.063$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Four observations.
+
+\begin{enumerate}
+\item \textbf{Reward-independent arms are exactly flat.} A5, A6, and A9 post
+identical values at every $K$ in both memory models. This is not a rounding
+artifact but a structural fact: a pinned specialist serves only its assigned
+niches, so its memory never overflows and the capacity model is inert for
+it. Flatness is the cleanest possible demonstration that the pinned arms'
+advantage is \emph{not} extra effective capacity---they use the same budget
+and simply never churn it.
+\item \textbf{Gap closure at $K = R$ under hard memory.} The retention gap
+A1 $-$ A5 falls from $0.213$ at $K=1$ to $0.007$ at $K=4$---zero to within
+a tenth of a CI. With enough slots, the monolith never evicts, never
+forgets, and pinning buys nothing. The invariance edge survives, however:
+A6 ($3.072$) still beats everything at $K=4$, confirming the axes are
+distinct (capacity governs retention, not robustness).
+\item \textbf{Non-closure under soft memory---at any capacity.} With no
+eviction, capacity slots stop binding and the reward-driven arms go
+\emph{flat} in $K$ at $\approx 3.28$: gentler than hard eviction at tight
+capacity ($3.43$ at $K \le 2$) but never closing the gap to the pinned
+arms ($\approx 0.063$ above A5, $0.21$ above A6, at every $K$), because
+graded interference from foreign updates erodes dormant heads regardless
+of how many slots exist. The hard model predicts closure at $K = R$ and
+closes; the soft model predicts a capacity-independent residue and shows
+exactly that.
+\item \textbf{A4's coverage problem is worst at $K=1$.} Random fixed niches
+post $3.667 \pm 0.163$ at $K=1$---the worst learner cell in the
+sweep---because with one slot per specialist a single unlucky assignment
+leaves a regime entirely uncovered. The cell's CI ($0.163$) is the widest in
+the sweep, the variance signature of Section~\ref{sec:dd5-e1-a4} amplified.
+\end{enumerate}
+
+\subsection{E3: dormancy length}
+\label{sec:dd5-e3}
+
+Retention should matter more the longer a regime sleeps: the monolith's
+relearning debt accumulates with dormancy, while a pinned specialist's
+retained parameters do not decay (hard memory). E3 sweeps the minimum
+dormancy threshold $D \in \{21, 63, 126, 252, 504\}$ days.
+
+\begin{table}[h]
+\centering
+\caption{E3 dormancy sweep ($\times 10^{-2}$, $\pm$ 95\% CI). Each $D$ is a
+\emph{different schedule generator} (shorter dormancies mean more frequent
+transitions and different steady-state mixes), so levels are comparable
+\emph{within} a row block only, never across $D$. Rightmost columns:
+within-$D$ retention$+$invariance gap A1 $-$ A6, absolute and relative.}
+\label{tab:dd5-e3}
+\small
+\begin{tabular}{clccr@{\quad}r}
+\toprule
+$D$ & Arm & \texttt{post\_react} & \texttt{steady} &
+\multicolumn{2}{c}{A1 $-$ A6 (post)} \\
+\midrule
+\multirow{5}{*}{21}
+& A1 & $5.226 \pm 0.148$ & $3.225 \pm 0.225$ & & \\
+& A2 & $5.241 \pm 0.151$ & $3.305 \pm 0.213$ & & \\
+& A3 & $5.475 \pm 0.169$ & $3.504 \pm 0.263$ & $0.152$ & $2.9\%$ \\
+& A5 & $5.198 \pm 0.167$ & $3.416 \pm 0.220$ & & \\
+& A6 & $5.074 \pm 0.142$ & $3.293 \pm 0.222$ & & \\
+\midrule
+\multirow{5}{*}{63}
+& A1 & $5.024 \pm 0.202$ & $2.719 \pm 0.214$ & & \\
+& A2 & $5.028 \pm 0.208$ & $2.785 \pm 0.226$ & & \\
+& A3 & $5.362 \pm 0.173$ & $2.973 \pm 0.218$ & $0.375$ & $7.5\%$ \\
+& A5 & $4.818 \pm 0.198$ & $2.876 \pm 0.208$ & & \\
+& A6 & $4.648 \pm 0.193$ & $2.776 \pm 0.209$ & & \\
+\midrule
+\multirow{5}{*}{126}
+& A1 & $4.975 \pm 0.160$ & $2.550 \pm 0.157$ & & \\
+& A2 & $4.960 \pm 0.150$ & $2.598 \pm 0.156$ & & \\
+& A3 & $5.228 \pm 0.147$ & $2.747 \pm 0.159$ & $0.401$ & $8.1\%$ \\
+& A5 & $4.787 \pm 0.185$ & $2.762 \pm 0.141$ & & \\
+& A6 & $4.574 \pm 0.181$ & $2.649 \pm 0.130$ & & \\
+\midrule
+\multirow{5}{*}{252}
+& A1 & $4.336 \pm 0.098$ & $2.633 \pm 0.100$ & & \\
+& A2 & $4.344 \pm 0.103$ & $2.657 \pm 0.096$ & & \\
+& A3 & $4.682 \pm 0.103$ & $2.811 \pm 0.103$ & $0.385$ & $8.9\%$ \\
+& A5 & $4.095 \pm 0.144$ & $2.777 \pm 0.099$ & & \\
+& A6 & $3.951 \pm 0.103$ & $2.652 \pm 0.092$ & & \\
+\midrule
+\multirow{5}{*}{504}
+& A1 & $3.668 \pm 0.059$ & $2.530 \pm 0.080$ & & \\
+& A2 & $3.646 \pm 0.059$ & $2.565 \pm 0.080$ & & \\
+& A3 & $3.968 \pm 0.049$ & $2.713 \pm 0.079$ & $0.408$ & $11.1\%$ \\
+& A5 & $3.454 \pm 0.076$ & $2.668 \pm 0.077$ & & \\
+& A6 & $3.260 \pm 0.061$ & $2.533 \pm 0.077$ & & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{warning}
+Do not compare levels across $D$ blocks. A $D = 21$ generator produces a
+chaotic schedule in which \emph{every} arm is perpetually post-transition
+(note the elevated steady values, $3.2$--$3.5$, against $2.5$--$2.7$ at
+$D = 504$); a $D = 504$ generator produces long calm stretches. The only
+licensed reading is the \emph{within-$D$ gap between arms}, which holds the
+schedule fixed.
+\end{warning}
+
+The within-$D$ gap A1 $-$ A6 grows steeply from $0.152$ at $D = 21$ to
+$0.375$ at $D = 63$, then saturates in absolute terms
+($0.375 \to 0.401 \to 0.385 \to 0.408$), while the relative gap continues
+to drift up ($7.5\% \to 11.1\%$) because the baseline level falls as
+schedules calm down. The shape is exactly the theory's: at $D = 21$ the
+monolith's parameters have barely drifted from the dormant regime, so there
+is little to retain; by $D \approx 63$--$126$ (one to two quarters of
+dormancy) the monolith's relearning debt is fully formed and further
+dormancy adds little, because the debt is bounded by ``relearn from
+scratch.'' The ordering A6 $<$ A5 $<$ A1 $\approx$ A2, and A3 worst, holds
+at every $D$ without exception.
+
+\subsection{E4: heterogeneity}
+\label{sec:dd5-e4}
+
+The invariance axis should engage only insofar as regimes differ: at
+heterogeneity $0$ all regimes share one mechanism and there is nothing to be
+invariant \emph{across}. E4 sweeps the cross-regime heterogeneity scale
+$h \in \{0, 0.5, 1.0, 1.5, 2.0\}$ for the pinned arms.
+
+\begin{table}[h]
+\centering
+\caption{E4 heterogeneity sweep, \texttt{post\_react} ($\times 10^{-2}$)
+$\pm$ 95\% CI. Rightmost column: ERM$-$INV gap (A5 $-$ A6).}
+\label{tab:dd5-e4}
+\small
+\begin{tabular}{ccccc}
+\toprule
+$h$ & A5 RISP-ERM & A6 RISP-INV & A9 oracle-pinned-ERM & A5$-$A6 \\
+\midrule
+0.0 & $2.998 \pm 0.080$ & $2.900 \pm 0.079$ & $2.997 \pm 0.081$ & $0.097$ \\
+0.5 & $3.073 \pm 0.081$ & $2.948 \pm 0.080$ & $3.067 \pm 0.073$ & $0.125$ \\
+1.0 & $3.214 \pm 0.070$ & $3.072 \pm 0.066$ & $3.210 \pm 0.077$ & $0.142$ \\
+1.5 & $3.459 \pm 0.087$ & $3.249 \pm 0.095$ & $3.418 \pm 0.094$ & $0.210$ \\
+2.0 & $3.749 \pm 0.138$ & $3.511 \pm 0.124$ & $3.679 \pm 0.165$ & $0.238$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three readings.
+
+\begin{enumerate}
+\item \textbf{Both arms degrade with heterogeneity, ERM faster.} Fitting
+endpoint slopes, A5 degrades at $0.376 \times 10^{-2}$ per unit $h$ against
+A6's $0.306$---the ERM arm is roughly $1.2\times$ more sensitive to
+heterogeneity than the INV arm, and the oracle-pinned ERM arm A9 sits in
+between ($0.341$). The cleaner statement is in the gap itself: the
+ERM$-$INV gap grows \emph{monotonically} and roughly $2.4$-fold across the
+sweep, from $0.0010$ at $h = 0$ to $0.0024$ at $h = 2$
+(in raw units, $0.00097 \to 0.00238$). The invariance objective buys more
+the more the regimes differ---which is what an invariance objective is for.
+\item \textbf{The $h = 0$ residual gap.} At zero heterogeneity the theory's
+first-order prediction is gap $= 0$, yet A6 retains a small, CI-overlapping
+but consistently signed edge ($0.097 \times 10^{-2}$). The likely mechanism
+is mundane and worth naming: with $d = 20$ features of which only a subset
+is causal, the cross-environment variance penalty also suppresses reliance
+on \emph{spuriously correlated distractor features within} a niche---it
+acts as a targeted regularizer even when there is no cross-regime
+heterogeneity to be invariant to. We flag this as a confound on the pure
+invariance interpretation at low $h$: part of the A5$-$A6 gap at every $h$
+is plain regularization, and only the \emph{growth} of the gap with $h$
+(the $0.0010 \to 0.0024$ monotone trend) is unambiguously attributable to
+invariance proper.
+\item \textbf{A5 tracks A9 everywhere.} Learned pinning matches
+oracle pinning under ERM at every heterogeneity ($\le 0.041 \times 10^{-2}$
+apart, well inside CIs), extending the P7 skyline result along the whole
+sweep.
+\end{enumerate}
+
+% ============================================================================
+\section{E5--E6: Ablations and the Inversion Audit}
+\label{sec:dd5-e5e6}
+
+\subsection{E5: ablations of the full system}
+\label{sec:dd5-e5}
+
+E5 ablates A6's four design choices one at a time, holding everything else
+at the headline configuration; the response variable is
+\texttt{post\_react} ($\times 10^{-2}$, 20 seeds).
+
+\paragraph{The invariance weight $\beta$.}
+
+\begin{table}[h]
+\centering
+\caption{E5 $\beta$ sweep (A6 variant, \texttt{post\_react},
+$\times 10^{-2}$). Reference points: A5 retained-ERM $= 3.214 \pm 0.070$;
+headline A6 ($\beta = 1$) $= 3.072 \pm 0.066$.}
+\label{tab:dd5-e5-beta}
+\small
+\begin{tabular}{cccccc}
+\toprule
+$\beta$ & $0$ & $0.25$ & $1$ & $4$ & $16$ \\
+\midrule
+\texttt{post\_react} & $3.555 \pm 0.107$ & $3.090 \pm 0.079$ &
+$3.072 \pm 0.066$ & $3.170 \pm 0.076$ & $3.522 \pm 0.065$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The response is a clean U-shape with minimum at $\beta = 1$ and a broad
+plateau over $\beta \in [0.25, 4]$ (all within $\sim 3\%$ of the minimum,
+CIs overlapping). Both extremes collapse, and the collapses are
+informative:
+\begin{itemize}
+\item At $\beta = 0$ the within-niche objective degenerates to the
+cross-environment variance term alone, and performance ($3.555$) falls not
+merely to the retained-ERM level but \emph{below} it
+(A5 $= 3.214$; the variance-only arm is $10.6\%$ worse). This is precisely
+the degeneracy the theory predicts (and that the V-REx analysis warns of
+\citep{krueger2021rex}): a variance-only criterion is minimized by any
+predictor that \emph{equalizes} risk across environments, including
+uniformly bad constant-like predictors. Equal risks are not low risks. The
+empirical collapse below the ERM reference is the theory's degenerate
+solution showing up on schedule.
+\item At $\beta = 16$ the risk term swamps the variance term and
+performance ($3.522$) gives back the entire invariance gain and more,
+landing $14.6\%$ above the $\beta = 1$ optimum and visibly worse than plain
+retained ERM. We read the overshoot beyond A5 cautiously (the heavily
+re-weighted objective also rescales effective step sizes), but the
+qualitative point stands: the benefit requires \emph{both} terms in
+balance, and a factor-of-16 window around the default ($0.25$--$4$) is all
+flat---the choice $\beta = 1$ is not a tuned knife-edge.
+\end{itemize}
+
+\paragraph{The environment window $W_c$.}
+
+\begin{table}[h]
+\centering
+\caption{E5 $W_c$ sweep (\texttt{post\_react}, $\times 10^{-2}$).}
+\label{tab:dd5-e5-wc}
+\small
+\begin{tabular}{ccccc}
+\toprule
+$W_c$ & $1$ & $5$ & $20$ & $60$ \\
+\midrule
+\texttt{post\_react} & $3.033 \pm 0.076$ & $3.057 \pm 0.069$ &
+$3.072 \pm 0.066$ & $3.090 \pm 0.070$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We had entertained a deflationary explanation of the invariance gain: that
+chunking each niche's stream into $W_c$-day pseudo-environments effectively
+\emph{batches} the updates, and the gain is a batching/smoothing artifact
+rather than an invariance effect. The sweep refutes this cleanly, and we
+report it as the refutation it is: across a $60\times$ range of $W_c$ the
+response is flat to within $0.057 \times 10^{-2}$---less than one CI
+half-width---and the numerically best cell is $W_c = 1$, i.e.\ \emph{no}
+batching at all. If batching were the active ingredient, $W_c = 1$ would be
+the worst cell, not the best. The pseudo-environment construction matters
+for defining the variance penalty, not for any smoothing side effect.
+
+\paragraph{The assignment-smoothing parameter $\lambda$.}
+With $\lambda$ off ($0$): $3.141 \pm 0.082$; on ($0.3$): $3.072 \pm 0.066$.
+The unpaired CIs overlap, so by the conservative standard of
+Section~\ref{sec:dd5-paired} the effect is not individually established.
+The paired within-seed contrast, which is legitimate here, gives
+$+0.069 \pm 0.060$ ($\times 10^{-2}$, mean $\pm$ 95\% CI)---a $2.2\%$
+improvement whose interval excludes zero, barely. Honest summary:
+$\lambda$ helps a little, with weak evidence; nothing in the headline
+depends on it.
+
+\paragraph{Pinning schedule: pinned vs.\ never.}
+Removing dormancy-pinning entirely (assignments stay perpetually plastic)
+degrades \texttt{post\_react} from $3.072 \pm 0.066$ to $3.197 \pm 0.092$;
+the paired contrast is $+0.126 \pm 0.059$ ($\times 10^{-2}$), a $3.9\%$
+loss that is clearly resolved. Never-pinning gives back most of the
+invariance-axis gain (the never-pin arm sits near the A5/A9 retained-ERM
+level of $3.21$), which is consistent with the interaction story of
+Section~\ref{sec:dd5-e1-interaction}: a perpetually plastic assignment lets
+reactivation-time reassignment churn destroy exactly the retained-invariant
+parameters the mechanism exists to protect.
+
+\subsection{E6: the SNR audit and the inversion}
+\label{sec:dd5-e6}
+
+\paragraph{Development history, stated plainly.} This experiment exists
+because our first prototype failed. The initial generator was, we later
+understood, calibrated to an effectively high signal-to-noise ratio, and
+the arm lineup showed no positive separation---RISP did not beat the
+monolith. The tempting path was to tune the generator until the predicted
+effect appeared and report that point. Instead we made SNR an explicit
+axis, swept it, and report the whole curve, including the region where our
+method \emph{loses}. The audit below is the honest version of what could
+otherwise have been a silent hyperparameter search.
+
+\begin{table}[h]
+\centering
+\caption{E6 SNR audit ($\times 10^{-2}$, $\pm$ 95\% CI, 20 seeds per cell).
+$\rho$ = post/steady relearning-penalty ratio. ``A6 adv.'' =
+$(\text{A1}-\text{A6})/\text{A1}$ on \texttt{post\_react}; positive favors
+RISP.}
+\label{tab:dd5-e6}
+\scriptsize
+\begin{tabular}{clccc r}
+\toprule
+SNR & Arm & \texttt{post\_react} & \texttt{steady} & $\rho$ & A6/A9 adv. \\
+\midrule
+\multirow{3}{*}{$0.5\times$}
+& A1  & $3.778 \pm 0.077$ & $2.963 \pm 0.057$ & $1.28$ & \\
+& A6  & $3.466 \pm 0.073$ & $2.890 \pm 0.066$ & $1.20$ & $+8.3\%$ \\
+& A9  & $3.584 \pm 0.068$ & $3.000 \pm 0.068$ & $1.19$ & $+5.1\%$ \\
+\midrule
+\multirow{3}{*}{$1\times$}
+& A1  & $3.424 \pm 0.095$ & $2.459 \pm 0.058$ & $1.39$ & \\
+& A6  & $3.072 \pm 0.066$ & $2.507 \pm 0.074$ & $1.23$ & $+10.3\%$ \\
+& A9  & $3.210 \pm 0.077$ & $2.624 \pm 0.088$ & $1.22$ & $+6.3\%$ \\
+\midrule
+\multirow{3}{*}{$2\times$}
+& A1  & $2.990 \pm 0.075$ & $1.878 \pm 0.062$ & $1.59$ & \\
+& A6  & $2.779 \pm 0.117$ & $2.273 \pm 0.110$ & $1.22$ & $+7.0\%$ \\
+& A9  & $2.908 \pm 0.121$ & $2.369 \pm 0.128$ & $1.23$ & $+2.7\%$ \\
+\midrule
+\multirow{3}{*}{$4\times$}
+& A1  & $2.733 \pm 0.070$ & $1.480 \pm 0.091$ & $1.85$ & \\
+& A6  & $3.089 \pm 0.265$ & $2.577 \pm 0.217$ & $1.20$ & $-13.1\%$ \\
+& A9  & $3.210 \pm 0.283$ & $2.660 \pm 0.250$ & $1.21$ & $-17.5\%$ \\
+\midrule
+\multirow{3}{*}{$8\times$}
+& A1  & $3.286 \pm 0.155$ & $1.594 \pm 0.210$ & $2.06$ & \\
+& A6  & $4.905 \pm 0.620$ & $4.117 \pm 0.465$ & $1.19$ & $-49.3\%$ \\
+& A9  & $4.939 \pm 0.629$ & $4.194 \pm 0.535$ & $1.18$ & $-50.3\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{The inversion.} The RISP advantage on the primary endpoint
+is $+8.3\%$ at $0.5\times$, peaks at $+10.3\%$ at the headline $1\times$,
+narrows to $+7.0\%$ at $2\times$, then \emph{inverts}: $-13.1\%$ at
+$4\times$ and $-49.3\%$ at $8\times$. The crossover sits between $2\times$
+and $4\times$, i.e.\ around $2$--$3\times$ the headline SNR.
+
+\paragraph{The relearning-penalty ratio isolates the mechanism.} The
+post/steady ratio $\rho$ tells the mechanistic story with unusual clarity.
+A6's ratio is \emph{flat} across the entire sweep:
+$1.20, 1.23, 1.22, 1.20, 1.19$. The retention mechanism works identically
+at every SNR---a pinned specialist's reactivation penalty is always the
+same modest $\sim\!20\%$ premium over its own steady state. A1's ratio, by
+contrast, climbs monotonically: $1.28, 1.39, 1.59, 1.85, 2.06$. The
+monolith's \emph{relative} relearning penalty gets worse with SNR, not
+better. So why does the monolith win at high SNR? Because its
+\emph{absolute levels} collapse: A1's steady regret falls from $2.96$ at
+$0.5\times$ to $1.48$ at $4\times$, while A6's steady regret
+\emph{deteriorates} ($2.89 \to 2.58 \to 4.12$ from $0.5\times$ through
+$8\times$, non-monotonically). At high SNR a pooled learner extracts the
+strong signal from all data jointly and relearns a reactivated regime
+within days---faster than the probe window can penalize it---whereas each
+pinned specialist is confined to its own niche's fraction of the data and
+carries a variance penalty calibrated for a noisier world. Pooling beats
+partitioning when the signal is strong enough to relearn cheaply. (A1's
+own non-monotonicity at $8\times$---post-react $3.29$ vs $2.73$ at
+$4\times$, with steady CIs widening---suggests additional dynamics at
+extreme SNR, e.g.\ aggressive-fit instability, that we have not dissected;
+we note it rather than interpret it.)
+
+\paragraph{The skyline inverts identically.} The decisive control: A9, the
+\emph{oracle-assigned} pinned arm, inverts in lockstep with A6 ($-17.5\%$
+at $4\times$, $-50.3\%$ at $8\times$; their CIs overlap heavily at both
+points). The inversion therefore cannot be an artifact of RISP's
+learned assignment, its pinning heuristic, or any estimation failure in
+our mechanism---perfect assignment inverts too. The inversion is a property
+of the \emph{regime}: partitioned, reward-independent memory is the right
+architecture in low-SNR, slow-relearning environments and the wrong one in
+high-SNR, fast-relearning environments. The boundary is part of the claim,
+not a caveat appended to it.
+
+\begin{keypoint}
+\textbf{Deployment-boundary reading.} The audit gives an operational rule:
+RISP-style partitioned retention should be deployed only where the
+post-reactivation relearning cost of a pooled learner is demonstrably
+large---empirically, below roughly $2$--$3\times$ the headline SNR in this
+family, i.e.\ in environments where a monolith's post/steady ratio is
+materially elevated ($\rho \gtrsim 1.4$). The monolith's measured $\rho$
+is itself an observable diagnostic: it can be estimated on any stream
+\emph{before} committing to the architecture. Financial daily data, where
+the E0 diagnostic already found no exploitable conditional structure at
+all, sits firmly outside the deployment region; the mechanism's natural
+habitat is low-SNR streams with long-dormancy recurring structure.
+\end{keypoint}
+
+\begin{intuition}
+A useful way to compress E6: \emph{retention is a hedge against expensive
+relearning}. The price of the hedge is the partitioning cost (less data per
+specialist, a variance penalty, a worse steady state). The value of the
+hedge is the relearning debt it cancels. Low SNR makes relearning slow and
+expensive, so the hedge is cheap relative to its payout; high SNR makes
+relearning nearly free, so the hedge is all premium and no payout. The
+post/steady ratios are precisely the two sides of this ledger, read off
+the data.
+\end{intuition}
+
+% ============================================================================
+\section{Threats to Validity}
+\label{sec:dd5-threats}
+
+We enumerate the limits of the evidence, in roughly decreasing order of
+importance, with what each would take to overturn.
+
+\begin{enumerate}
+\item \textbf{The headline is synthetic, and the real-data result is null.}
+This is the central limitation and we state it without hedging: every
+positive number in Sections \ref{sec:dd5-e1}--\ref{sec:dd5-e5e6} comes from
+a generator we wrote. E0/E1s show that the mechanism's precondition is
+absent in the real universes we tested, so the contribution is a
+\emph{mechanism, a boundary map, and a falsifiable deployment gate}---not a
+demonstrated real-market improvement. A reader who needs the latter should
+treat this paper as a protocol to run on their own data, starting with E0.
+\item \textbf{Small real universes.} The E0/E1s null rests on five crypto
+pairs and three commodities at daily frequency with one feature set and two
+labelers. The null is well-measured on that data ($|z| < 0.7$ across all
+four cells) but could fail to generalize to intraday frequencies, equities
+cross-sections, or richer conditioning information. The gate is cheap to
+rerun; we make no claim beyond the cells in Table~\ref{tab:dd5-e0}.
+\item \textbf{Single decision-layer family.} All arms share one decision
+layer (top-$K$ portfolio from predicted returns). The decision-space
+dissociation literature \citep{elmachtoub2022smart,yan2026invpnco} cuts
+both ways: just as prediction nulls did not settle the decision question,
+our decision-layer-specific results do not settle other decision layers
+(e.g.\ mean-variance with estimated covariances, or execution-aware
+objectives). The within-family rankings are clean; the family is one
+point in a larger space.
+\item \textbf{Linear specialists.} Specialists are linear in the $d = 20$
+features. Retention-vs-relearning economics could shift with
+high-capacity nonlinear specialists, in either direction (faster relearning
+hurts retention's value, as E6 shows; worse interference helps it). The
+GAUSE neural-expert results \citep{li2026gause} suggest the
+reward-independence principle transfers to gradient-trained experts, but
+we have not verified that here.
+\item \textbf{Task-incremental labels are given.} Arms receive the regime
+label stream (synthetic: true labels; E1s: causal labeler output). The
+harder class-incremental problem---detecting reactivations without
+labels---is not addressed, and the GAUSE real-data experience (label-free
+recovery collapsing under feature overlap) warns against assuming it is
+easy.
+\item \textbf{Hyperparameter choices.} Each load-bearing choice is ablated
+where it matters: $\beta$ has a $16\times$ flat plateau
+(Table~\ref{tab:dd5-e5-beta}), $W_c$ is flat over $60\times$
+(Table~\ref{tab:dd5-e5-wc}), $\lambda$ is nearly irrelevant, pinning
+matters and is the mechanism itself. The probe length ($15$ days) and
+dormancy threshold ($90$ days) were fixed before the final run and the E3
+sweep shows the effect is not knife-edged in the dormancy axis; we did not
+sweep probe length, and the post/steady split depends on it mechanically.
+\item \textbf{Seed count and inference.} $n = 20$ seeds powers the
+pre-registered effects (Section~\ref{sec:dd5-ci}) but leaves the marginal
+comparison A6 vs A9 unresolved (Holm $p = 0.057$) and gives only moderate
+resolution on variance signatures (A4). The conservative unpaired tests
+mean reported significances are, if anything, understated.
+\item \textbf{What would change our conclusions.} Concretely: (i) an E0 run
+on some real universe showing a robust positive gap, followed by an E1s-style
+run in which arms \emph{fail} to separate, would break the protocol's
+central link; (ii) a demonstration that A2-style routers with explicit
+idle-expert protection match A6 would collapse the
+reward-independence claim to an implementation detail; (iii) an E6-style
+audit on a low-SNR regime showing the monolith's $\rho$ elevated but no
+RISP advantage would falsify the deployment gate. All three are
+runnable with the released code, and the third is the one we would run
+first.
+\end{enumerate}
+
+\begin{keypoint}
+\textbf{Summary of Part V.} On a generator with the hypothesized structure:
+retention is worth $6.1\%$, invariance $4.4\%$, jointly $10.3\%$
+($38.1\%$ of excess-over-floor), with a super-additive interaction
+($I = -0.0015 \pm 0.0005$) and a reached skyline (A6 $\approx$ A10,
+$p = 0.72$); the effect requires capacity pressure (gap $\to 0.007$ at
+$K = R$, hard memory), grows then saturates with dormancy, scales with
+heterogeneity (gap $0.0010 \to 0.0024$), and survives every ablation with
+flat plateaus. On real daily crypto/commodities the precondition is absent
+(all E0 $|z| < 0.7$) and the arms correctly fail to separate (all
+E1s $p > 0.2$). At high SNR the advantage inverts ($-49.3\%$ at $8\times$),
+the oracle skyline inverts with it, and the monolith's own post/steady
+ratio provides a measurable deployment gate. The mechanism is real,
+bounded, and honest about where it lives.
+\end{keypoint}

@@ -1,0 +1,2 @@
+block counts: {0: 15, 1: 13, 2: 7, 3: 9}
+[saved] /Users/yuhaoli/Desktop/Summer 2026/IDea 1/results/e1s_stitched_crypto.json
