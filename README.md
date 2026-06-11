@@ -134,6 +134,7 @@ The full battery reruns in **under an hour on a laptop**. Every experiment write
 | [`paper/RISP Explainer.pdf`](paper/RISP%20Explainer.pdf) | Explanatory companion (18 pp): architecture, worked demos, applications, when-not-to-use |
 | [`paper/Deep Dive.pdf`](paper/Deep%20Dive.pdf) | Mathematical deep dive (80 pp): every proof from first principles, full experimental tables, code walkthrough |
 | [`NEXT_STEPS_AND_REVIEW.pdf`](NEXT_STEPS_AND_REVIEW.pdf) | Frank self-review: what's strong, what a referee will attack, deferred items + costs |
+| [`CHANGELOG.md`](CHANGELOG.md) | The research journey, including everything that went against us |
 
 ---
 
