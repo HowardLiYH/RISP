@@ -170,7 +170,7 @@ def dormancy_diag(sched):
     return out
 
 
-def main():
+def main(seeds=20):
     ret, dropped = load_french_vw()
     print(f"panel: {ret.shape[0]} days x {ret.shape[1]} industries "
           f"(dropped {dropped})", flush=True)
@@ -211,7 +211,7 @@ def main():
             diag = dormancy_diag(sched)
             print(f"[dissoc/wf] labeler={lname} dormancy diag: {diag}",
                   flush=True)
-            for s in range(20):
+            for s in range(seeds):
                 for a in ARMS:
                     arm = ARM_FACTORIES[a](cfg, np.random.default_rng(
                         911 * s + 13), 2, "hard")
@@ -230,7 +230,7 @@ def main():
             others = [r for r in range(4) if r != rare and counts[r] > 0]
             diag = {"block_counts": counts, "rare": rare}
             print(f"[dissoc/st] blocks={counts} rare={rare}", flush=True)
-            for s in range(20):
+            for s in range(seeds):
                 rng = np.random.default_rng(4000 + s)
                 seq = []
                 for cyc in range(16):

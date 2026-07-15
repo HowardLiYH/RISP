@@ -1,0 +1,46 @@
+{
+ "real_mean_regret": 0.010486772689023283,
+ "shuffled_mean_regret": 0.011646805723804131,
+ "pooled_mean_regret": 0.01170503416611982,
+ "gap_pct": 9.96009603139797,
+ "cond_vs_pooled_pct": 10.408012994261144,
+ "z_vs_shuffled": 23.467165696512694,
+ "p_one_sided": 3.820319102320871e-69,
+ "n_shuffle": 50,
+ "split_half": {
+  "first_half": {
+   "gap_pct": 9.166873375514122,
+   "z": 40.09463134848029
+  },
+  "second_half": {
+   "gap_pct": 10.741015675583784,
+   "z": 14.40846260029525
+  }
+ },
+ "regime_counts": {
+  "0": 7424,
+  "1": 2659,
+  "2": 3353,
+  "3": 3547
+ },
+ "PASS": true,
+ "window": [
+  "1926-07-01",
+  "1989-12-31"
+ ],
+ "dropped_industries": [
+  "Soda",
+  "Toys",
+  "Books",
+  "Hlth",
+  "MedEq",
+  "Rubbr",
+  "FabPr",
+  "Guns",
+  "Gold",
+  "PerSv",
+  "Softw",
+  "LabEq",
+  "Paper"
+ ]
+}

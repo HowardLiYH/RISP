@@ -35,7 +35,7 @@ def label_L3(px, dd_thresh=0.15, trend_win=50):
     return (crisis * 2 + (1 - up)).values
 
 
-def main():
+def main(seeds=20):
     ret, dropped = load_french_vw()
     X, Y, idx = build_xy_returns(ret)
     px = price_panel(ret)
@@ -63,7 +63,7 @@ def main():
             sched = mkt.schedule()
             diag = dormancy_diag(sched)
             print(f"[L3/wf] dormancy diag: {diag}", flush=True)
-            for s in range(20):
+            for s in range(seeds):
                 for a in ARMS:
                     arm = ARM_FACTORIES[a](cfg, np.random.default_rng(
                         1311 * s + 17), 2, "hard")
@@ -84,7 +84,7 @@ def main():
             others = [r for r in range(4) if r != rare and counts[r] > 0]
             diag = {"block_counts": counts, "rare": rare}
             print(f"[L3/st] blocks={counts} rare(crisis)={rare}", flush=True)
-            for s in range(20):
+            for s in range(seeds):
                 rng = np.random.default_rng(5000 + s)
                 seq = []
                 for cyc in range(16):
