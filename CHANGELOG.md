@@ -339,3 +339,85 @@ targets the fourth.
   state of E1f-L3: event-robust (LORO), specification-fragile (sweep),
   single-history. CRSP + NBER-anchored labeler are the discriminating
   forward tests.
+
+---
+
+## v1.2.0-dev — The addenda D–F wave: costs, replay, mechanism honesty, emergent forgetting, and the withheld era
+
+**Date**: 2026-07-15 (results integrated into `paper/main.tex`; see
+PREREG_FRENCH49.md addenda D, E, and F for the registrations and verdicts)
+
+One integration pass over the completed D/E-series batteries. E1f is
+rewritten as the paper's real-data centerpiece around Addendum F's
+synthesis; all quoted numbers recomputed from the result JSONs and the
+audit manifest extended (347 claims, all PASS).
+
+1. **100-seed parity (D6, `results_100seed/e_french49_*.json`).** L3
+   walk-forward Γ = +0.00089 ± 0.00011 with the full ordering (joint Holm
+   5.2e-65, −5.5%); L1 inversion stands with Γ now negative-significant
+   (−0.00013 ± 0.00007, headline Holm 1.2e-26). New wrinkle disclosed:
+   both stitched Γ turn marginally positive (≈+0.00023) with flat arm
+   families (min raw p 0.50/0.34). Bonferroni ×3 caveat updated: every
+   primary claim and all three L1 inversion pairs now survive.
+2. **Costs (D3, `results/e_french49_L3_costs.json`).** Γ_net strengthens
+   with tier: +0.00126/+0.00161/+0.00230 at 25/50/100 bps (both-pay
+   convention; orderings hold at every tier, Holm down to 4.6e-19 at
+   25 bps); mechanism confirmed (A1 churn 1.03/day vs A6 0.62). **The L1
+   inversion REVERSES net of costs** (A6 beats A1, p=1.2e-16) — the
+   inversion, not the deficit, was the gross-only phenomenon. Gate-1 cost
+   slice lodged as sensitivity (L3 pooled sub-criterion −0.10% gross →
+   +3.0% net; gate 1 as registered remains a gross FAIL). Caveat (iv)
+   rewritten: costs are now measured, not deferred, for L3/L1.
+3. **Replay (D1/D2, `results/e1_replay.json`,
+   `results/e_french49_L3_replay.json`).** Synthetic: decoupled buffer +
+   generous burst refit closes only 56.3% of the deficit (< the lodged
+   60% — eviction-coupling stronger than the theory requires) and stays
+   ≪ A6 (p=7.0e-14); replay+INV beats A9 but loses to A6 (Holm 0.040)
+   and A10 (Holm 0.017). A1r rows added to Table 1 (conventions match;
+   shared arms reproduce to quoted precision). French L3: replay collects
+   ~99% of the deficit yet A6 beats replay (Holm 0.013) and replay+INV
+   (Holm 4.5e-4) — data retention matches parameter retention against the
+   ERM oracle; the pool still wins.
+4. **Mechanism honesty (E-X1/E-X3, `results/e_french49_L3_x1.json`).**
+   No dormancy/rehearsal covariate explains Γ_i (all registered slopes
+   n.s.; overlap dilution ≤4.4%); the 15% gap does not decay across the
+   probe (R²<0.2) — a level offset, not a relearning transient. The
+   registered RENAME executed in the paper: on real data the measured
+   quantity is a **regime-conditional allocation deficit**;
+   eviction-forgetting remains demonstrated only in the controlled
+   settings. Symbol and definition of Γ̂ unchanged.
+5. **E-X4 → new §E1m (`results/e_x4_mlp.json`).** Shared trunk 20→32→32,
+   nothing evicted, identical architecture across arms: Γ-mlp =
+   +0.01009 ± 0.00037 (100 seeds, p=1.9e-78), reactivation-localized
+   (~4× probe vs steady); competition pins 3/4 regimes every seed and
+   matches the oracle. Honest null: invariance effect absent under the
+   MLP (p=0.13). Lodged divergence at full prominence: the E6 inversion
+   does not reproduce at 4× SNR (Γ grows ~5×), with the recorded
+   single-readout architectural caveat — the linear E6 boundary stands
+   as the linear result. "Forgetting is coded, not emergent" is answered.
+6. **The withheld era (E-F, `results/e_french49_prewar_L3_*.json`).**
+   36 industries, 1926–1989, frozen 15% spec, zero new researcher degrees
+   of freedom. Gate 1's strongest pass ever (z=23.5) coincides with an
+   inversion at 15% (Γ=−0.00024±0.00008) → gate 1 demoted to a structure
+   screen. **Sign-rule scorecard: 5/6 withheld cells consistent in both
+   directions**, incl. two positive-side full orderings (10% Holm 1.9e-6;
+   1958–89 Holm 2.1e-4); the 12% conservative miss reported under both
+   scorings (weak-form hit / strong-form miss). Fragility replicates in
+   pattern but the window RELOCATES (15%→10%) with crisis density (41%
+   vs 13% crisis-union days); both simple readings (fixed-threshold
+   artifact; naive granularity) refuted as stated.
+7. **Paper-wide reconciliation.** Abstract rewritten around the new
+   record (same caveat prominence, no growth); C4/C5, register paragraph,
+   E1 (replay paragraph + Table 1 rows), E1s arm-count note, stats
+   (seed counts per battery; costs inside the metric for E1f),
+   Synthesis (the four surviving claims), Limitations (multi-era but one
+   country/one aggregate; mechanism attribution open, CRSP + NBER as
+   deciders). references.bib: + Kumar et al. (FnT ML 2025, average-reward
+   CL thesis Γ̂ operationalizes) and Capitaine et al. (ICLR 2026, online
+   DFL regret, drift-only) with one differentiation line each; ReCAP
+   deliberately NOT added pending a full read (TODO comment in source).
+8. **Audit.** `code/audit_manifest.json`: 37 stale claims replaced,
+   112 claims added (replay closures, cost tiers, prewar cells,
+   sign-rule count as an eq-claim, X4 Γ, 100-seed values, stitched
+   wrinkle). `python3 code/audit_numbers.py`: **347 claims checked,
+   347 PASS**. main.tex recompiles clean.
