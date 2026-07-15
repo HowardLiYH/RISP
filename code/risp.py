@@ -533,6 +533,176 @@ class RISPArm(ArmBase):
             self._close_window()
 
 
+class RISPTriggerArm(RISPArm):
+    """A6t: A6-risp-inv plus a GAUSE-style STALENESS TRIGGER.
+
+    Purely additive: not registered in ARM_FACTORIES (so no existing
+    experiment's arm list or output changes); until the first trigger fire
+    the trajectory is bit-identical to RISPArm(mode="inv") because the
+    trigger only reads decisions and trains a private probe.
+
+    Motivation (E6): once regime r is pinned, ownership is reward-
+    independent -- the owner keeps serving r even when the environment is so
+    easily learnable that a fresh learner recalibrates within days and the
+    owner's retained multi-episode state is a liability (the high-SNR
+    inversion, -49% at 8x SNR). GAUSE's remedy (GAUSE repo,
+    experiments/exp_intra_regime_drift.py): when the pinned owner is
+    CONFIDENTLY underperforming on its own niche, reset that regime's stale
+    beliefs toward the prior and soften the owner's affinity so competition
+    re-opens.
+
+    Statistic. While r is pinned we keep the same per-day window bookkeeping
+    the competition phase uses (decision regret of every candidate,
+    aggregated over Wt = Wc in-regime days), with one extra non-serving
+    candidate: a RECALIBRATION PROBE -- a private fresh ERM Specialist,
+    reset at every episode change of r and trained only on current-episode
+    data (exactly the "fresh learner" whose break-even speed E6 measures).
+    Rivals never train on r while it is pinned (owner-only training), so the
+    probe supplies the counterfactual the pool alone cannot express; rivals
+    still holding a head for r are evaluated alongside it (prediction only --
+    rivals are never trained or otherwise mutated here). Days on which the
+    probe has seen < probe_burn days of the current episode are excluded
+    from BOTH series (paired comparison on probe-warm days only), so probe
+    cold-starts cannot mask or fake staleness.
+
+    Rule. Exactly like _close_window, every candidate's regret is
+    accumulated separately over the window and candidates are compared by
+    WINDOW MEAN (never by per-day minima, which would select noise and
+    bias the alternative downward). Let c* be the candidate (probe or
+    rival) with the best window mean and d_t = owner_t - c*_t the paired
+    daily differences. A shadow window (Wt paired days) is a LOSS for the
+    owner iff both
+      (a) mean(owner) > (1 + stale_margin) * mean(c*)      [economic margin]
+      (b) mean(d) > z_thresh * sd(d) / sqrt(Wt)      [statistical confidence]
+    After stale_k CONSECUTIVE losing windows the owner is declared stale
+    (GAUSE reset_regime analogue -- reset beliefs, soften identity,
+    re-open the niche):
+      (i)   UNPIN r: competition re-opens; r may re-pin later under the
+            normal, unchanged pin rule;
+      (ii)  soften the owner's affinity row toward uniform
+            (0.5 * alpha + 0.5 * 1/R -- GAUSE's reset_regime softening);
+      (iii) reset the owner's beliefs for r to the demonstrated fresh fit:
+            copy the probe's head into the owner's head for r and drop the
+            owner's stale episode buffer for r down to the current episode.
+            (GAUSE resets beliefs to the flat prior; here a zeroed head
+            would serve empty portfolios for a full window, so the reset
+            target is the probe -- the very model whose confident
+            superiority triggered the fire. With a single buffered episode
+            Specialist.learn falls back to plain ERM, i.e. the owner
+            keeps recalibrating like a fresh learner.)
+      (iv)  PROBATION: until r is re-pinned, the serving affinity leader
+            additionally trains daily on r exactly as a pinned owner would.
+            risp.py's batched competition trains only at window closes,
+            so without this the re-opened niche would be served for whole
+            windows with no adaptation at all -- a cold-start artifact of
+            the batching, not part of the mechanism under test. Windows,
+            EG updates and the pin rule run unchanged during probation.
+
+    Conservative defaults: Wt = Wc = 20 in-regime paired days per window;
+    stale_k = 3 (>= 60 in-regime days of confident evidence per fire);
+    stale_margin = 0.25 (the fresh alternative must be >= 25% better --
+    comfortably above the ~15% fresh-vs-retained steady gap at the measured
+    2x-SNR crossover, so the trigger stays silent where retention pays);
+    z_thresh = 2.0; probe_burn = 5 (upper end of the measured 2-5 day fresh
+    refit time).
+    """
+
+    def __init__(self, cfg, rng, stale_k=3, stale_margin=0.25,
+                 z_thresh=2.0, probe_burn=5, Wt=None, **kw):
+        kw.setdefault("mode", "inv")
+        super().__init__(cfg, rng, **kw)
+        self.stale_k = stale_k
+        self.stale_margin = stale_margin
+        self.z_thresh = z_thresh
+        self.probe_burn = probe_burn
+        self.Wt = Wt if Wt is not None else self.Wc
+        self._tr_owner: dict[int, list] = {}   # r -> owner daily regrets
+        self._tr_cand: dict[int, list] = {}    # r -> daily (N+1)-vectors:
+                                               #      rivals 0..N-1 (inf at
+                                               #      owner slot), probe at N
+        self._tr_streak: dict[int, int] = {}   # r -> consecutive losing windows
+        self._probe: dict[int, Specialist] = {}
+        self._probe_ep: dict[int, int] = {}
+        self._probe_days: dict[int, int] = {}  # r -> days probe has seen of ep
+        self._reopened: set = set()            # regimes on probation
+        self.n_unpins = 0
+        self.name = "risp-inv-trigger"
+
+    def observe(self, X, y, r, e, served_regret):
+        if r not in self.pinned:
+            super().observe(X, y, r, e, served_regret)
+            if r in self._reopened:
+                if r in self.pinned:           # re-pinned at a window close
+                    self._reopened.discard(r)
+                else:
+                    # probation: the serving leader recalibrates daily,
+                    # exactly as a pinned owner would (see class docstring iv)
+                    self.specs[self._owner(r)].learn(X, y, r, e)
+            return
+        owner = self.pinned[r]
+        # --- recalibration probe: fresh ERM learner on the current episode
+        if self._probe_ep.get(r) != e:
+            self._probe[r] = Specialist(
+                self.specs[owner].d, 1, self.k, self.w_max,
+                np.random.default_rng(self.rng.integers(2 ** 31)),
+                mode="erm")
+            self._probe_ep[r] = e
+            self._probe_days[r] = 0
+        probe = self._probe[r]
+        if self._probe_days[r] >= self.probe_burn:
+            cand = np.full(self.N + 1, np.inf)
+            for i in range(self.N):
+                # only rivals actually holding a head for r are candidates;
+                # predict() on a missing head draws from the rival's rng and
+                # would perturb its later training (never mutate rivals here)
+                if i != owner and self.specs[i].holds(r):
+                    cand[i] = regret(self.specs[i].predict(X, r), y,
+                                     self.k, self.w_max)
+            cand[self.N] = regret(probe.predict(X, r), y, self.k, self.w_max)
+            self._tr_owner.setdefault(r, []).append(served_regret)
+            self._tr_cand.setdefault(r, []).append(cand)
+        probe.learn(X, y, r, e)
+        self._probe_days[r] += 1
+        # owner trains exactly as in the base pinned path
+        self.specs[owner].learn(X, y, r, e)
+        if len(self._tr_owner.get(r, [])) >= self.Wt:
+            self._close_shadow_window(r, owner, e)
+
+    def _close_shadow_window(self, r, owner, e):
+        own = np.asarray(self._tr_owner[r])
+        cand = np.vstack(self._tr_cand[r])          # (Wt, N+1)
+        j_star = int(np.argmin(cand.mean(axis=0)))  # best candidate by
+        alt = cand[:, j_star]                       # WINDOW MEAN, as in
+        d = own - alt                               # _close_window
+        sd = d.std(ddof=1) if len(d) > 1 else 0.0
+        confident = (d.mean() > self.z_thresh * sd / np.sqrt(len(d))
+                     if sd > 0 else d.mean() > 0)
+        losing = (own.mean() > (1.0 + self.stale_margin) * alt.mean()
+                  and confident)
+        self._tr_streak[r] = self._tr_streak.get(r, 0) + 1 if losing else 0
+        self._tr_owner[r] = []
+        self._tr_cand[r] = []
+        if self._tr_streak[r] < self.stale_k:
+            return
+        # confidently stale: re-open the niche (GAUSE reset_regime analogue)
+        del self.pinned[r]
+        self.alpha[owner] = 0.5 * self.alpha[owner] + 0.5 / self.R
+        probe = self._probe.get(r)
+        if probe is not None and probe.holds(r) and r in self.specs[owner].heads:
+            self.specs[owner].heads[r].w = probe.heads[r].w.copy()
+            self.specs[owner].heads[r].strength = 1.0
+        buf = self.specs[owner].buf.get(r)
+        if buf is not None:
+            for key in [q for q in buf if q != e]:
+                del buf[key]
+        self._reopened.add(r)
+        self._tr_streak[r] = 0
+        self._probe.pop(r, None)
+        self._probe_ep.pop(r, None)
+        self._probe_days.pop(r, None)
+        self.n_unpins += 1
+
+
 class HedgeFixedArm(ArmBase):
     """A8a: Hedge / exponential weights over FIXED strategies (no learning).
     The adaptive online-learning baseline over static experts."""
@@ -606,8 +776,16 @@ ARM_FACTORIES = {
 
 
 def run_arm(arm: ArmBase, market, sched: Schedule, cfg,
-            probe: int = 15, min_dormancy: int = 90):
-    """Run one arm through the schedule; return metric dict."""
+            probe: int = 15, min_dormancy: int = 90,
+            collect_react: bool = False):
+    """Run one arm through the schedule; return metric dict.
+
+    collect_react=False (default) leaves the output exactly as before.
+    collect_react=True adds "react_detail": a list of per-reactivation dicts
+    {t_start, regime, dormancy, mean_probe_regret, n_days} for every
+    qualifying reactivation whose probe window intersects the evaluated
+    second half (days >= T/2), with the window mean taken over exactly the
+    days that enter the aggregate post_react (clipped to [half, T))."""
     T = sched.T
     daily = np.zeros(T)
     for t in range(T):
@@ -632,7 +810,7 @@ def run_arm(arm: ArmBase, market, sched: Schedule, cfg,
             late_mask[t + probe:t1 + 1] = True
         t = t1 + 1
     half = int(T * 0.5)
-    return {
+    out = {
         "overall": float(daily[half:].mean()),
         "post_react": float(daily[probe_mask & (np.arange(T) >= half)].mean())
         if (probe_mask & (np.arange(T) >= half)).any() else float("nan"),
@@ -641,6 +819,21 @@ def run_arm(arm: ArmBase, market, sched: Schedule, cfg,
         "daily": daily,
         "react_days": [t0 for t0 in react if t0 >= half],
     }
+    if collect_react:
+        detail = []
+        for t0 in react:
+            lo, hi = max(int(t0), half), min(int(t0) + probe, T)
+            if hi <= lo:
+                continue  # probe window entirely inside the burn-in half
+            detail.append({
+                "t_start": int(t0),
+                "regime": int(sched.regimes[t0]),
+                "dormancy": int(sched.dormancy[t0]),
+                "mean_probe_regret": float(daily[lo:hi].mean()),
+                "n_days": int(hi - lo),
+            })
+        out["react_detail"] = detail
+    return out
 
 
 # ----------------------------------------------------------------------------

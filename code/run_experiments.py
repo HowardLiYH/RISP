@@ -14,8 +14,8 @@ import numpy as np
 
 from risp import (SynthConfig, SyntheticMarket, make_schedule,
                       make_dormancy_schedule, run_arm, ARM_FACTORIES,
-                      RISPArm, MonolithArm, welch, holm, ci95, regret,
-                      solve_topk)
+                      RISPArm, RISPTriggerArm, MonolithArm, welch, holm,
+                      ci95, regret, solve_topk)
 
 RESULTS = Path(__file__).resolve().parents[0] / ".." / "results"
 RESULTS.mkdir(exist_ok=True)
@@ -230,6 +230,65 @@ def e6(seeds=SEEDS, K=2):
 
 
 # ============================================================================
+# E6t — staleness-trigger remedy for the E6 high-SNR inversion
+# Same SNR sweep, same seeds/schedules/markets as e6(); compares the fresh
+# monolith (A1), pin-forever RISP (A6) and RISP + GAUSE-style staleness
+# trigger (A6t).  A6t is registered LOCALLY, not in ARM_FACTORIES, so that
+# e1()'s default arm list — and every existing result file — is untouched.
+# ============================================================================
+
+def e6t(seeds=SEEDS, K=2):
+    arms = ["A1-monolith-erm", "A6-risp-inv", "A6t-risp-trigger"]
+    factories = dict(ARM_FACTORIES)
+    factories["A6t-risp-trigger"] = (
+        lambda cfg, rng, K, mem: RISPTriggerArm(cfg, rng, K=K, memory=mem))
+    trig_defaults = {"Wt": 20, "stale_k": 3, "stale_margin": 0.25,
+                     "z_thresh": 2.0, "probe_burn": 5,
+                     "fire_action": "unpin; soften owner affinity row to "
+                                    "0.5*alpha + 0.5/R; reset owner beliefs "
+                                    "for r to the recalibration probe (head "
+                                    "copy) and drop stale episode buffer to "
+                                    "the current episode; probation until "
+                                    "re-pin (serving leader trains daily). "
+                                    "See RISPTriggerArm docstring."}
+    out = {"config": {"seeds": seeds, "K": K, "probe": PROBE,
+                      "min_dormancy": MIN_DORM, "trigger": trig_defaults}}
+    t0 = time.time()
+    for snr in (0.5, 1.0, 2.0, 4.0, 8.0):
+        res = {a: {"post_react": [], "steady": []} for a in arms}
+        unpins = []
+        for s in range(seeds):
+            cfg = SynthConfig(snr_mult=snr)
+            rng = np.random.default_rng(1000 + s)
+            sched = make_schedule(rng)
+            for a in arms:
+                mkt = SyntheticMarket(cfg, seed=5000 + s)
+                arm = factories[a](cfg, np.random.default_rng(99 * s + 7),
+                                   K, "hard")
+                m = run_arm(arm, mkt, sched, cfg, probe=PROBE,
+                            min_dormancy=MIN_DORM)
+                res[a]["post_react"].append(m["post_react"])
+                res[a]["steady"].append(m["steady"])
+                if a == "A6t-risp-trigger":
+                    unpins.append(getattr(arm, "n_unpins", 0))
+        pv = {}
+        for metric in ("post_react", "steady"):
+            for a, b in (("A6t-risp-trigger", "A6-risp-inv"),
+                         ("A6t-risp-trigger", "A1-monolith-erm")):
+                _, p = welch(res[a][metric], res[b][metric])
+                pv[f"{a} vs {b} ({metric})"] = p
+        out[snr] = {k: summarize({a: res[a][k] for a in arms})
+                    for k in ("post_react", "steady")}
+        out[snr]["welch_p"] = pv
+        out[snr]["mean_unpins_per_run"] = float(np.mean(unpins))
+        out[snr]["raw"] = {a: res[a] for a in arms}
+        print(f"snr={snr} done ({time.time()-t0:.0f}s); "
+              f"A6t unpins/run={np.mean(unpins):.2f}")
+    save("e6_trigger", out)
+    return out
+
+
+# ============================================================================
 # E0 — structure diagnostic on real data (decision-regret metric)
 # ============================================================================
 
@@ -388,4 +447,4 @@ if __name__ == "__main__":
         if a == "--seeds":
             seeds = int(sys.argv[i + 1])
     {"e0": e0, "e1": e1, "e1s": e1s, "e2": e2,
-     "e3": e3, "e4": e4, "e5": e5, "e6": e6}[which](seeds=seeds)
+     "e3": e3, "e4": e4, "e5": e5, "e6": e6, "e6t": e6t}[which](seeds=seeds)
