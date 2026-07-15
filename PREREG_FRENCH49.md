@@ -218,3 +218,60 @@ revised toward it — reported at full prominence either way.
   single-event and all-of-2020 exclusions; era-consistent) but
   specification-fragile (threshold ±5pp kills it) on one history. Forward
   discriminating tests: CRSP constituents; NBER-anchored labeler.
+
+---
+
+# PRE-REGISTRATION D — replay, costs, A3′, CVaR panel, seed parity (written 2026-07-15 BEFORE any of these runs; predictions with probabilities)
+
+- **D1 (replay, synthetic; ~70%/85%):** We predict a monolith with its
+  replay buffer decoupled from head eviction closes at least 60% of the
+  A1−A9 deficit (landing within CI of A9's 0.0322) while remaining
+  significantly worse than A6 (0.0308); if replay+INV also matches A6,
+  that confirms Proposition 1(ii)'s isolation reading — retention bought
+  in data space at O(buffer) memory instead of O(d) parameters — and the
+  pool's surviving claim is emergent assignment under capacity, not raw
+  performance; if replay fails to close the deficit, the eviction-coupling
+  mechanism is stronger than the theory requires and is reported as such.
+- **D2 (replay, French L3; ~50%):** We predict replay-ERM collects most of
+  the L3 deficit (Γ over the replay monolith n.s.) while A6 still beats
+  it, mirroring A6-vs-A9. Pre-committed branches: replay matching or
+  beating A6 relabels the E1f headline as "retention, however implemented,
+  prices the pool" and withdraws the pool-specific superiority claim in
+  both papers; replay failing on L3 (decade-stale crisis buffers) is
+  reported as the first substrate where parameter retention beats data
+  retention.
+- **D3 (costs; ~70% probe survives, ~65% overall does not):** We predict
+  the L3 probe-window ordering and Γ survive 25 bps crisis-window
+  effective costs and strengthen with the cost tier, because a reactivated
+  monolith's near-uninformed predictions churn the top-5 hardest exactly
+  when spreads are widest; if the ordering dies at 25 bps, every E1f
+  decision-layer claim is relabeled gross-only in both papers, per the
+  standing commitment; the overall-regret margin (0.00011/day) is declared
+  exploratory NOW and is expected not to survive cost adjustment.
+- **D4 (A3′; ~50%):** We predict A3′ (reward-driven capital,
+  reward-independent training) lands strictly between A3 and A5 — the
+  organizational-carrier dissociation: expertise retained, deployment
+  starved. A3′ ≈ A5 corrects the A3 narrative to training starvation
+  alone; A3′ ≈ A3 establishes that capital routing by itself destroys the
+  value of retained expertise.
+- **D5 (CVaR panel; ~65%):** We predict the A5−A6 gap concentrates in the
+  upper quantiles of per-reactivation regret (q75/q90/CVaR gaps exceeding
+  the median gap) on the synthetic 100-seed battery, per the revised
+  Proposition 3's interpretation; a uniform shift demotes that
+  interpretation to an unconfirmed bound and is reported as such; the
+  French-L3 quantile panel (27 events) is declared descriptive-only in
+  advance.
+- **D6 (seed parity; ~70% E1r null):** We predict E1f outcomes unchanged
+  at 100 seeds and E1r-4H still null under the pre-registered Holm family.
+  Pre-committed: a significant A6-over-A1 separation at Γ≈0 on 4H refutes
+  the revised sign rule a third time and will be reported at headline
+  prominence; a significant inversion there would instead be the sign
+  rule's fourth consistent cell.
+- **Implementation register for D1/D2:** decoupling = remove the buffer
+  eviction in Specialist._touch (buffer survives head eviction) plus a
+  GENEROUS burst-refit at head recreation (full refit on the retained
+  buffer, not the 2-steps/day trickle) — committed in advance so the
+  deficit cannot "survive" as an artifact of our own SGD budget.
+- **Deferral rule (honest-tension flag):** D1/D2 run BEFORE the ICAIF
+  submission. If compute prevents it, the ICAIF text discloses the lodged,
+  unrun baseline at the same prominence as a result.
