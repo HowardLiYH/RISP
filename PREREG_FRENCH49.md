@@ -275,3 +275,63 @@ revised toward it — reported at full prominence either way.
 - **Deferral rule (honest-tension flag):** D1/D2 run BEFORE the ICAIF
   submission. If compute prevents it, the ICAIF text discloses the lodged,
   unrun baseline at the same prominence as a result.
+
+---
+
+# PRE-REGISTRATION E — mechanism probes and out-of-sample eras (written 2026-07-15 BEFORE any of these runs)
+
+- **E-X1 (rehearsal regression, within-event fixed effects):** Per-reactivation
+  deficit Γ_i (matched A1−A9, shared deterministic schedule) regressed on
+  {log cell-dormancy, log union-dormancy, rehearsal count R_i} across
+  thresholds {10,12,15,20%}, with event fixed effects exploiting the same
+  calendar crises appearing at multiple thresholds with different rehearsal
+  histories; cluster-robust SEs + Spearman backstops (n≈18–25/threshold).
+  Predictions: rehearsal reading (~40%) = Γ_i decreasing in R_i and
+  union-dormancy dominating cell-dormancy → E1f attribution revised toward
+  rehearsal, fragility becomes mechanism; dormancy reading (~40%) = cell-
+  dormancy dominates, R_i coefficient ≈0 → isolation story stands and the
+  10/12% nulls get a separate explanation (probe-overlap dilution, checkable
+  from n_days); neither (~20%) = Γ not localized in identifiable
+  reactivations → artifact warning at headline prominence.
+- **E-X2 (granularity-window map):** thresholds 8–22% ×1pp × hysteresis exit
+  bands {0,2,4,6pp}; tier 1 = A1/A9 Γ at 10 seeds, tier 2 = +A5/A6 at 20
+  seeds where tier-1 CI excludes 0. **Window criterion fixed now:** Γ CI>0
+  in ≥3 contiguous thresholds at some hysteresis level = window (granularity
+  reading vindicated); only 15±0 positive = island (artifact reading wins,
+  E1f demotes to one-specification-one-history); between = ambiguous,
+  reported without adjudication.
+- **E-X3 (relearning half-life):** per-day probe profiles regret(t0+j),
+  j=0..14, A1 vs A9, per threshold; exponential fit → τ(θ). Prediction
+  (~55%): τ(15%) ≳ probe window while τ(10/12%) ≲ 5 days — the E6 crossover
+  operating on real data; anti-branch: parallel/flat profiles mean the
+  deficit is a level offset, not a reactivation transient, and the
+  "forgetting" label is wrong (candidate rename: allocation deficit) —
+  reported plainly.
+- **E-X4 (CPU emergent forgetting):** shared trunk 20→32→32 + linear heads,
+  SAME architecture for all arms, NO eviction model — the monolith is one
+  trunk+head; A9 pins heads sharing the trunk; forgetting can arise ONLY as
+  representation interference. Minimal battery {A1,A5,A6,A9}, 20 seeds,
+  SNR 1×; full 100-seed + SNR {0.5,1,4}× if minimal is clean. Predictions:
+  Γ>0 emerges (~55%) → "coded, not emergent" objection dies; Γ≈0 (~45%) →
+  the synthetic deficit is an artifact of the hard-memory model and the
+  paper's synthetic headline takes a scope caveat at full prominence.
+- **E-F (withheld era 1926–1989):** byte-identical L3@15% battery + 10/12/20%
+  sweep on the 36 complete industries, window 1926-07-01–1989-12-31 (one
+  era primary; 1926–57/1958–89 split reported as robustness). Inherits the
+  lodged Γ-sign hypothesis and the frozen L3 spec — zero new researcher
+  degrees of freedom. Predictions: granularity reading (~50%) = Γ>0 with
+  ordering wherever the era contains multi-year crisis-cell dormancy, and
+  threshold-fragility REPLICATES in pattern; artifact reading = deficit
+  absent at 15% off-sample. Depression-era drawdowns (~85%) also probe the
+  20%-threshold branch with episodes the 1990–2025 window lacks.
+- **E-R (regional register):** the Γ-sign hypothesis will be tested on the
+  French international daily 25-portfolio panels in this fixed region
+  order: Japan, Europe, Asia-Pacific ex Japan, North America, Developed ex
+  US (k=5 of 25, w_max=0.2, same battery). Region-specific prediction
+  stated in advance: Japan's crisis-cell dormancy 1990–2012 is SHORT
+  (crisis frequent) → Γ_Japan ≈ 0 or negative expected; Europe's rarer
+  crises → positive Γ plausible. Sign-tracking is scored per region.
+- **Cost convention for D3 (fixed before the cost run):** both the arm and
+  the oracle benchmark pay costs (net regret = net-of-cost oracle utility
+  minus net-of-cost arm utility, turnover = 0.5·Σ|z_t − z_{t−1}|·2 sides);
+  the arm-only-pays variant is reported as sensitivity.
