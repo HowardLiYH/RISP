@@ -1,0 +1,1475 @@
+{
+ "config": {
+  "seeds": 20,
+  "K": 2,
+  "memory": "hard",
+  "probe": 15,
+  "min_dormancy": 90,
+  "k": 5,
+  "w_max": 0.2,
+  "dd_thresh": 0.15,
+  "seeding": "np.random.default_rng(1311*s+17) per arm",
+  "arms": [
+   "A1-monolith-erm",
+   "A5-risp-erm",
+   "A6-risp-inv",
+   "A9-oracle-pinned"
+  ]
+ },
+ "sanity_vs_headline": {
+  "A1-monolith-erm": {
+   "max_abs_diff": 0.0,
+   "match": true
+  },
+  "A5-risp-erm": {
+   "max_abs_diff": 0.0,
+   "match": true
+  },
+  "A6-risp-inv": {
+   "max_abs_diff": 0.0,
+   "match": true
+  },
+  "A9-oracle-pinned": {
+   "max_abs_diff": 0.0,
+   "match": true
+  }
+ },
+ "n_qualifying_reactivations": 27,
+ "overlap_days": 6,
+ "reactivation_inventory": [
+  {
+   "i": 0,
+   "t_start": 4614,
+   "date": "2008-09-15",
+   "year": 2008,
+   "era": "2000s",
+   "regime": 2,
+   "dormancy": 1333,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 1,
+   "t_start": 4961,
+   "date": "2010-02-01",
+   "year": 2010,
+   "era": "2010s",
+   "regime": 3,
+   "dormancy": 140,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 2,
+   "t_start": 5012,
+   "date": "2010-04-15",
+   "year": 2010,
+   "era": "2010s",
+   "regime": 0,
+   "dormancy": 453,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 3,
+   "t_start": 5139,
+   "date": "2010-10-14",
+   "year": 2010,
+   "era": "2010s",
+   "regime": 0,
+   "dormancy": 114,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 4,
+   "t_start": 5245,
+   "date": "2011-03-17",
+   "year": 2011,
+   "era": "2010s",
+   "regime": 1,
+   "dormancy": 638,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 5,
+   "t_start": 5345,
+   "date": "2011-08-09",
+   "year": 2011,
+   "era": "2010s",
+   "regime": 3,
+   "dormancy": 235,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 6,
+   "t_start": 5420,
+   "date": "2011-11-23",
+   "year": 2011,
+   "era": "2010s",
+   "regime": 2,
+   "dormancy": 275,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 7,
+   "t_start": 5521,
+   "date": "2012-04-20",
+   "year": 2012,
+   "era": "2010s",
+   "regime": 1,
+   "dormancy": 97,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 8,
+   "t_start": 5814,
+   "date": "2013-06-21",
+   "year": 2013,
+   "era": "2010s",
+   "regime": 1,
+   "dormancy": 134,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 9,
+   "t_start": 5967,
+   "date": "2014-01-30",
+   "year": 2014,
+   "era": "2010s",
+   "regime": 1,
+   "dormancy": 105,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 10,
+   "t_start": 6386,
+   "date": "2015-09-29",
+   "year": 2015,
+   "era": "2010s",
+   "regime": 3,
+   "dormancy": 964,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 11,
+   "t_start": 6411,
+   "date": "2015-11-03",
+   "year": 2015,
+   "era": "2010s",
+   "regime": 0,
+   "dormancy": 92,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 12,
+   "t_start": 6862,
+   "date": "2017-08-18",
+   "year": 2017,
+   "era": "2010s",
+   "regime": 1,
+   "dormancy": 193,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 13,
+   "t_start": 6983,
+   "date": "2018-02-12",
+   "year": 2018,
+   "era": "2010s",
+   "regime": 1,
+   "dormancy": 113,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 14,
+   "t_start": 7197,
+   "date": "2018-12-18",
+   "year": 2018,
+   "era": "2010s",
+   "regime": 3,
+   "dormancy": 709,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 15,
+   "t_start": 7495,
+   "date": "2020-02-26",
+   "year": 2020,
+   "era": "2020s",
+   "regime": 1,
+   "dormancy": 91,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 16,
+   "t_start": 7504,
+   "date": "2020-03-10",
+   "year": 2020,
+   "era": "2020s",
+   "regime": 3,
+   "dormancy": 295,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 17,
+   "t_start": 7554,
+   "date": "2020-05-20",
+   "year": 2020,
+   "era": "2020s",
+   "regime": 2,
+   "dormancy": 2134,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 18,
+   "t_start": 7667,
+   "date": "2020-10-29",
+   "year": 2020,
+   "era": "2020s",
+   "regime": 1,
+   "dormancy": 164,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 19,
+   "t_start": 7846,
+   "date": "2021-07-19",
+   "year": 2021,
+   "era": "2020s",
+   "regime": 1,
+   "dormancy": 177,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 20,
+   "t_start": 8053,
+   "date": "2022-05-12",
+   "year": 2022,
+   "era": "2020s",
+   "regime": 3,
+   "dormancy": 498,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 21,
+   "t_start": 8132,
+   "date": "2022-09-06",
+   "year": 2022,
+   "era": "2020s",
+   "regime": 2,
+   "dormancy": 551,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 22,
+   "t_start": 8421,
+   "date": "2023-10-30",
+   "year": 2023,
+   "era": "2020s",
+   "regime": 3,
+   "dormancy": 155,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 23,
+   "t_start": 8570,
+   "date": "2024-06-04",
+   "year": 2024,
+   "era": "2020s",
+   "regime": 1,
+   "dormancy": 128,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 24,
+   "t_start": 8708,
+   "date": "2024-12-19",
+   "year": 2024,
+   "era": "2020s",
+   "regime": 1,
+   "dormancy": 93,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 25,
+   "t_start": 8780,
+   "date": "2025-04-07",
+   "year": 2025,
+   "era": "2020s",
+   "regime": 3,
+   "dormancy": 359,
+   "n_probe_days_counted": 15
+  },
+  {
+   "i": 26,
+   "t_start": 8927,
+   "date": "2025-11-05",
+   "year": 2025,
+   "era": "2020s",
+   "regime": 1,
+   "dormancy": 122,
+   "n_probe_days_counted": 15
+  }
+ ],
+ "contrasts": {
+  "A1_minus_A9": {
+   "full": {
+    "mean": 0.0009136682557750011,
+    "ci95": 0.0002008175103508379,
+    "n_react": 27,
+    "n_days": 399
+   },
+   "per_reactivation_gamma": [
+    {
+     "i": 0,
+     "date": "2008-09-15",
+     "year": 2008,
+     "era": "2000s",
+     "regime": 2,
+     "dormancy": 1333,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0026997455173515513,
+     "gamma_i_ci95": 0.0022094343007409804
+    },
+    {
+     "i": 1,
+     "date": "2010-02-01",
+     "year": 2010,
+     "era": "2010s",
+     "regime": 3,
+     "dormancy": 140,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0005682932070433067,
+     "gamma_i_ci95": 0.0013586637507862372
+    },
+    {
+     "i": 2,
+     "date": "2010-04-15",
+     "year": 2010,
+     "era": "2010s",
+     "regime": 0,
+     "dormancy": 453,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.001158928820464891,
+     "gamma_i_ci95": 0.0011155338573432803
+    },
+    {
+     "i": 3,
+     "date": "2010-10-14",
+     "year": 2010,
+     "era": "2010s",
+     "regime": 0,
+     "dormancy": 114,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -0.00048048309097628177,
+     "gamma_i_ci95": 0.0006701522550172605
+    },
+    {
+     "i": 4,
+     "date": "2011-03-17",
+     "year": 2011,
+     "era": "2010s",
+     "regime": 1,
+     "dormancy": 638,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -0.000628971984946728,
+     "gamma_i_ci95": 0.0006356678988260491
+    },
+    {
+     "i": 5,
+     "date": "2011-08-09",
+     "year": 2011,
+     "era": "2010s",
+     "regime": 3,
+     "dormancy": 235,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.00045101507668760915,
+     "gamma_i_ci95": 0.0017808339394508887
+    },
+    {
+     "i": 6,
+     "date": "2011-11-23",
+     "year": 2011,
+     "era": "2010s",
+     "regime": 2,
+     "dormancy": 275,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.003517206790297777,
+     "gamma_i_ci95": 0.0009523556860047307
+    },
+    {
+     "i": 7,
+     "date": "2012-04-20",
+     "year": 2012,
+     "era": "2010s",
+     "regime": 1,
+     "dormancy": 97,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0015585453843450262,
+     "gamma_i_ci95": 0.000588320915940786
+    },
+    {
+     "i": 8,
+     "date": "2013-06-21",
+     "year": 2013,
+     "era": "2010s",
+     "regime": 1,
+     "dormancy": 134,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -3.2232956637701617e-05,
+     "gamma_i_ci95": 0.0008762832799294957
+    },
+    {
+     "i": 9,
+     "date": "2014-01-30",
+     "year": 2014,
+     "era": "2010s",
+     "regime": 1,
+     "dormancy": 105,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0004697614203534274,
+     "gamma_i_ci95": 0.000859672015143568
+    },
+    {
+     "i": 10,
+     "date": "2015-09-29",
+     "year": 2015,
+     "era": "2010s",
+     "regime": 3,
+     "dormancy": 964,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0002469010125025423,
+     "gamma_i_ci95": 0.0006975778998895531
+    },
+    {
+     "i": 11,
+     "date": "2015-11-03",
+     "year": 2015,
+     "era": "2010s",
+     "regime": 0,
+     "dormancy": 92,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.003828415832468863,
+     "gamma_i_ci95": 0.0006277731613893806
+    },
+    {
+     "i": 12,
+     "date": "2017-08-18",
+     "year": 2017,
+     "era": "2010s",
+     "regime": 1,
+     "dormancy": 193,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.00013162382627993394,
+     "gamma_i_ci95": 0.0004351018334137869
+    },
+    {
+     "i": 13,
+     "date": "2018-02-12",
+     "year": 2018,
+     "era": "2010s",
+     "regime": 1,
+     "dormancy": 113,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -0.0005801264872241361,
+     "gamma_i_ci95": 0.0007449156962608983
+    },
+    {
+     "i": 14,
+     "date": "2018-12-18",
+     "year": 2018,
+     "era": "2010s",
+     "regime": 3,
+     "dormancy": 709,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0005113852715105836,
+     "gamma_i_ci95": 0.0006104516165221181
+    },
+    {
+     "i": 15,
+     "date": "2020-02-26",
+     "year": 2020,
+     "era": "2020s",
+     "regime": 1,
+     "dormancy": 91,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.007447831955314432,
+     "gamma_i_ci95": 0.0025413424252865384
+    },
+    {
+     "i": 16,
+     "date": "2020-03-10",
+     "year": 2020,
+     "era": "2020s",
+     "regime": 3,
+     "dormancy": 295,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.006048781473485994,
+     "gamma_i_ci95": 0.0018207963758261239
+    },
+    {
+     "i": 17,
+     "date": "2020-05-20",
+     "year": 2020,
+     "era": "2020s",
+     "regime": 2,
+     "dormancy": 2134,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.001783558203848348,
+     "gamma_i_ci95": 0.0014746781431425192
+    },
+    {
+     "i": 18,
+     "date": "2020-10-29",
+     "year": 2020,
+     "era": "2020s",
+     "regime": 1,
+     "dormancy": 164,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -0.0011733832785437606,
+     "gamma_i_ci95": 0.0014632663514673112
+    },
+    {
+     "i": 19,
+     "date": "2021-07-19",
+     "year": 2021,
+     "era": "2020s",
+     "regime": 1,
+     "dormancy": 177,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -0.0011492518474625678,
+     "gamma_i_ci95": 0.0008506258816905872
+    },
+    {
+     "i": 20,
+     "date": "2022-05-12",
+     "year": 2022,
+     "era": "2020s",
+     "regime": 3,
+     "dormancy": 498,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -0.0002504990100161926,
+     "gamma_i_ci95": 0.0011900040259171629
+    },
+    {
+     "i": 21,
+     "date": "2022-09-06",
+     "year": 2022,
+     "era": "2020s",
+     "regime": 2,
+     "dormancy": 551,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0007174658268446585,
+     "gamma_i_ci95": 0.0007985087137528387
+    },
+    {
+     "i": 22,
+     "date": "2023-10-30",
+     "year": 2023,
+     "era": "2020s",
+     "regime": 3,
+     "dormancy": 155,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 7.575317245123057e-05,
+     "gamma_i_ci95": 0.0013936902057884507
+    },
+    {
+     "i": 23,
+     "date": "2024-06-04",
+     "year": 2024,
+     "era": "2020s",
+     "regime": 1,
+     "dormancy": 128,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.00037224032904218377,
+     "gamma_i_ci95": 0.0006231179338329234
+    },
+    {
+     "i": 24,
+     "date": "2024-12-19",
+     "year": 2024,
+     "era": "2020s",
+     "regime": 1,
+     "dormancy": 93,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -0.00022275698028879337,
+     "gamma_i_ci95": 0.0007828335196706089
+    },
+    {
+     "i": 25,
+     "date": "2025-04-07",
+     "year": 2025,
+     "era": "2020s",
+     "regime": 3,
+     "dormancy": 359,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.006177614953804809,
+     "gamma_i_ci95": 0.0014664999337519178
+    },
+    {
+     "i": 26,
+     "date": "2025-11-05",
+     "year": 2025,
+     "era": "2020s",
+     "regime": 1,
+     "dormancy": 122,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -0.0008514734408000245,
+     "gamma_i_ci95": 0.000892675190448642
+    }
+   ],
+   "loro": [
+    {
+     "dropped_i": 0,
+     "dropped_date": "2008-09-15",
+     "mean": 0.000843899612744663,
+     "ci95": 0.0001993278488017111,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 1,
+     "dropped_date": "2010-02-01",
+     "mean": 0.0009271594686160796,
+     "ci95": 0.0002130658700848558,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 2,
+     "dropped_date": "2010-04-15",
+     "mean": 0.0009040877649667989,
+     "ci95": 0.0001991032639599258,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 3,
+     "dropped_date": "2010-10-14",
+     "mean": 0.0009681272927574685,
+     "ci95": 0.0002130128285036176,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 4,
+     "dropped_date": "2011-03-17",
+     "mean": 0.0009739276401781889,
+     "ci95": 0.00020104408405209747,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 5,
+     "dropped_date": "2011-08-09",
+     "mean": 0.0009317406455830984,
+     "ci95": 0.000185282930180293,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 6,
+     "dropped_date": "2011-11-23",
+     "mean": 0.0008119675317702019,
+     "ci95": 0.00022227732336038044,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 7,
+     "dropped_date": "2012-04-20",
+     "mean": 0.0008884777429402286,
+     "ci95": 0.00021593977475937694,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 8,
+     "dropped_date": "2013-06-21",
+     "mean": 0.0009506175218848663,
+     "ci95": 0.00020333257547363397,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 9,
+     "dropped_date": "2014-01-30",
+     "mean": 0.0009310083665336527,
+     "ci95": 0.00021947219065227613,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 10,
+     "dropped_date": "2015-09-29",
+     "mean": 0.0009397138512153285,
+     "ci95": 0.00020684120919398376,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 11,
+     "dropped_date": "2015-11-03",
+     "mean": 0.0007998109285603939,
+     "ci95": 0.00020252576244742397,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 12,
+     "dropped_date": "2017-08-18",
+     "mean": 0.0009442168663021493,
+     "ci95": 0.0002081059124106693,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 13,
+     "dropped_date": "2018-02-12",
+     "mean": 0.0009720196129233999,
+     "ci95": 0.00020312381090062113,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 14,
+     "dropped_date": "2018-12-18",
+     "mean": 0.0009293824348478254,
+     "ci95": 0.00021027636252543395,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 15,
+     "dropped_date": "2020-02-26",
+     "mean": 0.0009595406554571862,
+     "ci95": 0.0001754169869124063,
+     "n_react": 26,
+     "n_days": 390
+    },
+    {
+     "dropped_i": 16,
+     "dropped_date": "2020-03-10",
+     "mean": 0.0010133502893736662,
+     "ci95": 0.00020152903222687936,
+     "n_react": 26,
+     "n_days": 390
+    },
+    {
+     "dropped_i": 17,
+     "dropped_date": "2020-05-20",
+     "mean": 0.0008796881796783845,
+     "ci95": 0.0002142072803735503,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 18,
+     "dropped_date": "2020-10-29",
+     "mean": 0.0009951937063343275,
+     "ci95": 0.0002089937452443316,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 19,
+     "dropped_date": "2021-07-19",
+     "mean": 0.000994251072307713,
+     "ci95": 0.0002076466727529116,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 20,
+     "dropped_date": "2022-05-12",
+     "mean": 0.000959143539594967,
+     "ci95": 0.00019997999416804853,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 21,
+     "dropped_date": "2022-09-06",
+     "mean": 0.0009213324131550909,
+     "ci95": 0.00020604263364821992,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 22,
+     "dropped_date": "2023-10-30",
+     "mean": 0.0009463993137173308,
+     "ci95": 0.00020740201242551272,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 23,
+     "dropped_date": "2024-06-04",
+     "mean": 0.0009348177841629971,
+     "ci95": 0.0002075008943904375,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 24,
+     "dropped_date": "2024-12-19",
+     "mean": 0.000958059866558738,
+     "ci95": 0.0002028864642606911,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 25,
+     "dropped_date": "2025-04-07",
+     "mean": 0.0007080453378832108,
+     "ci95": 0.00021876967770454453,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 26,
+     "dropped_date": "2025-11-05",
+     "mean": 0.0009826191032974612,
+     "ci95": 0.00020446969911013088,
+     "n_react": 26,
+     "n_days": 384
+    }
+   ],
+   "loro_min": {
+    "dropped_i": 25,
+    "dropped_date": "2025-04-07",
+    "mean": 0.0007080453378832108,
+    "ci95": 0.00021876967770454453,
+    "n_react": 26,
+    "n_days": 384
+   },
+   "loro_max": {
+    "dropped_i": 16,
+    "dropped_date": "2020-03-10",
+    "mean": 0.0010133502893736662,
+    "ci95": 0.00020152903222687936,
+    "n_react": 26,
+    "n_days": 390
+   },
+   "calendar_exclusions": {
+    "drop_2020": {
+     "mean": 0.0007951782888302713,
+     "ci95": 0.00018521233068095818,
+     "n_react": 23,
+     "n_days": 345
+    },
+    "drop_2008_2010": {
+     "mean": 0.0009007562455633404,
+     "ci95": 0.0002248629338530602,
+     "n_react": 23,
+     "n_days": 339
+    },
+    "drop_2022": {
+     "mean": 0.0009689678368612418,
+     "ci95": 0.00020541764151154864,
+     "n_react": 25,
+     "n_days": 369
+    }
+   },
+   "era_blocked": {
+    "2000s": {
+     "mean": 0.0026997455173515504,
+     "ci95": 0.00220943430074098,
+     "n_react": 1,
+     "n_days": 15
+    },
+    "2010s": {
+     "mean": 0.0007657330087263642,
+     "ci95": 0.0002168925176845272,
+     "n_react": 14,
+     "n_days": 210
+    },
+    "2020s": {
+     "mean": 0.0009382386175943135,
+     "ci95": 0.0003979231243752316,
+     "n_react": 12,
+     "n_days": 174
+    }
+   }
+  },
+  "A1_minus_A6": {
+   "full": {
+    "mean": 0.0011894506104257172,
+    "ci95": 0.00020487316701617685,
+    "n_react": 27,
+    "n_days": 399
+   },
+   "per_reactivation_gamma": [
+    {
+     "i": 0,
+     "date": "2008-09-15",
+     "year": 2008,
+     "era": "2000s",
+     "regime": 2,
+     "dormancy": 1333,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.004386170180707624,
+     "gamma_i_ci95": 0.0020678411655694865
+    },
+    {
+     "i": 1,
+     "date": "2010-02-01",
+     "year": 2010,
+     "era": "2010s",
+     "regime": 3,
+     "dormancy": 140,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0017723150917646647,
+     "gamma_i_ci95": 0.0008219320772319895
+    },
+    {
+     "i": 2,
+     "date": "2010-04-15",
+     "year": 2010,
+     "era": "2010s",
+     "regime": 0,
+     "dormancy": 453,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0015315359234825375,
+     "gamma_i_ci95": 0.0005919579043159416
+    },
+    {
+     "i": 3,
+     "date": "2010-10-14",
+     "year": 2010,
+     "era": "2010s",
+     "regime": 0,
+     "dormancy": 114,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0001227757836982886,
+     "gamma_i_ci95": 0.00043292446288907685
+    },
+    {
+     "i": 4,
+     "date": "2011-03-17",
+     "year": 2011,
+     "era": "2010s",
+     "regime": 1,
+     "dormancy": 638,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -0.000794740375957893,
+     "gamma_i_ci95": 0.0004636584422402446
+    },
+    {
+     "i": 5,
+     "date": "2011-08-09",
+     "year": 2011,
+     "era": "2010s",
+     "regime": 3,
+     "dormancy": 235,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0008180915626287462,
+     "gamma_i_ci95": 0.0007398449207300541
+    },
+    {
+     "i": 6,
+     "date": "2011-11-23",
+     "year": 2011,
+     "era": "2010s",
+     "regime": 2,
+     "dormancy": 275,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.004461941406771622,
+     "gamma_i_ci95": 0.00027476562892704017
+    },
+    {
+     "i": 7,
+     "date": "2012-04-20",
+     "year": 2012,
+     "era": "2010s",
+     "regime": 1,
+     "dormancy": 97,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.001060480585684409,
+     "gamma_i_ci95": 0.0004656207493601076
+    },
+    {
+     "i": 8,
+     "date": "2013-06-21",
+     "year": 2013,
+     "era": "2010s",
+     "regime": 1,
+     "dormancy": 134,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -0.0010030413304197247,
+     "gamma_i_ci95": 0.0006473843280249806
+    },
+    {
+     "i": 9,
+     "date": "2014-01-30",
+     "year": 2014,
+     "era": "2010s",
+     "regime": 1,
+     "dormancy": 105,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0004814970120647978,
+     "gamma_i_ci95": 0.0005441329131971193
+    },
+    {
+     "i": 10,
+     "date": "2015-09-29",
+     "year": 2015,
+     "era": "2010s",
+     "regime": 3,
+     "dormancy": 964,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0005826116724922069,
+     "gamma_i_ci95": 0.0004830076814404083
+    },
+    {
+     "i": 11,
+     "date": "2015-11-03",
+     "year": 2015,
+     "era": "2010s",
+     "regime": 0,
+     "dormancy": 92,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.004133145414050815,
+     "gamma_i_ci95": 0.0004958466929799346
+    },
+    {
+     "i": 12,
+     "date": "2017-08-18",
+     "year": 2017,
+     "era": "2010s",
+     "regime": 1,
+     "dormancy": 193,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0003763710330359389,
+     "gamma_i_ci95": 0.0004545519411851918
+    },
+    {
+     "i": 13,
+     "date": "2018-02-12",
+     "year": 2018,
+     "era": "2010s",
+     "regime": 1,
+     "dormancy": 113,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -0.0004287278793929106,
+     "gamma_i_ci95": 0.0006850270967789594
+    },
+    {
+     "i": 14,
+     "date": "2018-12-18",
+     "year": 2018,
+     "era": "2010s",
+     "regime": 3,
+     "dormancy": 709,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.00044611073710740766,
+     "gamma_i_ci95": 0.0003189290704832853
+    },
+    {
+     "i": 15,
+     "date": "2020-02-26",
+     "year": 2020,
+     "era": "2020s",
+     "regime": 1,
+     "dormancy": 91,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0075201825275906225,
+     "gamma_i_ci95": 0.001713638812207181
+    },
+    {
+     "i": 16,
+     "date": "2020-03-10",
+     "year": 2020,
+     "era": "2020s",
+     "regime": 3,
+     "dormancy": 295,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.009131041250210773,
+     "gamma_i_ci95": 0.0009875706819255541
+    },
+    {
+     "i": 17,
+     "date": "2020-05-20",
+     "year": 2020,
+     "era": "2020s",
+     "regime": 2,
+     "dormancy": 2134,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0004961414826332189,
+     "gamma_i_ci95": 0.0011307990314669536
+    },
+    {
+     "i": 18,
+     "date": "2020-10-29",
+     "year": 2020,
+     "era": "2020s",
+     "regime": 1,
+     "dormancy": 164,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.001694324234379304,
+     "gamma_i_ci95": 0.001158503946659972
+    },
+    {
+     "i": 19,
+     "date": "2021-07-19",
+     "year": 2021,
+     "era": "2020s",
+     "regime": 1,
+     "dormancy": 177,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -0.0009846315709618977,
+     "gamma_i_ci95": 0.0005675112622582102
+    },
+    {
+     "i": 20,
+     "date": "2022-05-12",
+     "year": 2022,
+     "era": "2020s",
+     "regime": 3,
+     "dormancy": 498,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -0.0003653952447783534,
+     "gamma_i_ci95": 0.0008237662553754229
+    },
+    {
+     "i": 21,
+     "date": "2022-09-06",
+     "year": 2022,
+     "era": "2020s",
+     "regime": 2,
+     "dormancy": 551,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.0007597859601726582,
+     "gamma_i_ci95": 0.0007602919893403975
+    },
+    {
+     "i": 22,
+     "date": "2023-10-30",
+     "year": 2023,
+     "era": "2020s",
+     "regime": 3,
+     "dormancy": 155,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -0.0012037237371651933,
+     "gamma_i_ci95": 0.0010569402605578842
+    },
+    {
+     "i": 23,
+     "date": "2024-06-04",
+     "year": 2024,
+     "era": "2020s",
+     "regime": 1,
+     "dormancy": 128,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.00045612635711347736,
+     "gamma_i_ci95": 0.0006722338971203294
+    },
+    {
+     "i": 24,
+     "date": "2024-12-19",
+     "year": 2024,
+     "era": "2020s",
+     "regime": 1,
+     "dormancy": 93,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -0.0005217169958644511,
+     "gamma_i_ci95": 0.00047457070374849747
+    },
+    {
+     "i": 25,
+     "date": "2025-04-07",
+     "year": 2025,
+     "era": "2020s",
+     "regime": 3,
+     "dormancy": 359,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": 0.005824236712858687,
+     "gamma_i_ci95": 0.0010259537175060054
+    },
+    {
+     "i": 26,
+     "date": "2025-11-05",
+     "year": 2025,
+     "era": "2020s",
+     "regime": 1,
+     "dormancy": 122,
+     "n_probe_days_counted": 15,
+     "gamma_i_mean": -1.3723258200301797e-05,
+     "gamma_i_ci95": 0.0009746084730401686
+    }
+   ],
+   "loro": [
+    {
+     "dropped_i": 0,
+     "dropped_date": "2008-09-15",
+     "mean": 0.0010645787522115743,
+     "ci95": 0.0001830337990548066,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 1,
+     "dropped_date": "2010-02-01",
+     "mean": 0.001166682466623409,
+     "ci95": 0.0002101572816028639,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 2,
+     "dropped_date": "2010-04-15",
+     "mean": 0.0011760879028844301,
+     "ci95": 0.00020974880584770044,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 3,
+     "dropped_date": "2010-10-14",
+     "mean": 0.001231117595844751,
+     "ci95": 0.00021565623140243218,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 4,
+     "dropped_date": "2011-03-17",
+     "mean": 0.0012669580708313207,
+     "ci95": 0.00020485493372171537,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 5,
+     "dropped_date": "2011-08-09",
+     "mean": 0.0012039568232302808,
+     "ci95": 0.00020008225242704503,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 6,
+     "dropped_date": "2011-11-23",
+     "mean": 0.0010616189386934518,
+     "ci95": 0.00021374120976659858,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 7,
+     "dropped_date": "2012-04-20",
+     "mean": 0.001194488502017169,
+     "ci95": 0.00021064458169613498,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 8,
+     "dropped_date": "2013-06-21",
+     "mean": 0.0012750948268649867,
+     "ci95": 0.00020761273785065506,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 9,
+     "dropped_date": "2014-01-30",
+     "mean": 0.0012171050478616873,
+     "ci95": 0.00021043054857580965,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 10,
+     "dropped_date": "2015-09-29",
+     "mean": 0.001213155256438741,
+     "ci95": 0.0002101395471049172,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 11,
+     "dropped_date": "2015-11-03",
+     "mean": 0.0010744625321591086,
+     "ci95": 0.00020547054097398108,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 12,
+     "dropped_date": "2017-08-18",
+     "mean": 0.0012212115314175034,
+     "ci95": 0.0002157972898545233,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 13,
+     "dropped_date": "2018-02-12",
+     "mean": 0.0012526607076842528,
+     "ci95": 0.00021107052469139707,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 14,
+     "dropped_date": "2018-12-18",
+     "mean": 0.0012184873242272094,
+     "ci95": 0.00021085070785744687,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 15,
+     "dropped_date": "2020-02-26",
+     "mean": 0.0012776539233891183,
+     "ci95": 0.00019409701449805964,
+     "n_react": 26,
+     "n_days": 390
+    },
+    {
+     "dropped_i": 16,
+     "dropped_date": "2020-03-10",
+     "mean": 0.0012156978186729605,
+     "ci95": 0.0002062635055717566,
+     "n_react": 26,
+     "n_days": 390
+    },
+    {
+     "dropped_i": 17,
+     "dropped_date": "2020-05-20",
+     "mean": 0.0012165329982301108,
+     "ci95": 0.000217267356044163,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 18,
+     "dropped_date": "2020-10-29",
+     "mean": 0.0011697289844900304,
+     "ci95": 0.00019475955391419177,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 19,
+     "dropped_date": "2021-07-19",
+     "mean": 0.0012743756956361649,
+     "ci95": 0.00021594453187023197,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 20,
+     "dropped_date": "2022-05-12",
+     "mean": 0.0012501867766446214,
+     "ci95": 0.00021065478031371824,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 21,
+     "dropped_date": "2022-09-06",
+     "mean": 0.0012062343858262239,
+     "ci95": 0.00021212423650996868,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 22,
+     "dropped_date": "2023-10-30",
+     "mean": 0.0012829339833784845,
+     "ci95": 0.0002094074781036586,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 23,
+     "dropped_date": "2024-06-04",
+     "mean": 0.0012180960890707255,
+     "ci95": 0.00020767670567450557,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 24,
+     "dropped_date": "2024-12-19",
+     "mean": 0.0012562930950464212,
+     "ci95": 0.00020652597436434706,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 25,
+     "dropped_date": "2025-04-07",
+     "mean": 0.0010084042782994265,
+     "ci95": 0.0002067722042459947,
+     "n_react": 26,
+     "n_days": 384
+    },
+    {
+     "dropped_i": 26,
+     "dropped_date": "2025-11-05",
+     "mean": 0.0012364495896689202,
+     "ci95": 0.00019391086265934524,
+     "n_react": 26,
+     "n_days": 384
+    }
+   ],
+   "loro_min": {
+    "dropped_i": 25,
+    "dropped_date": "2025-04-07",
+    "mean": 0.0010084042782994265,
+    "ci95": 0.0002067722042459947,
+    "n_react": 26,
+    "n_days": 384
+   },
+   "loro_max": {
+    "dropped_i": 22,
+    "dropped_date": "2023-10-30",
+    "mean": 0.0012829339833784845,
+    "ci95": 0.0002094074781036586,
+    "n_react": 26,
+    "n_days": 384
+   },
+   "calendar_exclusions": {
+    "drop_2020": {
+     "mean": 0.0009520650017779871,
+     "ci95": 0.0001880670963853619,
+     "n_react": 23,
+     "n_days": 345
+    },
+    "drop_2008_2010": {
+     "mean": 0.0010542738609588868,
+     "ci95": 0.00020754025536067521,
+     "n_react": 23,
+     "n_days": 339
+    },
+    "drop_2022": {
+     "mean": 0.0012701217691841328,
+     "ci95": 0.0002174592370455003,
+     "n_react": 25,
+     "n_days": 369
+    }
+   },
+   "era_blocked": {
+    "2000s": {
+     "mean": 0.0043861701807076225,
+     "ci95": 0.0020678411655694856,
+     "n_react": 1,
+     "n_days": 15
+    },
+    "2010s": {
+     "mean": 0.0009685976169293481,
+     "ci95": 0.00015240934069349132,
+     "n_react": 14,
+     "n_days": 210
+    },
+    "2020s": {
+     "mean": 0.0011804180534142176,
+     "ci95": 0.00029310590837063717,
+     "n_react": 12,
+     "n_days": 174
+    }
+   }
+  }
+ }
+}
