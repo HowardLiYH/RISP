@@ -335,3 +335,77 @@ revised toward it — reported at full prominence either way.
   the oracle benchmark pay costs (net regret = net-of-cost oracle utility
   minus net-of-cost arm utility, turnover = 0.5·Σ|z_t − z_{t−1}|·2 sides);
   the arm-only-pays variant is reported as sensitivity.
+
+---
+
+# ADDENDUM F — verdicts for addenda D and E (written 2026-07-15 AFTER the runs; registrations above unedited)
+
+- **D1 (replay, synthetic): REFUTED by the letter, favorably.** Closure
+  56.3% < the committed 60% (A1r-erm−A9 = +0.00073±0.00025, p=0.011) —
+  the anti-branch activates: eviction-coupling is STRONGER than the theory
+  requires. Second leg CONFIRMED: replay ≪ A6 (p=7.0e-14); replay+INV
+  still worse than A6 (Holm 0.040) and A10 (Holm 0.017).
+- **D2 (replay, French L3): CONFIRMED (primary branch).** Replay collects
+  ~99% of the deficit (Γ over replay +0.00001±0.00023 n.s.) — data
+  retention ≈ parameter retention vs the ERM oracle — yet **A6 still
+  beats replay** (Holm 0.013; A6 vs replay+INV Holm 4.5e-4). Neither
+  relabeling branch triggers; the pool-superiority claim survives its
+  most dangerous baseline.
+- **D3 (costs): CONFIRMED, beyond the prediction.** Γ_net strengthens
+  monotonically with cost tier: +0.00126±0.00020 (25bps) → +0.00161 (50)
+  → +0.00230 (100); full ordering at every tier (Holm down to 4.6e-19);
+  mechanism as predicted (A1 turnover 1.03/day vs A6 0.62). The lodged
+  "overall margin expected NOT to survive" is REFUTED in the favorable
+  direction (survives and strengthens ~10×). **The L1 inversion REVERSES
+  net of costs** (A6 beats A1, p=1.2e-16): the inversion, not the
+  deficit, was the gross-only phenomenon. Gate-1 cost slice (sensitivity,
+  not re-adjudication): L3 cond-vs-pooled −0.10% gross → +3.0% net.
+- **E-X1 (rehearsal regression): NEITHER branch (the ~20% outcome).**
+  No dormancy/rehearsal covariate explains Γ_i (all registered slopes
+  n.s., pooled and within-event); probe-overlap dilution ruled out
+  (≤4.4%). Per the register: artifact warning at headline prominence —
+  now to be read jointly with D3/E-F (the effect is real and
+  cost-amplified but not dormancy-mechanistic).
+- **E-X3 (half-life): ANTI-BRANCH.** At 15% the A1−A9 gap does NOT decay
+  across the probe (tail ≥ start; all-cell fits R²<0.2): a level offset,
+  not a relearning transient. The registered rename applies — the
+  quantity behaves as an ALLOCATION deficit (regime-conditional service
+  gap), not eviction-forgetting. Where a true transient exists (20%),
+  it relearns in 2–4 days and nets to zero (the E6 mechanism).
+- **E-X4 (emergent forgetting): CONFIRMED, replicated, with one lodged
+  divergence.** Γ-mlp = +0.01009±0.00037 at 100 seeds (p=1.9e-78),
+  reactivation-localized (4× probe vs steady) — interference measured,
+  not injected; the "coded, not emergent" objection dies. Honest null:
+  A6-vs-A5 invariance effect absent under the MLP (p=0.13). Divergence
+  at full prominence: the E6 inversion does NOT reproduce at 4× SNR
+  (Γ grows ~5× instead); post-hoc architectural caveat recorded in the
+  JSON (single readout vs regime-keyed heads — not apples-to-apples).
+- **E-F (withheld era 1926–1989): the decisive record.**
+  Gate 1 passes at z=23.5 (strongest in program) while the frozen 15%
+  spec INVERTS (Γ=−0.00024±0.00008) — gate 1 again dissociates from pool
+  value. Sweep: dissociation at 10% (Γ=+0.00020, ordering Holm 1.9e-6),
+  flat at 12/20%. Sub-eras at 15%: 1926–57 inversion (Holm 0.023);
+  **1958–89 Γ=+0.00021 with the full ordering (Holm 2.1e-4)**. Sign-rule
+  scorecard: **5 of 6 withheld cells consistent, both directions,
+  including two positive-side confirmations**; one conservative miss
+  (12%: Γ marginally negative, table flat — a hit under the weak "iff
+  significantly positive" form, a miss under the strong directional
+  form; both scorings reported). Granularity clause 1 REFUTED (multi-year
+  dormancy everywhere, sign varies); fragility pattern replicates but the
+  window RELOCATES (15%→10%) with crisis density; artifact reading
+  confirmed at the letter for 15%-off-sample yet undermined as a full
+  account (the phenomenon reappears off-sample with full ordering).
+- **D6 (seed parity, French): L1 complete at 100 seeds** — gates
+  unchanged; wf inversion stands with Γ now negative-significant
+  (−0.00013±0.00007); stitched Γ turns marginally positive
+  (+0.00023±0.00015) — a new wrinkle disclosed here. L3 100-seed run
+  completing; verdict to be appended when saved.
+- **Synthesis (the surviving claims):** (1) Γ̂'s sign prices the pool —
+  now 5/6 on withheld data, cost-robust, replay-tested; (2) the deficit,
+  where positive, is real economics (amplified net of crisis-window
+  costs, collected by replay on real data but the invariance-equipped
+  pool still wins); (3) its mechanism on real data is NOT
+  eviction-forgetting (X1/X3/E-F clause-1) — the honest name is a
+  regime-conditional allocation deficit, and the synthetic/MLP forgetting
+  transient remains a distinct, controlled-setting phenomenon; (4) gate 1
+  does not price the pool and is demoted to a structure screen.
