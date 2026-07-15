@@ -1,0 +1,46 @@
+{
+ "screen_passes": [
+  "4H/L2b",
+  "1H/L1b"
+ ],
+ "4H/L2b": {
+  "real_mean_regret": 0.004303320348210167,
+  "shuffled_mean_regret": 0.0044434989405173824,
+  "gap_pct": 3.1546894497368116,
+  "z_vs_shuffled": 2.3165568690043052,
+  "p_one_sided": 1.2407014907792773e-21,
+  "n_shuffle": 50,
+  "split_half": {
+   "first_half": {
+    "gap_pct": 3.424188484558847,
+    "z": 1.5648808582412457
+   },
+   "second_half": {
+    "gap_pct": 2.922049527237155,
+    "z": 1.9659052425596317
+   }
+  },
+  "CONFIRMED": true,
+  "n_episodes": 951
+ },
+ "1H/L1b": {
+  "real_mean_regret": 0.0024368865482810903,
+  "shuffled_mean_regret": 0.0024641049128126037,
+  "gap_pct": 1.1045943855288018,
+  "z_vs_shuffled": 1.7577627586479703,
+  "p_one_sided": 6.687264596072014e-17,
+  "n_shuffle": 50,
+  "split_half": {
+   "first_half": {
+    "gap_pct": 0.7295437593727965,
+    "z": 0.7299268535772445
+   },
+   "second_half": {
+    "gap_pct": 1.4674238032198763,
+    "z": 1.39253516568913
+   }
+  },
+  "CONFIRMED": false,
+  "n_episodes": 1528
+ }
+}
