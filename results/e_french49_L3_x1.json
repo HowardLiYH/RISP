@@ -1,0 +1,3247 @@
+{
+ "config": {
+  "thresholds": [
+   0.1,
+   0.12,
+   0.15,
+   0.2
+  ],
+  "seeds": 20,
+  "seed_formula": "1311*s+17 (as e_french_L3.py; 15pct cell bit-identical to the registered battery)",
+  "arms": [
+   "A1-monolith-erm",
+   "A9-oracle-pinned"
+  ],
+  "probe": 15,
+  "min_dormancy": 90,
+  "K": 2,
+  "memory": "hard",
+  "k_sel": 5,
+  "w_max": 0.2,
+  "event_bins": [
+   [
+    "2008-GFC",
+    "2007-07-01",
+    "2009-12-31"
+   ],
+   [
+    "2010",
+    "2010-01-01",
+    "2010-12-31"
+   ],
+   [
+    "2011-12-euro",
+    "2011-01-01",
+    "2012-12-31"
+   ],
+   [
+    "2015-16",
+    "2015-01-01",
+    "2016-12-31"
+   ],
+   [
+    "2018-19",
+    "2018-01-01",
+    "2019-12-31"
+   ],
+   [
+    "2020-covid",
+    "2020-01-01",
+    "2021-12-31"
+   ],
+   [
+    "2022-23",
+    "2022-01-01",
+    "2023-12-31"
+   ],
+   [
+    "2024-25",
+    "2024-01-01",
+    "2025-12-31"
+   ]
+  ],
+  "notes": [
+   "Gamma_i = mean over 20 seeds of A1 probe-window regret minus mean over seeds of A9, matched per reactivation on the shared deterministic walk-forward schedule.",
+   "Union = {crisis-up, crisis-down} for crisis-cell reactivations, {calm-up, calm-down} for calm-cell ones; rehearsal = union activity strictly inside the cell's dormancy interval.",
+   "X3 profiles use only reactivations whose full probe window lies in the evaluated second half; Gamma_i additionally includes windows clipped at the halfway boundary, exactly as the registered aggregate post_react does.",
+   "Small-n caveat: n per threshold is the handful of >=90d reactivations on ONE market history; cluster count for robust SEs is the number of calendar events. No spec was tuned; all analysis choices were fixed in this file before its first execution."
+  ]
+ },
+ "per_threshold": {
+  "10pct": {
+   "n_react_detail": 30,
+   "gamma_agg_seedCI": {
+    "mean": 0.0003030164189101644,
+    "ci95": 0.00023460483129971124,
+    "n_seeds": 20
+   },
+   "overlap_diagnostic": {
+    "window_days_total": 450,
+    "unique_probe_days": 430,
+    "overlap_frac": 0.0444444444444444,
+    "median_n_days": 15.0
+   },
+   "T": 8966,
+   "half": 4483,
+   "reactivations": [
+    {
+     "t0": 4499,
+     "date": "2008-04-02",
+     "cell": 2,
+     "cell_name": "crisis-up",
+     "event": "2008-GFC",
+     "D_cell": 1167,
+     "D_union": 1,
+     "R": 7,
+     "rehearsal_days": 52,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0028013839057312133,
+     "a1_mean": 0.02038673994941703,
+     "a9_mean": 0.017585356043685815
+    },
+    {
+     "t0": 4961,
+     "date": "2010-02-01",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2010",
+     "D_cell": 140,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 139,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -6.47113488923233e-05,
+     "a1_mean": 0.015366400468081121,
+     "a9_mean": 0.015431111816973445
+    },
+    {
+     "t0": 5175,
+     "date": "2010-12-06",
+     "cell": 0,
+     "cell_name": "calm-up",
+     "event": "2010",
+     "D_cell": 620,
+     "D_union": 620,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0004253975541060086,
+     "a1_mean": 0.012792436421529533,
+     "a9_mean": 0.012367038867423524
+    },
+    {
+     "t0": 5245,
+     "date": "2011-03-17",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2011-12-euro",
+     "D_cell": 691,
+     "D_union": 1,
+     "R": 2,
+     "rehearsal_days": 71,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.002929293246109174,
+     "a1_mean": 0.013513800110036712,
+     "a9_mean": 0.016443093356145886
+    },
+    {
+     "t0": 5343,
+     "date": "2011-08-05",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2011-12-euro",
+     "D_cell": 233,
+     "D_union": 169,
+     "R": 1,
+     "rehearsal_days": 64,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.00017535585137415724,
+     "a1_mean": 0.027700151303305266,
+     "a9_mean": 0.027875507154679423
+    },
+    {
+     "t0": 5393,
+     "date": "2011-10-17",
+     "cell": 2,
+     "cell_name": "crisis-up",
+     "event": "2011-12-euro",
+     "D_cell": 219,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 50,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.006668813696567969,
+     "a1_mean": 0.028166703636242817,
+     "a9_mean": 0.021497889939674848
+    },
+    {
+     "t0": 5521,
+     "date": "2012-04-20",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2011-12-euro",
+     "D_cell": 179,
+     "D_union": 1,
+     "R": 7,
+     "rehearsal_days": 84,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0008413756149100379,
+     "a1_mean": 0.012223631854201982,
+     "a9_mean": 0.01306500746911202
+    },
+    {
+     "t0": 5542,
+     "date": "2012-05-21",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2011-12-euro",
+     "D_cell": 118,
+     "D_union": 96,
+     "R": 2,
+     "rehearsal_days": 19,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0005239800600548312,
+     "a1_mean": 0.015238035610452024,
+     "a9_mean": 0.015762015670506856
+    },
+    {
+     "t0": 5814,
+     "date": "2013-06-21",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "other-2013",
+     "D_cell": 134,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 133,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0030115513293457533,
+     "a1_mean": 0.014534557338188637,
+     "a9_mean": 0.01754610866753439
+    },
+    {
+     "t0": 5967,
+     "date": "2014-01-30",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "other-2014",
+     "D_cell": 105,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 104,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0006339953285420773,
+     "a1_mean": 0.014269539243553295,
+     "a9_mean": 0.014903534572095372
+    },
+    {
+     "t0": 6361,
+     "date": "2015-08-24",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2015-16",
+     "D_cell": 808,
+     "D_union": 808,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0019007863757318083,
+     "a1_mean": 0.0257704649284796,
+     "a9_mean": 0.02386967855274779
+    },
+    {
+     "t0": 6411,
+     "date": "2015-11-03",
+     "cell": 0,
+     "cell_name": "calm-up",
+     "event": "2015-16",
+     "D_cell": 92,
+     "D_union": 1,
+     "R": 5,
+     "rehearsal_days": 65,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.00327668802587734,
+     "a1_mean": 0.017203530327137288,
+     "a9_mean": 0.013926842301259948
+    },
+    {
+     "t0": 6419,
+     "date": "2015-11-13",
+     "cell": 2,
+     "cell_name": "crisis-up",
+     "event": "2015-16",
+     "D_cell": 973,
+     "D_union": 27,
+     "R": 6,
+     "rehearsal_days": 30,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.000148567992023875,
+     "a1_mean": 0.01761086507343512,
+     "a9_mean": 0.017462297081411244
+    },
+    {
+     "t0": 6573,
+     "date": "2016-06-27",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2015-16",
+     "D_cell": 123,
+     "D_union": 1,
+     "R": 2,
+     "rehearsal_days": 74,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.001669119917221528,
+     "a1_mean": 0.01675981730206165,
+     "a9_mean": 0.018428937219283178
+    },
+    {
+     "t0": 6862,
+     "date": "2017-08-18",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "other-2017",
+     "D_cell": 193,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 192,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.00020623797501282022,
+     "a1_mean": 0.011019054072140601,
+     "a9_mean": 0.010812816097127781
+    },
+    {
+     "t0": 6983,
+     "date": "2018-02-12",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2018-19",
+     "D_cell": 113,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 112,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0005819883667821744,
+     "a1_mean": 0.015528097864220927,
+     "a9_mean": 0.014946109497438752
+    },
+    {
+     "t0": 7161,
+     "date": "2018-10-25",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2018-19",
+     "D_cell": 662,
+     "D_union": 662,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.000888566258599871,
+     "a1_mean": 0.01921856259794564,
+     "a9_mean": 0.02010712885654551
+    },
+    {
+     "t0": 7495,
+     "date": "2020-02-26",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2020-covid",
+     "D_cell": 91,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 90,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.003698981778155433,
+     "a1_mean": 0.050741979620842925,
+     "a9_mean": 0.05444096139899836
+    },
+    {
+     "t0": 7497,
+     "date": "2020-02-28",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2020-covid",
+     "D_cell": 272,
+     "D_union": 272,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.004163305569809941,
+     "a1_mean": 0.055220670202451604,
+     "a9_mean": 0.059383975772261545
+    },
+    {
+     "t0": 7554,
+     "date": "2020-05-20",
+     "cell": 2,
+     "cell_name": "crisis-up",
+     "event": "2020-covid",
+     "D_cell": 1059,
+     "D_union": 1,
+     "R": 8,
+     "rehearsal_days": 104,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.005426571146005255,
+     "a1_mean": 0.031157615338295336,
+     "a9_mean": 0.02573104419229008
+    },
+    {
+     "t0": 7667,
+     "date": "2020-10-29",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2020-covid",
+     "D_cell": 166,
+     "D_union": 1,
+     "R": 2,
+     "rehearsal_days": 78,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0025652905768086855,
+     "a1_mean": 0.029826222732171597,
+     "a9_mean": 0.03239151330898028
+    },
+    {
+     "t0": 7846,
+     "date": "2021-07-19",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2020-covid",
+     "D_cell": 177,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 176,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0013610738198033753,
+     "a1_mean": 0.019252761431717037,
+     "a9_mean": 0.020613835251520413
+    },
+    {
+     "t0": 7981,
+     "date": "2022-01-28",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2022-23",
+     "D_cell": 426,
+     "D_union": 389,
+     "R": 2,
+     "rehearsal_days": 33,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0010128191999139655,
+     "a1_mean": 0.02442205567766333,
+     "a9_mean": 0.023409236477749364
+    },
+    {
+     "t0": 8103,
+     "date": "2022-07-26",
+     "cell": 2,
+     "cell_name": "crisis-up",
+     "event": "2022-23",
+     "D_cell": 511,
+     "D_union": 1,
+     "R": 5,
+     "rehearsal_days": 50,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.002790133991269622,
+     "a1_mean": 0.023917713577199996,
+     "a9_mean": 0.021127579585930374
+    },
+    {
+     "t0": 8284,
+     "date": "2023-04-14",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2022-23",
+     "D_cell": 169,
+     "D_union": 27,
+     "R": 7,
+     "rehearsal_days": 33,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -1.0325303493735616e-06,
+     "a1_mean": 0.01735324123990912,
+     "a9_mean": 0.017354273770258492
+    },
+    {
+     "t0": 8388,
+     "date": "2023-09-13",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2022-23",
+     "D_cell": 100,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 66,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0011461742032299709,
+     "a1_mean": 0.01475980879220902,
+     "a9_mean": 0.013613634588979049
+    },
+    {
+     "t0": 8570,
+     "date": "2024-06-04",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2024-25",
+     "D_cell": 128,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 127,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0003145425328025461,
+     "a1_mean": 0.015526727610813026,
+     "a9_mean": 0.01521218507801048
+    },
+    {
+     "t0": 8708,
+     "date": "2024-12-19",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2024-25",
+     "D_cell": 93,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 92,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.000139269431795732,
+     "a1_mean": 0.015834884158006535,
+     "a9_mean": 0.015695614726210803
+    },
+    {
+     "t0": 8763,
+     "date": "2025-03-13",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2024-25",
+     "D_cell": 331,
+     "D_union": 331,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0012282528505595351,
+     "a1_mean": 0.0182565377697507,
+     "a9_mean": 0.017028284919191165
+    },
+    {
+     "t0": 8927,
+     "date": "2025-11-05",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2024-25",
+     "D_cell": 122,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 121,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0008053113552487327,
+     "a1_mean": 0.021701222951680584,
+     "a9_mean": 0.022506534306929317
+    }
+   ]
+  },
+  "12pct": {
+   "n_react_detail": 28,
+   "gamma_agg_seedCI": {
+    "mean": -0.0002442249297917061,
+    "ci95": 0.00022363571555711171,
+    "n_seeds": 20
+   },
+   "overlap_diagnostic": {
+    "window_days_total": 420,
+    "unique_probe_days": 408,
+    "overlap_frac": 0.02857142857142858,
+    "median_n_days": 15.0
+   },
+   "T": 8966,
+   "half": 4483,
+   "reactivations": [
+    {
+     "t0": 4558,
+     "date": "2008-06-25",
+     "cell": 2,
+     "cell_name": "crisis-up",
+     "event": "2008-GFC",
+     "D_cell": 1255,
+     "D_union": 50,
+     "R": 7,
+     "rehearsal_days": 31,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.003272651327539667,
+     "a1_mean": 0.02569828253853969,
+     "a9_mean": 0.02897093386607936
+    },
+    {
+     "t0": 4961,
+     "date": "2010-02-01",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2010",
+     "D_cell": 140,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 139,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0005930741674543567,
+     "a1_mean": 0.015278064260460822,
+     "a9_mean": 0.01587113842791518
+    },
+    {
+     "t0": 5155,
+     "date": "2010-11-05",
+     "cell": 0,
+     "cell_name": "calm-up",
+     "event": "2010",
+     "D_cell": 596,
+     "D_union": 596,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0023647912624169196,
+     "a1_mean": 0.016576578278689417,
+     "a9_mean": 0.014211787016272497
+    },
+    {
+     "t0": 5245,
+     "date": "2011-03-17",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2011-12-euro",
+     "D_cell": 689,
+     "D_union": 1,
+     "R": 4,
+     "rehearsal_days": 80,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0008719224853363065,
+     "a1_mean": 0.014166338253573324,
+     "a9_mean": 0.015038260738909631
+    },
+    {
+     "t0": 5343,
+     "date": "2011-08-05",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2011-12-euro",
+     "D_cell": 233,
+     "D_union": 171,
+     "R": 2,
+     "rehearsal_days": 56,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0005818246184488944,
+     "a1_mean": 0.02717196309435872,
+     "a9_mean": 0.027753787712807614
+    },
+    {
+     "t0": 5393,
+     "date": "2011-10-17",
+     "cell": 2,
+     "cell_name": "crisis-up",
+     "event": "2011-12-euro",
+     "D_cell": 221,
+     "D_union": 1,
+     "R": 2,
+     "rehearsal_days": 49,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.005641606062764801,
+     "a1_mean": 0.02711386159383163,
+     "a9_mean": 0.02147225553106683
+    },
+    {
+     "t0": 5521,
+     "date": "2012-04-20",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2011-12-euro",
+     "D_cell": 159,
+     "D_union": 1,
+     "R": 7,
+     "rehearsal_days": 105,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.00040576584493562384,
+     "a1_mean": 0.012278425101532413,
+     "a9_mean": 0.012684190946468037
+    },
+    {
+     "t0": 5814,
+     "date": "2013-06-21",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "other-2013",
+     "D_cell": 134,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 133,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0004597675417075259,
+     "a1_mean": 0.01653201032485086,
+     "a9_mean": 0.016072242783143335
+    },
+    {
+     "t0": 5967,
+     "date": "2014-01-30",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "other-2014",
+     "D_cell": 105,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 104,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0002305544854611253,
+     "a1_mean": 0.014085329912195358,
+     "a9_mean": 0.014315884397656483
+    },
+    {
+     "t0": 6362,
+     "date": "2015-08-25",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2015-16",
+     "D_cell": 938,
+     "D_union": 924,
+     "R": 2,
+     "rehearsal_days": 6,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.001226032310354619,
+     "a1_mean": 0.022372478519820257,
+     "a9_mean": 0.02114644620946564
+    },
+    {
+     "t0": 6411,
+     "date": "2015-11-03",
+     "cell": 0,
+     "cell_name": "calm-up",
+     "event": "2015-16",
+     "D_cell": 92,
+     "D_union": 1,
+     "R": 4,
+     "rehearsal_days": 78,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.003948194204260598,
+     "a1_mean": 0.017397174326962066,
+     "a9_mean": 0.013448980122701468
+    },
+    {
+     "t0": 6439,
+     "date": "2015-12-14",
+     "cell": 2,
+     "cell_name": "crisis-up",
+     "event": "2015-16",
+     "D_cell": 1001,
+     "D_union": 49,
+     "R": 3,
+     "rehearsal_days": 13,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0026827923878678835,
+     "a1_mean": 0.013040801123215883,
+     "a9_mean": 0.015723593511083767
+    },
+    {
+     "t0": 6862,
+     "date": "2017-08-18",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "other-2017",
+     "D_cell": 193,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 192,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.00014735110896751773,
+     "a1_mean": 0.011030416463698048,
+     "a9_mean": 0.01088306535473053
+    },
+    {
+     "t0": 6983,
+     "date": "2018-02-12",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2018-19",
+     "D_cell": 113,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 112,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -7.872799671941426e-05,
+     "a1_mean": 0.014620979886788668,
+     "a9_mean": 0.014699707883508082
+    },
+    {
+     "t0": 7164,
+     "date": "2018-10-30",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2018-19",
+     "D_cell": 672,
+     "D_union": 672,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0006422014571714554,
+     "a1_mean": 0.0188280654879524,
+     "a9_mean": 0.018185864030780943
+    },
+    {
+     "t0": 7495,
+     "date": "2020-02-26",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2020-covid",
+     "D_cell": 91,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 90,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.009637769860707461,
+     "a1_mean": 0.047012181026048636,
+     "a9_mean": 0.0566499508867561
+    },
+    {
+     "t0": 7498,
+     "date": "2020-03-02",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2020-covid",
+     "D_cell": 281,
+     "D_union": 281,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.012299528420958245,
+     "a1_mean": 0.05473692268730318,
+     "a9_mean": 0.06703645110826142
+    },
+    {
+     "t0": 7554,
+     "date": "2020-05-20",
+     "cell": 2,
+     "cell_name": "crisis-up",
+     "event": "2020-covid",
+     "D_cell": 1114,
+     "D_union": 1,
+     "R": 8,
+     "rehearsal_days": 120,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0005320602653042482,
+     "a1_mean": 0.029012175479318263,
+     "a9_mean": 0.02954423574462251
+    },
+    {
+     "t0": 7667,
+     "date": "2020-10-29",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2020-covid",
+     "D_cell": 165,
+     "D_union": 1,
+     "R": 6,
+     "rehearsal_days": 85,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0003059342516671011,
+     "a1_mean": 0.030039327583244697,
+     "a9_mean": 0.029733393331577596
+    },
+    {
+     "t0": 7846,
+     "date": "2021-07-19",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2020-covid",
+     "D_cell": 177,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 176,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.00072917136657304,
+     "a1_mean": 0.019459249476060873,
+     "a9_mean": 0.020188420842633913
+    },
+    {
+     "t0": 8051,
+     "date": "2022-05-10",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2022-23",
+     "D_cell": 496,
+     "D_union": 460,
+     "R": 6,
+     "rehearsal_days": 26,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.003618100454295947,
+     "a1_mean": 0.027563830800160356,
+     "a9_mean": 0.02394573034586441
+    },
+    {
+     "t0": 8103,
+     "date": "2022-07-26",
+     "cell": 2,
+     "cell_name": "crisis-up",
+     "event": "2022-23",
+     "D_cell": 512,
+     "D_union": 1,
+     "R": 3,
+     "rehearsal_days": 42,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0009822155666863973,
+     "a1_mean": 0.021557672070866077,
+     "a9_mean": 0.022539887637552474
+    },
+    {
+     "t0": 8275,
+     "date": "2023-03-31",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2022-23",
+     "D_cell": 160,
+     "D_union": 16,
+     "R": 7,
+     "rehearsal_days": 62,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0003558129575304478,
+     "a1_mean": 0.018266537118777668,
+     "a9_mean": 0.01791072416124722
+    },
+    {
+     "t0": 8416,
+     "date": "2023-10-23",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2022-23",
+     "D_cell": 98,
+     "D_union": 98,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0012598147866273376,
+     "a1_mean": 0.017857771435616936,
+     "a9_mean": 0.019117586222244274
+    },
+    {
+     "t0": 8570,
+     "date": "2024-06-04",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2024-25",
+     "D_cell": 128,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 127,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.001024817531047311,
+     "a1_mean": 0.016116004865340254,
+     "a9_mean": 0.015091187334292943
+    },
+    {
+     "t0": 8708,
+     "date": "2024-12-19",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2024-25",
+     "D_cell": 93,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 92,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -4.430165245231099e-05,
+     "a1_mean": 0.016178796013507975,
+     "a9_mean": 0.016223097665960286
+    },
+    {
+     "t0": 8779,
+     "date": "2025-04-04",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2024-25",
+     "D_cell": 355,
+     "D_union": 355,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0003460588400979632,
+     "a1_mean": 0.02943169520388994,
+     "a9_mean": 0.029085636363791977
+    },
+    {
+     "t0": 8927,
+     "date": "2025-11-05",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2024-25",
+     "D_cell": 122,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 121,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0017299957046867098,
+     "a1_mean": 0.0215529410620121,
+     "a9_mean": 0.02328293676669881
+    }
+   ]
+  },
+  "15pct": {
+   "n_react_detail": 27,
+   "gamma_agg_seedCI": {
+    "mean": 0.0009136682557749859,
+    "ci95": 0.00020081751035083996,
+    "n_seeds": 20
+   },
+   "overlap_diagnostic": {
+    "window_days_total": 405,
+    "unique_probe_days": 399,
+    "overlap_frac": 0.014814814814814836,
+    "median_n_days": 15.0
+   },
+   "T": 8966,
+   "half": 4483,
+   "reactivations": [
+    {
+     "t0": 4614,
+     "date": "2008-09-15",
+     "cell": 2,
+     "cell_name": "crisis-up",
+     "event": "2008-GFC",
+     "D_cell": 1333,
+     "D_union": 1,
+     "R": 10,
+     "rehearsal_days": 34,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.00269974551735154,
+     "a1_mean": 0.039751088814689,
+     "a9_mean": 0.03705134329733746
+    },
+    {
+     "t0": 4961,
+     "date": "2010-02-01",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2010",
+     "D_cell": 140,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 139,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0005682932070433071,
+     "a1_mean": 0.015603275924425888,
+     "a9_mean": 0.015034982717382581
+    },
+    {
+     "t0": 5012,
+     "date": "2010-04-15",
+     "cell": 0,
+     "cell_name": "calm-up",
+     "event": "2010",
+     "D_cell": 453,
+     "D_union": 405,
+     "R": 6,
+     "rehearsal_days": 26,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0011589288204648905,
+     "a1_mean": 0.01863253907264194,
+     "a9_mean": 0.01747361025217705
+    },
+    {
+     "t0": 5139,
+     "date": "2010-10-14",
+     "cell": 0,
+     "cell_name": "calm-up",
+     "event": "2010",
+     "D_cell": 114,
+     "D_union": 114,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0004804830909762841,
+     "a1_mean": 0.015414142497859848,
+     "a9_mean": 0.01589462558883613
+    },
+    {
+     "t0": 5245,
+     "date": "2011-03-17",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2011-12-euro",
+     "D_cell": 638,
+     "D_union": 1,
+     "R": 7,
+     "rehearsal_days": 111,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0006289719849467273,
+     "a1_mean": 0.015274532063455568,
+     "a9_mean": 0.015903504048402295
+    },
+    {
+     "t0": 5345,
+     "date": "2011-08-09",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2011-12-euro",
+     "D_cell": 235,
+     "D_union": 200,
+     "R": 3,
+     "rehearsal_days": 33,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.00045101507668761365,
+     "a1_mean": 0.02141283898517553,
+     "a9_mean": 0.020961823908487918
+    },
+    {
+     "t0": 5420,
+     "date": "2011-11-23",
+     "cell": 2,
+     "cell_name": "crisis-up",
+     "event": "2011-12-euro",
+     "D_cell": 275,
+     "D_union": 26,
+     "R": 6,
+     "rehearsal_days": 33,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.00351720679029777,
+     "a1_mean": 0.019171923745474436,
+     "a9_mean": 0.015654716955176666
+    },
+    {
+     "t0": 5521,
+     "date": "2012-04-20",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2011-12-euro",
+     "D_cell": 97,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 96,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0015585453843450243,
+     "a1_mean": 0.01367627230301711,
+     "a9_mean": 0.012117726918672085
+    },
+    {
+     "t0": 5814,
+     "date": "2013-06-21",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "other-2013",
+     "D_cell": 134,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 133,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -3.2232956637699706e-05,
+     "a1_mean": 0.018077869614664416,
+     "a9_mean": 0.018110102571302116
+    },
+    {
+     "t0": 5967,
+     "date": "2014-01-30",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "other-2014",
+     "D_cell": 105,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 104,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0004697614203534265,
+     "a1_mean": 0.013624116184038559,
+     "a9_mean": 0.013154354763685133
+    },
+    {
+     "t0": 6386,
+     "date": "2015-09-29",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2015-16",
+     "D_cell": 964,
+     "D_union": 964,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.00024690101250253796,
+     "a1_mean": 0.01855310882611074,
+     "a9_mean": 0.018306207813608203
+    },
+    {
+     "t0": 6411,
+     "date": "2015-11-03",
+     "cell": 0,
+     "cell_name": "calm-up",
+     "event": "2015-16",
+     "D_cell": 92,
+     "D_union": 1,
+     "R": 2,
+     "rehearsal_days": 89,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0038284158324688664,
+     "a1_mean": 0.01735928878160842,
+     "a9_mean": 0.013530872949139554
+    },
+    {
+     "t0": 6862,
+     "date": "2017-08-18",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "other-2017",
+     "D_cell": 193,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 192,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.00013162382627993248,
+     "a1_mean": 0.01098389353397757,
+     "a9_mean": 0.010852269707697638
+    },
+    {
+     "t0": 6983,
+     "date": "2018-02-12",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2018-19",
+     "D_cell": 113,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 112,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.000580126487224138,
+     "a1_mean": 0.014833775017837678,
+     "a9_mean": 0.015413901505061816
+    },
+    {
+     "t0": 7197,
+     "date": "2018-12-18",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2018-19",
+     "D_cell": 709,
+     "D_union": 709,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0005113852715105879,
+     "a1_mean": 0.01827242583156464,
+     "a9_mean": 0.01776104056005405
+    },
+    {
+     "t0": 7495,
+     "date": "2020-02-26",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2020-covid",
+     "D_cell": 91,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 90,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.007447831955314434,
+     "a1_mean": 0.06504444179558223,
+     "a9_mean": 0.0575966098402678
+    },
+    {
+     "t0": 7504,
+     "date": "2020-03-10",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2020-covid",
+     "D_cell": 295,
+     "D_union": 295,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0060487814734860035,
+     "a1_mean": 0.07383453426685879,
+     "a9_mean": 0.06778575279337279
+    },
+    {
+     "t0": 7554,
+     "date": "2020-05-20",
+     "cell": 2,
+     "cell_name": "crisis-up",
+     "event": "2020-covid",
+     "D_cell": 2134,
+     "D_union": 1,
+     "R": 6,
+     "rehearsal_days": 99,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0017835582038483455,
+     "a1_mean": 0.03272657358914482,
+     "a9_mean": 0.030943015385296473
+    },
+    {
+     "t0": 7667,
+     "date": "2020-10-29",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2020-covid",
+     "D_cell": 164,
+     "D_union": 1,
+     "R": 3,
+     "rehearsal_days": 106,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.001173383278543768,
+     "a1_mean": 0.030307465545602607,
+     "a9_mean": 0.031480848824146375
+    },
+    {
+     "t0": 7846,
+     "date": "2021-07-19",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2020-covid",
+     "D_cell": 177,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 176,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0011492518474625658,
+     "a1_mean": 0.019362849691759113,
+     "a9_mean": 0.02051210153922168
+    },
+    {
+     "t0": 8053,
+     "date": "2022-05-12",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2022-23",
+     "D_cell": 498,
+     "D_union": 472,
+     "R": 3,
+     "rehearsal_days": 5,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.00025049901001619745,
+     "a1_mean": 0.02317712422468996,
+     "a9_mean": 0.02342762323470616
+    },
+    {
+     "t0": 8132,
+     "date": "2022-09-06",
+     "cell": 2,
+     "cell_name": "crisis-up",
+     "event": "2022-23",
+     "D_cell": 551,
+     "D_union": 28,
+     "R": 4,
+     "rehearsal_days": 29,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0007174658268446592,
+     "a1_mean": 0.022033274483879487,
+     "a9_mean": 0.021315808657034828
+    },
+    {
+     "t0": 8421,
+     "date": "2023-10-30",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2022-23",
+     "D_cell": 155,
+     "D_union": 155,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 7.575317245123517e-05,
+     "a1_mean": 0.018048597910389083,
+     "a9_mean": 0.017972844737937848
+    },
+    {
+     "t0": 8570,
+     "date": "2024-06-04",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2024-25",
+     "D_cell": 128,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 127,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.00037224032904218697,
+     "a1_mean": 0.015457979238684813,
+     "a9_mean": 0.015085738909642626
+    },
+    {
+     "t0": 8708,
+     "date": "2024-12-19",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2024-25",
+     "D_cell": 93,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 92,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.00022275698028879215,
+     "a1_mean": 0.016195590100720626,
+     "a9_mean": 0.016418347081009418
+    },
+    {
+     "t0": 8780,
+     "date": "2025-04-07",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2024-25",
+     "D_cell": 359,
+     "D_union": 359,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.006177614953804804,
+     "a1_mean": 0.032011722246704594,
+     "a9_mean": 0.02583410729289979
+    },
+    {
+     "t0": 8927,
+     "date": "2025-11-05",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2024-25",
+     "D_cell": 122,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 121,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0008514734408000268,
+     "a1_mean": 0.02095340472141321,
+     "a9_mean": 0.021804878162213236
+    }
+   ]
+  },
+  "20pct": {
+   "n_react_detail": 22,
+   "gamma_agg_seedCI": {
+    "mean": -0.00017651746567575317,
+    "ci95": 0.00033548373735437827,
+    "n_seeds": 20
+   },
+   "overlap_diagnostic": {
+    "window_days_total": 330,
+    "unique_probe_days": 324,
+    "overlap_frac": 0.018181818181818188,
+    "median_n_days": 15.0
+   },
+   "T": 8966,
+   "half": 4483,
+   "reactivations": [
+    {
+     "t0": 4617,
+     "date": "2008-09-18",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2008-GFC",
+     "D_cell": 1369,
+     "D_union": 1359,
+     "R": 2,
+     "rehearsal_days": 9,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.009917696204047054,
+     "a1_mean": 0.038872940178939816,
+     "a9_mean": 0.04879063638298687
+    },
+    {
+     "t0": 4692,
+     "date": "2009-01-06",
+     "cell": 2,
+     "cell_name": "crisis-up",
+     "event": "2008-GFC",
+     "D_cell": 1434,
+     "D_union": 1,
+     "R": 2,
+     "rehearsal_days": 72,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.00671404489455299,
+     "a1_mean": 0.04272117921496491,
+     "a9_mean": 0.03600713432041192
+    },
+    {
+     "t0": 4961,
+     "date": "2010-02-01",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2010",
+     "D_cell": 140,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 139,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0014881238822556167,
+     "a1_mean": 0.015723209234913587,
+     "a9_mean": 0.01423508535265797
+    },
+    {
+     "t0": 4985,
+     "date": "2010-03-08",
+     "cell": 0,
+     "cell_name": "calm-up",
+     "event": "2010",
+     "D_cell": 366,
+     "D_union": 365,
+     "R": 1,
+     "rehearsal_days": 1,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0006276463032913182,
+     "a1_mean": 0.013636642108096597,
+     "a9_mean": 0.014264288411387915
+    },
+    {
+     "t0": 5245,
+     "date": "2011-03-17",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2011-12-euro",
+     "D_cell": 625,
+     "D_union": 1,
+     "R": 8,
+     "rehearsal_days": 178,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0011112526208529108,
+     "a1_mean": 0.012779687888947917,
+     "a9_mean": 0.013890940509800827
+    },
+    {
+     "t0": 5345,
+     "date": "2011-08-09",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2011-12-euro",
+     "D_cell": 235,
+     "D_union": 220,
+     "R": 3,
+     "rehearsal_days": 10,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0025956699477861916,
+     "a1_mean": 0.02335810303983404,
+     "a9_mean": 0.02076243309204785
+    },
+    {
+     "t0": 5521,
+     "date": "2012-04-20",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2011-12-euro",
+     "D_cell": 97,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 96,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0002473379912373043,
+     "a1_mean": 0.012208712918576486,
+     "a9_mean": 0.01245605090981379
+    },
+    {
+     "t0": 5814,
+     "date": "2013-06-21",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "other-2013",
+     "D_cell": 134,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 133,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -6.379613540798829e-06,
+     "a1_mean": 0.017445695804943057,
+     "a9_mean": 0.017452075418483856
+    },
+    {
+     "t0": 5967,
+     "date": "2014-01-30",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "other-2014",
+     "D_cell": 105,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 104,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 9.540587072565977e-05,
+     "a1_mean": 0.014135805965849253,
+     "a9_mean": 0.014040400095123593
+    },
+    {
+     "t0": 6411,
+     "date": "2015-11-03",
+     "cell": 0,
+     "cell_name": "calm-up",
+     "event": "2015-16",
+     "D_cell": 92,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 91,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0002308308221359856,
+     "a1_mean": 0.013872147246513644,
+     "a9_mean": 0.013641316424377659
+    },
+    {
+     "t0": 6464,
+     "date": "2016-01-21",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2015-16",
+     "D_cell": 1079,
+     "D_union": 1079,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0015127357502386085,
+     "a1_mean": 0.027995756006881877,
+     "a9_mean": 0.02648302025664327
+    },
+    {
+     "t0": 6862,
+     "date": "2017-08-18",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "other-2017",
+     "D_cell": 193,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 192,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0003117703230765684,
+     "a1_mean": 0.010795602900921015,
+     "a9_mean": 0.011107373223997583
+    },
+    {
+     "t0": 6983,
+     "date": "2018-02-12",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2018-19",
+     "D_cell": 113,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 112,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.00015226225205634478,
+     "a1_mean": 0.015094347104401006,
+     "a9_mean": 0.014942084852344661
+    },
+    {
+     "t0": 7202,
+     "date": "2018-12-26",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2018-19",
+     "D_cell": 722,
+     "D_union": 722,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.00025811458803046486,
+     "a1_mean": 0.01802930905321471,
+     "a9_mean": 0.017771194465184246
+    },
+    {
+     "t0": 7495,
+     "date": "2020-02-26",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2020-covid",
+     "D_cell": 91,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 90,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0019502947317800792,
+     "a1_mean": 0.058247796648138096,
+     "a9_mean": 0.05629750191635802
+    },
+    {
+     "t0": 7504,
+     "date": "2020-03-10",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2020-covid",
+     "D_cell": 302,
+     "D_union": 302,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.00033604889294001905,
+     "a1_mean": 0.0649169201746904,
+     "a9_mean": 0.06525296906763042
+    },
+    {
+     "t0": 7667,
+     "date": "2020-10-29",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2020-covid",
+     "D_cell": 112,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 111,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0028583613225081628,
+     "a1_mean": 0.02788904761387545,
+     "a9_mean": 0.030747408936383613
+    },
+    {
+     "t0": 7846,
+     "date": "2021-07-19",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2020-covid",
+     "D_cell": 177,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 176,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0002574771450605008,
+     "a1_mean": 0.019756470944898463,
+     "a9_mean": 0.019498993799837962
+    },
+    {
+     "t0": 8078,
+     "date": "2022-06-17",
+     "cell": 3,
+     "cell_name": "crisis-down",
+     "event": "2022-23",
+     "D_cell": 526,
+     "D_union": 526,
+     "R": 0,
+     "rehearsal_days": 0,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.0014213386569824557,
+     "a1_mean": 0.025967418599087966,
+     "a9_mean": 0.02454607994210551
+    },
+    {
+     "t0": 8570,
+     "date": "2024-06-04",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2024-25",
+     "D_cell": 128,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 127,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.00040314097016743225,
+     "a1_mean": 0.014718632568920448,
+     "a9_mean": 0.01512177353908788
+    },
+    {
+     "t0": 8708,
+     "date": "2024-12-19",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2024-25",
+     "D_cell": 93,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 92,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": 0.00038707540950300157,
+     "a1_mean": 0.016631650831746163,
+     "a9_mean": 0.01624457542224316
+    },
+    {
+     "t0": 8927,
+     "date": "2025-11-05",
+     "cell": 1,
+     "cell_name": "calm-down",
+     "event": "2024-25",
+     "D_cell": 122,
+     "D_union": 1,
+     "R": 1,
+     "rehearsal_days": 121,
+     "n_days": 15,
+     "full_window": true,
+     "gamma_i": -0.0005111339503346725,
+     "a1_mean": 0.022993527381938054,
+     "a9_mean": 0.023504661332272726
+    }
+   ]
+  }
+ },
+ "X1": {
+  "pooled_all_cells": {
+   "names": [
+    "FE_10pct",
+    "FE_12pct",
+    "FE_15pct",
+    "FE_20pct",
+    "log_D_cell",
+    "log_D_union",
+    "R"
+   ],
+   "beta": [
+    -0.0012906173584770135,
+    -0.002038185249952525,
+    -0.00022267741546934088,
+    -0.0012850212610560387,
+    0.0002423275973453276,
+    -7.735554907192774e-05,
+    0.00011482230681180114
+   ],
+   "se": [
+    0.001704352766485184,
+    0.002167778101812293,
+    0.0014093113335271945,
+    0.001612804381836563,
+    0.0003087996422714641,
+    0.00015515314967106897,
+    0.0001423243451829375
+   ],
+   "t": [
+    -0.7572477857026043,
+    -0.940218580604986,
+    -0.1580044168892253,
+    -0.7967620100292232,
+    0.7847405377895442,
+    -0.49857543489078165,
+    0.8067650454615727
+   ],
+   "p": [
+    0.4663694714999882,
+    0.36926163564201975,
+    0.8775983800234881,
+    0.44409423598162345,
+    0.4507959176240617,
+    0.6288618110880639,
+    0.4385681329440684
+   ],
+   "n": 107,
+   "n_clusters": 11,
+   "dof": 10,
+   "r2": 0.07403821730030513,
+   "beta_std": {
+    "log_D_cell": 0.00020895434109058,
+    "log_D_union": -0.00021133407752741968,
+    "R": 0.0002730078687459874
+   }
+  },
+  "pooled_crisis_cells": {
+   "names": [
+    "FE_10pct",
+    "FE_12pct",
+    "FE_15pct",
+    "FE_20pct",
+    "log_D_cell",
+    "log_D_union",
+    "R"
+   ],
+   "beta": [
+    0.00218315465636134,
+    0.00028147170126815324,
+    0.0031047275786293704,
+    0.001958180077475577,
+    0.00010060136106822248,
+    -0.00043961167587464994,
+    -2.8965832359824564e-05
+   ],
+   "se": [
+    0.0035459540278998743,
+    0.003827261717157538,
+    0.003698075622042894,
+    0.0037267072761477203,
+    0.00047543549463704244,
+    0.0003585513988543568,
+    0.0003286884804156282
+   ],
+   "t": [
+    0.6156748336791987,
+    0.07354388648320578,
+    0.8395522147041045,
+    0.5254451000239918,
+    0.21159833921323795,
+    -1.226077146203576,
+    -0.08812548685368324
+   ],
+   "p": [
+    0.5575885633003672,
+    0.9434307366843204,
+    0.42889705752427276,
+    0.6155014558687302,
+    0.83844918610464,
+    0.2598112378516356,
+    0.9322450903319369
+   ],
+   "n": 46,
+   "n_clusters": 8,
+   "dof": 7,
+   "r2": 0.19547058240619308,
+   "beta_std": {
+    "log_D_cell": 7.948427698259505e-05,
+    "log_D_union": -0.001196556577905097,
+    "R": -7.833530554285942e-05
+   }
+  },
+  "spearman_pooled_all": {
+   "vs_log_D_cell": {
+    "rho": 0.11080380337297291,
+    "p": 0.2558712681632193,
+    "n": 107
+   },
+   "vs_log_D_union": {
+    "rho": 0.12246927810490589,
+    "p": 0.20886625325333974,
+    "n": 107
+   },
+   "vs_R": {
+    "rho": 0.0250050411918623,
+    "p": 0.7982163944711358,
+    "n": 107
+   },
+   "vs_rehearsal_days": {
+    "rho": -0.20966714469448278,
+    "p": 0.03019730796803333,
+    "n": 107
+   }
+  },
+  "spearman_pooled_crisis": {
+   "vs_log_D_cell": {
+    "rho": 0.11345549546496826,
+    "p": 0.45280625976605016,
+    "n": 46
+   },
+   "vs_log_D_union": {
+    "rho": -0.16233074398975722,
+    "p": 0.28110076159153086,
+    "n": 46
+   },
+   "vs_R": {
+    "rho": 0.15522446283635846,
+    "p": 0.30297697139604435,
+    "n": 46
+   },
+   "vs_rehearsal_days": {
+    "rho": 0.16101014757255822,
+    "p": 0.2850856972295525,
+    "n": 46
+   }
+  },
+  "spearman_per_threshold": {
+   "10pct": {
+    "vs_log_D_cell": {
+     "rho": 0.2622914349276974,
+     "p": 0.1614412820441479,
+     "n": 30
+    },
+    "vs_log_D_union": {
+     "rho": 0.046403951396283664,
+     "p": 0.8076211597086483,
+     "n": 30
+    },
+    "vs_R": {
+     "rho": 0.16917024465517874,
+     "p": 0.3714946532336215,
+     "n": 30
+    },
+    "vs_rehearsal_days": {
+     "rho": -0.21545738322365574,
+     "p": 0.2528490443493463,
+     "n": 30
+    }
+   },
+   "12pct": {
+    "vs_log_D_cell": {
+     "rho": -0.028461959496442254,
+     "p": 0.8856829853518466,
+     "n": 28
+    },
+    "vs_log_D_union": {
+     "rho": 0.1409825578725159,
+     "p": 0.47424847928143987,
+     "n": 28
+    },
+    "vs_R": {
+     "rho": 0.034883890870175835,
+     "p": 0.8601166028451224,
+     "n": 28
+    },
+    "vs_rehearsal_days": {
+     "rho": -0.058726895116393917,
+     "p": 0.766587293749575,
+     "n": 28
+    }
+   },
+   "15pct": {
+    "vs_log_D_cell": {
+     "rho": 0.10683760683760683,
+     "p": 0.5958360563688367,
+     "n": 27
+    },
+    "vs_log_D_union": {
+     "rho": 0.18311206757813958,
+     "p": 0.36060188682482186,
+     "n": 27
+    },
+    "vs_R": {
+     "rho": 0.04997216209490062,
+     "p": 0.804497701940158,
+     "n": 27
+    },
+    "vs_rehearsal_days": {
+     "rho": -0.38551846825441466,
+     "p": 0.04703890940852653,
+     "n": 27
+    }
+   },
+   "20pct": {
+    "vs_log_D_cell": {
+     "rho": 0.012987012987012988,
+     "p": 0.9542576793321902,
+     "n": 22
+    },
+    "vs_log_D_union": {
+     "rho": 0.01843666701659509,
+     "p": 0.9350964701569795,
+     "n": 22
+    },
+    "vs_R": {
+     "rho": -0.14076647550036844,
+     "p": 0.5320783015975332,
+     "n": 22
+    },
+    "vs_rehearsal_days": {
+     "rho": -0.2802955741653719,
+     "p": 0.20641917648468847,
+     "n": 22
+    }
+   }
+  },
+  "within_event": {
+   "cells": [
+    {
+     "event": "2008-GFC",
+     "thresh": 0.1,
+     "gamma": 0.0028013839057312133,
+     "R": 7.0,
+     "n_react": 1
+    },
+    {
+     "event": "2008-GFC",
+     "thresh": 0.12,
+     "gamma": -0.003272651327539667,
+     "R": 7.0,
+     "n_react": 1
+    },
+    {
+     "event": "2008-GFC",
+     "thresh": 0.15,
+     "gamma": 0.00269974551735154,
+     "R": 10.0,
+     "n_react": 1
+    },
+    {
+     "event": "2008-GFC",
+     "thresh": 0.2,
+     "gamma": -0.001601825654747032,
+     "R": 2.0,
+     "n_react": 2
+    },
+    {
+     "event": "2010",
+     "thresh": 0.1,
+     "gamma": 0.00018034310260684264,
+     "R": 0.5,
+     "n_react": 2
+    },
+    {
+     "event": "2010",
+     "thresh": 0.12,
+     "gamma": 0.0008858585474812814,
+     "R": 0.5,
+     "n_react": 2
+    },
+    {
+     "event": "2010",
+     "thresh": 0.15,
+     "gamma": 0.00041557964551063785,
+     "R": 2.3333333333333335,
+     "n_react": 3
+    },
+    {
+     "event": "2010",
+     "thresh": 0.2,
+     "gamma": 0.00043023878948214925,
+     "R": 1.0,
+     "n_react": 2
+    },
+    {
+     "event": "2011-12-euro",
+     "thresh": 0.1,
+     "gamma": 0.0004397617848239537,
+     "R": 2.6,
+     "n_react": 5
+    },
+    {
+     "event": "2011-12-euro",
+     "thresh": 0.12,
+     "gamma": 0.000945523278510994,
+     "R": 3.75,
+     "n_react": 4
+    },
+    {
+     "event": "2011-12-euro",
+     "thresh": 0.15,
+     "gamma": 0.0012244488165959202,
+     "R": 4.25,
+     "n_react": 4
+    },
+    {
+     "event": "2011-12-euro",
+     "thresh": 0.2,
+     "gamma": 0.0004123597785653255,
+     "R": 4.0,
+     "n_react": 3
+    },
+    {
+     "event": "2015-16",
+     "thresh": 0.1,
+     "gamma": 0.0009142306191028738,
+     "R": 3.25,
+     "n_react": 4
+    },
+    {
+     "event": "2015-16",
+     "thresh": 0.12,
+     "gamma": 0.0008304780422491113,
+     "R": 3.0,
+     "n_react": 3
+    },
+    {
+     "event": "2015-16",
+     "thresh": 0.15,
+     "gamma": 0.002037658422485702,
+     "R": 1.0,
+     "n_react": 2
+    },
+    {
+     "event": "2015-16",
+     "thresh": 0.2,
+     "gamma": 0.0008717832861872971,
+     "R": 0.5,
+     "n_react": 2
+    },
+    {
+     "event": "2018-19",
+     "thresh": 0.1,
+     "gamma": -0.00015328894590884833,
+     "R": 0.5,
+     "n_react": 2
+    },
+    {
+     "event": "2018-19",
+     "thresh": 0.12,
+     "gamma": 0.0002817367302260206,
+     "R": 0.5,
+     "n_react": 2
+    },
+    {
+     "event": "2018-19",
+     "thresh": 0.15,
+     "gamma": -3.4370607856775044e-05,
+     "R": 0.5,
+     "n_react": 2
+    },
+    {
+     "event": "2018-19",
+     "thresh": 0.2,
+     "gamma": 0.00020518842004340482,
+     "R": 0.5,
+     "n_react": 2
+    },
+    {
+     "event": "2020-covid",
+     "thresh": 0.1,
+     "gamma": -0.001272416119714436,
+     "R": 2.4,
+     "n_react": 5
+    },
+    {
+     "event": "2020-covid",
+     "thresh": 0.12,
+     "gamma": -0.004578519132375178,
+     "R": 3.2,
+     "n_react": 5
+    },
+    {
+     "event": "2020-covid",
+     "thresh": 0.15,
+     "gamma": 0.0025915073013284898,
+     "R": 2.2,
+     "n_react": 5
+    },
+    {
+     "event": "2020-covid",
+     "thresh": 0.2,
+     "gamma": -0.00024665958465190044,
+     "R": 0.75,
+     "n_react": 4
+    },
+    {
+     "event": "2022-23",
+     "thresh": 0.1,
+     "gamma": 0.0012370237160160462,
+     "R": 3.75,
+     "n_react": 4
+    },
+    {
+     "event": "2022-23",
+     "thresh": 0.12,
+     "gamma": 0.000432970764628165,
+     "R": 4.0,
+     "n_react": 4
+    },
+    {
+     "event": "2022-23",
+     "thresh": 0.15,
+     "gamma": 0.0001809066630932323,
+     "R": 2.3333333333333335,
+     "n_react": 3
+    },
+    {
+     "event": "2022-23",
+     "thresh": 0.2,
+     "gamma": 0.0014213386569824557,
+     "R": 0.0,
+     "n_react": 1
+    },
+    {
+     "event": "2024-25",
+     "thresh": 0.1,
+     "gamma": 0.00021918836497727013,
+     "R": 0.75,
+     "n_react": 4
+    },
+    {
+     "event": "2024-25",
+     "thresh": 0.12,
+     "gamma": -0.00010085524649843663,
+     "R": 0.75,
+     "n_react": 4
+    },
+    {
+     "event": "2024-25",
+     "thresh": 0.15,
+     "gamma": 0.001368906215439543,
+     "R": 0.75,
+     "n_react": 4
+    },
+    {
+     "event": "2024-25",
+     "thresh": 0.2,
+     "gamma": -0.0001757331703330344,
+     "R": 1.0,
+     "n_react": 3
+    },
+    {
+     "event": "other-2013",
+     "thresh": 0.1,
+     "gamma": -0.0030115513293457533,
+     "R": 1.0,
+     "n_react": 1
+    },
+    {
+     "event": "other-2013",
+     "thresh": 0.12,
+     "gamma": 0.0004597675417075259,
+     "R": 1.0,
+     "n_react": 1
+    },
+    {
+     "event": "other-2013",
+     "thresh": 0.15,
+     "gamma": -3.2232956637699706e-05,
+     "R": 1.0,
+     "n_react": 1
+    },
+    {
+     "event": "other-2013",
+     "thresh": 0.2,
+     "gamma": -6.379613540798829e-06,
+     "R": 1.0,
+     "n_react": 1
+    },
+    {
+     "event": "other-2014",
+     "thresh": 0.1,
+     "gamma": -0.0006339953285420773,
+     "R": 1.0,
+     "n_react": 1
+    },
+    {
+     "event": "other-2014",
+     "thresh": 0.12,
+     "gamma": -0.0002305544854611253,
+     "R": 1.0,
+     "n_react": 1
+    },
+    {
+     "event": "other-2014",
+     "thresh": 0.15,
+     "gamma": 0.0004697614203534265,
+     "R": 1.0,
+     "n_react": 1
+    },
+    {
+     "event": "other-2014",
+     "thresh": 0.2,
+     "gamma": 9.540587072565977e-05,
+     "R": 1.0,
+     "n_react": 1
+    },
+    {
+     "event": "other-2017",
+     "thresh": 0.1,
+     "gamma": 0.00020623797501282022,
+     "R": 1.0,
+     "n_react": 1
+    },
+    {
+     "event": "other-2017",
+     "thresh": 0.12,
+     "gamma": 0.00014735110896751773,
+     "R": 1.0,
+     "n_react": 1
+    },
+    {
+     "event": "other-2017",
+     "thresh": 0.15,
+     "gamma": 0.00013162382627993248,
+     "R": 1.0,
+     "n_react": 1
+    },
+    {
+     "event": "other-2017",
+     "thresh": 0.2,
+     "gamma": -0.0003117703230765684,
+     "R": 1.0,
+     "n_react": 1
+    }
+   ],
+   "events_used": [
+    "2008-GFC",
+    "2010",
+    "2011-12-euro",
+    "2015-16",
+    "2018-19",
+    "2020-covid",
+    "2022-23",
+    "2024-25",
+    "other-2013",
+    "other-2014",
+    "other-2017"
+   ],
+   "n_cells_used": 44,
+   "ols_event_FE": {
+    "names": [
+     "FE_2008-GFC",
+     "FE_2010",
+     "FE_2011-12-euro",
+     "FE_2015-16",
+     "FE_2018-19",
+     "FE_2020-covid",
+     "FE_2022-23",
+     "FE_2024-25",
+     "FE_other-2013",
+     "FE_other-2014",
+     "FE_other-2017",
+     "R"
+    ],
+    "beta": [
+     -0.0009406578834097873,
+     0.0002951181890020941,
+     0.00013933547205910798,
+     0.000836451527103623,
+     -9.592908074726632e-06,
+     -0.0012373716721361492,
+     0.00039249635970989576,
+     0.0001907114166952358,
+     -0.0008164177038555353,
+     -0.0002436642451323827,
+     -0.0001254579676054282,
+     0.00016881861440135376
+    ],
+    "se": [
+     0.001439744972246643,
+     0.0007473398751210713,
+     0.0010031977259162173,
+     0.000808482354112858,
+     0.0007242005557096944,
+     0.0008268555094823771,
+     0.0008657497322311549,
+     0.0007345662191007246,
+     0.0007430453751534979,
+     0.0007430453751534979,
+     0.0007430453751534979,
+     0.00019200689101096433
+    ],
+    "t": [
+     -0.6533503513069695,
+     0.3948915330582141,
+     0.13889133563560796,
+     1.0345946610318482,
+     -0.013246203691912215,
+     -1.4964787171954153,
+     0.45336007058111266,
+     0.25962453994782086,
+     -1.0987454214177435,
+     -0.3279264675889365,
+     -0.16884294257199456,
+     0.8792320604353392
+    ],
+    "p": [
+     0.5181977576910418,
+     0.6955428834345907,
+     0.8904064336349209,
+     0.308614005339764,
+     0.9895136096645603,
+     0.1443278309144818,
+     0.6533489511037526,
+     0.7968165032818373,
+     0.2800774374665264,
+     0.7451032704953999,
+     0.8669829307494217,
+     0.3858304104617044
+    ],
+    "n": 44,
+    "dof": 32,
+    "r2": 0.19937377679910362
+   },
+   "spearman_demeaned": {
+    "rho": -0.039661214857647925,
+    "p": 0.798252351240488,
+    "n": 44
+   }
+  },
+  "within_event_crisis_only": {
+   "cells": [
+    {
+     "event": "2008-GFC",
+     "thresh": 0.1,
+     "gamma": 0.0028013839057312133,
+     "R": 7.0,
+     "n_react": 1
+    },
+    {
+     "event": "2008-GFC",
+     "thresh": 0.12,
+     "gamma": -0.003272651327539667,
+     "R": 7.0,
+     "n_react": 1
+    },
+    {
+     "event": "2008-GFC",
+     "thresh": 0.15,
+     "gamma": 0.00269974551735154,
+     "R": 10.0,
+     "n_react": 1
+    },
+    {
+     "event": "2008-GFC",
+     "thresh": 0.2,
+     "gamma": -0.001601825654747032,
+     "R": 2.0,
+     "n_react": 2
+    },
+    {
+     "event": "2010",
+     "thresh": 0.1,
+     "gamma": -6.47113488923233e-05,
+     "R": 1.0,
+     "n_react": 1
+    },
+    {
+     "event": "2010",
+     "thresh": 0.12,
+     "gamma": -0.0005930741674543567,
+     "R": 1.0,
+     "n_react": 1
+    },
+    {
+     "event": "2010",
+     "thresh": 0.15,
+     "gamma": 0.0005682932070433071,
+     "R": 1.0,
+     "n_react": 1
+    },
+    {
+     "event": "2010",
+     "thresh": 0.2,
+     "gamma": 0.0014881238822556167,
+     "R": 1.0,
+     "n_react": 1
+    },
+    {
+     "event": "2011-12-euro",
+     "thresh": 0.1,
+     "gamma": 0.0019898259283796602,
+     "R": 1.3333333333333333,
+     "n_react": 3
+    },
+    {
+     "event": "2011-12-euro",
+     "thresh": 0.12,
+     "gamma": 0.002529890722157953,
+     "R": 2.0,
+     "n_react": 2
+    },
+    {
+     "event": "2011-12-euro",
+     "thresh": 0.15,
+     "gamma": 0.001984110933492692,
+     "R": 4.5,
+     "n_react": 2
+    },
+    {
+     "event": "2011-12-euro",
+     "thresh": 0.2,
+     "gamma": 0.0025956699477861916,
+     "R": 3.0,
+     "n_react": 1
+    },
+    {
+     "event": "2015-16",
+     "thresh": 0.1,
+     "gamma": 0.0010246771838778417,
+     "R": 3.0,
+     "n_react": 2
+    },
+    {
+     "event": "2015-16",
+     "thresh": 0.12,
+     "gamma": -0.0007283800387566323,
+     "R": 2.5,
+     "n_react": 2
+    },
+    {
+     "event": "2015-16",
+     "thresh": 0.15,
+     "gamma": 0.00024690101250253796,
+     "R": 0.0,
+     "n_react": 1
+    },
+    {
+     "event": "2015-16",
+     "thresh": 0.2,
+     "gamma": 0.0015127357502386085,
+     "R": 0.0,
+     "n_react": 1
+    },
+    {
+     "event": "2018-19",
+     "thresh": 0.1,
+     "gamma": -0.000888566258599871,
+     "R": 0.0,
+     "n_react": 1
+    },
+    {
+     "event": "2018-19",
+     "thresh": 0.12,
+     "gamma": 0.0006422014571714554,
+     "R": 0.0,
+     "n_react": 1
+    },
+    {
+     "event": "2018-19",
+     "thresh": 0.15,
+     "gamma": 0.0005113852715105879,
+     "R": 0.0,
+     "n_react": 1
+    },
+    {
+     "event": "2018-19",
+     "thresh": 0.2,
+     "gamma": 0.00025811458803046486,
+     "R": 0.0,
+     "n_react": 1
+    },
+    {
+     "event": "2020-covid",
+     "thresh": 0.1,
+     "gamma": 0.0006316327880976566,
+     "R": 4.0,
+     "n_react": 2
+    },
+    {
+     "event": "2020-covid",
+     "thresh": 0.12,
+     "gamma": -0.006415794343131246,
+     "R": 4.0,
+     "n_react": 2
+    },
+    {
+     "event": "2020-covid",
+     "thresh": 0.15,
+     "gamma": 0.0039161698386671745,
+     "R": 3.0,
+     "n_react": 2
+    },
+    {
+     "event": "2020-covid",
+     "thresh": 0.2,
+     "gamma": -0.00033604889294001905,
+     "R": 0.0,
+     "n_react": 1
+    },
+    {
+     "event": "2022-23",
+     "thresh": 0.1,
+     "gamma": 0.0019014765955917938,
+     "R": 3.5,
+     "n_react": 2
+    },
+    {
+     "event": "2022-23",
+     "thresh": 0.12,
+     "gamma": 0.00045869003366073743,
+     "R": 3.0,
+     "n_react": 3
+    },
+    {
+     "event": "2022-23",
+     "thresh": 0.15,
+     "gamma": 0.0001809066630932323,
+     "R": 2.3333333333333335,
+     "n_react": 3
+    },
+    {
+     "event": "2022-23",
+     "thresh": 0.2,
+     "gamma": 0.0014213386569824557,
+     "R": 0.0,
+     "n_react": 1
+    },
+    {
+     "event": "2024-25",
+     "thresh": 0.1,
+     "gamma": 0.0012282528505595351,
+     "R": 0.0,
+     "n_react": 1
+    },
+    {
+     "event": "2024-25",
+     "thresh": 0.12,
+     "gamma": 0.0003460588400979632,
+     "R": 0.0,
+     "n_react": 1
+    },
+    {
+     "event": "2024-25",
+     "thresh": 0.15,
+     "gamma": 0.006177614953804804,
+     "R": 0.0,
+     "n_react": 1
+    }
+   ],
+   "events_used": [
+    "2008-GFC",
+    "2010",
+    "2011-12-euro",
+    "2015-16",
+    "2018-19",
+    "2020-covid",
+    "2022-23",
+    "2024-25"
+   ],
+   "n_cells_used": 31,
+   "ols_event_FE": {
+    "names": [
+     "FE_2008-GFC",
+     "FE_2010",
+     "FE_2011-12-euro",
+     "FE_2015-16",
+     "FE_2018-19",
+     "FE_2020-covid",
+     "FE_2022-23",
+     "FE_2024-25",
+     "R"
+    ],
+    "beta": [
+     -0.0007537446969435969,
+     0.00020959515367765827,
+     0.0018955377966447034,
+     0.00032139721007003663,
+     0.00013078376452815957,
+     -0.0009361826861177129,
+     0.000681297770802835,
+     0.0025839755481541007,
+     0.00014006273956040143
+    ],
+    "se": [
+     0.002145271161476972,
+     0.0011608157197068364,
+     0.001359169194276086,
+     0.001190699359098205,
+     0.0011263176429354529,
+     0.0013657545740961233,
+     0.001285835998007722,
+     0.001300559588683617,
+     0.00028089446831651573
+    ],
+    "t": [
+     -0.3513517127712006,
+     0.18055850736634704,
+     1.3946297522247004,
+     0.2699230562393616,
+     0.11611623536971846,
+     -0.6854691932752943,
+     0.5298481080467802,
+     1.9868182670272836,
+     0.4986311777509866
+    ],
+    "p": [
+     0.7286671421641857,
+     0.8583670802465141,
+     0.17705153378358354,
+     0.7897352307844184,
+     0.9086138474519356,
+     0.5002077498229496,
+     0.6015242233399672,
+     0.05953638266477376,
+     0.6229881335353427
+    ],
+    "n": 31,
+    "dof": 22,
+    "r2": 0.21985707337831928
+   },
+   "spearman_demeaned": {
+    "rho": 0.1010889183022988,
+    "p": 0.5884392080100738,
+    "n": 31
+   }
+  },
+  "X6_cell_split": {
+   "10pct": {
+    "cells": {
+     "crisis-up": {
+      "n_react": 5,
+      "mean_gamma_i": 0.003567094146319587,
+      "day_weighted_sum": 0.26753206097396903,
+      "share_of_day_weighted_total": 3.7669833448497285
+     },
+     "crisis-down": {
+      "n_react": 8,
+      "mean_gamma_i": -0.0002092575828157269,
+      "day_weighted_sum": -0.02511090993788723,
+      "share_of_day_weighted_total": -0.353573994704308
+     },
+     "calm": {
+      "n_react": 17,
+      "mean_gamma_i": -0.0006721604356992693,
+      "day_weighted_sum": -0.17140091110331365,
+      "share_of_day_weighted_total": -2.41340935014542
+     }
+    },
+    "day_weighted_gamma_total": 0.0710202399327681,
+    "red_flag_calm_carried": false
+   },
+   "12pct": {
+    "cells": {
+     "crisis-up": {
+      "n_react": 5,
+      "mean_gamma_i": -0.00036562269692667904,
+      "day_weighted_sum": -0.027421702269500935,
+      "share_of_day_weighted_total": 0.11532745442297436
+     },
+     "crisis-down": {
+      "n_react": 8,
+      "mean_gamma_i": -0.001112731116446106,
+      "day_weighted_sum": -0.13352773397353274,
+      "share_of_day_weighted_total": 0.5615775965580092
+     },
+     "calm": {
+      "n_react": 15,
+      "mean_gamma_i": -0.000341436035951638,
+      "day_weighted_sum": -0.07682310808911853,
+      "share_of_day_weighted_total": 0.32309494901901636
+     }
+    },
+    "day_weighted_gamma_total": -0.23777254433215222,
+    "red_flag_calm_carried": false
+   },
+   "15pct": {
+    "cells": {
+     "crisis-up": {
+      "n_react": 4,
+      "mean_gamma_i": 0.0021794940845855787,
+      "day_weighted_sum": 0.13076964507513472,
+      "share_of_day_weighted_total": 0.26910748888834496
+     },
+     "crisis-down": {
+      "n_react": 8,
+      "mean_gamma_i": 0.0017286556446837365,
+      "day_weighted_sum": 0.20743867736204838,
+      "share_of_day_weighted_total": 0.42688271831851116
+     },
+     "calm": {
+      "n_react": 15,
+      "mean_gamma_i": 0.0006565778334259172,
+      "day_weighted_sum": 0.1477300125208314,
+      "share_of_day_weighted_total": 0.30400979279314405
+     }
+    },
+    "day_weighted_gamma_total": 0.4859383349580144,
+    "red_flag_calm_carried": false
+   },
+   "20pct": {
+    "cells": {
+     "crisis-up": {
+      "n_react": 1,
+      "mean_gamma_i": 0.00671404489455299,
+      "day_weighted_sum": 0.10071067341829484,
+      "share_of_day_weighted_total": 9.164608400969017
+     },
+     "crisis-down": {
+      "n_react": 7,
+      "mean_gamma_i": -0.0004253946102419622,
+      "day_weighted_sum": -0.04466643407540601,
+      "share_of_day_weighted_total": -4.06461761275874
+     },
+     "calm": {
+      "n_react": 14,
+      "mean_gamma_i": -0.0002145483474105426,
+      "day_weighted_sum": -0.04505515295621394,
+      "share_of_day_weighted_total": -4.099990788210276
+     }
+    },
+    "day_weighted_gamma_total": 0.010989086386674878,
+    "red_flag_calm_carried": false
+   }
+  }
+ },
+ "X3": {
+  "10pct": {
+   "all_cells": {
+    "gap_profile": [
+     0.0013320443128049385,
+     -7.298598531904968e-05,
+     0.0005554655952028919,
+     0.0027265256657281562,
+     0.00028211417495901855,
+     -0.00031729334052554235,
+     -0.0007594811877546322,
+     0.0012485121248997876,
+     8.214445614454919e-06,
+     -0.001682155911463274,
+     0.00036612030916024455,
+     -0.0019941738376956465,
+     0.00038628789154718105,
+     -0.00026092750599378885,
+     0.0005490745799275209
+    ],
+    "n_seeds": 20,
+    "exp_fit": {
+     "A": 0.001742210154053496,
+     "tau_half": 4.20640251652249,
+     "C": -0.0005421390129154576,
+     "r2": 0.1788512525492193,
+     "censored_at_bound": false
+    },
+    "bootstrap": {
+     "n_boot": 2000,
+     "fit_success_frac": 1.0,
+     "decaying_fit_frac": 0.997,
+     "tau_ci95": [
+      1.8169143472990774,
+      17.347174472428783
+     ],
+     "tau_median_boot": 4.105999730469184
+    }
+   },
+   "crisis_cells": {
+    "gap_profile": [
+     0.0018707829967779372,
+     -0.0005879423575077687,
+     0.003505115916084882,
+     0.007037367337655605,
+     0.002591093043642476,
+     -0.00020193975191520078,
+     -0.002082097294788229,
+     0.0023048434271928956,
+     0.0026470563978763474,
+     -0.0021676480757111647,
+     0.0013975245212780097,
+     -0.004077010988279619,
+     0.00014900356556934346,
+     0.002811704421097491,
+     0.0034499276899563488
+    ],
+    "n_seeds": 20,
+    "exp_fit": {
+     "A": 0.0006159044922021533,
+     "tau_half": 0.20000000053608538,
+     "C": 0.0012008005637850886,
+     "r2": 0.0032368543301715125,
+     "censored_at_bound": false
+    },
+    "bootstrap": {
+     "n_boot": 2000,
+     "fit_success_frac": 1.0,
+     "decaying_fit_frac": 0.8295,
+     "tau_ci95": [
+      0.20000000000000098,
+      12.617867347871115
+     ],
+     "tau_median_boot": 3.8214069347186053
+    }
+   },
+   "n_full_windows_all": 30,
+   "n_full_windows_crisis": 13
+  },
+  "12pct": {
+   "all_cells": {
+    "gap_profile": [
+     -0.0005317590297884779,
+     -0.001005347497966978,
+     0.0039340111202537135,
+     -0.0008034186393552932,
+     -0.0005809277803183611,
+     0.0002564821014844145,
+     0.00033934779103454683,
+     0.0013946367182829337,
+     -0.003999427973009712,
+     -0.0014519560051773068,
+     -0.000881109994110833,
+     -0.0037441340662119488,
+     -0.0009288605627645566,
+     0.0012172436815926677,
+     -0.0017066564472359405
+    ],
+    "n_seeds": 20,
+    "exp_fit": {
+     "A": 0.003802004277300475,
+     "tau_half": 12.895853586708986,
+     "C": -0.0032468844557580747,
+     "r2": 0.10802112636965255,
+     "censored_at_bound": false
+    },
+    "bootstrap": {
+     "n_boot": 2000,
+     "fit_success_frac": 1.0,
+     "decaying_fit_frac": 0.955,
+     "tau_ci95": [
+      5.3211024423955156,
+      272.1369562871714
+     ],
+     "tau_median_boot": 13.251483909578049
+    }
+   },
+   "crisis_cells": {
+    "gap_profile": [
+     -0.002272418358457726,
+     -0.0008702921858511948,
+     0.007514690556338574,
+     4.147783738981854e-05,
+     -0.0004658707863453952,
+     -0.0010805818318628375,
+     0.0002763483569154648,
+     -0.00010262875014314615,
+     -0.006402924217647643,
+     -0.0004386802288127453,
+     -0.001241444751535823,
+     -0.005446768452592037,
+     -0.005682865368719332,
+     0.0034096358925202602,
+     0.00038159642395506994
+    ],
+    "n_seeds": 20,
+    "exp_fit": {
+     "A": 0.003590292930034618,
+     "tau_half": 6.323574334305913,
+     "C": -0.002685514717489058,
+     "r2": 0.06545337407267748,
+     "censored_at_bound": false
+    },
+    "bootstrap": {
+     "n_boot": 2000,
+     "fit_success_frac": 1.0,
+     "decaying_fit_frac": 1.0,
+     "tau_ci95": [
+      4.402394499132438,
+      11.844182370638908
+     ],
+     "tau_median_boot": 6.36423420014027
+    }
+   },
+   "n_full_windows_all": 28,
+   "n_full_windows_crisis": 13
+  },
+  "15pct": {
+   "all_cells": {
+    "gap_profile": [
+     0.0008803691043759311,
+     0.002172194420208755,
+     0.0031747168850848584,
+     0.00032553113102108233,
+     0.0006981982998472953,
+     0.002762188997195996,
+     6.907287781968163e-05,
+     0.0007205087292845749,
+     -0.0005477506964830103,
+     0.0004824980353960883,
+     0.002707483686340306,
+     -0.0010930498475015707,
+     1.5783989389140546e-05,
+     0.0024954759583952447,
+     0.0031344945391817295
+    ],
+    "n_seeds": 20,
+    "exp_fit": {
+     "A": 0.0007146763838860254,
+     "tau_half": 2.193980128474104,
+     "C": 0.0010255030865937123,
+     "r2": 0.0227916135129016,
+     "censored_at_bound": false
+    },
+    "bootstrap": {
+     "n_boot": 2000,
+     "fit_success_frac": 1.0,
+     "decaying_fit_frac": 0.9235,
+     "tau_ci95": [
+      1.3400073519065958,
+      3.5872939616212105
+     ],
+     "tau_median_boot": 2.236824859289583
+    }
+   },
+   "crisis_cells": {
+    "gap_profile": [
+     0.002382158533487349,
+     0.004690535807997046,
+     0.005729622096048999,
+     0.001652430028824326,
+     0.0017174770167570047,
+     0.007056010138503664,
+     -0.001469108689663211,
+     0.0006134507425105346,
+     -0.00012359963601292652,
+     0.0013433940378884523,
+     0.003212786741991225,
+     -0.0026381163946400297,
+     -0.001723218047906983,
+     0.0024341646047892464,
+     0.003306039889190586
+    ],
+    "n_seeds": 20,
+    "exp_fit": {
+     "A": 0.004237515812219796,
+     "tau_half": 4.560556548920088,
+     "C": 8.036314929258344e-05,
+     "r2": 0.18439576259884038,
+     "censored_at_bound": false
+    },
+    "bootstrap": {
+     "n_boot": 2000,
+     "fit_success_frac": 1.0,
+     "decaying_fit_frac": 1.0,
+     "tau_ci95": [
+      2.784392801600649,
+      7.673274170258033
+     ],
+     "tau_median_boot": 4.6232852509097
+    }
+   },
+   "n_full_windows_all": 27,
+   "n_full_windows_crisis": 12
+  },
+  "20pct": {
+   "all_cells": {
+    "gap_profile": [
+     0.0024821630248970552,
+     0.0022063475981987414,
+     -0.0005100038933750636,
+     0.0007647457108266346,
+     0.0038851098407361962,
+     0.0004346829660806438,
+     -0.0013325459033417363,
+     -0.004549395123509716,
+     0.002192960830186398,
+     -0.0005627098048042913,
+     -0.004502068911297273,
+     -0.001845177737154878,
+     -0.0014274926458353785,
+     0.0016285574445570514,
+     0.0016343305305026444
+    ],
+    "n_seeds": 20,
+    "exp_fit": {
+     "A": 0.003532924485340976,
+     "tau_half": 2.2572794334332316,
+     "C": -0.0008485952322667817,
+     "r2": 0.18106293597042178,
+     "censored_at_bound": false
+    },
+    "bootstrap": {
+     "n_boot": 2000,
+     "fit_success_frac": 1.0,
+     "decaying_fit_frac": 1.0,
+     "tau_ci95": [
+      1.6594522955204642,
+      3.217254889562561
+     ],
+     "tau_median_boot": 2.234980166121864
+    }
+   },
+   "crisis_cells": {
+    "gap_profile": [
+     0.007754701395244479,
+     0.007828363403040457,
+     -0.0017839937581442596,
+     0.0017415070028071148,
+     0.01000826563909716,
+     0.0024813733828624846,
+     -0.0003710698610264347,
+     -0.007200030514623336,
+     0.007037992934147153,
+     -0.0017848221534725317,
+     -0.01071181715544067,
+     -0.005235330236057643,
+     -0.00281804704867922,
+     -0.003281253678984967,
+     0.0033396905670913016
+    ],
+    "n_seeds": 20,
+    "exp_fit": {
+     "A": 0.01172237525629062,
+     "tau_half": 3.788441822728095,
+     "C": -0.00390645697153587,
+     "r2": 0.3146392010773883,
+     "censored_at_bound": false
+    },
+    "bootstrap": {
+     "n_boot": 2000,
+     "fit_success_frac": 1.0,
+     "decaying_fit_frac": 1.0,
+     "tau_ci95": [
+      2.4873973752164997,
+      6.7695742056500885
+     ],
+     "tau_median_boot": 3.7565731805653946
+    }
+   },
+   "n_full_windows_all": 22,
+   "n_full_windows_crisis": 8
+  }
+ },
+ "verdicts": {
+  "E-X1": "NEITHER branch (~20% prior): Gamma not cleanly localized in identifiable reactivation covariates -> artifact warning at headline prominence, as registered.",
+  "E-X1_slopes": {
+   "log_D_cell": {
+    "beta": 0.0002423275973453276,
+    "p": 0.4507959176240617,
+    "beta_std": 0.00020895434109058
+   },
+   "log_D_union": {
+    "beta": -7.735554907192774e-05,
+    "p": 0.6288618110880639,
+    "beta_std": -0.00021133407752741968
+   },
+   "R": {
+    "beta": 0.00011482230681180114,
+    "p": 0.4385681329440684,
+    "beta_std": 0.0002730078687459874
+   }
+  },
+  "E-X3": "ANTI-BRANCH: profiles flat/parallel -> the deficit is a level offset, not a reactivation transient; the 'forgetting' label is wrong (candidate rename: allocation deficit). Reported plainly, as registered.",
+  "E-X3_tau": {
+   "10pct": 4.20640251652249,
+   "12pct": 12.895853586708986,
+   "15pct": 2.193980128474104,
+   "20pct": 2.2572794334332316
+  },
+  "X6": "No red flag: no threshold has positive Gamma carried majority by calm-cell reactivations."
+ }
+}
