@@ -161,16 +161,29 @@ half-life). The paper treats C_relearn as an empirical constant, not a theorem.
 
 ## 5. Prop 1 (decomposition) and Prop 3 (additivity / the 2×2)
 
-**Prop 1.** Under A1–A2, for the owner-of-r's head q̂_r trained on E_r episodes, probe
-window after reactivation:
-  E[Regret_react(r)] ≤ [ μ̂_r(q̂_r) + σ̂_r(q̂_r)/√δ + ε_est(E_r) ]·(1−φ) + Φ(D;A)·C_relearn
-  with φ = Pr[head lost] shorthand; displayed in the paper in the clean two-term form
-  E[Regret_react(r)] ≤ G_inv(q̂_r; Q_r, δ, E_r) + G_forget(D; A, K, ρ_int)
-  G_inv = μ_r + σ_r/√δ + O(B/√E_r),  G_forget = Φ(D;A)·C_relearn.
-**Proof.** Condition on the retention event; on retention the served head is q̂_r and
-Lemma 1/1' bound its regret on the fresh episode; on eviction the served head is fresh
-and its probe-window excess is C_relearn by definition; combine with Pr[eviction] =
-Φ(D;A) from Lemma 3/Prop 2. ∎
+**Prop 1 (register fixed 2026-07-14; matches the paper).** The previous statement
+mixed registers: it bounded E[Regret_react] while injecting Lemma 1's Cantelli
+*quantile* term σ_r/√δ into the expectation — type-inconsistent (the σ-term is a
+tail object; in expectation it vanishes). Fixed statement at fixed tail level
+δ ∈ (0,1]: CVaR over the fresh episode draw e′, expectation over the
+allocation/eviction randomness:
+  E_A[ CVaR_δ^{e′}[Regret_react(r)] ] ≤ G_inv(δ) + G_forget
+  G_inv(δ) = μ_r(q̂_r) + σ_r(q̂_r)·√((1−δ)/δ) + O(B/√E_r),
+  G_forget  = Φ(D;A)·C_relearn.
+At δ = 1 this specializes to E[Regret_react] ≤ μ_r + O(B/√E_r) + G_forget: the
+σ-term vanishes and the population-level bound is minimized by the mean-optimal
+(ERM) head. Interpretation: allocation controls the *mean* of the reactivation
+transient; the invariance objective controls its *tail* across episode draws.
+**Eviction-branch bookkeeping (also fixed):** C_relearn is an EXCESS over the
+converged retained benchmark, so the eviction branch's regret is
+(retained benchmark + C_relearn), not C_relearn alone; the pointwise accounting is
+  Regret_react(r) ≤ L_{r,e′}(q̂_r) + 1{evict}·C_relearn.
+**Proof.** Pointwise accounting inequality above; the eviction event is a function of
+the dormancy-period allocation stream, independent of e′ under A1. Conditional on the
+event, apply the CVaR form of Cantelli (CVaR_δ[X] ≤ μ + σ√((1−δ)/δ) for any X with
+mean μ, variance σ² — same one-sided moment argument as Lemma 1's quantile version)
+plus Lemma 1's estimation terms to the first term; the second term is constant given
+the event. Take E over the indicator: E[1{evict}] = Φ(D;A) from Lemma 3/Prop 2. ∎
 
 **Prop 3 (independent controls; additive bound).** G_forget depends only on (A, D, K,
 memory model) and is zeroed by reward-independent assignment (Prop 2(ii)) regardless

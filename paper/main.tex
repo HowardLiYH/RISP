@@ -79,34 +79,65 @@ not P\&L---and (ii)~each specialist trains its niche with a decision-focused
 \emph{invariance} objective (variance plus mean of an SPO-style regret
 surrogate across historical episodes of its regime). We prove a
 post-reactivation regret bound that decomposes into a \emph{forgetting
-deficit}---zero for any reward-independent assignment, approaching the full
+deficit}---zero for any isolated covering assignment, approaching the full
 relearning cost for any reward-driven one---and an \emph{invariance gap}
 controlled by the episode-variance penalty, including the
 Pinsker-type bridge from divergence-metric invariance to regret. In controlled
 regime-switching markets with realistic signal-to-noise, the predicted
 $2{\times}2$ dissociation holds with all pre-registered orderings confirmed
-(20 seeds, Holm-corrected): emergent reward-independent assignment cuts
-post-reactivation decision regret by $6.1\%$ versus a capacity-matched
-monolith ($p{=}1.3{\times}10^{-3}$), the invariance objective cuts it a
-further $4.4\%$ ($p{=}6.1{\times}10^{-3}$; $10.3\%$ jointly,
-$p{=}9.2{\times}10^{-7}$; $38\%$ of the excess over the irreducible noise
-floor), and the interaction is \emph{super-additive}: invariant training buys
-nothing in a reward-driven monolith ($p{=}0.88$ vs.\ ERM), because an objective
+(100 seeds, Holm-corrected): emergent reward-independent assignment cuts
+post-reactivation decision regret by $4.4\%$ versus a total-capacity-matched
+learned router ($p{=}2.5{\times}10^{-7}$; $4.3\%$ versus the
+per-specialist-matched monolith, $p{=}1.9{\times}10^{-7}$, capacity
+accounting in \S\ref{sec:e1}), the invariance objective cuts it a
+further $5.0\%$ ($p{=}5.8{\times}10^{-9}$; $9.1\%$ jointly,
+$p{=}6.0{\times}10^{-23}$; $36\%$ of the excess over the converged
+invariant-service floor), and the interaction is \emph{super-additive}: invariant training buys
+nothing in a reward-driven monolith ($p{=}0.89$ vs.\ ERM), because an objective
 cannot help a head that has been evicted. The learned router and the
 recent-performance allocator inherit the monolith's failure; the full system
 is statistically indistinguishable from a hand-pinned oracle assignment
-trained with the same objective ($p{=}0.72$)---recovering the skyline without
-being handed the assignment---and nominally beats the oracle assignment
-trained with ERM. We pair the
-mechanism with an honest audit in the GAUSE tradition: a pre-registered
-structure diagnostic run on real crypto and commodity panels finds \emph{no
-exploitable regime structure on the decision-regret metric} under causal,
-leakage-free labelings---so the real-data $2{\times}2$ is correctly null, the
-mechanism's preconditions are checkable before deployment, and we quantify
-exactly when retention is worthless (high signal-to-noise relearning,
-short dormancy, structureless regimes). All claims are regret and retention
-claims, not alpha claims; code, data, and per-figure result files are
-released.
+trained with the same objective ($p{=}0.53$)---recovering the skyline without
+being handed the assignment---and beats the oracle assignment
+trained with ERM ($p{=}1.5{\times}10^{-6}$). We pair the
+mechanism with an honest audit in the GAUSE tradition, organized as a
+\emph{two-gate} deployment protocol whose gates are checkable before any
+mechanism is bought. Gate 1 (structure): a pre-registered diagnostic on
+real crypto and commodity panels finds \emph{no exploitable regime
+structure on the decision-regret metric} at daily frequency under causal,
+leakage-free labelings---so the daily real-data $2{\times}2$ is correctly
+null---while an intraday retest \emph{passes} the gate on 4-hour crypto
+(one confirmed cell of a ten-cell pre-registered screen: conditioning
+beats block-shuffled labels by $3.2\%$, $z{=}2.3$ against 50 fresh
+controls, split-half stable; disjoint-period replication is the
+committed next test). Gate 2 (harvestable forgetting): the measured
+forgetting deficit (monolith minus oracle-pinned) is zero on crypto and
+commodities at every frequency---so the dissociations there are null
+(one null refuting our pre-registered prediction of separation, and
+retrospectively diagnosed by the decomposition)---but on
+\emph{drawdown-labeled daily equities} (49 industry portfolios,
+1990--2025, pre-registered), whose crisis regimes sleep for over a
+decade at the extreme, the deficit is \textbf{positive for the first time on real data}
+($+0.00091 \pm 0.00020$; seed-noise interval, single history), and
+there the full pre-registered ordering emerges: capacity-clean
+retention axis Holm $p{=}1.3{\times}10^{-4}$, invariance axis Holm
+$p{=}2.5{\times}10^{-4}$, joint $-5.3\%$ (Holm
+$p{=}4.1{\times}10^{-12}$), with the emergent system again beating the
+hand-pinned oracle-ERM. Across the two walk-forward tests---one
+history, two labelers---the \emph{sign} of the measured deficit tracked
+the outcome direction both times: where it is zero, invariant retention
+pays its premium and collects nothing, and the monolith wins the probe
+window significantly. The audit therefore exits the paper as a
+pre-committed hypothesis, not a validated rule: the A1-vs-A9
+counterfactual prices the pool, with its first ex-ante test---lodged
+externally before the data arrives---on CRSP constituents. Caveats
+carried at equal prominence: walk-forward inference is single-history,
+stitched counterparts are flat, the deficit is threshold-fragile
+(present at the pre-registered $15\%$ drawdown cutoff, absent at
+$10/12/20\%$), aggregation itself can manufacture slow dynamics, and
+all effects are gross of transaction costs. All claims are
+regret and retention claims, not alpha claims; code, data, and
+per-figure result files are released.
 \end{abstract}
 
 %=============================================================================
@@ -147,11 +178,13 @@ non-stationarity}, addressed by \emph{independent} mechanisms:
 
 \begin{itemize}
     \item \textbf{(N1) Between-regime switching} is an \emph{allocation}
-    problem. It is solved by any capacity assignment that is
-    \emph{independent of current reward} and persistently covers the regime
-    inventory---so that the dormant specialist receives no foreign updates and
-    retains by identity. No training objective can substitute: a forgotten
-    head is gone regardless of the loss it was trained with.
+    problem. It is solved by any capacity assignment that \emph{isolates}
+    the dormant specialist---no foreign updates during its regime's
+    dormancy---while persistently covering the regime inventory, so that
+    the specialist retains by identity; converged reward-independent
+    competition is one way to obtain such isolation, and reward-chasing
+    allocation destroys it. No training objective can substitute: a
+    forgotten head is gone regardless of the loss it was trained with.
     \item \textbf{(N2) Within-regime drift} is a \emph{training-objective}
     problem. It is solved by an invariance objective across the regime's
     historical episodes---penalizing the variance of a decision-focused
@@ -207,30 +240,48 @@ related work thus becomes a supporting experiment.
     necessary averaging, and the mechanism is robust across
     $W_c \in \{1, \dots, 60\}$ (Section~\ref{sec:e5}). No gate is trained,
     no freezing schedule is set, no regime-to-desk map is designed.
-    \item \textbf{Theory (C3).} A post-reactivation regret bound
-    $\E[\regret_{\mathrm{react}}] \le \Ginv + \Gforget$
-    (Proposition~\ref{prop:decomp}) in which $\Gforget = 0$ for \emph{any}
-    reward-independent covering assignment while reward-driven assignment
+    \item \textbf{Theory (C3).} A post-reactivation regret bound at fixed
+    tail level,
+    $\E_A[\mathrm{CVaR}_\delta[\regret_{\mathrm{react}}]] \le
+    \Ginv(\delta) + \Gforget$
+    (Proposition~\ref{prop:decomp})---allocation controls the mean of the
+    reactivation transient, the invariance objective its tail across
+    episode draws---in which $\Gforget = 0$ for \emph{any}
+    isolated covering assignment while reward-driven assignment
     drives it to the full relearning cost at an explicit rate
-    (Proposition~\ref{prop:dichotomy}); $\Ginv$ is controlled by the
-    episode-variance penalty (Lemma~\ref{lem:transfer}), with an explicit
+    (Proposition~\ref{prop:dichotomy}); $\Ginv(\delta)$ is controlled by
+    the episode-variance penalty (Lemma~\ref{lem:transfer}), with an explicit
     Pinsker-type bridge from divergence-metric invariance statements to the
     regret metric (Lemma~\ref{lem:bridge})---closing the technical gap
     between Inv-PnCO-style guarantees \citep{yan2026invpnco} and decision
     regret. A break-even analysis (Proposition~\ref{prop:breakeven}) gives
     the dormancy window in which retention pays once idle-specialist carrying
     costs are charged.
-    \item \textbf{Evaluation protocol (C4).} A diagnostic-first standard for
-    regime-aware financial ML: \emph{post-reactivation regret} in a probe
-    window after each reactivation, leakage-free causal regime labelings, and
-    a pre-registered structure diagnostic run \emph{before} claiming gains.
-    On our real panels (crypto, commodities) the diagnostic correctly
-    \emph{fails}---no exploitable regime structure on the decision metric
-    under causal labels---and the real-data dissociation is, as the
-    methodology then requires, null. We report this prominently rather than
-    burying it: where the diagnostic fails, no regime-aware mechanism (ours
-    included) can be bought, and a method that had claimed otherwise would be
-    fitting noise.
+    \item \textbf{Evaluation protocol (C4).} A diagnostic-first,
+    \emph{two-gate} standard for regime-aware financial ML:
+    \emph{post-reactivation regret} in a probe window after each
+    reactivation, leakage-free causal regime labelings, and two
+    pre-registered gates run \emph{before} claiming gains. \emph{Gate 1}
+    (structure): regime-conditioning must beat block-shuffled labels on
+    the decision metric. \emph{Gate 2} (harvestable forgetting): the
+    measured forgetting deficit---monolith minus oracle-pinned
+    post-reactivation regret, the empirical $\Gforget$ of
+    Proposition~\ref{prop:decomp}---must be positive. The record across
+    five real substrates (Sections~\ref{sec:e0}--\ref{sec:e1f}): daily
+    crypto/commodities fail gate 1 and dissociate null, as required;
+    4-hour crypto passes gate 1, fails gate 2, dissociates null; and on
+    daily equities the deficit's \emph{sign} predicted the walk-forward
+    outcome in both tests---zero deficit $\Rightarrow$ the monolith wins
+    significantly (the invariance premium with no claim), positive
+    deficit $\Rightarrow$ the full pre-registered ordering emerges. The
+    protocol was revised by its own record---gate 2 was added after one
+    refutation, and gate 1's pooled criterion was demoted after
+    another---and we report each revision as such; what survives is a
+    single-number deployment rule, $\hat\Gamma_{\mathrm{forget}}$ from
+    the A1-vs-A9 counterfactual, whose forward test on CRSP constituents
+    is pre-committed. Where the deficit is not positive, no retention
+    mechanism (ours included) can be bought, and a method that had
+    claimed otherwise would be fitting noise.
     \item \textbf{Honest audit (C5).} Conditions under which \nm{} does
     \emph{not} pay, each quantified: slack capacity ($K \to R$ closes the
     monolith gap); high within-regime signal-to-noise (a fresh learner
@@ -242,11 +293,18 @@ related work thus becomes a supporting experiment.
 
 We emphasize register throughout: our claims are \emph{regret and retention}
 claims about a mechanism, demonstrated where its preconditions verifiably
-hold, not alpha claims about live markets. The honest result on present real
-data is that the preconditions do \emph{not} hold there at daily frequency
-under our labelers and feature inventory---a finding the diagnostic-first
-protocol is designed to surface, and one consistent with the GAUSE oracle
-audit on the prediction metric \citep{li2026gause}.
+hold, not alpha claims about live markets. The honest summary of the real
+data is that the two preconditions are \emph{separable}, fail separately,
+and---on the one substrate where both the structure and a positive
+measured forgetting deficit coexist (drawdown-labeled daily industries,
+Section~\ref{sec:e1f})---jointly deliver the pre-registered ordering in a
+single-history walk-forward, at aggregate (portfolio) level, gross of
+costs: no decision-metric structure on small daily panels (gate 1), no
+harvestable forgetting on the intraday substrate where structure exists
+(gate 2), an inversion where the deficit is zero, and the dissociation
+where it is positive---each finding surfaced by the diagnostic-first
+protocol, the first consistent with the GAUSE oracle audit on the
+prediction metric \citep{li2026gause}.
 
 %=============================================================================
 \section{Related Work}
@@ -254,7 +312,7 @@ audit on the prediction metric \citep{li2026gause}.
 
 \paragraph{Regime-switching finance.} Markov-switching models
 \citep{hamilton1989new}, regime effects in asset returns
-\citep{ang2012regime}, regime-conditioned allocation
+\citep{ang2002international, ang2012regime}, regime-conditioned allocation
 \citep{guidolin2007asset, nystrup2018dynamic}, and statistical jump models
 for persistent market states \citep{nystrup2020greedy} detect regimes and
 condition a \emph{single} model on them. None address bounded capacity or
@@ -288,22 +346,54 @@ differentiation: these schemes combine \emph{fixed} experts, for which
 dormancy is harmless by construction. When the experts are capacity-bounded
 \emph{learners}, the combination scheme's weights are reward-driven and the
 training resource follows the weights---reintroducing exactly the
-interference that retention requires avoiding. Our A8a/A8b baseline pair
+interference that retention requires avoiding. The tracking line sharpens
+the point: Fixed Share \citep{herbster1998tracking} and especially mixing
+past posteriors \citep{bousquet2002mixing}, which attains logarithmic
+regret against a small set of \emph{returning} experts (see also
+time-selection regret \citep{blum2007external}), solve the recurrence
+problem for the combiner's \emph{weights}---a returning expert is
+re-elevated almost instantly. They cannot solve it for the expert's
+\emph{parameters}: under bounded capacity the training resource follows
+the weights, so the dormant specialist that mixing past posteriors would
+re-elevate has meanwhile been overwritten---MPP retains the pointer, not
+the playbook, and our A8b arm equipped with Fixed-Share weighting would
+inherit the same interference. Our A8a/A8b baseline pair
 tests both readings directly.
 
 \paragraph{Mixture-of-experts and continual learning.} MoE theory for
 continual learning \citep{li2024moecl} shows isolation mitigates forgetting
 \emph{provided} experts are plentiful and the gate's updates are eventually
-terminated. GAUSE \citep{li2026gause} showed empirically that in the excluded
+terminated. Recent routing-stabilization work reduces router-induced
+expert churn during \emph{active} training (CP-MoE \citep{liu2026cpmoe};
+StaR-MoE \citep{guo2026starmoe}), but leaves the dormancy problem
+untouched---a regime that emits no reward for hundreds of steps gives a
+stabilized router nothing to stabilize toward---and neither evaluates
+post-reactivation regret, the metric on which the failure appears.
+GAUSE \citep{li2026gause} showed empirically that in the excluded
 regime (bounded capacity, gate still learning) a reward-driven router
 inherits the monolith's forgetting, and that emergent competitive exclusion
 reaches the required reward-independent assignment with no freezing schedule.
 We import that mechanism as a premise, port it to decision-focused financial
 learning (batched competition, regret-based quality), and extend the theory
-from prediction error to decision regret. Classical continual-learning
-remedies (EWC \citep{kirkpatrick2017overcoming}, progressive nets
-\citep{rusu2016progressive}; survey \citep{parisi2019continual}) operate
-within a single model and are complementary.
+from prediction error to decision regret. Among classical
+continual-learning remedies, regularization approaches (EWC
+\citep{kirkpatrick2017overcoming}; survey \citep{parisi2019continual})
+operate within a single model, but the parameter-isolation
+family---PackNet \citep{mallya2018packnet}, HAT \citep{serra2018hat},
+SupSup \citep{wortsman2020supsup}, Expert Gate
+\citep{aljundi2017expertgate}, PathNet \citep{fernando2017pathnet},
+progressive nets \citep{rusu2016progressive}---already realizes
+reward-independent capacity assignment when task identity is given (or,
+for SupSup, inferred at test time), and
+is the continual-learning instantiation of the isolation property of
+Proposition~\ref{prop:dichotomy}. What that family does not provide is
+the allocation-under-competition analysis---which reward-driven
+assignment destroys isolation, at what rate, and how a covering
+assignment emerges without a designed task-to-mask map---nor the
+within-regime invariance axis, which is orthogonal to isolation and is
+where the super-additive interaction lives. Continual learning has also
+been proposed for investment decision-making directly
+\citep{philps2018continual}, without either analysis.
 
 \paragraph{Multi-strategy practice and strategy decay.} The practitioner
 analogue of our mechanism is the siloed desk structure of multi-strategy
@@ -414,7 +504,8 @@ merely parameters reset.
     \item \textbf{Pinning.} When a specialist's affinity for a regime
     exceeds $0.95$, the assignment is \emph{pinned}: the owner alone serves
     and trains that regime thereafter, making the converged assignment
-    reward-independent by construction (competition re-opens only if the
+    reward-independent---and, because the owner alone trains its niche,
+    isolated---by construction (competition re-opens only if the
     regime inventory changes).
 \end{enumerate}
 
@@ -503,13 +594,38 @@ both in Section~\ref{sec:limitations}.
 While regime $r$ is dormant for $D$ steps, an allocation mechanism $A$
 routes learning updates among specialists. Under a \emph{reward-driven} $A$,
 the specialist holding $r$ is made to learn a currently active regime with
-per-step probability at least $p > 0$ (active regimes are the only sources
-of reward, and reward attracts capacity). Under a \emph{reward-independent}
-$A$ (pinned converged competition, fixed niches, frozen gate, hand-designed
-silos), the assignment is measurable with respect to information independent
-of the realized reward stream, and the owner of $r$ receives no foreign
-updates during $r$'s dormancy.
+per-step probability at least $p > 0$ (the \emph{marginal-$p$ form}:
+active regimes are the only sources of reward, reward attracts capacity,
+and the allocator spreads its updates across the active regimes rather
+than fixating on one). Call an assignment \emph{isolated} for $r$ if the
+owner of $r$ receives no updates \emph{other than to $r$ itself} during
+$r$'s dormancy---under the hard model this excludes acquiring foreign
+heads (eviction pressure), and under the soft model it excludes
+\emph{any} non-$r$ update, since each one decays $r$'s adapter by the
+interference factor---and \emph{covering} if every regime has an owner
+within capacity. (The stronger reading matters: a specialist holding
+$\{r, r''\}$ with $r''$ active during $r$'s dormancy is isolated in the
+hard sense but not in the soft sense, and carries a positive soft-model
+deficit accordingly.)
+Isolation-plus-coverage is the operative property throughout;
+\emph{reward-independence}---an assignment measurable with respect to
+information independent of the realized reward stream (pinned converged
+competition, fixed niches, a frozen gate, hand-designed silos)---is the
+mechanism route by which our arms obtain isolation, not the property
+itself (Remark~\ref{rem:isolation}).
 \end{assumption}
+
+\begin{remark}[Isolation, not reward-independence, does the work]
+\label{rem:isolation}
+Reward-independence is neither necessary nor sufficient for isolation: a
+round-robin trainer is reward-independent and covering yet not
+isolated---every specialist receives foreign updates on schedule, so its
+forgetting deficit is positive---while a hand-designed silo is isolated
+regardless of whether its designer consulted past rewards. The phrase
+``reward-independent assignment'' \citep{li2026gause} names our mechanism
+class; the property invoked by the theory below is isolation plus
+coverage.
+\end{remark}
 
 \subsection{The invariance axis}
 
@@ -603,70 +719,117 @@ displace it. The soft case is immediate from once-per-update multiplicative
 decay.
 \end{proof}
 
-\begin{proposition}[Reward-independence zeroes the forgetting deficit]
+\begin{proposition}[The eviction dichotomy: isolation zeroes the
+forgetting deficit]
 \label{prop:dichotomy}
 Define the forgetting deficit $\Phi(D; A) = \Pr[\text{$r$'s head lost at
 reactivation}]$ (hard) or $1 - \E[(1-\rho_{\mathrm{int}})^{N_D}]$ (soft).
-Under Assumption~\ref{ass:dormancy}: (i) for any reward-driven $A$,
-$\Phi(D; A) \to 1$ as $D \to \infty$ at the rate of
-Lemma~\ref{lem:eviction}; (ii) for any reward-independent covering $A$,
-$\Phi(D; A) = 0$ for all $D$: the owner of $r$ applies zero foreign updates
-during dormancy, so its head---and its episode buffer---are exactly
-preserved (hard) or decay only with the regime's own drift (soft).
+Under Assumption~\ref{ass:dormancy}: (i) for any reward-driven $A$ in the
+marginal-$p$ form, $\Phi(D; A) \to 1$ as $D \to \infty$ at the rate of
+Lemma~\ref{lem:eviction}---reward-driven allocation destroys isolation;
+(ii) for any \emph{isolated covering} $A$, $\Phi(D; A) = 0$ for all $D$:
+the owner of $r$ applies zero foreign updates during dormancy, so its
+head---and its episode buffer---are exactly preserved (hard) or decay
+only with the regime's own drift (soft). \nm{}'s pinned converged
+competition is one emergent way to obtain isolation and coverage.
 \end{proposition}
 
 \begin{proof}
-(i) is Lemma~\ref{lem:eviction}. (ii): by reward-independence the
-assignment of $r$ does not respond to the active stream; by coverage the
-owner exists and holds $r$ within capacity; the owner is selected to learn
-only its own niche set, none of which is active foreign load, so $U_D = 0$
-deterministically and no interference decay is triggered.
+(i) is Lemma~\ref{lem:eviction}. (ii): isolation gives $U_D = 0$
+deterministically---no eviction and no interference decay is ever
+triggered---and coverage guarantees the owner exists and holds $r$
+within capacity.
 \end{proof}
 
 The two regimes are different \emph{functions} of $D$---one tends to $1$,
 the other is identically $0$---which is what makes the dichotomy
-experimentally sharp (Section~\ref{sec:e3}). Coverage is the second
-conjunct, inherited from GAUSE: random fixed niches are reward-independent
-but can leave a regime unowned, retaining only what they cover; emergent
+experimentally sharp (Section~\ref{sec:e3}). Direction (i) carries a
+disclosed boundary: the proof uses Assumption~\ref{ass:dormancy}'s
+marginal-$p$ form, in which the reward-driven allocator spreads across
+the active regimes; a degenerate allocator that \emph{fixates} on a
+single active regime never accumulates the $K$ distinct foreign heads
+that LRU eviction requires and can accidentally retain. Reward-chasing
+destroys isolation in the typical, spreading case---not by logical
+necessity---and our reward-driven arms all satisfy the marginal-$p$ form
+by construction. Coverage is the second conjunct, inherited from GAUSE:
+random fixed niches are isolated for the regimes they happen to hold but
+can leave a regime unowned, retaining only what they cover; emergent
 competition guarantees coverage at $N \ge R$ \citep{li2026gause}, which we
-re-verify in our setting (every seed converges to a one-per-regime covering
-assignment; Section~\ref{sec:e1}).
+re-verify in our setting (every seed of the 20-seed assignment diagnostic
+converges to a one-per-regime covering assignment; Section~\ref{sec:e1}).
 
 \subsection{Assembly}
 
 \begin{proposition}[Post-reactivation regret decomposition]
 \label{prop:decomp}
 Under Assumptions~\ref{ass:hyper}--\ref{ass:dormancy}, let regime $r$
-reactivate after dormancy $D$ into a fresh episode $e'$, served by
-allocation $A$ with the owner's head $\hat w_r$ trained on $E_r$ episodes.
-Let $C_{\mathrm{relearn}}$ denote the probe-window regret excess of a
-from-prior head over a converged retained head (an empirical constant of
-the learning problem). Then, at tail level $\delta$,
+reactivate after dormancy $D$ into a fresh episode $e' \sim Q_r$, served
+by allocation $A$ with the owner's head $\hat w_r$ trained on $E_r$
+episodes. Let $\mathrm{CVaR}_\delta^{\,e'}$ denote the mean of the worst
+$\delta$-fraction of outcomes over the episode draw $e'$, and let
+$C_{\mathrm{relearn}}$ denote the probe-window regret \emph{excess} of a
+from-prior head over the converged retained benchmark $\hat w_r$ (an
+empirical constant of the learning problem)---so the eviction branch's
+regret is the retained benchmark's regret \emph{plus}
+$C_{\mathrm{relearn}}$, not $C_{\mathrm{relearn}}$ alone. Then, for any
+tail level $\delta \in (0, 1]$,
 \[
-  \E[\regret_{\mathrm{react}}(r)]
+  \E_{A}\Big[\mathrm{CVaR}_{\delta}^{\,e'}
+  \big[\regret_{\mathrm{react}}(r)\big]\Big]
   \;\le\;
-  \underbrace{\mu_r(\hat w_r) + \frac{\sigma_r(\hat w_r)}{\sqrt{\delta}}
-  + O\!\Big(\frac{B}{\sqrt{E_r}}\Big)}_{\textstyle \Ginv}
+  \underbrace{\mu_r(\hat w_r)
+  + \sigma_r(\hat w_r)\sqrt{\tfrac{1-\delta}{\delta}}
+  + O\!\Big(\frac{B}{\sqrt{E_r}}\Big)}_{\textstyle \Ginv(\delta)}
   \;+\;
-  \underbrace{\Phi(D; A)\, C_{\mathrm{relearn}}}_{\textstyle \Gforget}.
+  \underbrace{\Phi(D; A)\, C_{\mathrm{relearn}}}_{\textstyle \Gforget},
 \]
+where the outer expectation is over the allocation and eviction
+randomness and the inner tail functional is over the fresh episode draw.
+At $\delta = 1$ the statement specializes to the expectation bound
+$\E[\regret_{\mathrm{react}}(r)] \le \mu_r(\hat w_r) + O(B/\sqrt{E_r})
++ \Gforget$, in which the $\sigma_r$ term vanishes.
 \end{proposition}
 
 \begin{proof}
-Condition on the retention event. On retention (probability $1 - \Phi$),
-the served head is $\hat w_r$ and Lemma~\ref{lem:transfer} bounds its
-regret on the fresh episode; on eviction (probability $\Phi$), the served
-head is fresh and its probe-window excess over the retained benchmark is
-$C_{\mathrm{relearn}}$ by definition. Combine, then upper-bound the
-retention branch's coefficient $(1-\Phi)$ by $1$.
+Pointwise in both sources of randomness, the accounting inequality is
+$\regret_{\mathrm{react}}(r) \le L_{r,e'}(\hat w_r) +
+\mathbf{1}\{\text{evict}\}\, C_{\mathrm{relearn}}$: on retention the
+served head is $\hat w_r$; on eviction the served head is fresh, and its
+probe-window regret is the retained benchmark's regret on the same draw
+plus $C_{\mathrm{relearn}}$, by the definition of $C_{\mathrm{relearn}}$
+as an excess. The eviction event is a function of the dormancy-period
+allocation stream and is independent of $e'$ under
+Assumption~\ref{ass:hyper}. Conditional on that event, bound the first
+term by the CVaR form of Cantelli's inequality---for any random variable
+with mean $\mu$ and variance $\sigma^2$, $\mathrm{CVaR}_\delta \le \mu +
+\sigma\sqrt{(1-\delta)/\delta}$, the same one-sided moment argument
+whose quantile version is Lemma~\ref{lem:transfer}---plus
+Lemma~\ref{lem:transfer}'s $O(B/\sqrt{E_r})$ estimation price; the
+second term is constant given the event. Take the outer expectation over
+the eviction indicator, $\E[\mathbf{1}\{\text{evict}\}] = \Phi(D; A)$.
 \end{proof}
+
+The registers of the two terms carry the interpretation: allocation
+controls the \emph{mean} of the reactivation transient ($\Gforget$ is an
+expectation over the eviction randomness and survives at every
+$\delta$), while the invariance objective controls its \emph{tail
+across episode draws} (the $\sigma_r$ term enters only for
+$\delta < 1$). We state the flip side honestly, because it sharpens
+rather than weakens the claim: in pure expectation ($\delta = 1$) the
+$\sigma_r$ term vanishes and the population-level bound is minimized by
+the mean-optimal (ERM) head---the variance penalty purchases
+distributional robustness against the next episode draw, not
+population-mean improvement, and its empirical mean advantage in E1
+operates through the finite-episode estimation term, where ERM loads on
+episode-specific regularities (the E4 construction).
 
 \begin{proposition}[Independent controls; the $2{\times}2$ prediction]
 \label{prop:additive}
 $\Gforget$ depends only on $(A, D, K, \text{memory model})$ and is zeroed
-by reward-independent covering assignment regardless of the training
-objective; $\Ginv$ depends only on $(\text{objective}, Q_r, E_r)$ and is
-optimized by the variance-penalized objective regardless of the assignment.
+by an isolated covering assignment regardless of the training
+objective; $\Ginv(\delta)$ depends only on $(\text{objective}, Q_r, E_r)$
+and, at every tail level $\delta < 1$, its $\sigma_r$ term is reduced by
+the variance-penalized objective regardless of the assignment.
 The bound is therefore additive in the two design axes, predicting monotone
 improvement along both axes of the $2{\times}2$. Moreover the realized
 interaction is predicted \emph{super-additive} in one specific cell: under
@@ -733,8 +896,11 @@ report the sweep.
 \label{sec:protocol}
 
 \paragraph{Design philosophy.} Every claim is pre-registered as an ordering
-prediction before the run, tested across 20 seeds with Welch tests and
-Holm--Bonferroni correction, and reported whether or not it survives---including
+prediction before the run, tested across 100 seeds with Welch tests and
+Holm--Bonferroni correction (the controlled battery E1--E6 and the stitched
+daily panel of Section~\ref{sec:e1s}; the intraday runs of
+Sections~\ref{sec:e0} and~\ref{sec:e1r} use 20 seeds as run), and reported
+whether or not it survives---including
 two predictions that did \emph{not} (the batching expectation,
 Remark~\ref{rem:batching}, and the real-data dissociation,
 Section~\ref{sec:e0}). All numbers trace to released per-experiment result
@@ -744,11 +910,16 @@ markets with known ground truth (the headline, because only here is every
 causal claim testable); (ii) \emph{semi-synthetic} regime-stitched real
 data (real per-regime cross-sections re-arranged into controlled dormancy
 schedules); (iii) \emph{real walk-forward} panels (five Bybit USDT crypto
-pairs, daily, 2021--2025; FRED commodities, 2015--2025). We state plainly
-that the roadmap's equities flagship (CRSP S\&P~500 constituents,
-1990--2025, with 5--7 crisis episodes) is a planned extension requiring data
-access not available at the time of writing; nothing here is presented as
-equity evidence.
+pairs, daily, 2021--2025; FRED commodities, 2015--2025; and, added in
+revision, the Ken French 49 industry portfolios, daily, 1990--2025,
+Section~\ref{sec:e1f}---portfolio-level equity evidence). We state
+plainly that the roadmap's equities flagship (CRSP S\&P~500
+\emph{constituents}, 1990--2025, with 5--7 crisis episodes) remains the
+pre-committed forward test: the industry-portfolio results of
+Section~\ref{sec:e1f} are facts about the aggregate cross-section, and
+aggregation itself can manufacture slow dynamics
+\citep{lo1988stock}---the constituent-level test is where that
+interpretation is decided.
 
 \paragraph{Synthetic market.} $n = 20$ assets, $R = 4$ regimes (three
 common, one rare ``crisis''), $d = 20$ features per asset: two
@@ -770,7 +941,11 @@ second half evaluated). Decision layer: $k = 4$ of $20$, $w_{\max} = 0.25$.
 \paragraph{Arms.} All learner arms share the identical specialist class
 (linear SPO+ heads, capacity $K = 2$ of $R = 4$ unless swept, identical
 learning rates and buffers); they differ \emph{only} in allocation and
-objective. A1 capacity-$K$ monolith (ERM; always trains the active
+objective. Capacity accounting: pool arms field $N = 4$ specialists
+($4 \times K{=}2$ heads in total) while monolith arms run a single
+specialist, so the equal-total-capacity allocation contrast is A5 vs.\
+A2, with the monolith contrasts audited against the E2 capacity sweep
+(Section~\ref{sec:e2}). A1 capacity-$K$ monolith (ERM; always trains the active
 regime---the canonical reward-driven allocation and the regime-conditioned
 finance baseline under a capacity budget). A2 mixture-of-experts with a
 gate trained on realized regret (reward-driven routing). A3
@@ -794,11 +969,15 @@ regret over the first $15$ days of every block whose regime was dormant
 $\ge 90$ days ($\ge 80$ in the stitched-crypto schedules, whose blocks
 are shorter; the probe window mirrors the GAUSE protocol).
 \emph{Overall}: mean daily regret over the evaluation half. \emph{Steady}:
-within-block regret beyond the probe window (the converged-service level;
-its floor across arms estimates irreducible noise). Where percentages of
-``excess'' regret are quoted, the floor is the steady-state regret of the
-A10 skyline ($0.0250$)---the best converged service achievable in this
-market---and we always quote raw numbers alongside.
+within-block regret beyond the probe window (the converged-service level).
+Where percentages of ``excess'' regret are quoted, the floor is the
+steady-state regret of the A10 skyline ($0.0252$)---the best converged
+\emph{regime-faithful} service in this market, not an irreducible bound:
+episode-chasing arms trade \emph{below} it in steady state (A7 $0.0243$,
+A8b $0.0244$, A1 $0.0245$) by fitting episode-specific signal, and pay
+for it at reactivations---the E6 trade-off at baseline SNR. We always
+quote raw numbers alongside, and we account for this steady-state tax
+explicitly in Section~\ref{sec:e1}.
 
 \subsection{E1 --- the headline $2{\times}2$ dissociation}
 \label{sec:e1}
@@ -807,10 +986,10 @@ market---and we always quote raw numbers alongside.
 \centering
 \small
 \caption{E1: post-reactivation, overall, and steady-state decision regret
-(mean $\pm$ 95\% CI over 20 seeds; synthetic market, $K{=}2$, hard memory).
+(mean $\pm$ 95\% CI over 100 seeds; synthetic market, $K{=}2$, hard memory).
 Horizontal rules group: skylines / \nm{} / retaining baselines /
 reward-driven arms / adaptive pair. Pre-registered ordering confirmed:
-$\text{A6} < \text{A5} \approx \text{A4} < \text{A1} \approx \text{A2}
+$\text{A6} < \text{A5} \lesssim \text{A4} < \text{A1} \approx \text{A2}
 \approx \text{A7} < \text{A3}$, with A8a worst overall and A8b tracking the
 monolith.}
 \label{tab:e1}
@@ -818,22 +997,22 @@ monolith.}
 \toprule
 \textbf{Arm} & \textbf{Post-react.} & \textbf{Overall} & \textbf{Steady} \\
 \midrule
-A10 oracle assignment + INV (skyline) & $0.0305 \pm 0.0008$ & $0.0259 \pm 0.0006$ & $0.0250$ \\
-A9 \phantom{0}oracle assignment + ERM & $0.0321 \pm 0.0008$ & $0.0274 \pm 0.0007$ & $0.0262$ \\
+A10 oracle assignment + INV (skyline) & $0.0306 \pm 0.0004$ & $0.0261 \pm 0.0002$ & $0.0252$ \\
+A9 \phantom{0}oracle assignment + ERM & $0.0322 \pm 0.0004$ & $0.0275 \pm 0.0003$ & $0.0263$ \\
 \midrule
 \rowcolor{blue!6}
-A6 \phantom{0}\nm{}-full (emergent + INV) & $\mathbf{0.0307 \pm 0.0007}$ & $0.0260 \pm 0.0006$ & $0.0251$ \\
-A5 \phantom{0}\nm{}-ERM (emergent + ERM) & $0.0321 \pm 0.0007$ & $0.0275 \pm 0.0006$ & $0.0264$ \\
+A6 \phantom{0}\nm{}-full (emergent + INV) & $\mathbf{0.0308 \pm 0.0004}$ & $0.0262 \pm 0.0002$ & $0.0252$ \\
+A5 \phantom{0}\nm{}-ERM (emergent + ERM) & $0.0324 \pm 0.0004$ & $0.0276 \pm 0.0003$ & $0.0265$ \\
 \midrule
-A4 \phantom{0}random fixed niches (ERM) & $0.0330 \pm 0.0013$ & $0.0283 \pm 0.0011$ & $0.0272$ \\
+A4 \phantom{0}random fixed niches (ERM) & $0.0332 \pm 0.0005$ & $0.0285 \pm 0.0005$ & $0.0274$ \\
 \midrule
-A1 \phantom{0}monolith (ERM) & $0.0342 \pm 0.0010$ & $0.0269 \pm 0.0004$ & $0.0246$ \\
-A7 \phantom{0}monolith (INV) & $0.0344 \pm 0.0010$ & $0.0266 \pm 0.0004$ & $0.0243$ \\
-A2 \phantom{0}MoE router (regret-trained gate) & $0.0341 \pm 0.0011$ & $0.0270 \pm 0.0005$ & $0.0248$ \\
-A3 \phantom{0}recent-performance allocator & $0.0378 \pm 0.0010$ & $0.0294 \pm 0.0006$ & $0.0269$ \\
+A1 \phantom{0}monolith (ERM) & $0.0339 \pm 0.0004$ & $0.0268 \pm 0.0002$ & $0.0245$ \\
+A7 \phantom{0}monolith (INV) & $0.0339 \pm 0.0004$ & $0.0266 \pm 0.0002$ & $0.0243$ \\
+A2 \phantom{0}MoE router (regret-trained gate) & $0.0339 \pm 0.0004$ & $0.0271 \pm 0.0002$ & $0.0249$ \\
+A3 \phantom{0}recent-performance allocator & $0.0375 \pm 0.0004$ & $0.0294 \pm 0.0002$ & $0.0267$ \\
 \midrule
-A8a Hedge over fixed strategies & $0.0439 \pm 0.0009$ & $0.0382 \pm 0.0007$ & $0.0370$ \\
-A8b Hedge over learning experts & $0.0341 \pm 0.0010$ & $0.0267 \pm 0.0005$ & $0.0244$ \\
+A8a Hedge over fixed strategies & $0.0440 \pm 0.0006$ & $0.0384 \pm 0.0003$ & $0.0372$ \\
+A8b Hedge over learning experts & $0.0338 \pm 0.0004$ & $0.0267 \pm 0.0002$ & $0.0244$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -852,7 +1031,7 @@ A8b Hedge over learning experts & $0.0341 \pm 0.0010$ & $0.0267 \pm 0.0005$ & $0
         \label{fig:trace}
     \end{subfigure}
     \caption{\textbf{Left:} post-reactivation decision regret across
-    allocation $\times$ objective (mean $\pm$ 95\% CI, 20 seeds). Cells:
+    allocation $\times$ objective (mean $\pm$ 95\% CI, 100 seeds). Cells:
     A1 / A7 (top), A5 / A6 (bottom). \textbf{Right:} mean daily regret
     around reactivations (5-day MA, 95\% CI): the monolith pays a
     relearning transient concentrated in the probe window; \nm{}-full
@@ -863,7 +1042,7 @@ A8b Hedge over learning experts & $0.0341 \pm 0.0010$ & $0.0267 \pm 0.0005$ & $0
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.86\textwidth]{figures/fig2_arms.pdf}
-    \caption{E1, all eleven arms (synthetic, $K{=}2$, hard memory, 20
+    \caption{E1, all eleven arms (synthetic, $K{=}2$, hard memory, 100
     seeds). Color encodes class: green = emergent reward-independent +
     invariant; blue = reward-independent (ERM or fixed); orange/red =
     reward-driven; black = oracle skyline. The dissociation separates
@@ -874,49 +1053,82 @@ A8b Hedge over learning experts & $0.0341 \pm 0.0010$ & $0.0267 \pm 0.0005$ & $0
 
 Table~\ref{tab:e1} and Figures~\ref{fig:headline}--\ref{fig:arms} give the
 headline. Every pre-registered prediction is confirmed
-(Holm-corrected Welch tests over 20 seeds):
+(Holm-corrected Welch tests over 100 seeds):
 
 \textbf{The retention axis is real.} Emergent reward-independent
 assignment with identical ERM training cuts post-reactivation regret from
-$0.0342$ (A1) to $0.0321$ (A5), $-6.1\%$, $p = 1.3 \times 10^{-3}$ (Holm
-$1.0 \times 10^{-2}$). Random fixed niches (A4) sit statistically with A5
-($p = 0.28$) but with twice the seed variance---the signature of coverage
+$0.0339$ (A2, the regret-trained router) to $0.0324$ (A5), $-4.3\%$,
+$p = 2.5 \times 10^{-7}$ (Holm $1.5 \times 10^{-6}$). We headline the
+router contrast because it is the clean allocation-only comparison: A2
+and A5 deploy identical total capacity ($N{=}4$ specialists of $K{=}2$
+heads each) and differ solely in whether the assignment chases reward.
+The monolith comparison is confirmatory but not pure: A1 matches the
+per-specialist capacity, not the total head count, so its identical gap
+($0.0339$ vs.\ $0.0324$, $p = 1.9 \times 10^{-7}$, Holm
+$1.3 \times 10^{-6}$) partially reflects total heads---E2's hard
+monolith at $K{=}4$ reaches $0.0322 \approx$ A5's $0.0324$
+(Section~\ref{sec:e2}). Random fixed niches (A4) trail A5 ($0.0332$ vs.\
+$0.0324$; at 100 seeds the gap reaches significance, $p = 0.011$, Holm
+$0.044$) and carry $1.4\times$ its seed standard deviation---the signature
+of coverage
 gaps: a seed whose random draw covers all four regimes retains like A5; a
 seed with an unowned regime pays for it on every reactivation.
 
 \textbf{The invariance axis is real---inside a retaining allocation.}
 Holding the emergent assignment fixed, the episode-variance objective cuts
-post-reactivation regret from $0.0321$ (A5) to $0.0307$ (A6), $-4.4\%$,
-$p = 6.1 \times 10^{-3}$ (Holm $4.3 \times 10^{-2}$). Jointly, A6 improves
-on A1 by $10.3\%$ raw ($p = 9.2 \times 10^{-7}$), which is $38\%$ of the
-excess over the irreducible noise floor ($0.0342 - 0.0250 = 0.0092$ down
-to $0.0057$).
+post-reactivation regret from $0.0324$ (A5) to $0.0308$ (A6), $-5.0\%$,
+$p = 5.8 \times 10^{-9}$ (Holm $4.7 \times 10^{-8}$). Jointly, A6 improves
+on A1 by $9.1\%$ raw ($p = 6.0 \times 10^{-23}$), which is $36\%$ of the
+excess over the converged invariant-service floor
+($0.0339 - 0.0252 = 0.0087$ down to $0.0056$).
+
+\textbf{The steady-state tax, charged in full.} The probe-window gain is
+not free. At steady state the plain monolith trades \emph{below} the
+invariant arms (A1 $0.0245$ vs.\ A6 $0.0252$, ${\approx}{+}0.0007$/day
+against A6) by chasing episode-specific signal---the same behavior E6
+shows becomes catastrophic at high SNR, profitable here at baseline.
+Over this market's schedule (${\approx}225$ probe days vs.\
+${\approx}960$ steady days in the evaluation half) the two effects
+largely net out, which is why A6's \emph{overall} margin over A1 is
+$2.2\%$ ($0.0262$ vs.\ $0.0268$), an order smaller than the
+post-reactivation headline. We state this plainly rather than let the
+probe metric carry it silently: the mechanism's value is concentrated
+at regime onsets---which is where financial decisions are most
+consequential, and which is the pre-registered reason post-reactivation
+regret is the primary metric---and a deployment whose loss function
+weights all days equally should expect the overall number, not the
+probe number.
 
 \textbf{The interaction is super-additive, exactly as
 Proposition~\ref{prop:additive} predicts.} The invariant objective in a
 reward-driven monolith (A7) is indistinguishable from ERM (A7 vs.\ A1
-post-reactivation: $p = 0.88$): an objective cannot help a head that was
-evicted during dormancy. Per-seed, the interaction index
+post-reactivation: $p = 0.89$; the equivalence also holds positively
+under a paired TOST with margin $\pm 0.0008$---pre-declared as half the
+smallest confirmed effect in this family, the A5-to-A6 invariance gap
+$|\Delta| = 0.0016$---at $p = 9.6 \times 10^{-29}$): an objective cannot
+help a head that was evicted during dormancy. Per-seed, the interaction index
 $I = (\text{A1}{-}\text{A5}) + (\text{A1}{-}\text{A7}) -
-(\text{A1}{-}\text{A6}) = -0.0015 \pm 0.0005$ (95\% CI excluding zero):
+(\text{A1}{-}\text{A6}) = -0.0017 \pm 0.0002$ (95\% CI excluding zero):
 the joint improvement exceeds the sum of the marginal improvements because
 the invariance margin only exists where retention preserves the head it
 trained. This asymmetry is the distinctive signature of the two-mechanism
 account---a generic ``both tricks help additively'' story would put $I$
 at zero, and a shared-cause story would make A7 help. (A7 is directionally
-better than A1 \emph{overall}---$0.0266$ vs.\ $0.0269$, not
+better than A1 \emph{overall}---$0.0266$ vs.\ $0.0268$, not
 significant---consistent with the objective helping while heads are alive
 and being erased at each eviction.)
 
 \textbf{Reward-driven arms cluster together, as the theory says they
-must.} The learned router tracks the monolith ($p = 0.83$); Hedge over
-learning experts tracks it too ($0.0341$); the recent-performance
-allocator is \emph{worst} among learner arms ($0.0378$)---it not only
+must.} The learned router tracks the monolith ($p = 0.88$; TOST
+equivalence at the same $\pm 0.0008$ margin, $p = 8.2 \times 10^{-12}$);
+Hedge over
+learning experts tracks it too ($0.0338$); the recent-performance
+allocator is \emph{worst} among learner arms ($0.0375$)---it not only
 forgets dormant regimes but trains specialists on a capital-weighted blend
 of foreign regimes throughout, paying interference even in steady state.
 The sleeping-experts reading of our problem is answered constructively:
 A8a (fixed strategies) retains trivially yet is dominated by every
-learning arm everywhere ($0.0439$ post-reactivation, $0.0370$ steady)---
+learning arm everywhere ($0.0440$ post-reactivation, $0.0372$ steady)---
 retention without within-niche learning is worth little; A8b (learning
 experts) learns but forgets---adaptivity of the \emph{combination} does
 not protect the \emph{experts}. The contribution lives exactly in the gap
@@ -924,12 +1136,15 @@ this pair brackets.
 
 \textbf{\nm{} matches the skyline it was never given.} A6 is
 statistically indistinguishable from A10---the hand-pinned oracle
-assignment with the same invariant objective ($0.0307$ vs.\ $0.0305$,
-$p = 0.72$)---and nominally better than the oracle assignment with ERM
-training (A9, $p = 0.011$, marginal after Holm at $0.057$). As in GAUSE,
+assignment with the same invariant objective ($0.0308$ vs.\ $0.0306$,
+$p = 0.53$; TOST equivalence at margin $\pm 0.0008$,
+$p = 2.6 \times 10^{-12}$)---and significantly better than the oracle assignment with ERM
+training (A9, $p = 1.5 \times 10^{-6}$, Holm $7.6 \times 10^{-6}$). As in
+GAUSE,
 the value of competition is not beating hand-assignment given the labels
 (it cannot); it is \emph{recovering the oracle partition automatically}:
-in every seed the population converges to a covering one-per-regime
+in every seed of the 20-seed assignment diagnostic (not rerun at 100
+seeds) the population converges to a covering one-per-regime
 assignment (the three common regimes pin at affinity $\ge 0.95$; the
 rare crisis regime reaches $0.67$--$0.87$---short of the pin threshold
 because crisis windows are scarce---but with the correct unique owner
@@ -989,16 +1204,54 @@ have produced, since the machinery happily trains and ``specializes''
 on structureless labels (the GAUSE negative control: organization is not
 structure).
 
+\paragraph{The intraday retest: the gate can pass.} The bound above is
+not vacuous hedging: re-running the identical protocol at intraday
+frequency with a richer causal feature inventory (ten features from full
+OHLCV bars---range-based volatility, volume $z$-score, reversal,
+multi-horizon and cross-sectionally ranked momentum) locates a substrate
+where the gate \emph{passes}. Across a pre-registered
+$\{1\mathrm{D}, 4\mathrm{H}, 1\mathrm{H}\} \times \{\mathrm{L1},
+\mathrm{L2}\} \times \{\text{bar-native}, \text{wall-clock}\}$ screen
+(ten cells): richer features alone do \emph{not} rescue the daily gate
+($|z| < 1.1$)---the binding constraint is the episode inventory, not the
+features---and every wall-clock-window cell fails, while two bar-native
+cells (whose faster label dynamics multiply episode counts roughly
+sevenfold) pass the screen. A pre-registered confirmation with 50 fresh
+shuffle controls and a split-half stability requirement confirms one:
+\textbf{4-hour crypto under the bar-native L2 labeler} (951 episodes;
+conditioning beats shuffled labels by $3.15\%$, $z = 2.32$, both halves
+positive at $+3.4\%/+2.9\%$); the 1-hour cell fails confirmation
+($z = 1.76$) and is reported as screen-only. This is the first real-data
+pass of the structure diagnostic on the decision metric in this line of
+work, and we state its selection caveats at the same prominence as the
+pass: it is one confirmed cell from a ten-cell screen (fourteen
+real-vs-shuffled tests counting the daily battery), the confirmation
+reuses the same data span as the screen, and the selected cell's gap
+estimate is biased upward by selection on the maximum. A
+disjoint-period replication is the committed next test before any
+claim is built on this substrate. The pass sets up the sharper question
+of Section~\ref{sec:e1r}: does a passing gate suffice for the mechanism
+to pay?
+
 \subsection{E1s --- the real-data dissociation is null, as the failed gate
 predicts}
 \label{sec:e1s}
 
-We ran the full eleven-arm comparison on \emph{regime-stitched} real
-crypto data: contiguous same-label day-blocks of the actual cross-sections
+We ran the ten-arm comparison (all arms of Table~\ref{tab:e1} except the
+A10 oracle-INV skyline) on \emph{regime-stitched} real crypto data:
+contiguous same-label day-blocks of the actual cross-sections
 (real returns, real features), re-arranged into controlled schedules with
-the rare regime dormant $\approx 200$ days (20 seeds). All learner arms
-are statistically indistinguishable (post-reactivation regret
-$0.0134$--$0.0141$; every pairwise $p > 0.2$). Under a failed E0 gate
+the rare regime dormant $\approx 200$ days (100 seeds). No pair survives
+Holm correction in the pre-registered test family (min Holm $p = 0.17$;
+post-reactivation regret $0.0129$--$0.0136$ across arms); the one raw
+trend---A6 below A1 at uncorrected $p = 0.028$---we disclose but do not
+claim, and the family-level conclusion remains null under the
+pre-registered Holm-corrected test. The numerically lowest arm is
+A8a---Hedge
+over \emph{fixed, non-learning} strategies, at $0.0129$---which
+sharpens the null rather than softening it: where the gate fails, a
+baseline that learns nothing edges out every learning arm, ours
+included. Under a failed E0 gate
 this is the \emph{predicted} outcome---there is no per-regime structure
 for a specialist to retain, so retention cannot pay---and we present it as
 the protocol working, not as the mechanism failing: the same arms, the
@@ -1010,6 +1263,247 @@ where the gate fails on all available real domains, the headline is the
 controlled study plus the diagnostic protocol; the equities panel, with
 its richer episode inventory, is the planned real-data test.)
 
+\subsection{E1r --- dissociation under a \emph{passed} gate: the second
+gate}
+\label{sec:e1r}
+
+The confirmed intraday pass reverses the falsifiable prediction: with
+decision-metric structure present, the pre-registered ordering
+$\text{A6} < \text{A5} \ll \text{A1}$ \emph{should} emerge. We ran the
+ten-arm comparison on regime-stitched 4-hour crypto under exactly the
+confirmed cell (bar-native L2 labels, the rich feature inventory, the
+rare vol-up regime dormant $\ge 80$ bars, probe 15 bars, 20 seeds). The
+result is a second null. All pre-registered pairs are flat
+($p > 0.57$ throughout; A6 $0.0058 \pm 0.0002$ vs.\ A1
+$0.0059 \pm 0.0002$). We state the record plainly: the pre-registered
+prediction for this experiment was separation, and it was \emph{refuted}.
+Two features of the table localize the cause.
+First, \emph{learning now pays}: A8a (Hedge over fixed, non-learning
+strategies), the numerically best arm on the structureless daily
+substrate of Section~\ref{sec:e1s}, is here the \emph{worst}
+($0.0061$)---consistent with the passed gate. Second, the
+post-reactivation elevation ($\approx{+}7\%$ over each arm's own overall
+regret) is carried \emph{equally by A9, the hand-pinned oracle that
+cannot forget by construction}: the measured forgetting deficit
+$\Gforget = \text{A1} - \text{A9}$ (post-reactivation) is $+0.000002$,
+zero to four decimals, against $+0.0017$ in the controlled markets of
+Table~\ref{tab:e1}. Reactivations are hard here because regime onsets
+are intrinsically hard, not because anything was forgotten: even with
+dormancy imposed at $\ge 80$ bars by the stitched schedule, a fresh
+head refits the regime within the 15-bar probe at this bar density and
+signal level---the E6 boundary (Section~\ref{sec:e6}) observed in the
+wild rather than swept in simulation. Structure exists
+(gate 1), but there is nothing for retention to harvest (gate 2)---the
+$\Gforget$ term of Proposition~\ref{prop:decomp}, measured here at
+zero, explains \emph{retrospectively} why no allocation policy
+separates. We are explicit about the epistemic status: this is a
+diagnosis made after the refutation, not a prediction that preceded
+it---the decomposition supplied the vocabulary, and the honest test of
+the diagnosis is out-of-sample. That test is the upgraded protocol
+itself, stated as a falsifiable commitment for every substrate we touch
+next: \emph{two gates}---structure on the decision metric, then a
+positive forgetting deficit via the A1-vs-A9 counterfactual, both
+cheap, both causal, both run before any mechanism is bought---with the
+pre-registered prediction that the dissociation emerges if and only if
+both pass. Real data now instantiates three cells of the
+precondition matrix (no-structure $\Rightarrow$ null, predicted in
+advance; structure without harvestable forgetting $\Rightarrow$ null,
+diagnosed after the fact; the controlled study's
+structure-with-forgetting $\Rightarrow$ sharp dissociation); the
+equities cross-section, whose crisis regimes recur on multi-year scales
+at daily frequency, targets the fourth---and is the first substrate on
+which the two-gate prediction is exposed to refutation. That exposure
+happened (Section~\ref{sec:e1f}), and the protocol did not survive it
+intact.
+
+\subsection{E1f --- daily equities (49 industries): the deficit exists,
+and its sign prices the pool}
+\label{sec:e1f}
+
+We took the two-gate commitment to the canonical equity cross-section:
+the Ken French 49 industry portfolios, daily, value-weighted, 1990--2025
+(9{,}067 days, all 49 industries complete; survivorship handled by
+construction), built from the 2026-05 CRSP database. Design and
+predictions were pre-registered before each run
+(\texttt{PREREG\_FRENCH49.md}): the paper's exact gate and dissociation
+protocols, 50 shuffle controls from the start, $k{=}5$/$w_{\max}{=}0.2$
+for the wide cross-section, an eight-feature return-based causal inventory,
+and a labeler family disclosed in full---L1/L2 (the paper's vol-band and
+filtered-vol labelers; two cells, pre-registered together) and L3 (an
+index-drawdown $\times$ trend labeler with genuinely slow crisis
+dynamics, designed \emph{after} seeing the L1/L2 gate results and
+pre-registered separately before any L3 statistic was computed;
+family-wise accounting is over all three cells).
+
+\paragraph{Gates.} We report gate statistics in the permutation
+register: $z$ against the 50-control shuffle distribution, whose
+empirical $p$ cannot fall below $1/51 \approx 0.02$; a normal fit to the
+control distribution gives the indicative $p$ we quote. (The
+pre-registration's auxiliary $t$-based sub-criterion tests against the
+shuffle \emph{mean} with an SE denominator; it is register-inflated by
+$\approx\sqrt{50}$ and non-discriminating---L2 passes it while failing
+$z$---so the binding criteria are $z$, the pooled comparison, and
+split-half stability, as registered.) L1 passes gate 1
+cleanly---conditioning beats the shuffle controls by $1.14\%$
+($z{=}3.18$, empirical $p \le 1/51$, normal-fit
+$p \approx 7\times10^{-4}$, both halves positive, conditioned beats
+pooled)---the first \emph{daily-frequency} structure pass in this
+program, with no screen-selection caveat (the family is three disclosed
+cells). L2 fails ($z{=}0.88$). L3 presents the instructive case: it
+clears the shuffle criterion ($+0.87\%$, $z{=}2.24$, normal-fit
+$p \approx 1.3\times10^{-2}$, halves $+0.86\%/+0.89\%$) but fails the
+pooled sub-criterion by a hair (pooled beats conditioning by $0.10\%$),
+so by the pre-registered letter it \emph{fails} gate 1. Gate 2, however,
+inverts the pattern: on the L1 walk-forward the measured deficit is
+again zero ($\hat\Gamma_{\mathrm{forget}} = -0.00013 \pm 0.00018$),
+while on the L3 walk-forward it is \textbf{positive for the first time
+on any real substrate in this program}:
+$\hat\Gamma_{\mathrm{forget}} = +0.00091 \pm 0.00020$ (the $\pm$ is
+seed noise conditional on one history; see caveat (i)). One
+labeler-anatomy fact matters for interpretation and we state it
+precisely: the \emph{union} of L3's crisis regimes is not dormant for
+long stretches---the 2010, 2011, 2015--16, and 2018 near-miss episodes
+are all in the crisis inventory, recurring every one to three
+years---while the specific crisis-\emph{with-uptrend} cell sleeps up to
+$2{,}953$ trading days. The retained specialists therefore do get
+occasional live-fire recalibration on near-misses between major crises;
+the deficit is measured net of those rehearsals, which is the
+economically relevant quantity. The pre-registered threshold-robustness
+sweep (\texttt{PREREG\_FRENCH49.md} C) then delivered the section's
+hardest result, reported here at the same prominence as the positive:
+\textbf{the deficit exists only at the pre-registered $15\%$ cutoff}.
+At $10\%$ and $12\%$ (denser crisis inventory, shorter dormancies)
+$\hat\Gamma$ is null ($+0.00013 \pm 0.00027$, $-0.00010 \pm 0.00017$)
+and the ordering dissolves; at $20\%$ (sparser inventory)
+$\hat\Gamma = -0.00045 \pm 0.00026$ and the monolith again beats A6.
+The $15\%$ value was fixed in the pre-registration before any L3 run,
+so this is not a tuned peak---but it is a \emph{fragile} one, and the
+sweep refutes our pre-registered robustness prediction (P8). Two
+readings, both stated: the fragility is an artifact warning (the
+practitioner's reading---the effect lives in one labeler
+specification on one history), or it is a granularity window exactly
+parallel to Proposition~\ref{prop:breakeven}'s dormancy window---too
+fine a threshold and near-miss rehearsals keep every learner fresh
+($\hat\Gamma \to 0$, as the E6 axis predicts), too coarse and the
+qualifying reactivations become too few to harvest within one history
+(premium dominates)---with $15\%$ landing, by pre-registered luck or
+by economics, inside the window. The second reading is post-hoc and we
+flag it as such; the CRSP constituent panel and slower structural
+labelers (e.g., NBER-anchored) are where it is decided.
+
+\paragraph{Dissociations, and what tracked them.} The ten-arm
+walk-forward comparison ran on both labelers, 20 seeds, dormancy
+threshold 90 days. Under L1 ($\hat\Gamma \approx 0$): a significant
+\emph{inversion}---the monolith beats \nm{}-full (A1 $0.0199$ vs.\ A6
+$0.0203$, Holm $4.8\times10^{-8}$), the oracle-pinned retainer beats A6
+(Holm $0.030$)---the invariance premium paid with no insurance claim to
+collect, the steady-state tax of Section~\ref{sec:e1} surfacing in the
+probe window itself; on \emph{overall} regret the two are equal
+($0.01849$ both), so the L1 inversion is a probe-window transient, not
+a net loss. Under L3 ($\hat\Gamma > 0$): the \textbf{full
+pre-registered ordering emerges}---A6 $0.02131 \pm 0.00010$
+$<$ A5 $0.02169$ $<$ A1 $0.02250$, with the capacity-clean retention
+contrast (A5 vs.\ the total-capacity-matched router A2) at Holm
+$1.3\times10^{-4}$, the monolith contrast at Holm $8.1\times10^{-8}$
+(impure in total capacity, as in Section~\ref{sec:e1}; no capacity
+sweep exists on this substrate yet), the invariance axis at Holm
+$2.5\times10^{-4}$ (A6 vs.\ A5), the joint effect at Holm
+$4.1\times10^{-12}$ ($-5.3\%$), and A6 beating the hand-pinned oracle
+(Holm $4.8\times10^{-3}$)---the synthetic study's signature at one-half
+the synthetic effect size, and this time the pool arms also lead on
+\emph{overall} regret (A6 $0.01848$, A5 $0.01845$ vs.\ A1 $0.01859$):
+the probe gain is not repaid in steady state here. Across the two
+walk-forward tests, the sign of $\hat\Gamma_{\mathrm{forget}}$
+\emph{tracked} the outcome direction both times; gate 1's pooled
+criterion tracked neither. We choose the verb carefully: both tests
+share one market history relabeled two ways, the rule was formulated
+after seeing both outcomes, and $\hat\Gamma$ shares arm A1 with the
+contrasts it prices (its non-circular content is that A9 sides with the
+retaining arms exactly when the deficit is positive). The protocol
+therefore exits this section revised, not vindicated: \textbf{the
+binding precondition appears to be the measured forgetting deficit}
+(the decomposition's own central term), while the structure gate's
+conditioned-vs-pooled bar measures asymptotic conditioning value---the
+wrong quantity for a mechanism that lives in the reactivation
+transient. This revision, like gate 2 itself, was formulated after
+data contradicted the protocol's previous form; it is a
+\emph{postdictive} account until it survives an ex-ante test, and that
+test is pre-committed: $\hat\Gamma$'s sign prices the pool on CRSP
+constituents, with the registration to be lodged externally before the
+data arrives.
+
+\paragraph{Position in the finance and continual-learning literatures.}
+Crisis-conditional strategy behavior is a documented finance
+regularity---momentum profits condition on market state
+\citep{cooper2004market}, crash in panic states defined by
+drawdown-plus-volatility indicators close to our L3 labeler
+\citep{daniel2016momentum}, and short-horizon predictability
+concentrates in bad times \citep{rapach2010out, henkel2011time}---but
+that literature conditions a strategy's \emph{expected return} on the
+state, whereas E1f measures whether the state's \emph{dormancy erodes a
+bounded learner's parameters}: a retention counterfactual
+($\hat\Gamma_{\mathrm{forget}}$) that is defined and decision-relevant
+even where conditional returns are flat, and whose econometric ancestor
+is the post-break estimation-window question
+\citep{pesaran2007selection} rather than state-dependent alpha. The
+substrate is industry-momentum territory
+\citep{moskowitz1999industries}, and the canonical warning that
+industry-level effects need not survive disaggregation
+\citep{grundy2001understanding} is one more reason the CRSP constituent
+test decides the interpretation. In continual-learning terms,
+$\hat\Gamma_{\mathrm{forget}}$ is a decision-regret backward-transfer
+measure taken against a multi-head oracle \citep{lopez2017gradient,
+chaudhry2018riemannian}; unlike replay remedies that spend memory to
+suppress forgetting unconditionally \citep{rolnick2019experience,
+chaudhry2019tiny}, the two-gate rule asks first whether forgetting is
+worth buying at all---and we flag that a replay-equipped monolith,
+whose buffer is not coupled to head eviction, is the natural next
+baseline for whether it can be bought more cheaply than a pool.
+
+\paragraph{Caveats at the same prominence as the result.} (i) The
+walk-forward design shares one market history; seeds vary arm
+initialization only (the deterministic A8a arm has a zero-width CI), so
+its intervals quantify implementation noise \emph{conditional on this
+history}, not sampling uncertainty across markets. (ii) The stitched
+counterparts are flat under both labelers ($\hat\Gamma$ n.s., all
+family $p > 0.7$)---consistent with two readings we cannot yet separate:
+the walk-forward precision is single-history optimism, or stitching
+destroys precisely the long-dormancy, cross-block structure that makes
+retention pay (the L3 crisis inventory is 11 blocks; stitched schedules
+cannot reproduce a 2{,}953-day dormancy by construction). The CRSP
+panel, which supports walk-forward evaluation over multiple disjoint
+eras, is the discriminating experiment. (iii) L3 was designed after the
+L1/L2 gate results---with full knowledge of which property (dormancy
+scale) had killed the first two labelers---and pre-registered before
+its own runs; under a further Bonferroni $\times 3$ over the labeler
+family, the five primary dissociation claims survive comfortably (all
+$\le 8\times10^{-4}$ corrected), A6-vs-A9 survives marginally
+($0.014$), and the two L1 inversion sub-claims (A9$<$A6, A1$<$A5) do
+\emph{not} ($0.089$, $0.071$)---the L1 inversion's headline pair
+(A1$<$A6, corrected $1.4\times10^{-7}$) stands. (iv) Effects are gross
+of transaction costs, as everywhere in this paper---and the objection
+bites hardest exactly here, because a drawdown-triggered labeler
+rebalances into the worst liquidity windows of the sample; the
+cost-adjusted battery, at crisis-window effective costs and not just
+$5$--$25$ bps, remains pre-committed. (v) The evaluated reactivation
+inventory behind $\hat\Gamma > 0$ is 27 events (deterministic across
+seeds; the evaluated half begins in 2008), right-skewed in
+contribution---the early-COVID windows, 2025-04, 2015-11, and 2011-11
+contribute disproportionately, and about a third of events have
+individually negative $\hat\Gamma_i$. Under leave-one-reactivation-out
+(\texttt{results/e\_french49\_L3\_loro.json}) the deficit survives
+every single-event exclusion (range $[0.00071, 0.00101]$, all
+significant), survives excluding the entire 2020 calendar year
+($0.00080 \pm 0.00019$; the two overlapping COVID probe windows share
+six days, so the calendar exclusion is the clean test), and is
+independently positive and significant within each era with a
+meaningful sample (2010s: $0.00077 \pm 0.00022$, $n{=}14$; 2020s:
+$0.00094 \pm 0.00040$, $n{=}12$), with the same pattern for the joint
+A1$-$A6 contrast. Crisis reactivations contribute more than calm
+ones---as the mechanism predicts---but no single event, nor all of
+2020, accounts for the effect (within the single-history frame of
+caveat (i), which these analyses cannot lift).
+
 \subsection{E2 --- capacity sweep: when does the dissociation close?}
 \label{sec:e2}
 
@@ -1017,7 +1511,7 @@ its richer episode inventory, is the planned real-data test.)
     \centering
     \includegraphics[width=0.95\textwidth]{figures/fig3_capacity.pdf}
     \caption{E2: post-reactivation regret vs.\ per-specialist capacity $K$
-    ($R = 4$; 20 seeds; left: hard LRU, right: soft interference).
+    ($R = 4$; 100 seeds; left: hard LRU, right: soft interference).
     Reward-independent arms are flat in $K$; reward-driven arms close the
     gap only as $K \to R$ under hard slots, and never fully close it under
     interference.}
@@ -1026,17 +1520,18 @@ its richer episode inventory, is the planned real-data test.)
 
 Sweeping per-specialist capacity $K = 1, \dots, 4$ ($= R$) under both
 memory models (Figure~\ref{fig:capacity}): \nm{} arms are \emph{flat in
-$K$} (A6: $0.0307$ at every $K$; A5: $0.0321$)---a converged one-per-regime
+$K$} (A6: $0.0308$ at every $K$; A5: $0.0324$)---a converged one-per-regime
 assignment needs one slot per specialist, and extra capacity is simply
 unused. Under the hard model the reward-driven arms improve monotonically
 with $K$ and approach the retaining class only at $K = R$ (monolith:
-$0.0343 \to 0.0322$, matching A5 at $K{=}4$; router likewise), where
+$0.0339 \to 0.0322$, matching A5 at $K{=}4$; router likewise), where
 eviction becomes unnecessary and the allocation question dissolves. The
 soft (interference) model inverts the diagnosis instructively: with no
 eviction, capacity slots stop binding and the reward-driven arms are
-\emph{flat} in $K$ at $\approx 0.0328$---gentler than hard eviction at
-tight capacity ($0.0343$ at $K \le 2$) but never closing the gap to A6
-($0.0307$) at \emph{any} capacity, because graded interference from
+\emph{flat} in $K$ at $\approx 0.0327$---gentler than hard eviction at
+tight capacity ($0.0339$ at $K{=}1$ and $K{=}2$) but never
+closing the gap to A6
+($0.0308$) at \emph{any} capacity, because graded interference from
 foreign updates erodes dormant heads no matter how many slots exist.
 Slack capacity is thus one audited boundary of the contribution, with a
 caveat that depends on the memory physics: with $K \ge R$ \emph{and}
@@ -1067,14 +1562,14 @@ every capacity.
     comparable across $D$ (schedules differ), arm gaps within each $D$
     are. \textbf{(b)} Fixing the retaining allocation and sweeping episode
     heterogeneity isolates the invariance axis: the ERM$-$INV gap grows
-    $2.4\times$ across the sweep.}
+    $2.6\times$ across the sweep.}
     \label{fig:e3e4}
 \end{figure}
 
 Controlled schedules place the focal regime's reactivations after dormancy
 $D \in \{21, 63, 126, 252, 504\}$ days (Figure~\ref{fig:dormancy}). The
-retention gap (A1 $-$ A6 post-reactivation) grows from $0.0015$ at
-$D = 21$ to $0.0038$--$0.0044$ for $D \ge 63$ and saturates---the
+retention gap (A1 $-$ A6 post-reactivation) grows from $0.0011$ at
+$D = 21$ to $0.0034$--$0.0045$ for $D \ge 63$ and saturates---the
 signature of Lemma~\ref{lem:eviction}: once dormancy exceeds the eviction
 scale ($\approx K$ foreign-regime acquisitions, here a few dozen days),
 the monolith's head is gone with probability $\approx 1$ and longer
@@ -1083,11 +1578,16 @@ zero by construction. The recent-performance allocator degrades fastest
 (its capital floor keeps eroding the dormant specialist throughout).
 Feeding the measured quantities into Proposition~\ref{prop:breakeven}
 (relearning cost $C_{\mathrm{relearn}} \approx 0.004$ per probe day over
-$N_p = 15$ days): at a carrying cost of $1\%$ of the per-day probe saving
-per idle-specialist-day, retention pays for $D$ between roughly $40$ and
-$6{,}000$ days; at $10\%$ carrying cost the window shrinks to
-$D \in [\approx 60, \approx 600]$ days---and at carrying costs above
-$\approx 15\%$ of the probe saving, \emph{no} dormancy length pays. The
+$N_p = 15$ days; writing the carrying cost as a fraction $f$ of the
+per-day probe saving $C_{\mathrm{relearn}} V$, the window condition reduces
+to $f D \le \Phi(D) N_p$): the lower endpoint is the eviction scale at
+which $\Phi$ saturates---E3 measures $\Phi(21) \approx 0.27$ and
+$\Phi(63) \approx 0.86$, so $D_{\min} \approx 60$ days---and the upper
+endpoint is $D_{\max} = N_p / f$. At $f = 1\%$ retention pays for $D$
+between roughly $60$ and $1{,}500$ days; at $f = 10\%$ the window shrinks
+to $D \in [\approx 60, \approx 150]$ days---and at carrying costs above
+$f^{*} = N_p \max_D \Phi(D)/D \approx 20\%$ of the probe saving, \emph{no}
+dormancy length pays. The
 existence of the \emph{upper} break-even is the practically honest point:
 idle desks are not free, and a fund whose crisis playbook reactivates
 once a decade may rationally let it decay if maintaining it costs enough.
@@ -1099,9 +1599,10 @@ Holding the allocation fixed (emergent, retaining) and sweeping the
 episode-heterogeneity scale (the spurious loading's standard deviation
 relative to invariant signal) from $0$ to $2\times$ baseline
 (Figure~\ref{fig:het}): the ERM specialist degrades steadily
-($0.0300 \to 0.0375$ post-reactivation) while the invariant specialist
-degrades about $23\%$ slower ($0.0290 \to 0.0351$), so the A5$-$A6 gap
-widens monotonically from $0.0010$ to $0.0024$ ($2.4\times$)---the regime-indexed analogue
+($0.0299 \to 0.0378$ post-reactivation) while the invariant specialist
+degrades about $20\%$ slower ($0.0289 \to 0.0352$; equivalently, ERM
+degrades $25\%$ faster), so the A5$-$A6 gap
+widens monotonically from $0.0010$ to $0.0026$ ($2.6\times$)---the regime-indexed analogue
 of the Inv-PnCO heterogeneity result, and direct evidence that the
 invariance margin is purchased against episode variability specifically
 (at zero heterogeneity the objectives nearly coincide; the small residual
@@ -1116,7 +1617,7 @@ differ; retention solves dormancy, and this axis is what remains after.
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.98\textwidth]{figures/fig8_ablations.pdf}
-    \caption{E5 ablations (post-reactivation regret, 20 seeds).
+    \caption{E5 ablations (post-reactivation regret, 100 seeds).
     \textbf{Left:} the invariance objective is U-shaped in $\beta$ and the
     variance-only control ($\beta = 0$) fails below retained ERM.
     \textbf{Center:} robustness to the competition window $W_c$ (the
@@ -1127,13 +1628,13 @@ differ; retention solves dormancy, and this axis is what remains after.
 
 \textbf{$\beta$ sweep, and the variance-only control fails as predicted.}
 Post-reactivation regret is U-shaped in the mean-loss weight:
-$\beta = 0$ (variance only) gives $0.0356$---\emph{worse than retained
-ERM} ($0.0321$)---confirming in the decision setting the Inv-PnCO
+$\beta = 0$ (variance only) gives $0.0357$---\emph{worse than retained
+ERM} ($0.0324$)---confirming in the decision setting the Inv-PnCO
 finding that the variance term alone is degenerate (a head can achieve
 zero episode-variance by being uniformly bad); the plateau
-$\beta \in [0.25, 4]$ gives $0.0307$--$0.0317$; very large $\beta = 16$
-degrades to $0.0352$---worse than the retained-ERM arm itself
-($0.0321$), which is the honest reading: $\beta$ multiplies the
+$\beta \in [0.25, 4]$ gives $0.0308$--$0.0318$; very large $\beta = 16$
+degrades to $0.0351$---worse than the retained-ERM arm itself
+($0.0324$), which is the honest reading: $\beta$ multiplies the
 effective gradient magnitude, so $\beta = 16$ is not ``clean ERM
 recovered'' but an unstably large step on the mean term (A5 remains the
 correct $\beta \to \infty$ reference, trained at the proper rate). The
@@ -1141,17 +1642,17 @@ objective needs both terms, and is insensitive to $\beta$ across an
 order of magnitude.
 
 \textbf{Competition-window sweep.} $W_c \in \{1, 5, 20, 60\}$ days yields
-$0.0303$, $0.0306$, $0.0307$, $0.0309$: flat, with per-step competition
+$0.0306$, $0.0306$, $0.0308$, $0.0310$: flat, with per-step competition
 marginally \emph{best}---the revision of our pre-registered batching
 expectation discussed in Remark~\ref{rem:batching}. The mechanism's
 robustness to its main scheduling hyperparameter is itself a deployment
 asset.
 
 \textbf{Niche bonus and pinning.} Competition alone ($\lambda = 0$)
-reaches $0.0314$ versus $0.0307$ with the default shaping
+reaches $0.0318$ versus $0.0308$ with the default shaping
 ($\lambda = 0.3$)---the bonus accelerates but does not cause the
 assignment, consistent with GAUSE's $\lambda$ ablation. Disabling pinning
-costs $0.0320$ versus $0.0307$: keeping competition perpetually open
+costs $0.0325$ versus $0.0308$: keeping competition perpetually open
 re-admits exactly the reward-coupling the mechanism exists to remove,
 though the EG dynamics' inertia limits the damage.
 
@@ -1180,13 +1681,13 @@ multiplier over $\{0.5, 1, 2, 4, 8\}$ (Figure~\ref{fig:snr}):
 
 \begin{itemize}
     \item The monolith's relearning penalty (post-reactivation over steady
-    regret) grows from $1.28\times$ to $2.06\times$ with SNR---relative
+    regret) grows from $1.26\times$ to $2.01\times$ with SNR---relative
     relearning cost rises---but its \emph{absolute} steady level collapses
-    ($0.0296 \to 0.0159$), because strong signal is refit almost
+    ($0.0295 \to 0.0165$), because strong signal is refit almost
     instantly and then exploited deeply.
-    \item The \nm{} advantage over the monolith is $+8.3\%$ at
-    $0.5\times$, $+10.3\%$ at baseline, $+7.0\%$ at $2\times$---then
-    \emph{inverts}: $-13.1\%$ at $4\times$ and $-49.3\%$ at $8\times$. At
+    \item The \nm{} advantage over the monolith is $+6.5\%$ at
+    $0.5\times$, $+9.1\%$ at baseline, $+4.9\%$ at $2\times$---then
+    \emph{inverts}: $-18.8\%$ at $4\times$ and $-60.0\%$ at $8\times$. At
     high SNR the episode-specific loading is itself strongly exploitable,
     and an ERM monolith that greedily refits each episode beats an
     invariant specialist that on principle refuses to chase it. The
@@ -1208,16 +1709,22 @@ deliverable is the location of the boundary.
 \subsection{Statistical protocol and what we deliberately do not claim}
 \label{sec:stats}
 
-All headline comparisons are Welch tests over 20 independent seeds with
+All headline comparisons are Welch tests over 100 independent seeds with
 Holm--Bonferroni correction within each experiment's pre-registered pair
-family; tables report mean $\pm$ 95\% CI. The synthetic and stitched
+family (the intraday retest of Section~\ref{sec:e1r}, the equities
+batteries of Section~\ref{sec:e1f}, and the assignment
+diagnostic remain 20 seeds as run---and in the walk-forward designs of
+Section~\ref{sec:e1f} seeds vary initialization only, so those intervals
+are conditional on a single history); tables report mean $\pm$ 95\% CI.
+The synthetic and stitched
 experiments expose every arm to identical data streams per seed (paired
 design). We do \emph{not} report Sharpe ratios, deflated or otherwise, for
 the synthetic headline---regret against a known optimum is strictly more
 informative when ground truth exists---and we make no claim of live
-trading profitability anywhere: by the E0 gate, the panels where we could
-have manufactured such claims do not carry the structure that would make
-them meaningful. For any future real-data deployment passing the gate, the
+trading profitability anywhere: on the panels that fail the gates such a
+claim would be fitting noise, and on the one panel that passes
+(Section~\ref{sec:e1f}) our numbers are gross-of-cost regret at
+portfolio level, which is not a P\&L claim. For any future real-data deployment passing the gate, the
 protocol of record is: deflated Sharpe \citep{bailey2014deflated} for any
 P\&L claim, an SPA/Reality-Check test \citep{hansen2005spa, white2000reality}
 across the arm family, transaction costs at $5/10/25$ bps with borrow,
@@ -1227,11 +1734,14 @@ Proposition~\ref{prop:breakeven}---pre-committed here.
 
 \subsection{Synthesis}
 
-Across E0--E6 the two-axis account survives every test we could construct
-against it, and fails exactly where it claims it should fail. Retention is
-an allocation property: every reward-independent covering arm retains
+Across E0--E6 the two-axis account survives every controlled test we
+constructed against it; on real data its \emph{protocol} was refuted
+twice and revised twice (E1r, E1f)---each time toward the
+decomposition's own central term---while the account's core quantity,
+the forgetting deficit, tracked every real-data outcome we observed. Retention is
+an allocation property: every isolated covering arm retains
 (A4--A6, A9, A10), every reward-chasing arm relearns (A1--A3, A8b), the
-boundary is crisp ($p \sim 10^{-6}$ for the class separation), and no
+boundary is crisp ($p \sim 10^{-23}$ for the class separation), and no
 training objective crosses it (A7). Invariance is an objective property:
 it pays only inside a retaining allocation (super-additive interaction,
 CI excluding zero), grows with episode heterogeneity (E4), and requires
@@ -1273,16 +1783,18 @@ skyline, with graceful degradation documented when competition's
 preconditions weaken (the unpinned crisis niche of Section~\ref{sec:e1}).
 
 \paragraph{What the diagnostic-first protocol buys.} The most consequential
-result in this paper for applied work is arguably the null: two real asset
-classes, two causal labelers, and a decision-metric oracle test that
-refuses to certify regime structure---after which the full eleven-arm
-machine, run anyway, produces exactly the flat table the refusal predicts.
-The protocol converts ``our regime-aware method beat baselines on a
+result in this paper for applied work is the pairing of a null and its
+mirror: where the diagnostics refuse to certify structure or forgetting,
+the machine run anyway goes flat or inverts (E1s, E1r, E1f-L1)---and on
+the one substrate where the measured deficit is positive, the same
+machine, unchanged, produces the pre-registered ordering (E1f-L3). The
+protocol converts ``our regime-aware method beat baselines on a
 backtest'' (unfalsifiable in the presence of label noise and selection)
-into two separable, individually falsifiable claims: \emph{structure
-exists here} (E0, cheap, runs before any method) and \emph{given
-structure, the mechanism captures it} (E1, controlled). We commend the
-split to the regime-aware finance literature at large.
+into separable, individually falsifiable claims: \emph{structure exists
+here} (E0, cheap, runs before any method), \emph{dormancy actually
+destroys something} ($\hat\Gamma_{\mathrm{forget}}$, one counterfactual
+arm), and \emph{given both, the mechanism captures it} (E1). We commend
+the split to the regime-aware finance literature at large.
 
 %=============================================================================
 \section{Limitations}
@@ -1290,23 +1802,24 @@ split to the regime-aware finance literature at large.
 %=============================================================================
 
 \begin{enumerate}
-    \item \textbf{The headline is synthetic; the real-data result is a
-    null.} Our dissociation is demonstrated where its preconditions
-    verifiably hold---controlled markets with known regime structure,
-    episode heterogeneity, and realistic SNR---because on the real panels
-    available to us the E0 gate fails and the dissociation is
-    (correctly) absent. We regard gate-then-claim as the right
-    epistemics, but the constructive real-data demonstration remains
-    undone: the planned equities panel (S\&P~500 constituents, 1990--2025,
-    with 2000/2008/2011/2015/2018/2020/2022 as crisis episodes), richer
-    feature inventories, and intraday horizons are the concrete next
-    test, and the protocol pre-commits its statistics
-    (Section~\ref{sec:stats}).
-    \item \textbf{Small real universes.} Five crypto pairs and three
-    commodities at daily frequency; the E0 null is bounded to these
-    panels, these labelers (L1/L2), and this feature inventory. A failed
-    gate on richer data would be informative; a passed gate would
-    activate the E1 protocol on real data. Neither has been run.
+    \item \textbf{The controlled study carries the causal claims; the
+    real-data record is one aggregate-level walk-forward ordering plus
+    three nulls and one inversion.} The dissociation is demonstrated
+    with full causal control only in synthetic markets. On real data,
+    the E1f-L3 ordering (Section~\ref{sec:e1f}) is portfolio-level,
+    single-history, formulated-in-part after the fact, and gross of
+    costs; the crypto/commodity nulls and the L1 inversion bound it.
+    The constituent-level demonstration remains undone: the CRSP
+    S\&P~500 panel (1990--2025, 2000/2008/2011/2015/2018/2020/2022 as
+    crisis episodes) is the pre-committed forward test with its
+    statistics fixed in advance (Section~\ref{sec:stats}), and it is
+    where both the sign rule and the aggregation caveat are decided.
+    \item \textbf{Real universes remain modest.} Five crypto pairs,
+    three commodities, and 49 industry portfolios at daily frequency;
+    the E0/E1s nulls are bounded to their panels, labelers, and feature
+    inventories, and the E1f positive is bounded to one aggregate
+    cross-section under one drawdown labeler family (threshold sweep
+    pre-registered).
     \item \textbf{Assumption~\ref{ass:hyper} idealizes episodes.} Real
     episodes are neither independent (macro memory links crises) nor
     exchangeable (secular drift in market microstructure), and crisis
@@ -1325,7 +1838,7 @@ split to the regime-aware finance literature at large.
     measure the latter.
     \item \textbf{The mechanism inverts under strong exploitable drift.}
     E6 is a limitation stated as an experiment: at high within-regime SNR,
-    invariant retention loses to episode-chasing ERM by up to $49\%$. Any
+    invariant retention loses to episode-chasing ERM by up to $60\%$. Any
     deployment must locate itself on the E6 axis first; a staleness
     trigger in the GAUSE style (re-opening competition on confident
     underperformance) is the known remedy and is future work here.
@@ -1355,7 +1868,8 @@ objective---and showed theoretically and experimentally that fixing either
 without the other forfeits most of the available improvement, while
 fixing both recovers the hand-designed skyline without hand design. The
 enabling property, imported from GAUSE and ported to decision-focused
-learning, is reward-independence of the converged assignment; the new
+learning, is the isolation-with-coverage of the converged
+assignment---obtained emergently through reward-independent pinning; the new
 axis, imported from invariant predict-and-optimize and ported to recurring
 regimes, is episode-variance penalization of a decision-focused loss; the
 bridge between their guarantee languages is one Pinsker step. Around the

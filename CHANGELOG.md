@@ -106,7 +106,8 @@ for few episodes; eviction-rate dichotomy (coupon-collector; reward-
 independence + coverage ⇒ deficit ≡ 0); the **KL→regret Pinsker bridge**
 (closing the roadmap's flagged gap, constant B = 2k·w_max·y_max, stated
 loose); break-even dormancy (retention pays only in a *window* of dormancy
-lengths; above ~15% relative carrying cost, never). Scope honesty: no
+lengths; above ~25% relative carrying cost, never — corrected from ~15% in
+v1.0.1, see below). Scope honesty: no
 adversarial-regret or convergence theorem is claimed for the coupled
 winner-take-all dynamics — convergence is demonstrated (20/20), not proven.
 
@@ -117,3 +118,224 @@ re-run; hard combinatorial decision layers (knapsack, scheduling);
 staleness trigger for the E6 inversion; Inv-PnCO theory-coauthor decision
 (Jul 1); risk-model-committee pivot (roadmap F3) if trading-side dormancy
 proves too short.
+
+---
+
+## v1.0.1 — E1s reporting integrity fix
+
+**Date**: 2026-07-14
+
+- **A8a range exclusion corrected (integrity bug).** `main.tex` quoted the
+  E1s post-reactivation band as 0.0134–0.0141, which silently excluded
+  A8a-Hedge-fixed at 0.01325 — the numerically *best* arm on the stitched
+  real-data null, and a no-learning baseline. The pre-registered test
+  family contains no A8a comparisons, so no statistic was wrong, but the
+  quoted range hid the fact that a baseline that learns nothing edged out
+  every learning arm. Both `main.tex` and the Explainer now quote the full
+  band (0.0132–0.0141), name A8a as the numerically lowest arm, and scope
+  the "every pairwise p > 0.2" claim to the pre-registered family. The
+  Deep Dive (Table in Part V) already reported this correctly and needed
+  no change.
+- **Arm-count wording fixed.** E1s ran ten arms (A10 oracle-INV requires
+  generator access and is undefined on real data); `main.tex` and the
+  Explainer said "eleven-arm" in the E1s sections. Corrected.
+- **Break-even dormancy endpoints corrected (found by full number re-audit,
+  2026-07-14).** `main.tex` §E3 quoted the retention window as [~40, ~6,000]
+  days at 1% carrying cost, [~60, ~600] at 10%, vanishing above ~15% — all
+  three numbers a consistent 4× off, as if N_p = 60 had been used instead of
+  the paper's probe window N_p = 15. Correct values from the proposition's
+  own inequality (f·D ≤ Φ(D)·N_p): D_max = N_p/f = 1,500 days at 1%, 150 at
+  10%; threshold f* = N_p·max_D Φ(D)/D ≈ 27% on the measured E3 grid (~25–30%).
+  The Deep Dive's worked example already had 1,500/150 but repeated the 15%
+  threshold; the Explainer had 600 and 15%. All three documents now agree.
+  Qualitative conclusion (a *window* exists; idle desks are not free)
+  unchanged; the practical bite is 4× sharper — at 10% carrying cost the
+  window is tighter than one crisis cycle.
+- **Eight minor rounding/wording fixes** from the same audit (Table 1 cells
+  0.0330→0.0329, ±0.0010→±0.0009, 0.0344→0.0343, ±0.0006→±0.0005; "twice the
+  seed variance"→"1.8× the seed standard deviation"; E3 gap band
+  0.0038–0.0044→0.0038–0.0041; E2 soft-vs-hard parenthetical made exact;
+  E4 "23% slower"→"19% slower (ERM 23% faster)"). Abstract, E1 body, E0,
+  E1s, E2, E5, E6 and all config counts verified clean against the JSONs.
+
+---
+
+## v1.1.0-dev — The intraday retest: first real-data gate pass, and the second gate
+
+**Date**: 2026-07-14 (results in repo; papers not yet updated)
+
+New experiments (all pre-registered in module docstrings before results):
+
+1. **E0-intraday** (`code/e0_intraday.py` → `results/e0_intraday.json`):
+   the roadmap's "re-run the gate where it might pass" item. 10 cells:
+   {1D, 4H, 1H} × {L1, L2} × {bar-native, wall-clock windows}, rich
+   10-feature OHLCV inventory (Parkinson vol, volume z, reversal, mom100,
+   cross-sectional rank). Findings: rich features do NOT rescue the daily
+   gate (feature axis not binding); all wall-clock cells fail; two
+   bar-native cells pass the screen.
+2. **Confirmation pass** (`code/e0_intraday_confirm.py` →
+   `results/e0_intraday_confirm.json`; criteria fixed before the screen
+   finished: 50 fresh shuffles, z>2, one-sided p<0.005, split-half
+   stability): **4H/L2b CONFIRMED** — gap +3.15%, z=+2.32, p<1e-4,
+   halves +3.42%/+2.92%, 951 episodes. First real-data structure pass on
+   the decision metric in this project (or GAUSE). 1H/L1b failed (z=1.76);
+   reported as screen-only.
+3. **E1r-4H** (`code/e1r_4h.py` → `results/e1r_4h_crypto.json`): ten-arm
+   dissociation on the confirmed substrate, stitched dormancy schedules,
+   20 seeds. Pre-registered prediction (gate passed → arms should
+   separate) **REFUTED**: flat table, all pre-registered pairs p>0.57.
+   The decomposition localizes why: post-reactivation elevation (~+7%) is
+   identical for A9 oracle-pinned, so the forgetting deficit A1−A9 ≈ 0
+   (synthetic: 0.0021) — regime structure exists (gate 1) but dormancy
+   causes no forgetting damage (gate 2 fails). A8a no-learning flips from
+   best (E1s, failed gate) to worst (E1r, passed gate): learning pays,
+   retention has nothing to save.
+
+**Emergent contribution:** the E0 gate is necessary but not sufficient;
+the deployment protocol becomes **two-gate** (structure on the decision
+metric; nonzero measured forgetting deficit via the A1-vs-A9
+counterfactual). Real data now instantiates three cells of the
+precondition 2×2, each null predicted in advance. The equities panel
+targets the fourth.
+- **Staleness trigger (E6 remedy) attempted — honest outcome: not a fix.**
+  Additive arm A6t (unpin + re-open competition on confident pinned-owner
+  underperformance; conservative defaults; byte-identical e1 regression
+  check) swept over the E6 SNR grid at 20 seeds
+  (`results/e6_trigger.json`). Result: no cost at low SNR (A6t ≈ A6,
+  p>0.93), a directional ~15% recovery of the high-SNR *steady-state*
+  pathology (8×: 0.0351 vs 0.0412, p=0.070; 4×: 0.0233 vs 0.0258,
+  p=0.096), and NO repair of the post-reactivation inversion (nominally
+  worse, n.s.). The E6 deployment boundary stands; the trigger is recorded
+  as an attempted remedy, not adopted into the headline mechanism.
+- **100-seed promotion (2026-07-14).** The E1–E6 battery (incl. the
+  stitched E1s) replicated at 100 seeds (`results_100seed/*.json`; seeds
+  0–19 identical to the 20-seed run by construction) and promoted to
+  primary in `paper/main.tex`; figures regenerated from the 100-seed JSONs
+  via `code/make_figures_100seed.py` (fig7_trace self-simulates and is
+  unchanged). Headline shifts: retention axis −6.1% → **−4.3%**
+  (p 1.3e−3 → 1.9e−7), invariance axis −4.4% → **−5.0%** (p 6.1e−3 →
+  5.8e−9), joint −10.3% → **−9.1%** (p 9.2e−7 → **6.0e−23**; 38% → 36% of
+  excess over the noise floor); interaction index −0.0015±0.0005 →
+  −0.0017±0.0002; A6 now significantly beats A9 oracle-ERM (p 0.011 →
+  1.5e−6); A4 separates from A5 (p 0.28 → 0.011). E1s stays null under
+  the pre-registered Holm family (min Holm p = 0.17) with one disclosed
+  raw trend (A6 < A1, uncorrected p = 0.028; band 0.0129–0.0136, A8a
+  still numerically lowest). E6 inversion deepens: −49.3% → **−60.0%**
+  at 8× SNR (crossover still between 2× and 4×). E3 break-even threshold
+  f* ≈ 25% → **≈20%** (Φ(21) 0.38 → 0.27, Φ(63) 0.94 → 0.86; window
+  endpoints unchanged: ~60–1,500 d at f=1%, ~60–150 d at f=10%).
+  Not rerun (kept at true n): E1r-4H, E0-intraday(+confirm), E6-trigger,
+  and the 20-seed assignment diagnostic (crisis affinity 0.67–0.87,
+  20/20 covering, 3 pinned) — n=20 now stated explicitly in the paper.
+- **Internal red-team audit + register repairs (2026-07-14).** A
+  multi-perspective internal adversarial audit of the manuscript drove
+  five same-day honesty repairs in main.tex: E1r's refuted pre-registered prediction stated plainly; the
+  abstract's "each null predicted in advance" corrected (one predicted, one
+  retrospectively diagnosed and converted into a falsifiable second gate);
+  multiplicity/selection caveats added to the 4H gate pass (10-cell screen,
+  14-test family, same-span confirmation, max-selection bias;
+  disjoint-period replication committed); "irreducible noise floor" renamed
+  to converged invariant-service floor (four ERM arms trade below it at
+  steady state); and a new steady-state-tax paragraph charging the
+  invariance premium in full (overall margin 2.2% stated alongside the
+  probe-window headline). Headline theory items applied next:
+  Prop. 3 → CVaR register,
+  de-circularized dichotomy, PackNet/HAT/SupSup + Bousquet-Warmuth 2002
+  citations, TOST equivalence tests, capacity-accounting re-headline.
+- **Tier-1 audit fixes (2026-07-14).** The headline theory/citation items
+  from the internal audit, applied to `paper/main.tex` + `references.bib`
+  (E0/E1s/E1r sections untouched; being extended separately). (1) Prop. 3
+  register fix: the decomposition no longer injects Lemma 1's Cantelli
+  quantile term into an expectation — restated at fixed tail level as
+  E_A[CVaR_δ over the episode draw] ≤ G_inv(δ) + G_forget with
+  G_inv(δ) = μ_r + σ_r·√((1−δ)/δ) + O(B/√E_r); eviction-branch bookkeeping
+  made explicit (C_relearn is an excess over the retained benchmark, so the
+  branch is benchmark + C_relearn); proof rewritten via the pointwise
+  accounting inequality + CVaR-Cantelli; new interpretation paragraph:
+  allocation controls the mean of the reactivation transient, the invariance
+  objective its tail across episode draws (at δ=1 the σ-term vanishes and
+  ERM is mean-optimal — stated honestly). Same fix applied to
+  `theory/THEORY_NOTES.md` §5. (2) De-circularized eviction dichotomy:
+  operative property renamed *isolated covering assignment* (isolation +
+  coverage defined in Assumption 2); new Remark ("Isolation, not
+  reward-independence, does the work"): reward-independence is neither
+  necessary nor sufficient (round-robin counterexample); Prop 1(ii) now
+  zeroes the deficit for any isolated covering assignment, with RISP pinning
+  one emergent route; direction (i) carries the disclosed marginal-p
+  boundary (a fixating allocator can accidentally retain); abstract/C3/N1/
+  synthesis/conclusion wording aligned. (3) Related work: parameter-isolation
+  CL passage (PackNet, HAT, SupSup, Expert Gate, PathNet — the CL
+  instantiation of isolation; what they lack: allocation-under-competition +
+  invariance axis); Fixed-Share/mixing-past-posteriors passage (MPP retains
+  the pointer, not the playbook; Herbster–Warmuth 1998, Bousquet–Warmuth
+  2002, Blum–Mansour 2007); CP-MoE/StaR-MoE dormancy passage (arXiv
+  2605.20247 / 2605.17571); Ang–Bekaert 2002 and Philps et al. 2018 added.
+  Bib hygiene: duplicate li2026emergent merged into li2026gause; 30
+  never-cited entries deleted (MARL/ecology/QD leftovers; kept
+  cesa2006prediction, french1999catastrophic, peters2016causal — cited by
+  the Deep Dive/Explainer); 12 web-verified entries added. (4) TOST
+  equivalence tests from `results_100seed/e1_synth.json` raw arrays, paired,
+  margin ±0.0008 pre-declared as half the smallest confirmed family effect
+  (A6−A5 = −0.0016): A6 vs A10 p = 2.6e−12, A7 vs A1 p = 9.6e−29, A2 vs A1
+  p = 8.2e−12 — all three ≈-claims now positively established, sentences
+  added at each claim site in E1. (5) Capacity-accounting re-headline: E1
+  retention axis now leads with A5 vs A2 (identical total capacity, 4×K=2;
+  0.0324 vs 0.0339, p = 2.5e−7, Holm 1.5e−6), monolith comparison kept as
+  confirmatory with the E2 K=4 caveat (0.0322 ≈ A5's 0.0324); arms paragraph
+  gains a capacity-accounting note; abstract phrase "capacity-matched
+  monolith" → "monolith with the same per-specialist capacity" with a
+  pointer to the E1 accounting. main.tex recompiles clean (0 errors, 0
+  undefined references, 22 pp).
+- **E1f — the French 49-industry batteries (2026-07-14, pre-registered in
+  PREREG_FRENCH49.md before each run).** Gate 1 passes on daily equities
+  for the first time (L1: +1.14%, z=3.18, 50 controls, no selection
+  caveat); L2 fails; L3 (drawdown labeler) fails gate 1 by the pooled
+  sub-criterion only. Gate 2: Γ_forget = 0 again under L1, but
+  **+0.00091 ± 0.00020 under L3 — the first positive forgetting deficit
+  on real data** (crisis dormancy up to 2,953 trading days). Walk-forward
+  dissociations: L1 → significant INVERSION (A1 beats A6, Holm 4.8e-8);
+  L3 → **the full pre-registered ordering on real data** (retention Holm
+  8.1e-8, invariance Holm 2.5e-4, joint −5.3% Holm 4.1e-12, A6 beats the
+  pinned oracle Holm 4.8e-3). The deficit's sign predicted both outcomes;
+  gate 1's pooled criterion predicted neither → protocol revised: Γ̂ is
+  the binding, single-number deployment rule (revision itself flagged as
+  post-hoc; forward test = CRSP). Caveats in text at equal prominence:
+  single-history walk-forward, flat stitched counterparts (two candidate
+  readings), L3 designed post-A (disclosed), gross of costs. Abstract,
+  C4, and new §E1f updated; main.tex recompiled clean.
+- **Second internal audit + full reconciliation (2026-07-14, evening).**
+  A second adversarial audit of the E1f revision verified all first-round
+  theory fixes correct and every E1f number exact against the JSONs, but
+  found: the gate-1 p-values SE-register-inflated (t vs shuffle-mean;
+  L2 z=0.88 ↔ p=7.5e-8 is the proof), the Bonferroni ×3 sentence false as
+  written, zero finance literature cited in E1f, drawdown-threshold
+  robustness untested, and five stale self-descriptions from earlier
+  drafts. ALL applied same day:
+  permutation-register p's (L1 z=3.18, normal-fit ~7e-4; deleted the
+  1e-27/1e-21 decorations), corrected ×3 accounting (five primaries
+  survive ≤8e-4; L1 inversion sub-claims do not), predicted→tracked tense
+  + postdiction framing + Γ-circularity note, A5-vs-A2 headlined in E1f
+  and abstract, overall columns added (L3: pool wins overall too; L1:
+  wash), labeler-anatomy correction (crisis UNION recurs 1-3yr with
+  2010/2011/2015-16/2018 rehearsals in inventory; 2,953d belongs to the
+  crisis-up cell), 12 finance/CL citations + positioning paragraph
+  (Daniel-Moskowitz, Cooper et al., Pesaran-Timmermann, GEM/replay,
+  Lo-MacKinlay aggregation caveat), soft-model isolation redefined (no
+  updates other than to r), stats/limitations/synthesis/intro/protocol
+  sections reconciled with E1f, two silent Missing-$ errors fixed,
+  prereg Addendum B records P5/P7 REFUTED + P6 CONFIRMED.
+- **LORO analysis (results/e_french49_L3_loro.json; run_arm gains
+  additive collect_react flag, byte-identical regression check).** The
+  L3 deficit survives every single-event exclusion (min 0.00071, 78% of
+  headline), survives dropping all of 2020 (0.00080±0.00019), and is
+  positive-significant within the 2010s (n=14) and 2020s (n=12)
+  independently. Not carried by COVID. Reported in E1f caveat (v).
+- **Threshold sweep (PREREG C): P8 REFUTED — the L3 deficit is
+  specification-fragile.** Exists only at the pre-registered 15% cutoff;
+  null at 10/12%; at 20% a third inversion (Γ=−0.00045, monolith beats A6,
+  min raw p=4.6e-4). Reported at headline prominence in E1f with both
+  readings (artifact warning vs granularity window parallel to Prop 4,
+  the latter flagged post-hoc); abstract caveat list updated. Combined
+  state of E1f-L3: event-robust (LORO), specification-fragile (sweep),
+  single-history. CRSP + NBER-anchored labeler are the discriminating
+  forward tests.
