@@ -1,0 +1,2427 @@
+{
+ "tex_file": "paper/main.tex",
+ "claims": [
+  {
+   "id": "tab1.A10.post.mean",
+   "tex_pattern": "A10 oracle assignment \\+ INV \\(skyline\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A10-oracle-inv/mean"
+   }
+  },
+  {
+   "id": "tab1.A10.post.ci",
+   "tex_pattern": "A10 oracle assignment \\+ INV \\(skyline\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A10-oracle-inv/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "tab1.A10.overall.mean",
+   "tex_pattern": "A10 oracle assignment \\+ INV \\(skyline\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A10-oracle-inv/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "tab1.A10.overall.ci",
+   "tex_pattern": "A10 oracle assignment \\+ INV \\(skyline\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A10-oracle-inv/ci95"
+   },
+   "group": 4
+  },
+  {
+   "id": "tab1.A10.steady.mean",
+   "tex_pattern": "A10 oracle assignment \\+ INV \\(skyline\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A10-oracle-inv/mean"
+   },
+   "group": 5
+  },
+  {
+   "id": "tab1.A9.post.mean",
+   "tex_pattern": "A9 \\\\phantom\\{0\\}oracle assignment \\+ ERM & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A9-oracle-pinned/mean"
+   }
+  },
+  {
+   "id": "tab1.A9.post.ci",
+   "tex_pattern": "A9 \\\\phantom\\{0\\}oracle assignment \\+ ERM & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A9-oracle-pinned/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "tab1.A9.overall.mean",
+   "tex_pattern": "A9 \\\\phantom\\{0\\}oracle assignment \\+ ERM & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A9-oracle-pinned/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "tab1.A9.overall.ci",
+   "tex_pattern": "A9 \\\\phantom\\{0\\}oracle assignment \\+ ERM & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A9-oracle-pinned/ci95"
+   },
+   "group": 4
+  },
+  {
+   "id": "tab1.A9.steady.mean",
+   "tex_pattern": "A9 \\\\phantom\\{0\\}oracle assignment \\+ ERM & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A9-oracle-pinned/mean"
+   },
+   "group": 5
+  },
+  {
+   "id": "tab1.A6.post.mean",
+   "tex_pattern": "A6 \\\\phantom\\{0\\}\\\\nm\\{\\}-full \\(emergent \\+ INV\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A6-risp-inv/mean"
+   }
+  },
+  {
+   "id": "tab1.A6.post.ci",
+   "tex_pattern": "A6 \\\\phantom\\{0\\}\\\\nm\\{\\}-full \\(emergent \\+ INV\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A6-risp-inv/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "tab1.A6.overall.mean",
+   "tex_pattern": "A6 \\\\phantom\\{0\\}\\\\nm\\{\\}-full \\(emergent \\+ INV\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A6-risp-inv/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "tab1.A6.overall.ci",
+   "tex_pattern": "A6 \\\\phantom\\{0\\}\\\\nm\\{\\}-full \\(emergent \\+ INV\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A6-risp-inv/ci95"
+   },
+   "group": 4
+  },
+  {
+   "id": "tab1.A6.steady.mean",
+   "tex_pattern": "A6 \\\\phantom\\{0\\}\\\\nm\\{\\}-full \\(emergent \\+ INV\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A6-risp-inv/mean"
+   },
+   "group": 5
+  },
+  {
+   "id": "tab1.A5.post.mean",
+   "tex_pattern": "A5 \\\\phantom\\{0\\}\\\\nm\\{\\}-ERM \\(emergent \\+ ERM\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A5-risp-erm/mean"
+   }
+  },
+  {
+   "id": "tab1.A5.post.ci",
+   "tex_pattern": "A5 \\\\phantom\\{0\\}\\\\nm\\{\\}-ERM \\(emergent \\+ ERM\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A5-risp-erm/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "tab1.A5.overall.mean",
+   "tex_pattern": "A5 \\\\phantom\\{0\\}\\\\nm\\{\\}-ERM \\(emergent \\+ ERM\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A5-risp-erm/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "tab1.A5.overall.ci",
+   "tex_pattern": "A5 \\\\phantom\\{0\\}\\\\nm\\{\\}-ERM \\(emergent \\+ ERM\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A5-risp-erm/ci95"
+   },
+   "group": 4
+  },
+  {
+   "id": "tab1.A5.steady.mean",
+   "tex_pattern": "A5 \\\\phantom\\{0\\}\\\\nm\\{\\}-ERM \\(emergent \\+ ERM\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A5-risp-erm/mean"
+   },
+   "group": 5
+  },
+  {
+   "id": "tab1.A4.post.mean",
+   "tex_pattern": "A4 \\\\phantom\\{0\\}random fixed niches \\(ERM\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A4-randomfixed/mean"
+   }
+  },
+  {
+   "id": "tab1.A4.post.ci",
+   "tex_pattern": "A4 \\\\phantom\\{0\\}random fixed niches \\(ERM\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A4-randomfixed/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "tab1.A4.overall.mean",
+   "tex_pattern": "A4 \\\\phantom\\{0\\}random fixed niches \\(ERM\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A4-randomfixed/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "tab1.A4.overall.ci",
+   "tex_pattern": "A4 \\\\phantom\\{0\\}random fixed niches \\(ERM\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A4-randomfixed/ci95"
+   },
+   "group": 4
+  },
+  {
+   "id": "tab1.A4.steady.mean",
+   "tex_pattern": "A4 \\\\phantom\\{0\\}random fixed niches \\(ERM\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A4-randomfixed/mean"
+   },
+   "group": 5
+  },
+  {
+   "id": "tab1.A1.post.mean",
+   "tex_pattern": "A1 \\\\phantom\\{0\\}monolith \\(ERM\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A1-monolith-erm/mean"
+   }
+  },
+  {
+   "id": "tab1.A1.post.ci",
+   "tex_pattern": "A1 \\\\phantom\\{0\\}monolith \\(ERM\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A1-monolith-erm/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "tab1.A1.overall.mean",
+   "tex_pattern": "A1 \\\\phantom\\{0\\}monolith \\(ERM\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A1-monolith-erm/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "tab1.A1.overall.ci",
+   "tex_pattern": "A1 \\\\phantom\\{0\\}monolith \\(ERM\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A1-monolith-erm/ci95"
+   },
+   "group": 4
+  },
+  {
+   "id": "tab1.A1.steady.mean",
+   "tex_pattern": "A1 \\\\phantom\\{0\\}monolith \\(ERM\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A1-monolith-erm/mean"
+   },
+   "group": 5
+  },
+  {
+   "id": "tab1.A7.post.mean",
+   "tex_pattern": "A7 \\\\phantom\\{0\\}monolith \\(INV\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A7-monolith-inv/mean"
+   }
+  },
+  {
+   "id": "tab1.A7.post.ci",
+   "tex_pattern": "A7 \\\\phantom\\{0\\}monolith \\(INV\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A7-monolith-inv/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "tab1.A7.overall.mean",
+   "tex_pattern": "A7 \\\\phantom\\{0\\}monolith \\(INV\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A7-monolith-inv/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "tab1.A7.overall.ci",
+   "tex_pattern": "A7 \\\\phantom\\{0\\}monolith \\(INV\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A7-monolith-inv/ci95"
+   },
+   "group": 4
+  },
+  {
+   "id": "tab1.A7.steady.mean",
+   "tex_pattern": "A7 \\\\phantom\\{0\\}monolith \\(INV\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A7-monolith-inv/mean"
+   },
+   "group": 5
+  },
+  {
+   "id": "tab1.A2.post.mean",
+   "tex_pattern": "A2 \\\\phantom\\{0\\}MoE router \\(regret-trained gate\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A2-router/mean"
+   }
+  },
+  {
+   "id": "tab1.A2.post.ci",
+   "tex_pattern": "A2 \\\\phantom\\{0\\}MoE router \\(regret-trained gate\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A2-router/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "tab1.A2.overall.mean",
+   "tex_pattern": "A2 \\\\phantom\\{0\\}MoE router \\(regret-trained gate\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A2-router/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "tab1.A2.overall.ci",
+   "tex_pattern": "A2 \\\\phantom\\{0\\}MoE router \\(regret-trained gate\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A2-router/ci95"
+   },
+   "group": 4
+  },
+  {
+   "id": "tab1.A2.steady.mean",
+   "tex_pattern": "A2 \\\\phantom\\{0\\}MoE router \\(regret-trained gate\\) & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A2-router/mean"
+   },
+   "group": 5
+  },
+  {
+   "id": "tab1.A3.post.mean",
+   "tex_pattern": "A3 \\\\phantom\\{0\\}recent-performance allocator & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A3-recentperf/mean"
+   }
+  },
+  {
+   "id": "tab1.A3.post.ci",
+   "tex_pattern": "A3 \\\\phantom\\{0\\}recent-performance allocator & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A3-recentperf/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "tab1.A3.overall.mean",
+   "tex_pattern": "A3 \\\\phantom\\{0\\}recent-performance allocator & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A3-recentperf/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "tab1.A3.overall.ci",
+   "tex_pattern": "A3 \\\\phantom\\{0\\}recent-performance allocator & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A3-recentperf/ci95"
+   },
+   "group": 4
+  },
+  {
+   "id": "tab1.A3.steady.mean",
+   "tex_pattern": "A3 \\\\phantom\\{0\\}recent-performance allocator & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A3-recentperf/mean"
+   },
+   "group": 5
+  },
+  {
+   "id": "tab1.A8a.post.mean",
+   "tex_pattern": "A8a Hedge over fixed strategies & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A8a-hedge-fixed/mean"
+   }
+  },
+  {
+   "id": "tab1.A8a.post.ci",
+   "tex_pattern": "A8a Hedge over fixed strategies & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A8a-hedge-fixed/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "tab1.A8a.overall.mean",
+   "tex_pattern": "A8a Hedge over fixed strategies & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A8a-hedge-fixed/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "tab1.A8a.overall.ci",
+   "tex_pattern": "A8a Hedge over fixed strategies & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A8a-hedge-fixed/ci95"
+   },
+   "group": 4
+  },
+  {
+   "id": "tab1.A8a.steady.mean",
+   "tex_pattern": "A8a Hedge over fixed strategies & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A8a-hedge-fixed/mean"
+   },
+   "group": 5
+  },
+  {
+   "id": "tab1.A8b.post.mean",
+   "tex_pattern": "A8b Hedge over learning experts & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A8b-hedge-learn/mean"
+   }
+  },
+  {
+   "id": "tab1.A8b.post.ci",
+   "tex_pattern": "A8b Hedge over learning experts & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A8b-hedge-learn/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "tab1.A8b.overall.mean",
+   "tex_pattern": "A8b Hedge over learning experts & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A8b-hedge-learn/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "tab1.A8b.overall.ci",
+   "tex_pattern": "A8b Hedge over learning experts & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A8b-hedge-learn/ci95"
+   },
+   "group": 4
+  },
+  {
+   "id": "tab1.A8b.steady.mean",
+   "tex_pattern": "A8b Hedge over learning experts & \\$(?:\\\\mathbf\\{)?([\\d.]+) \\\\pm ([\\d.]+)\\}?\\$ & \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ & \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A8b-hedge-learn/mean"
+   },
+   "group": 5
+  },
+  {
+   "id": "abs.retention.router.pct",
+   "tex_pattern": "cuts post-reactivation decision regret by \\$([\\d.]+)\\\\%\\$ versus a total-capacity-matched",
+   "expect": {
+    "expr": "(a-b)/a*100",
+    "inputs": {
+     "a": "results_100seed/e1_synth.json:post_react/A2-router/mean",
+     "b": "results_100seed/e1_synth.json:post_react/A5-risp-erm/mean"
+    }
+   }
+  },
+  {
+   "id": "abs.retention.router.p",
+   "tex_pattern": "total-capacity-matched learned router \\(\\$p\\{=\\}([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A5-risp-erm vs A2-router"
+   }
+  },
+  {
+   "id": "abs.retention.monolith.pct",
+   "tex_pattern": "; \\$([\\d.]+)\\\\%\\$ versus the per-specialist-matched monolith",
+   "expect": {
+    "expr": "(a-b)/a*100",
+    "inputs": {
+     "a": "results_100seed/e1_synth.json:post_react/A1-monolith-erm/mean",
+     "b": "results_100seed/e1_synth.json:post_react/A5-risp-erm/mean"
+    }
+   }
+  },
+  {
+   "id": "abs.retention.monolith.p",
+   "tex_pattern": "per-specialist-matched monolith, \\$p\\{=\\}([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A5-risp-erm vs A1-monolith-erm"
+   }
+  },
+  {
+   "id": "abs.inv.pct",
+   "tex_pattern": "invariance objective cuts it a further \\$([\\d.]+)\\\\%\\$",
+   "expect": {
+    "expr": "(a-b)/a*100",
+    "inputs": {
+     "a": "results_100seed/e1_synth.json:post_react/A5-risp-erm/mean",
+     "b": "results_100seed/e1_synth.json:post_react/A6-risp-inv/mean"
+    }
+   }
+  },
+  {
+   "id": "abs.inv.p",
+   "tex_pattern": "cuts it a further \\$[\\d.]+\\\\%\\$ \\(\\$p\\{=\\}([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A6-risp-inv vs A5-risp-erm"
+   }
+  },
+  {
+   "id": "abs.joint.pct",
+   "tex_pattern": "\\$([\\d.]+)\\\\%\\$ jointly",
+   "expect": {
+    "expr": "(a-b)/a*100",
+    "inputs": {
+     "a": "results_100seed/e1_synth.json:post_react/A1-monolith-erm/mean",
+     "b": "results_100seed/e1_synth.json:post_react/A6-risp-inv/mean"
+    }
+   }
+  },
+  {
+   "id": "abs.joint.p",
+   "tex_pattern": "jointly, \\$p\\{=\\}([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A6-risp-inv vs A1-monolith-erm"
+   }
+  },
+  {
+   "id": "abs.excess36.pct",
+   "tex_pattern": "\\$(\\d+)\\\\%\\$ of the excess over the converged invariant-service floor\\), and the interaction",
+   "expect": {
+    "expr": "(a-b)/(a-f)*100",
+    "inputs": {
+     "a": "results_100seed/e1_synth.json:post_react/A1-monolith-erm/mean",
+     "b": "results_100seed/e1_synth.json:post_react/A6-risp-inv/mean",
+     "f": "results_100seed/e1_synth.json:steady/A10-oracle-inv/mean"
+    }
+   }
+  },
+  {
+   "id": "abs.a7erm.p",
+   "tex_pattern": "reward-driven monolith \\(\\$p\\{=\\}([\\d.]+)\\$ vs\\.",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A7-monolith-inv vs A1-monolith-erm"
+   }
+  },
+  {
+   "id": "abs.oracle.same.p",
+   "tex_pattern": "trained with the same objective \\(\\$p\\{=\\}([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A6-risp-inv vs A10-oracle-inv"
+   }
+  },
+  {
+   "id": "abs.oracle.erm.p",
+   "tex_pattern": "oracle assignment trained with ERM \\(\\$p\\{=\\}([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A6-risp-inv vs A9-oracle-pinned"
+   }
+  },
+  {
+   "id": "abs.gate4h.pct",
+   "tex_pattern": "conditioning beats block-shuffled labels by \\$([\\d.]+)\\\\%\\$, \\$z\\{=\\}([\\d.]+)\\$ against (\\d+) fresh",
+   "expect": {
+    "path": "results/e0_intraday_confirm.json:4H∕L2b/gap_pct"
+   }
+  },
+  {
+   "id": "abs.gate4h.z",
+   "tex_pattern": "conditioning beats block-shuffled labels by \\$([\\d.]+)\\\\%\\$, \\$z\\{=\\}([\\d.]+)\\$ against (\\d+) fresh",
+   "expect": {
+    "path": "results/e0_intraday_confirm.json:4H∕L2b/z_vs_shuffled"
+   },
+   "group": 2
+  },
+  {
+   "id": "abs.gate4h.ncontrols",
+   "tex_pattern": "conditioning beats block-shuffled labels by \\$([\\d.]+)\\\\%\\$, \\$z\\{=\\}([\\d.]+)\\$ against (\\d+) fresh",
+   "expect": {
+    "path": "results/e0_intraday_confirm.json:4H∕L2b/n_shuffle"
+   },
+   "group": 3
+  },
+  {
+   "id": "abs.gamma.l3.mean",
+   "tex_pattern": "positive for the first time on real data\\} \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/gate2_forgetting_deficit/mean"
+   }
+  },
+  {
+   "id": "abs.gamma.l3.ci",
+   "tex_pattern": "positive for the first time on real data\\} \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/gate2_forgetting_deficit/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "abs.l3.retention.holm",
+   "tex_pattern": "retention axis Holm \\$p\\{=\\}([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/holm_p/A5-risp-erm vs A2-router"
+   }
+  },
+  {
+   "id": "abs.l3.inv.holm",
+   "tex_pattern": "invariance axis Holm \\$p\\{=\\}([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/holm_p/A6-risp-inv vs A5-risp-erm"
+   }
+  },
+  {
+   "id": "abs.l3.joint.pct",
+   "tex_pattern": "joint \\$(-[\\d.]+)\\\\%\\$ \\(Holm",
+   "expect": {
+    "expr": "-(a-b)/a*100",
+    "inputs": {
+     "a": "results/e_french49_L3_dissoc.json:walkforward/post_react/A1-monolith-erm/mean",
+     "b": "results/e_french49_L3_dissoc.json:walkforward/post_react/A6-risp-inv/mean"
+    }
+   }
+  },
+  {
+   "id": "abs.l3.joint.holm",
+   "tex_pattern": "joint \\$-[\\d.]+\\\\%\\$ \\(Holm \\$p\\{=\\}([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/holm_p/A6-risp-inv vs A1-monolith-erm"
+   }
+  },
+  {
+   "id": "met.floor.a10steady",
+   "tex_pattern": "steady-state regret of the A10 skyline \\(\\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A10-oracle-inv/mean"
+   }
+  },
+  {
+   "id": "met.steady.A7",
+   "tex_pattern": "\\(A7 \\$([\\d.]+)\\$, A8b \\$([\\d.]+)\\$, A1 \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A7-monolith-inv/mean"
+   }
+  },
+  {
+   "id": "met.steady.A8b",
+   "tex_pattern": "\\(A7 \\$([\\d.]+)\\$, A8b \\$([\\d.]+)\\$, A1 \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A8b-hedge-learn/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "met.steady.A1",
+   "tex_pattern": "\\(A7 \\$([\\d.]+)\\$, A8b \\$([\\d.]+)\\$, A1 \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A1-monolith-erm/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "e1.retention.A2.mean",
+   "tex_pattern": "cuts post-reactivation regret from \\$([\\d.]+)\\$ \\(A2, the regret-trained router\\) to \\$([\\d.]+)\\$ \\(A5\\), \\$(-[\\d.]+)\\\\%\\$, \\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$ \\(Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A2-router/mean"
+   }
+  },
+  {
+   "id": "e1.retention.A5.mean",
+   "tex_pattern": "cuts post-reactivation regret from \\$([\\d.]+)\\$ \\(A2, the regret-trained router\\) to \\$([\\d.]+)\\$ \\(A5\\), \\$(-[\\d.]+)\\\\%\\$, \\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$ \\(Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A5-risp-erm/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e1.retention.pct",
+   "tex_pattern": "cuts post-reactivation regret from \\$([\\d.]+)\\$ \\(A2, the regret-trained router\\) to \\$([\\d.]+)\\$ \\(A5\\), \\$(-[\\d.]+)\\\\%\\$, \\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$ \\(Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "expr": "-(a-b)/a*100",
+    "inputs": {
+     "a": "results_100seed/e1_synth.json:post_react/A2-router/mean",
+     "b": "results_100seed/e1_synth.json:post_react/A5-risp-erm/mean"
+    }
+   },
+   "group": 3,
+   "note": "router contrast percentage; abstract quotes 4.4% for the same contrast"
+  },
+  {
+   "id": "e1.retention.p",
+   "tex_pattern": "cuts post-reactivation regret from \\$([\\d.]+)\\$ \\(A2, the regret-trained router\\) to \\$([\\d.]+)\\$ \\(A5\\), \\$(-[\\d.]+)\\\\%\\$, \\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$ \\(Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A5-risp-erm vs A2-router"
+   },
+   "group": 4
+  },
+  {
+   "id": "e1.retention.holm",
+   "tex_pattern": "cuts post-reactivation regret from \\$([\\d.]+)\\$ \\(A2, the regret-trained router\\) to \\$([\\d.]+)\\$ \\(A5\\), \\$(-[\\d.]+)\\\\%\\$, \\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$ \\(Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:holm_p/A5-risp-erm vs A2-router"
+   },
+   "group": 5
+  },
+  {
+   "id": "e1.monolith.p",
+   "tex_pattern": "its identical gap \\(\\$([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+)\\$, \\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$, Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A5-risp-erm vs A1-monolith-erm"
+   },
+   "group": 3
+  },
+  {
+   "id": "e1.monolith.holm",
+   "tex_pattern": "its identical gap \\(\\$([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+)\\$, \\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$, Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:holm_p/A5-risp-erm vs A1-monolith-erm"
+   },
+   "group": 4
+  },
+  {
+   "id": "e1.e2ref.monoK4",
+   "tex_pattern": "monolith at \\$K\\{=\\}4\\$ reaches \\$([\\d.]+) \\\\approx\\$ A5's \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e2_capacity_sweep.json:hard/4/post_react/A1-monolith-erm/mean"
+   }
+  },
+  {
+   "id": "e1.e2ref.A5",
+   "tex_pattern": "monolith at \\$K\\{=\\}4\\$ reaches \\$([\\d.]+) \\\\approx\\$ A5's \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A5-risp-erm/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e1.a4.mean",
+   "tex_pattern": "trail A5 \\(\\$([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+)\\$; at 100 seeds the gap reaches significance, \\$p = ([\\d.]+)\\$, Holm \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A4-randomfixed/mean"
+   }
+  },
+  {
+   "id": "e1.a4.a5mean",
+   "tex_pattern": "trail A5 \\(\\$([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+)\\$; at 100 seeds the gap reaches significance, \\$p = ([\\d.]+)\\$, Holm \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A5-risp-erm/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e1.a4.p",
+   "tex_pattern": "trail A5 \\(\\$([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+)\\$; at 100 seeds the gap reaches significance, \\$p = ([\\d.]+)\\$, Holm \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A5-risp-erm vs A4-randomfixed"
+   },
+   "group": 3
+  },
+  {
+   "id": "e1.a4.holm",
+   "tex_pattern": "trail A5 \\(\\$([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+)\\$; at 100 seeds the gap reaches significance, \\$p = ([\\d.]+)\\$, Holm \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:holm_p/A5-risp-erm vs A4-randomfixed"
+   },
+   "group": 4
+  },
+  {
+   "id": "e1.a4.sdratio",
+   "tex_pattern": "carry \\$([\\d.]+)\\\\times\\$ its seed standard deviation",
+   "expect": {
+    "expr": "stdev(a)/stdev(b)",
+    "inputs": {
+     "a": "results_100seed/e1_synth.json:raw/A4-randomfixed/post_react",
+     "b": "results_100seed/e1_synth.json:raw/A5-risp-erm/post_react"
+    }
+   }
+  },
+  {
+   "id": "e1.inv.A5.mean",
+   "tex_pattern": "cuts post-reactivation regret from \\$([\\d.]+)\\$ \\(A5\\) to \\$([\\d.]+)\\$ \\(A6\\), \\$(-[\\d.]+)\\\\%\\$, \\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$ \\(Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A5-risp-erm/mean"
+   }
+  },
+  {
+   "id": "e1.inv.A6.mean",
+   "tex_pattern": "cuts post-reactivation regret from \\$([\\d.]+)\\$ \\(A5\\) to \\$([\\d.]+)\\$ \\(A6\\), \\$(-[\\d.]+)\\\\%\\$, \\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$ \\(Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A6-risp-inv/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e1.inv.pct",
+   "tex_pattern": "cuts post-reactivation regret from \\$([\\d.]+)\\$ \\(A5\\) to \\$([\\d.]+)\\$ \\(A6\\), \\$(-[\\d.]+)\\\\%\\$, \\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$ \\(Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "expr": "-(a-b)/a*100",
+    "inputs": {
+     "a": "results_100seed/e1_synth.json:post_react/A5-risp-erm/mean",
+     "b": "results_100seed/e1_synth.json:post_react/A6-risp-inv/mean"
+    }
+   },
+   "group": 3
+  },
+  {
+   "id": "e1.inv.p",
+   "tex_pattern": "cuts post-reactivation regret from \\$([\\d.]+)\\$ \\(A5\\) to \\$([\\d.]+)\\$ \\(A6\\), \\$(-[\\d.]+)\\\\%\\$, \\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$ \\(Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A6-risp-inv vs A5-risp-erm"
+   },
+   "group": 4
+  },
+  {
+   "id": "e1.inv.holm",
+   "tex_pattern": "cuts post-reactivation regret from \\$([\\d.]+)\\$ \\(A5\\) to \\$([\\d.]+)\\$ \\(A6\\), \\$(-[\\d.]+)\\\\%\\$, \\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$ \\(Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:holm_p/A6-risp-inv vs A5-risp-erm"
+   },
+   "group": 5
+  },
+  {
+   "id": "e1.joint.pct",
+   "tex_pattern": "A6 improves on A1 by \\$([\\d.]+)\\\\%\\$ raw \\(\\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\), which is \\$(\\d+)\\\\%\\$ of the excess",
+   "expect": {
+    "expr": "(a-b)/a*100",
+    "inputs": {
+     "a": "results_100seed/e1_synth.json:post_react/A1-monolith-erm/mean",
+     "b": "results_100seed/e1_synth.json:post_react/A6-risp-inv/mean"
+    }
+   }
+  },
+  {
+   "id": "e1.joint.p",
+   "tex_pattern": "A6 improves on A1 by \\$([\\d.]+)\\\\%\\$ raw \\(\\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\), which is \\$(\\d+)\\\\%\\$ of the excess",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A6-risp-inv vs A1-monolith-erm"
+   },
+   "group": 2
+  },
+  {
+   "id": "e1.joint.excesspct",
+   "tex_pattern": "A6 improves on A1 by \\$([\\d.]+)\\\\%\\$ raw \\(\\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\), which is \\$(\\d+)\\\\%\\$ of the excess",
+   "expect": {
+    "expr": "(a-b)/(a-f)*100",
+    "inputs": {
+     "a": "results_100seed/e1_synth.json:post_react/A1-monolith-erm/mean",
+     "b": "results_100seed/e1_synth.json:post_react/A6-risp-inv/mean",
+     "f": "results_100seed/e1_synth.json:steady/A10-oracle-inv/mean"
+    }
+   },
+   "group": 3
+  },
+  {
+   "id": "e1.excess.A1",
+   "tex_pattern": "\\(\\$([\\d.]+) - ([\\d.]+) = ([\\d.]+)\\$ down to \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A1-monolith-erm/mean"
+   }
+  },
+  {
+   "id": "e1.excess.floor",
+   "tex_pattern": "\\(\\$([\\d.]+) - ([\\d.]+) = ([\\d.]+)\\$ down to \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A10-oracle-inv/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e1.excess.gap",
+   "tex_pattern": "\\(\\$([\\d.]+) - ([\\d.]+) = ([\\d.]+)\\$ down to \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "expr": "a-f",
+    "inputs": {
+     "a": "results_100seed/e1_synth.json:post_react/A1-monolith-erm/mean",
+     "f": "results_100seed/e1_synth.json:steady/A10-oracle-inv/mean"
+    }
+   },
+   "group": 3
+  },
+  {
+   "id": "e1.excess.gapA6",
+   "tex_pattern": "\\(\\$([\\d.]+) - ([\\d.]+) = ([\\d.]+)\\$ down to \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "expr": "b-f",
+    "inputs": {
+     "b": "results_100seed/e1_synth.json:post_react/A6-risp-inv/mean",
+     "f": "results_100seed/e1_synth.json:steady/A10-oracle-inv/mean"
+    }
+   },
+   "group": 4
+  },
+  {
+   "id": "e1.tax.A1steady",
+   "tex_pattern": "trades \\\\emph\\{below\\} the invariant arms \\(A1 \\$([\\d.]+)\\$ vs\\.\\\\ A6 \\$([\\d.]+)\\$, \\$\\{\\\\approx\\}\\{\\+\\}([\\d.]+)\\$/day",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A1-monolith-erm/mean"
+   }
+  },
+  {
+   "id": "e1.tax.A6steady",
+   "tex_pattern": "trades \\\\emph\\{below\\} the invariant arms \\(A1 \\$([\\d.]+)\\$ vs\\.\\\\ A6 \\$([\\d.]+)\\$, \\$\\{\\\\approx\\}\\{\\+\\}([\\d.]+)\\$/day",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A6-risp-inv/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e1.tax.perday",
+   "tex_pattern": "trades \\\\emph\\{below\\} the invariant arms \\(A1 \\$([\\d.]+)\\$ vs\\.\\\\ A6 \\$([\\d.]+)\\$, \\$\\{\\\\approx\\}\\{\\+\\}([\\d.]+)\\$/day",
+   "expect": {
+    "expr": "b-a",
+    "inputs": {
+     "a": "results_100seed/e1_synth.json:steady/A1-monolith-erm/mean",
+     "b": "results_100seed/e1_synth.json:steady/A6-risp-inv/mean"
+    }
+   },
+   "group": 3
+  },
+  {
+   "id": "e1.overallmargin.pct",
+   "tex_pattern": "margin over A1 is \\$([\\d.]+)\\\\%\\$ \\(\\$([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "expr": "(a-b)/a*100",
+    "inputs": {
+     "a": "results_100seed/e1_synth.json:overall/A1-monolith-erm/mean",
+     "b": "results_100seed/e1_synth.json:overall/A6-risp-inv/mean"
+    }
+   },
+   "note": "overall-regret margin A6 vs A1; text quotes 2.2%"
+  },
+  {
+   "id": "e1.overallmargin.A6",
+   "tex_pattern": "margin over A1 is \\$([\\d.]+)\\\\%\\$ \\(\\$([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A6-risp-inv/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e1.overallmargin.A1",
+   "tex_pattern": "margin over A1 is \\$([\\d.]+)\\\\%\\$ \\(\\$([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:overall/A1-monolith-erm/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "e1.a7a1.p",
+   "tex_pattern": "A7 vs\\.\\\\ A1 post-reactivation: \\$p = ([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A7-monolith-inv vs A1-monolith-erm"
+   }
+  },
+  {
+   "id": "e1.a5a6.delta",
+   "tex_pattern": "invariance gap \\$\\|\\\\Delta\\| = ([\\d.]+)\\$",
+   "expect": {
+    "expr": "a-b",
+    "inputs": {
+     "a": "results_100seed/e1_synth.json:post_react/A5-risp-erm/mean",
+     "b": "results_100seed/e1_synth.json:post_react/A6-risp-inv/mean"
+    }
+   }
+  },
+  {
+   "id": "e1.interaction.mean",
+   "tex_pattern": "= (-[\\d.]+) \\\\pm ([\\d.]+)\\$ \\(95\\\\% CI excluding zero\\)",
+   "expect": {
+    "expr": "mean(vsub(vadd(a1,a6),vadd(a5,a7)))",
+    "inputs": {
+     "a1": "results_100seed/e1_synth.json:raw/A1-monolith-erm/post_react",
+     "a5": "results_100seed/e1_synth.json:raw/A5-risp-erm/post_react",
+     "a7": "results_100seed/e1_synth.json:raw/A7-monolith-inv/post_react",
+     "a6": "results_100seed/e1_synth.json:raw/A6-risp-inv/post_react"
+    }
+   }
+  },
+  {
+   "id": "e1.interaction.ci",
+   "tex_pattern": "= (-[\\d.]+) \\\\pm ([\\d.]+)\\$ \\(95\\\\% CI excluding zero\\)",
+   "expect": {
+    "expr": "ci95(vsub(vadd(a1,a6),vadd(a5,a7)))",
+    "inputs": {
+     "a1": "results_100seed/e1_synth.json:raw/A1-monolith-erm/post_react",
+     "a5": "results_100seed/e1_synth.json:raw/A5-risp-erm/post_react",
+     "a7": "results_100seed/e1_synth.json:raw/A7-monolith-inv/post_react",
+     "a6": "results_100seed/e1_synth.json:raw/A6-risp-inv/post_react"
+    }
+   },
+   "group": 2
+  },
+  {
+   "id": "e1.router.p",
+   "tex_pattern": "learned router tracks the monolith \\(\\$p = ([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A2-router vs A1-monolith-erm"
+   }
+  },
+  {
+   "id": "e1.a8b.track",
+   "tex_pattern": "Hedge over learning experts tracks it too \\(\\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A8b-hedge-learn/mean"
+   }
+  },
+  {
+   "id": "e1.a3.worst",
+   "tex_pattern": "allocator is \\\\emph\\{worst\\} among learner arms \\(\\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A3-recentperf/mean"
+   }
+  },
+  {
+   "id": "e1.a8a.post",
+   "tex_pattern": "\\(\\$([\\d.]+)\\$ post-reactivation, \\$([\\d.]+)\\$ steady\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A8a-hedge-fixed/mean"
+   }
+  },
+  {
+   "id": "e1.a8a.steady",
+   "tex_pattern": "\\(\\$([\\d.]+)\\$ post-reactivation, \\$([\\d.]+)\\$ steady\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:steady/A8a-hedge-fixed/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e1.skyline.A6",
+   "tex_pattern": "\\(\\$([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+)\\$, \\$p = ([\\d.]+)\\$; TOST equivalence at margin",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A6-risp-inv/mean"
+   }
+  },
+  {
+   "id": "e1.skyline.A10",
+   "tex_pattern": "\\(\\$([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+)\\$, \\$p = ([\\d.]+)\\$; TOST equivalence at margin",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A10-oracle-inv/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e1.skyline.p",
+   "tex_pattern": "\\(\\$([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+)\\$, \\$p = ([\\d.]+)\\$; TOST equivalence at margin",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A6-risp-inv vs A10-oracle-inv"
+   },
+   "group": 3
+  },
+  {
+   "id": "e1.a9.p",
+   "tex_pattern": "oracle assignment with ERM training \\(A9, \\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$, Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:welch_p/A6-risp-inv vs A9-oracle-pinned"
+   }
+  },
+  {
+   "id": "e1.a9.holm",
+   "tex_pattern": "oracle assignment with ERM training \\(A9, \\$p = ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$, Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:holm_p/A6-risp-inv vs A9-oracle-pinned"
+   },
+   "group": 2
+  },
+  {
+   "id": "e1.crisisaffinity.min",
+   "tex_pattern": "rare crisis regime reaches \\$([\\d.]+)\\$--\\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results/assignment_diagnostics.json:crisis_alpha_min"
+   }
+  },
+  {
+   "id": "e1.crisisaffinity.max",
+   "tex_pattern": "rare crisis regime reaches \\$([\\d.]+)\\$--\\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results/assignment_diagnostics.json:crisis_alpha_max"
+   },
+   "group": 2
+  },
+  {
+   "id": "e0.crypto.L1.real",
+   "tex_pattern": "Crypto \\(5 pairs, daily\\) & L1 vol\\$\\\\times\\$trend & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:crypto/L1/real_mean_regret"
+   }
+  },
+  {
+   "id": "e0.crypto.L1.shuffled",
+   "tex_pattern": "Crypto \\(5 pairs, daily\\) & L1 vol\\$\\\\times\\$trend & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:crypto/L1/shuffled_mean_regret"
+   },
+   "group": 2
+  },
+  {
+   "id": "e0.crypto.L1.gap",
+   "tex_pattern": "Crypto \\(5 pairs, daily\\) & L1 vol\\$\\\\times\\$trend & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:crypto/L1/gap_pct"
+   },
+   "group": 3
+  },
+  {
+   "id": "e0.crypto.L1.z",
+   "tex_pattern": "Crypto \\(5 pairs, daily\\) & L1 vol\\$\\\\times\\$trend & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:crypto/L1/z_vs_shuffled"
+   },
+   "group": 4
+  },
+  {
+   "id": "e0.crypto.L2.real",
+   "tex_pattern": "Crypto \\(5 pairs, daily\\) & L2 filtered HMM & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:crypto/L2/real_mean_regret"
+   }
+  },
+  {
+   "id": "e0.crypto.L2.shuffled",
+   "tex_pattern": "Crypto \\(5 pairs, daily\\) & L2 filtered HMM & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:crypto/L2/shuffled_mean_regret"
+   },
+   "group": 2
+  },
+  {
+   "id": "e0.crypto.L2.gap",
+   "tex_pattern": "Crypto \\(5 pairs, daily\\) & L2 filtered HMM & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:crypto/L2/gap_pct"
+   },
+   "group": 3
+  },
+  {
+   "id": "e0.crypto.L2.z",
+   "tex_pattern": "Crypto \\(5 pairs, daily\\) & L2 filtered HMM & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:crypto/L2/z_vs_shuffled"
+   },
+   "group": 4
+  },
+  {
+   "id": "e0.comm.L1.real",
+   "tex_pattern": "Commodities \\(3, daily\\) & L1 vol\\$\\\\times\\$trend & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:commodities/L1/real_mean_regret"
+   }
+  },
+  {
+   "id": "e0.comm.L1.shuffled",
+   "tex_pattern": "Commodities \\(3, daily\\) & L1 vol\\$\\\\times\\$trend & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:commodities/L1/shuffled_mean_regret"
+   },
+   "group": 2
+  },
+  {
+   "id": "e0.comm.L1.gap",
+   "tex_pattern": "Commodities \\(3, daily\\) & L1 vol\\$\\\\times\\$trend & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:commodities/L1/gap_pct"
+   },
+   "group": 3
+  },
+  {
+   "id": "e0.comm.L1.z",
+   "tex_pattern": "Commodities \\(3, daily\\) & L1 vol\\$\\\\times\\$trend & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:commodities/L1/z_vs_shuffled"
+   },
+   "group": 4
+  },
+  {
+   "id": "e0.comm.L2.real",
+   "tex_pattern": "Commodities \\(3, daily\\) & L2 filtered HMM & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:commodities/L2/real_mean_regret"
+   }
+  },
+  {
+   "id": "e0.comm.L2.shuffled",
+   "tex_pattern": "Commodities \\(3, daily\\) & L2 filtered HMM & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:commodities/L2/shuffled_mean_regret"
+   },
+   "group": 2
+  },
+  {
+   "id": "e0.comm.L2.gap",
+   "tex_pattern": "Commodities \\(3, daily\\) & L2 filtered HMM & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:commodities/L2/gap_pct"
+   },
+   "group": 3
+  },
+  {
+   "id": "e0.comm.L2.z",
+   "tex_pattern": "Commodities \\(3, daily\\) & L2 filtered HMM & \\$([\\d.]+)\\$ & \\$([\\d.]+)\\$ & \\$([+-]?[\\d.]+)\\\\%\\$ & \\$([+-]?[\\d.]+)\\$",
+   "expect": {
+    "path": "results/e0_structure_diagnostic.json:commodities/L2/z_vs_shuffled"
+   },
+   "group": 4
+  },
+  {
+   "id": "e0.allz.lt",
+   "tex_pattern": "block-shuffled-label regret \\(all \\$\\|z\\| < ([\\d.]+)\\$\\)",
+   "expect": {
+    "expr": "max(abs(a),abs(b),abs(c),abs(d))",
+    "inputs": {
+     "a": "results/e0_structure_diagnostic.json:crypto/L1/z_vs_shuffled",
+     "b": "results/e0_structure_diagnostic.json:crypto/L2/z_vs_shuffled",
+     "c": "results/e0_structure_diagnostic.json:commodities/L1/z_vs_shuffled",
+     "d": "results/e0_structure_diagnostic.json:commodities/L2/z_vs_shuffled"
+    }
+   },
+   "cmp": "le"
+  },
+  {
+   "id": "e0i.confirm.nepisodes",
+   "tex_pattern": "bar-native L2 labeler\\} \\((\\d+) episodes; conditioning beats shuffled labels by \\$([\\d.]+)\\\\%\\$, \\$z = ([\\d.]+)\\$, both halves positive at \\$\\+([\\d.]+)\\\\%/\\+([\\d.]+)\\\\%\\$\\)",
+   "expect": {
+    "path": "results/e0_intraday_confirm.json:4H∕L2b/n_episodes"
+   }
+  },
+  {
+   "id": "e0i.confirm.gap",
+   "tex_pattern": "bar-native L2 labeler\\} \\((\\d+) episodes; conditioning beats shuffled labels by \\$([\\d.]+)\\\\%\\$, \\$z = ([\\d.]+)\\$, both halves positive at \\$\\+([\\d.]+)\\\\%/\\+([\\d.]+)\\\\%\\$\\)",
+   "expect": {
+    "path": "results/e0_intraday_confirm.json:4H∕L2b/gap_pct"
+   },
+   "group": 2
+  },
+  {
+   "id": "e0i.confirm.z",
+   "tex_pattern": "bar-native L2 labeler\\} \\((\\d+) episodes; conditioning beats shuffled labels by \\$([\\d.]+)\\\\%\\$, \\$z = ([\\d.]+)\\$, both halves positive at \\$\\+([\\d.]+)\\\\%/\\+([\\d.]+)\\\\%\\$\\)",
+   "expect": {
+    "path": "results/e0_intraday_confirm.json:4H∕L2b/z_vs_shuffled"
+   },
+   "group": 3
+  },
+  {
+   "id": "e0i.confirm.half1",
+   "tex_pattern": "bar-native L2 labeler\\} \\((\\d+) episodes; conditioning beats shuffled labels by \\$([\\d.]+)\\\\%\\$, \\$z = ([\\d.]+)\\$, both halves positive at \\$\\+([\\d.]+)\\\\%/\\+([\\d.]+)\\\\%\\$\\)",
+   "expect": {
+    "path": "results/e0_intraday_confirm.json:4H∕L2b/split_half/first_half/gap_pct"
+   },
+   "group": 4
+  },
+  {
+   "id": "e0i.confirm.half2",
+   "tex_pattern": "bar-native L2 labeler\\} \\((\\d+) episodes; conditioning beats shuffled labels by \\$([\\d.]+)\\\\%\\$, \\$z = ([\\d.]+)\\$, both halves positive at \\$\\+([\\d.]+)\\\\%/\\+([\\d.]+)\\\\%\\$\\)",
+   "expect": {
+    "path": "results/e0_intraday_confirm.json:4H∕L2b/split_half/second_half/gap_pct"
+   },
+   "group": 5
+  },
+  {
+   "id": "e0i.1h.z",
+   "tex_pattern": "1-hour cell fails confirmation \\(\\$z = ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e0_intraday_confirm.json:1H∕L1b/z_vs_shuffled"
+   }
+  },
+  {
+   "id": "e1s.minholm",
+   "tex_pattern": "\\(min Holm \\$p = ([\\d.]+)\\$; post-reactivation regret \\$([\\d.]+)\\$--\\$([\\d.]+)\\$ across arms\\)",
+   "expect": {
+    "expr": "min(h0,h1,h2,h3,h4,h5)",
+    "inputs": {
+     "h0": "results_100seed/e1s_stitched_crypto.json:holm_p/A6-risp-inv vs A1-monolith-erm",
+     "h1": "results_100seed/e1s_stitched_crypto.json:holm_p/A6-risp-inv vs A8b-hedge-learn",
+     "h2": "results_100seed/e1s_stitched_crypto.json:holm_p/A5-risp-erm vs A1-monolith-erm",
+     "h3": "results_100seed/e1s_stitched_crypto.json:holm_p/A5-risp-erm vs A2-router",
+     "h4": "results_100seed/e1s_stitched_crypto.json:holm_p/A6-risp-inv vs A5-risp-erm",
+     "h5": "results_100seed/e1s_stitched_crypto.json:holm_p/A6-risp-inv vs A9-oracle-pinned"
+    }
+   }
+  },
+  {
+   "id": "e1s.range.min",
+   "tex_pattern": "\\(min Holm \\$p = ([\\d.]+)\\$; post-reactivation regret \\$([\\d.]+)\\$--\\$([\\d.]+)\\$ across arms\\)",
+   "expect": {
+    "expr": "min(x0,x1,x2,x3,x4,x5,x6,x7,x8,x9)",
+    "inputs": {
+     "x0": "results_100seed/e1s_stitched_crypto.json:post_react/A1-monolith-erm/mean",
+     "x1": "results_100seed/e1s_stitched_crypto.json:post_react/A2-router/mean",
+     "x2": "results_100seed/e1s_stitched_crypto.json:post_react/A3-recentperf/mean",
+     "x3": "results_100seed/e1s_stitched_crypto.json:post_react/A4-randomfixed/mean",
+     "x4": "results_100seed/e1s_stitched_crypto.json:post_react/A5-risp-erm/mean",
+     "x5": "results_100seed/e1s_stitched_crypto.json:post_react/A6-risp-inv/mean",
+     "x6": "results_100seed/e1s_stitched_crypto.json:post_react/A7-monolith-inv/mean",
+     "x7": "results_100seed/e1s_stitched_crypto.json:post_react/A8a-hedge-fixed/mean",
+     "x8": "results_100seed/e1s_stitched_crypto.json:post_react/A8b-hedge-learn/mean",
+     "x9": "results_100seed/e1s_stitched_crypto.json:post_react/A9-oracle-pinned/mean"
+    }
+   },
+   "group": 2
+  },
+  {
+   "id": "e1s.range.max",
+   "tex_pattern": "\\(min Holm \\$p = ([\\d.]+)\\$; post-reactivation regret \\$([\\d.]+)\\$--\\$([\\d.]+)\\$ across arms\\)",
+   "expect": {
+    "expr": "max(x0,x1,x2,x3,x4,x5,x6,x7,x8,x9)",
+    "inputs": {
+     "x0": "results_100seed/e1s_stitched_crypto.json:post_react/A1-monolith-erm/mean",
+     "x1": "results_100seed/e1s_stitched_crypto.json:post_react/A2-router/mean",
+     "x2": "results_100seed/e1s_stitched_crypto.json:post_react/A3-recentperf/mean",
+     "x3": "results_100seed/e1s_stitched_crypto.json:post_react/A4-randomfixed/mean",
+     "x4": "results_100seed/e1s_stitched_crypto.json:post_react/A5-risp-erm/mean",
+     "x5": "results_100seed/e1s_stitched_crypto.json:post_react/A6-risp-inv/mean",
+     "x6": "results_100seed/e1s_stitched_crypto.json:post_react/A7-monolith-inv/mean",
+     "x7": "results_100seed/e1s_stitched_crypto.json:post_react/A8a-hedge-fixed/mean",
+     "x8": "results_100seed/e1s_stitched_crypto.json:post_react/A8b-hedge-learn/mean",
+     "x9": "results_100seed/e1s_stitched_crypto.json:post_react/A9-oracle-pinned/mean"
+    }
+   },
+   "group": 3
+  },
+  {
+   "id": "e1s.trend.p",
+   "tex_pattern": "A6 below A1 at uncorrected \\$p = ([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e1s_stitched_crypto.json:welch_p/A6-risp-inv vs A1-monolith-erm"
+   }
+  },
+  {
+   "id": "e1s.a8a.best",
+   "tex_pattern": "non-learning\\} strategies, at \\$([\\d.]+)\\$---which",
+   "expect": {
+    "path": "results_100seed/e1s_stitched_crypto.json:post_react/A8a-hedge-fixed/mean"
+   }
+  },
+  {
+   "id": "e1r.flat.minp",
+   "tex_pattern": "flat \\(\\$p > ([\\d.]+)\\$ throughout; A6 \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ vs\\.\\\\ A1 \\$([\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "expr": "min(w0,w1,w2,w3,w4,w5)",
+    "inputs": {
+     "w0": "results/e1r_4h_crypto.json:welch_p/A6-risp-inv vs A5-risp-erm",
+     "w1": "results/e1r_4h_crypto.json:welch_p/A6-risp-inv vs A1-monolith-erm",
+     "w2": "results/e1r_4h_crypto.json:welch_p/A5-risp-erm vs A2-router",
+     "w3": "results/e1r_4h_crypto.json:welch_p/A5-risp-erm vs A1-monolith-erm",
+     "w4": "results/e1r_4h_crypto.json:welch_p/A6-risp-inv vs A8b-hedge-learn",
+     "w5": "results/e1r_4h_crypto.json:welch_p/A6-risp-inv vs A9-oracle-pinned"
+    }
+   },
+   "cmp": "ge",
+   "note": "claim: all pre-registered pairs p > quoted threshold"
+  },
+  {
+   "id": "e1r.A6.mean",
+   "tex_pattern": "flat \\(\\$p > ([\\d.]+)\\$ throughout; A6 \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ vs\\.\\\\ A1 \\$([\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e1r_4h_crypto.json:post_react/A6-risp-inv/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e1r.A6.ci",
+   "tex_pattern": "flat \\(\\$p > ([\\d.]+)\\$ throughout; A6 \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ vs\\.\\\\ A1 \\$([\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e1r_4h_crypto.json:post_react/A6-risp-inv/ci95"
+   },
+   "group": 3
+  },
+  {
+   "id": "e1r.A1.mean",
+   "tex_pattern": "flat \\(\\$p > ([\\d.]+)\\$ throughout; A6 \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ vs\\.\\\\ A1 \\$([\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e1r_4h_crypto.json:post_react/A1-monolith-erm/mean"
+   },
+   "group": 4
+  },
+  {
+   "id": "e1r.A1.ci",
+   "tex_pattern": "flat \\(\\$p > ([\\d.]+)\\$ throughout; A6 \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ vs\\.\\\\ A1 \\$([\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e1r_4h_crypto.json:post_react/A1-monolith-erm/ci95"
+   },
+   "group": 5
+  },
+  {
+   "id": "e1r.a8a.worst",
+   "tex_pattern": "is here the \\\\emph\\{worst\\} \\(\\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e1r_4h_crypto.json:post_react/A8a-hedge-fixed/mean"
+   }
+  },
+  {
+   "id": "e1r.elevation.pct",
+   "tex_pattern": "post-reactivation elevation \\(\\$\\\\approx\\{\\+\\}(\\d+)\\\\%\\$",
+   "expect": {
+    "expr": "mean([(p0/o0-1)*100,(p1/o1-1)*100,(p2/o2-1)*100,(p3/o3-1)*100,(p4/o4-1)*100,(p5/o5-1)*100,(p6/o6-1)*100,(p7/o7-1)*100,(p8/o8-1)*100,(p9/o9-1)*100])",
+    "inputs": {
+     "p0": "results/e1r_4h_crypto.json:post_react/A1-monolith-erm/mean",
+     "o0": "results/e1r_4h_crypto.json:overall/A1-monolith-erm/mean",
+     "p1": "results/e1r_4h_crypto.json:post_react/A2-router/mean",
+     "o1": "results/e1r_4h_crypto.json:overall/A2-router/mean",
+     "p2": "results/e1r_4h_crypto.json:post_react/A3-recentperf/mean",
+     "o2": "results/e1r_4h_crypto.json:overall/A3-recentperf/mean",
+     "p3": "results/e1r_4h_crypto.json:post_react/A4-randomfixed/mean",
+     "o3": "results/e1r_4h_crypto.json:overall/A4-randomfixed/mean",
+     "p4": "results/e1r_4h_crypto.json:post_react/A5-risp-erm/mean",
+     "o4": "results/e1r_4h_crypto.json:overall/A5-risp-erm/mean",
+     "p5": "results/e1r_4h_crypto.json:post_react/A6-risp-inv/mean",
+     "o5": "results/e1r_4h_crypto.json:overall/A6-risp-inv/mean",
+     "p6": "results/e1r_4h_crypto.json:post_react/A7-monolith-inv/mean",
+     "o6": "results/e1r_4h_crypto.json:overall/A7-monolith-inv/mean",
+     "p7": "results/e1r_4h_crypto.json:post_react/A8a-hedge-fixed/mean",
+     "o7": "results/e1r_4h_crypto.json:overall/A8a-hedge-fixed/mean",
+     "p8": "results/e1r_4h_crypto.json:post_react/A8b-hedge-learn/mean",
+     "o8": "results/e1r_4h_crypto.json:overall/A8b-hedge-learn/mean",
+     "p9": "results/e1r_4h_crypto.json:post_react/A9-oracle-pinned/mean",
+     "o9": "results/e1r_4h_crypto.json:overall/A9-oracle-pinned/mean"
+    }
+   },
+   "tolerance": 1.0,
+   "note": "mean over the ten arms of post-react regret over own overall regret"
+  },
+  {
+   "id": "e1r.gamma",
+   "tex_pattern": "\\(post-reactivation\\) is \\$\\+([\\d.]+)\\$, zero to four decimals, against \\$\\+([\\d.]+)\\$ in the controlled markets",
+   "expect": {
+    "expr": "a-b",
+    "inputs": {
+     "a": "results/e1r_4h_crypto.json:post_react/A1-monolith-erm/mean",
+     "b": "results/e1r_4h_crypto.json:post_react/A9-oracle-pinned/mean"
+    }
+   }
+  },
+  {
+   "id": "e1r.gamma.synth",
+   "tex_pattern": "\\(post-reactivation\\) is \\$\\+([\\d.]+)\\$, zero to four decimals, against \\$\\+([\\d.]+)\\$ in the controlled markets",
+   "expect": {
+    "expr": "a-b",
+    "inputs": {
+     "a": "results_100seed/e1_synth.json:post_react/A1-monolith-erm/mean",
+     "b": "results_100seed/e1_synth.json:post_react/A9-oracle-pinned/mean"
+    }
+   },
+   "group": 2
+  },
+  {
+   "id": "gate.l1.gap",
+   "tex_pattern": "conditioning beats the shuffle controls by \\$([\\d.]+)\\\\%\\$ \\(\\$z\\{=\\}([\\d.]+)\\$, empirical \\$p \\\\le 1/51\\$, normal-fit \\$p \\\\approx ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$",
+   "expect": {
+    "path": "results/e_french49_gate.json:L1/gap_pct"
+   }
+  },
+  {
+   "id": "gate.l1.z",
+   "tex_pattern": "conditioning beats the shuffle controls by \\$([\\d.]+)\\\\%\\$ \\(\\$z\\{=\\}([\\d.]+)\\$, empirical \\$p \\\\le 1/51\\$, normal-fit \\$p \\\\approx ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$",
+   "expect": {
+    "path": "results/e_french49_gate.json:L1/z_vs_shuffled"
+   },
+   "group": 2
+  },
+  {
+   "id": "gate.l1.normalp",
+   "tex_pattern": "conditioning beats the shuffle controls by \\$([\\d.]+)\\\\%\\$ \\(\\$z\\{=\\}([\\d.]+)\\$, empirical \\$p \\\\le 1/51\\$, normal-fit \\$p \\\\approx ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$",
+   "expect": {
+    "expr": "normal_p_one_sided(z)",
+    "inputs": {
+     "z": "results/e_french49_gate.json:L1/z_vs_shuffled"
+    }
+   },
+   "group": 3
+  },
+  {
+   "id": "gate.l2.z",
+   "tex_pattern": "L2 fails \\(\\$z\\{=\\}([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_gate.json:L2/z_vs_shuffled"
+   }
+  },
+  {
+   "id": "gate.l3.gap",
+   "tex_pattern": "clears the shuffle criterion \\(\\$\\+([\\d.]+)\\\\%\\$, \\$z\\{=\\}([\\d.]+)\\$, normal-fit \\$p \\\\approx ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$, halves \\$\\+([\\d.]+)\\\\%/\\+([\\d.]+)\\\\%\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_gate.json:gap_pct"
+   }
+  },
+  {
+   "id": "gate.l3.z",
+   "tex_pattern": "clears the shuffle criterion \\(\\$\\+([\\d.]+)\\\\%\\$, \\$z\\{=\\}([\\d.]+)\\$, normal-fit \\$p \\\\approx ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$, halves \\$\\+([\\d.]+)\\\\%/\\+([\\d.]+)\\\\%\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_gate.json:z_vs_shuffled"
+   },
+   "group": 2
+  },
+  {
+   "id": "gate.l3.normalp",
+   "tex_pattern": "clears the shuffle criterion \\(\\$\\+([\\d.]+)\\\\%\\$, \\$z\\{=\\}([\\d.]+)\\$, normal-fit \\$p \\\\approx ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$, halves \\$\\+([\\d.]+)\\\\%/\\+([\\d.]+)\\\\%\\$\\)",
+   "expect": {
+    "expr": "normal_p_one_sided(z)",
+    "inputs": {
+     "z": "results/e_french49_L3_gate.json:z_vs_shuffled"
+    }
+   },
+   "group": 3,
+   "note": "normal fit to the shuffle distribution, one-sided at the measured z"
+  },
+  {
+   "id": "gate.l3.half1",
+   "tex_pattern": "clears the shuffle criterion \\(\\$\\+([\\d.]+)\\\\%\\$, \\$z\\{=\\}([\\d.]+)\\$, normal-fit \\$p \\\\approx ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$, halves \\$\\+([\\d.]+)\\\\%/\\+([\\d.]+)\\\\%\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_gate.json:split_half/first_half/gap_pct"
+   },
+   "group": 4
+  },
+  {
+   "id": "gate.l3.half2",
+   "tex_pattern": "clears the shuffle criterion \\(\\$\\+([\\d.]+)\\\\%\\$, \\$z\\{=\\}([\\d.]+)\\$, normal-fit \\$p \\\\approx ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$, halves \\$\\+([\\d.]+)\\\\%/\\+([\\d.]+)\\\\%\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_gate.json:split_half/second_half/gap_pct"
+   },
+   "group": 5
+  },
+  {
+   "id": "gate.l3.pooled",
+   "tex_pattern": "pooled beats conditioning by \\$([\\d.]+)\\\\%\\$",
+   "expect": {
+    "path": "results/e_french49_L3_gate.json:cond_vs_pooled_pct"
+   },
+   "abs": true
+  },
+  {
+   "id": "gamma.l1.mean",
+   "tex_pattern": "deficit is again zero \\(\\$\\\\hat\\\\Gamma_\\{\\\\mathrm\\{forget\\}\\} = (-[\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_dissoc.json:walkforward/gate2_forgetting_deficit/mean"
+   }
+  },
+  {
+   "id": "gamma.l1.ci",
+   "tex_pattern": "deficit is again zero \\(\\$\\\\hat\\\\Gamma_\\{\\\\mathrm\\{forget\\}\\} = (-[\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_dissoc.json:walkforward/gate2_forgetting_deficit/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "gamma.l3.mean",
+   "tex_pattern": "\\$\\\\hat\\\\Gamma_\\{\\\\mathrm\\{forget\\}\\} = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(the \\$\\\\pm\\$ is seed noise",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/gate2_forgetting_deficit/mean"
+   }
+  },
+  {
+   "id": "gamma.l3.ci",
+   "tex_pattern": "\\$\\\\hat\\\\Gamma_\\{\\\\mathrm\\{forget\\}\\} = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(the \\$\\\\pm\\$ is seed noise",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/gate2_forgetting_deficit/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "gamma.dormancy2953",
+   "tex_pattern": "sleeps up to \\$([\\d{},]+)\\$ trading days",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/diag/2/max"
+   }
+  },
+  {
+   "id": "sweep.10.mean",
+   "tex_pattern": "is null \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$(-[\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_sweep.json:10pct/gate2_forgetting_deficit/mean"
+   }
+  },
+  {
+   "id": "sweep.10.ci",
+   "tex_pattern": "is null \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$(-[\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_sweep.json:10pct/gate2_forgetting_deficit/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "sweep.12.mean",
+   "tex_pattern": "is null \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$(-[\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_sweep.json:12pct/gate2_forgetting_deficit/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "sweep.12.ci",
+   "tex_pattern": "is null \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$(-[\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_sweep.json:12pct/gate2_forgetting_deficit/ci95"
+   },
+   "group": 4
+  },
+  {
+   "id": "sweep.20.mean",
+   "tex_pattern": "at \\$20\\\\%\\$ \\(sparser inventory\\) \\$\\\\hat\\\\Gamma = (-[\\d.]+) \\\\pm ([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_french49_L3_sweep.json:20pct/gate2_forgetting_deficit/mean"
+   }
+  },
+  {
+   "id": "sweep.20.ci",
+   "tex_pattern": "at \\$20\\\\%\\$ \\(sparser inventory\\) \\$\\\\hat\\\\Gamma = (-[\\d.]+) \\\\pm ([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_french49_L3_sweep.json:20pct/gate2_forgetting_deficit/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "l3.order.A6.mean",
+   "tex_pattern": "ordering emerges\\}---A6 \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ \\$<\\$ A5 \\$([\\d.]+)\\$ \\$<\\$ A1 \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/post_react/A6-risp-inv/mean"
+   }
+  },
+  {
+   "id": "l3.order.A6.ci",
+   "tex_pattern": "ordering emerges\\}---A6 \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ \\$<\\$ A5 \\$([\\d.]+)\\$ \\$<\\$ A1 \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/post_react/A6-risp-inv/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "l3.order.A5.mean",
+   "tex_pattern": "ordering emerges\\}---A6 \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ \\$<\\$ A5 \\$([\\d.]+)\\$ \\$<\\$ A1 \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/post_react/A5-risp-erm/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "l3.order.A1.mean",
+   "tex_pattern": "ordering emerges\\}---A6 \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ \\$<\\$ A5 \\$([\\d.]+)\\$ \\$<\\$ A1 \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/post_react/A1-monolith-erm/mean"
+   },
+   "group": 4
+  },
+  {
+   "id": "l3.holm.retention",
+   "tex_pattern": "total-capacity-matched router A2\\) at Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/holm_p/A5-risp-erm vs A2-router"
+   }
+  },
+  {
+   "id": "l3.holm.monolith",
+   "tex_pattern": "the monolith contrast at Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/holm_p/A5-risp-erm vs A1-monolith-erm"
+   }
+  },
+  {
+   "id": "l3.holm.inv",
+   "tex_pattern": "the invariance axis at Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$ \\(A6 vs\\.\\\\ A5\\)",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/holm_p/A6-risp-inv vs A5-risp-erm"
+   }
+  },
+  {
+   "id": "l3.holm.joint",
+   "tex_pattern": "the joint effect at Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$ \\(\\$(-[\\d.]+)\\\\%\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/holm_p/A6-risp-inv vs A1-monolith-erm"
+   }
+  },
+  {
+   "id": "l3.joint.pct",
+   "tex_pattern": "the joint effect at Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$ \\(\\$(-[\\d.]+)\\\\%\\$\\)",
+   "expect": {
+    "expr": "-(a-b)/a*100",
+    "inputs": {
+     "a": "results/e_french49_L3_dissoc.json:walkforward/post_react/A1-monolith-erm/mean",
+     "b": "results/e_french49_L3_dissoc.json:walkforward/post_react/A6-risp-inv/mean"
+    }
+   },
+   "group": 2
+  },
+  {
+   "id": "l3.a6a9.holm",
+   "tex_pattern": "A6 beating the hand-pinned oracle \\(Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/holm_p/A6-risp-inv vs A9-oracle-pinned"
+   }
+  },
+  {
+   "id": "l3.overall.A6",
+   "tex_pattern": "lead on \\\\emph\\{overall\\} regret \\(A6 \\$([\\d.]+)\\$, A5 \\$([\\d.]+)\\$ vs\\.\\\\ A1 \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/overall/A6-risp-inv/mean"
+   }
+  },
+  {
+   "id": "l3.overall.A5",
+   "tex_pattern": "lead on \\\\emph\\{overall\\} regret \\(A6 \\$([\\d.]+)\\$, A5 \\$([\\d.]+)\\$ vs\\.\\\\ A1 \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/overall/A5-risp-erm/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "l3.overall.A1",
+   "tex_pattern": "lead on \\\\emph\\{overall\\} regret \\(A6 \\$([\\d.]+)\\$, A5 \\$([\\d.]+)\\$ vs\\.\\\\ A1 \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_dissoc.json:walkforward/overall/A1-monolith-erm/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "l1.inversion.A1",
+   "tex_pattern": "the monolith beats \\\\nm\\{\\}-full \\(A1 \\$([\\d.]+)\\$ vs\\.\\\\ A6 \\$([\\d.]+)\\$, Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e_french49_dissoc.json:walkforward/post_react/A1-monolith-erm/mean"
+   }
+  },
+  {
+   "id": "l1.inversion.A6",
+   "tex_pattern": "the monolith beats \\\\nm\\{\\}-full \\(A1 \\$([\\d.]+)\\$ vs\\.\\\\ A6 \\$([\\d.]+)\\$, Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e_french49_dissoc.json:walkforward/post_react/A6-risp-inv/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "l1.inversion.holm",
+   "tex_pattern": "the monolith beats \\\\nm\\{\\}-full \\(A1 \\$([\\d.]+)\\$ vs\\.\\\\ A6 \\$([\\d.]+)\\$, Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e_french49_dissoc.json:walkforward/holm_p/A6-risp-inv vs A1-monolith-erm"
+   },
+   "group": 3
+  },
+  {
+   "id": "l1.a9a6.holm",
+   "tex_pattern": "oracle-pinned retainer beats A6 \\(Holm \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_dissoc.json:walkforward/holm_p/A6-risp-inv vs A9-oracle-pinned"
+   }
+  },
+  {
+   "id": "l1.overallequal.A1",
+   "tex_pattern": "the two are equal \\(\\$([\\d.]+)\\$ both\\)",
+   "expect": {
+    "path": "results/e_french49_dissoc.json:walkforward/overall/A1-monolith-erm/mean"
+   }
+  },
+  {
+   "id": "l1.overallequal.A6",
+   "tex_pattern": "the two are equal \\(\\$([\\d.]+)\\$ both\\)",
+   "expect": {
+    "path": "results/e_french49_dissoc.json:walkforward/overall/A6-risp-inv/mean"
+   },
+   "note": "same quoted number must round from BOTH arms' overall means"
+  },
+  {
+   "id": "loro.nevents",
+   "tex_pattern": "inventory behind \\$\\\\hat\\\\Gamma > 0\\$ is (\\d+) events",
+   "expect": {
+    "path": "results/e_french49_L3_loro.json:n_qualifying_reactivations"
+   }
+  },
+  {
+   "id": "loro.range.min",
+   "tex_pattern": "survives every single-event exclusion \\(range \\$\\[([\\d.]+), ([\\d.]+)\\]\\$",
+   "expect": {
+    "path": "results/e_french49_L3_loro.json:contrasts/A1_minus_A9/loro_min/mean"
+   }
+  },
+  {
+   "id": "loro.range.max",
+   "tex_pattern": "survives every single-event exclusion \\(range \\$\\[([\\d.]+), ([\\d.]+)\\]\\$",
+   "expect": {
+    "path": "results/e_french49_L3_loro.json:contrasts/A1_minus_A9/loro_max/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "loro.drop2020.mean",
+   "tex_pattern": "excluding the entire 2020 calendar year \\(\\$([\\d.]+) \\\\pm ([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_french49_L3_loro.json:contrasts/A1_minus_A9/calendar_exclusions/drop_2020/mean"
+   }
+  },
+  {
+   "id": "loro.drop2020.ci",
+   "tex_pattern": "excluding the entire 2020 calendar year \\(\\$([\\d.]+) \\\\pm ([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_french49_L3_loro.json:contrasts/A1_minus_A9/calendar_exclusions/drop_2020/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "loro.2010s.mean",
+   "tex_pattern": "2010s: \\$([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$n\\{=\\}(\\d+)\\$; 2020s: \\$([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$n\\{=\\}(\\d+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_loro.json:contrasts/A1_minus_A9/era_blocked/2010s/mean"
+   }
+  },
+  {
+   "id": "loro.2010s.ci",
+   "tex_pattern": "2010s: \\$([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$n\\{=\\}(\\d+)\\$; 2020s: \\$([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$n\\{=\\}(\\d+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_loro.json:contrasts/A1_minus_A9/era_blocked/2010s/ci95"
+   },
+   "group": 2
+  },
+  {
+   "id": "loro.2010s.n",
+   "tex_pattern": "2010s: \\$([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$n\\{=\\}(\\d+)\\$; 2020s: \\$([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$n\\{=\\}(\\d+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_loro.json:contrasts/A1_minus_A9/era_blocked/2010s/n_react"
+   },
+   "group": 3
+  },
+  {
+   "id": "loro.2020s.mean",
+   "tex_pattern": "2010s: \\$([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$n\\{=\\}(\\d+)\\$; 2020s: \\$([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$n\\{=\\}(\\d+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_loro.json:contrasts/A1_minus_A9/era_blocked/2020s/mean"
+   },
+   "group": 4
+  },
+  {
+   "id": "loro.2020s.ci",
+   "tex_pattern": "2010s: \\$([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$n\\{=\\}(\\d+)\\$; 2020s: \\$([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$n\\{=\\}(\\d+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_loro.json:contrasts/A1_minus_A9/era_blocked/2020s/ci95"
+   },
+   "group": 5
+  },
+  {
+   "id": "loro.2020s.n",
+   "tex_pattern": "2010s: \\$([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$n\\{=\\}(\\d+)\\$; 2020s: \\$([\\d.]+) \\\\pm ([\\d.]+)\\$, \\$n\\{=\\}(\\d+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_loro.json:contrasts/A1_minus_A9/era_blocked/2020s/n_react"
+   },
+   "group": 6
+  },
+  {
+   "id": "cav3.primary.le",
+   "tex_pattern": "survive comfortably \\(all \\$\\\\le ([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$ corrected\\)",
+   "expect": {
+    "expr": "3*max(h0,h1,h2,h3,h4)",
+    "inputs": {
+     "h0": "results/e_french49_L3_dissoc.json:walkforward/holm_p/A5-risp-erm vs A2-router",
+     "h1": "results/e_french49_L3_dissoc.json:walkforward/holm_p/A5-risp-erm vs A1-monolith-erm",
+     "h2": "results/e_french49_L3_dissoc.json:walkforward/holm_p/A6-risp-inv vs A5-risp-erm",
+     "h3": "results/e_french49_L3_dissoc.json:walkforward/holm_p/A6-risp-inv vs A1-monolith-erm",
+     "h4": "results/e_french49_L3_dissoc.json:walkforward/holm_p/A6-risp-inv vs A8b-hedge-learn"
+    }
+   },
+   "cmp": "le",
+   "note": "3x Bonferroni over labeler family applied to the five primary L3 Holm p-values"
+  },
+  {
+   "id": "cav3.a6a9",
+   "tex_pattern": "A6-vs-A9 survives marginally \\(\\$([\\d.]+)\\$\\)",
+   "expect": {
+    "expr": "3*p",
+    "inputs": {
+     "p": "results/e_french49_L3_dissoc.json:walkforward/holm_p/A6-risp-inv vs A9-oracle-pinned"
+    }
+   }
+  },
+  {
+   "id": "cav3.l1.a9a6",
+   "tex_pattern": "do \\\\emph\\{not\\} \\(\\$([\\d.]+)\\$, \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "expr": "3*p",
+    "inputs": {
+     "p": "results/e_french49_dissoc.json:walkforward/holm_p/A6-risp-inv vs A9-oracle-pinned"
+    }
+   }
+  },
+  {
+   "id": "cav3.l1.a1a5",
+   "tex_pattern": "do \\\\emph\\{not\\} \\(\\$([\\d.]+)\\$, \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "expr": "3*p",
+    "inputs": {
+     "p": "results/e_french49_dissoc.json:walkforward/holm_p/A5-risp-erm vs A1-monolith-erm"
+    }
+   },
+   "group": 2
+  },
+  {
+   "id": "cav3.l1.headline",
+   "tex_pattern": "headline pair \\(A1\\$<\\$A6, corrected \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "expect": {
+    "expr": "3*p",
+    "inputs": {
+     "p": "results/e_french49_dissoc.json:walkforward/holm_p/A6-risp-inv vs A1-monolith-erm"
+    }
+   }
+  },
+  {
+   "id": "e2.a6.flat.max",
+   "tex_pattern": "\\(A6: \\$([\\d.]+)\\$ at every \\$K\\$; A5: \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "expr": "max(k1,k2,k3,k4)",
+    "inputs": {
+     "k1": "results_100seed/e2_capacity_sweep.json:hard/1/post_react/A6-risp-inv/mean",
+     "k2": "results_100seed/e2_capacity_sweep.json:hard/2/post_react/A6-risp-inv/mean",
+     "k3": "results_100seed/e2_capacity_sweep.json:hard/3/post_react/A6-risp-inv/mean",
+     "k4": "results_100seed/e2_capacity_sweep.json:hard/4/post_react/A6-risp-inv/mean"
+    }
+   }
+  },
+  {
+   "id": "e2.a6.flat.min",
+   "tex_pattern": "\\(A6: \\$([\\d.]+)\\$ at every \\$K\\$; A5: \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "expr": "min(k1,k2,k3,k4)",
+    "inputs": {
+     "k1": "results_100seed/e2_capacity_sweep.json:hard/1/post_react/A6-risp-inv/mean",
+     "k2": "results_100seed/e2_capacity_sweep.json:hard/2/post_react/A6-risp-inv/mean",
+     "k3": "results_100seed/e2_capacity_sweep.json:hard/3/post_react/A6-risp-inv/mean",
+     "k4": "results_100seed/e2_capacity_sweep.json:hard/4/post_react/A6-risp-inv/mean"
+    }
+   }
+  },
+  {
+   "id": "e2.a5.flat.max",
+   "tex_pattern": "\\(A6: \\$([\\d.]+)\\$ at every \\$K\\$; A5: \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "expr": "max(k1,k2,k3,k4)",
+    "inputs": {
+     "k1": "results_100seed/e2_capacity_sweep.json:hard/1/post_react/A5-risp-erm/mean",
+     "k2": "results_100seed/e2_capacity_sweep.json:hard/2/post_react/A5-risp-erm/mean",
+     "k3": "results_100seed/e2_capacity_sweep.json:hard/3/post_react/A5-risp-erm/mean",
+     "k4": "results_100seed/e2_capacity_sweep.json:hard/4/post_react/A5-risp-erm/mean"
+    }
+   },
+   "group": 2
+  },
+  {
+   "id": "e2.a5.flat.min",
+   "tex_pattern": "\\(A6: \\$([\\d.]+)\\$ at every \\$K\\$; A5: \\$([\\d.]+)\\$\\)",
+   "expect": {
+    "expr": "min(k1,k2,k3,k4)",
+    "inputs": {
+     "k1": "results_100seed/e2_capacity_sweep.json:hard/1/post_react/A5-risp-erm/mean",
+     "k2": "results_100seed/e2_capacity_sweep.json:hard/2/post_react/A5-risp-erm/mean",
+     "k3": "results_100seed/e2_capacity_sweep.json:hard/3/post_react/A5-risp-erm/mean",
+     "k4": "results_100seed/e2_capacity_sweep.json:hard/4/post_react/A5-risp-erm/mean"
+    }
+   },
+   "group": 2
+  },
+  {
+   "id": "e2.mono.K1",
+   "tex_pattern": "\\(monolith: \\$([\\d.]+) \\\\to ([\\d.]+)\\$, matching A5 at \\$K\\{=\\}4\\$",
+   "expect": {
+    "path": "results_100seed/e2_capacity_sweep.json:hard/1/post_react/A1-monolith-erm/mean"
+   }
+  },
+  {
+   "id": "e2.mono.K4",
+   "tex_pattern": "\\(monolith: \\$([\\d.]+) \\\\to ([\\d.]+)\\$, matching A5 at \\$K\\{=\\}4\\$",
+   "expect": {
+    "path": "results_100seed/e2_capacity_sweep.json:hard/4/post_react/A1-monolith-erm/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e2.soft.flatlevel",
+   "tex_pattern": "are \\\\emph\\{flat\\} in \\$K\\$ at \\$\\\\approx ([\\d.]+)\\$",
+   "expect": {
+    "expr": "mean([k1,k2,k3,k4])",
+    "inputs": {
+     "k1": "results_100seed/e2_capacity_sweep.json:soft/1/post_react/A1-monolith-erm/mean",
+     "k2": "results_100seed/e2_capacity_sweep.json:soft/2/post_react/A1-monolith-erm/mean",
+     "k3": "results_100seed/e2_capacity_sweep.json:soft/3/post_react/A1-monolith-erm/mean",
+     "k4": "results_100seed/e2_capacity_sweep.json:soft/4/post_react/A1-monolith-erm/mean"
+    }
+   },
+   "tolerance": 0.0005,
+   "note": "approx claim: mean soft-model monolith level across K"
+  },
+  {
+   "id": "e2.hard.K1",
+   "tex_pattern": "tight capacity \\(\\$([\\d.]+)\\$ at \\$K\\{=\\}1\\$ and \\$K\\{=\\}2\\$\\)",
+   "expect": {
+    "path": "results_100seed/e2_capacity_sweep.json:hard/1/post_react/A1-monolith-erm/mean"
+   }
+  },
+  {
+   "id": "e2.hard.K2",
+   "tex_pattern": "tight capacity \\(\\$([\\d.]+)\\$ at \\$K\\{=\\}1\\$ and \\$K\\{=\\}2\\$\\)",
+   "expect": {
+    "path": "results_100seed/e2_capacity_sweep.json:hard/2/post_react/A1-monolith-erm/mean"
+   }
+  },
+  {
+   "id": "e2.gap.A6",
+   "tex_pattern": "never closing the gap to A6 \\(\\$([\\d.]+)\\$\\) at \\\\emph\\{any\\} capacity",
+   "expect": {
+    "path": "results_100seed/e2_capacity_sweep.json:hard/2/post_react/A6-risp-inv/mean"
+   }
+  },
+  {
+   "id": "e3.gap.D21",
+   "tex_pattern": "grows from \\$([\\d.]+)\\$ at \\$D = 21\\$ to \\$([\\d.]+)\\$--\\$([\\d.]+)\\$ for \\$D \\\\ge 63\\$",
+   "expect": {
+    "expr": "a21-b21",
+    "inputs": {
+     "a21": "results_100seed/e3_dormancy_sweep.json:21/post_react/A1-monolith-erm/mean",
+     "b21": "results_100seed/e3_dormancy_sweep.json:21/post_react/A6-risp-inv/mean"
+    }
+   }
+  },
+  {
+   "id": "e3.gap.min63up",
+   "tex_pattern": "grows from \\$([\\d.]+)\\$ at \\$D = 21\\$ to \\$([\\d.]+)\\$--\\$([\\d.]+)\\$ for \\$D \\\\ge 63\\$",
+   "expect": {
+    "expr": "min(a63-b63,a126-b126,a252-b252,a504-b504)",
+    "inputs": {
+     "a63": "results_100seed/e3_dormancy_sweep.json:63/post_react/A1-monolith-erm/mean",
+     "b63": "results_100seed/e3_dormancy_sweep.json:63/post_react/A6-risp-inv/mean",
+     "a126": "results_100seed/e3_dormancy_sweep.json:126/post_react/A1-monolith-erm/mean",
+     "b126": "results_100seed/e3_dormancy_sweep.json:126/post_react/A6-risp-inv/mean",
+     "a252": "results_100seed/e3_dormancy_sweep.json:252/post_react/A1-monolith-erm/mean",
+     "b252": "results_100seed/e3_dormancy_sweep.json:252/post_react/A6-risp-inv/mean",
+     "a504": "results_100seed/e3_dormancy_sweep.json:504/post_react/A1-monolith-erm/mean",
+     "b504": "results_100seed/e3_dormancy_sweep.json:504/post_react/A6-risp-inv/mean"
+    }
+   },
+   "group": 2
+  },
+  {
+   "id": "e3.gap.max63up",
+   "tex_pattern": "grows from \\$([\\d.]+)\\$ at \\$D = 21\\$ to \\$([\\d.]+)\\$--\\$([\\d.]+)\\$ for \\$D \\\\ge 63\\$",
+   "expect": {
+    "expr": "max(a63-b63,a126-b126,a252-b252,a504-b504)",
+    "inputs": {
+     "a63": "results_100seed/e3_dormancy_sweep.json:63/post_react/A1-monolith-erm/mean",
+     "b63": "results_100seed/e3_dormancy_sweep.json:63/post_react/A6-risp-inv/mean",
+     "a126": "results_100seed/e3_dormancy_sweep.json:126/post_react/A1-monolith-erm/mean",
+     "b126": "results_100seed/e3_dormancy_sweep.json:126/post_react/A6-risp-inv/mean",
+     "a252": "results_100seed/e3_dormancy_sweep.json:252/post_react/A1-monolith-erm/mean",
+     "b252": "results_100seed/e3_dormancy_sweep.json:252/post_react/A6-risp-inv/mean",
+     "a504": "results_100seed/e3_dormancy_sweep.json:504/post_react/A1-monolith-erm/mean",
+     "b504": "results_100seed/e3_dormancy_sweep.json:504/post_react/A6-risp-inv/mean"
+    }
+   },
+   "group": 3
+  },
+  {
+   "id": "e3.phi21",
+   "tex_pattern": "E3 measures \\$\\\\Phi\\(21\\) \\\\approx ([\\d.]+)\\$ and \\$\\\\Phi\\(63\\) \\\\approx ([\\d.]+)\\$",
+   "expect": {
+    "expr": "(a21-b21)/0.004",
+    "inputs": {
+     "a21": "results_100seed/e3_dormancy_sweep.json:21/post_react/A1-monolith-erm/mean",
+     "b21": "results_100seed/e3_dormancy_sweep.json:21/post_react/A6-risp-inv/mean"
+    }
+   },
+   "tolerance": 0.01,
+   "note": "Phi(D) = measured retention gap / C_relearn(=0.004)"
+  },
+  {
+   "id": "e3.phi63",
+   "tex_pattern": "E3 measures \\$\\\\Phi\\(21\\) \\\\approx ([\\d.]+)\\$ and \\$\\\\Phi\\(63\\) \\\\approx ([\\d.]+)\\$",
+   "expect": {
+    "expr": "(a63-b63)/0.004",
+    "inputs": {
+     "a63": "results_100seed/e3_dormancy_sweep.json:63/post_react/A1-monolith-erm/mean",
+     "b63": "results_100seed/e3_dormancy_sweep.json:63/post_react/A6-risp-inv/mean"
+    }
+   },
+   "group": 2,
+   "tolerance": 0.01,
+   "note": "Phi(D) = measured retention gap / C_relearn(=0.004)"
+  },
+  {
+   "id": "e3.crelearn",
+   "tex_pattern": "relearning cost \\$C_\\{\\\\mathrm\\{relearn\\}\\} \\\\approx ([\\d.]+)\\$ per probe day",
+   "expect": {
+    "expr": "max(a63-b63,a126-b126,a252-b252,a504-b504)",
+    "inputs": {
+     "a63": "results_100seed/e3_dormancy_sweep.json:63/post_react/A1-monolith-erm/mean",
+     "b63": "results_100seed/e3_dormancy_sweep.json:63/post_react/A6-risp-inv/mean",
+     "a126": "results_100seed/e3_dormancy_sweep.json:126/post_react/A1-monolith-erm/mean",
+     "b126": "results_100seed/e3_dormancy_sweep.json:126/post_react/A6-risp-inv/mean",
+     "a252": "results_100seed/e3_dormancy_sweep.json:252/post_react/A1-monolith-erm/mean",
+     "b252": "results_100seed/e3_dormancy_sweep.json:252/post_react/A6-risp-inv/mean",
+     "a504": "results_100seed/e3_dormancy_sweep.json:504/post_react/A1-monolith-erm/mean",
+     "b504": "results_100seed/e3_dormancy_sweep.json:504/post_react/A6-risp-inv/mean"
+    }
+   },
+   "tolerance": 0.0012,
+   "note": "sanity: quoted C_relearn should be the order of the saturated retention gap"
+  },
+  {
+   "id": "e3.window.f1.Dmax",
+   "tex_pattern": "At \\$f = 1\\\\%\\$ retention pays for \\$D\\$ between roughly \\$\\d+\\$ and \\$([\\d{},]+)\\$ days",
+   "expect": {
+    "expr": "p/0.01",
+    "inputs": {
+     "p": "results/e_french49_L3_loro.json:config/probe"
+    }
+   },
+   "tolerance": 50,
+   "note": "D_max = N_p / f at f = 1%"
+  },
+  {
+   "id": "e3.window.f10.Dmax",
+   "tex_pattern": "the window shrinks to \\$D \\\\in \\[\\\\approx 60, \\\\approx (\\d+)\\]\\$ days",
+   "expect": {
+    "expr": "p/0.10",
+    "inputs": {
+     "p": "results/e_french49_L3_loro.json:config/probe"
+    }
+   },
+   "tolerance": 5,
+   "note": "D_max = N_p / f at f = 10%"
+  },
+  {
+   "id": "e3.fstar",
+   "tex_pattern": "f\\^\\{\\*\\} = N_p \\\\max_D \\\\Phi\\(D\\)/D \\\\approx (\\d+)\\\\%\\$",
+   "expect": {
+    "expr": "p*max(min(1.0,(a21-b21)/0.004)/21, min(1.0,(a63-b63)/0.004)/63, min(1.0,(a126-b126)/0.004)/126, min(1.0,(a252-b252)/0.004)/252, min(1.0,(a504-b504)/0.004)/504)*100",
+    "inputs": {
+     "p": "results/e_french49_L3_loro.json:config/probe",
+     "a21": "results_100seed/e3_dormancy_sweep.json:21/post_react/A1-monolith-erm/mean",
+     "b21": "results_100seed/e3_dormancy_sweep.json:21/post_react/A6-risp-inv/mean",
+     "a63": "results_100seed/e3_dormancy_sweep.json:63/post_react/A1-monolith-erm/mean",
+     "b63": "results_100seed/e3_dormancy_sweep.json:63/post_react/A6-risp-inv/mean",
+     "a126": "results_100seed/e3_dormancy_sweep.json:126/post_react/A1-monolith-erm/mean",
+     "b126": "results_100seed/e3_dormancy_sweep.json:126/post_react/A6-risp-inv/mean",
+     "a252": "results_100seed/e3_dormancy_sweep.json:252/post_react/A1-monolith-erm/mean",
+     "b252": "results_100seed/e3_dormancy_sweep.json:252/post_react/A6-risp-inv/mean",
+     "a504": "results_100seed/e3_dormancy_sweep.json:504/post_react/A1-monolith-erm/mean",
+     "b504": "results_100seed/e3_dormancy_sweep.json:504/post_react/A6-risp-inv/mean"
+    }
+   },
+   "tolerance": 1.5,
+   "note": "f* = N_p max_D Phi(D)/D, Phi capped at 1"
+  },
+  {
+   "id": "e4.erm.h0",
+   "tex_pattern": "the ERM specialist degrades steadily \\(\\$([\\d.]+) \\\\to ([\\d.]+)\\$ post-reactivation\\)",
+   "expect": {
+    "path": "results_100seed/e4_heterogeneity_sweep.json:0.0/post_react/A5-risp-erm/mean"
+   }
+  },
+  {
+   "id": "e4.erm.h2",
+   "tex_pattern": "the ERM specialist degrades steadily \\(\\$([\\d.]+) \\\\to ([\\d.]+)\\$ post-reactivation\\)",
+   "expect": {
+    "path": "results_100seed/e4_heterogeneity_sweep.json:2.0/post_react/A5-risp-erm/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e4.inv.slowerpct",
+   "tex_pattern": "degrades about \\$(\\d+)\\\\%\\$ slower \\(\\$([\\d.]+) \\\\to ([\\d.]+)\\$",
+   "expect": {
+    "expr": "(1-(d-c)/(b-a))*100",
+    "inputs": {
+     "a": "results_100seed/e4_heterogeneity_sweep.json:0.0/post_react/A5-risp-erm/mean",
+     "b": "results_100seed/e4_heterogeneity_sweep.json:2.0/post_react/A5-risp-erm/mean",
+     "c": "results_100seed/e4_heterogeneity_sweep.json:0.0/post_react/A6-risp-inv/mean",
+     "d": "results_100seed/e4_heterogeneity_sweep.json:2.0/post_react/A6-risp-inv/mean"
+    }
+   }
+  },
+  {
+   "id": "e4.inv.h0",
+   "tex_pattern": "degrades about \\$(\\d+)\\\\%\\$ slower \\(\\$([\\d.]+) \\\\to ([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e4_heterogeneity_sweep.json:0.0/post_react/A6-risp-inv/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e4.inv.h2",
+   "tex_pattern": "degrades about \\$(\\d+)\\\\%\\$ slower \\(\\$([\\d.]+) \\\\to ([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e4_heterogeneity_sweep.json:2.0/post_react/A6-risp-inv/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "e4.erm.fasterpct",
+   "tex_pattern": "ERM degrades \\$(\\d+)\\\\%\\$ faster",
+   "expect": {
+    "expr": "((b-a)/(d-c)-1)*100",
+    "inputs": {
+     "a": "results_100seed/e4_heterogeneity_sweep.json:0.0/post_react/A5-risp-erm/mean",
+     "b": "results_100seed/e4_heterogeneity_sweep.json:2.0/post_react/A5-risp-erm/mean",
+     "c": "results_100seed/e4_heterogeneity_sweep.json:0.0/post_react/A6-risp-inv/mean",
+     "d": "results_100seed/e4_heterogeneity_sweep.json:2.0/post_react/A6-risp-inv/mean"
+    }
+   }
+  },
+  {
+   "id": "e4.gap.h0",
+   "tex_pattern": "widens monotonically from \\$([\\d.]+)\\$ to \\$([\\d.]+)\\$ \\(\\$([\\d.]+)\\\\times\\$\\)",
+   "expect": {
+    "expr": "a-c",
+    "inputs": {
+     "a": "results_100seed/e4_heterogeneity_sweep.json:0.0/post_react/A5-risp-erm/mean",
+     "c": "results_100seed/e4_heterogeneity_sweep.json:0.0/post_react/A6-risp-inv/mean"
+    }
+   }
+  },
+  {
+   "id": "e4.gap.h2",
+   "tex_pattern": "widens monotonically from \\$([\\d.]+)\\$ to \\$([\\d.]+)\\$ \\(\\$([\\d.]+)\\\\times\\$\\)",
+   "expect": {
+    "expr": "b-d",
+    "inputs": {
+     "b": "results_100seed/e4_heterogeneity_sweep.json:2.0/post_react/A5-risp-erm/mean",
+     "d": "results_100seed/e4_heterogeneity_sweep.json:2.0/post_react/A6-risp-inv/mean"
+    }
+   },
+   "group": 2
+  },
+  {
+   "id": "e4.gap.ratio",
+   "tex_pattern": "widens monotonically from \\$([\\d.]+)\\$ to \\$([\\d.]+)\\$ \\(\\$([\\d.]+)\\\\times\\$\\)",
+   "expect": {
+    "expr": "(b-d)/(a-c)",
+    "inputs": {
+     "a": "results_100seed/e4_heterogeneity_sweep.json:0.0/post_react/A5-risp-erm/mean",
+     "b": "results_100seed/e4_heterogeneity_sweep.json:2.0/post_react/A5-risp-erm/mean",
+     "c": "results_100seed/e4_heterogeneity_sweep.json:0.0/post_react/A6-risp-inv/mean",
+     "d": "results_100seed/e4_heterogeneity_sweep.json:2.0/post_react/A6-risp-inv/mean"
+    }
+   },
+   "group": 3
+  },
+  {
+   "id": "e5.beta0",
+   "tex_pattern": "\\$\\\\beta = 0\\$ \\(variance only\\) gives \\$([\\d.]+)\\$---\\\\emph\\{worse than retained ERM\\} \\(\\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e5_ablations.json:beta_sweep/0.0/mean"
+   }
+  },
+  {
+   "id": "e5.beta0.a5ref",
+   "tex_pattern": "\\$\\\\beta = 0\\$ \\(variance only\\) gives \\$([\\d.]+)\\$---\\\\emph\\{worse than retained ERM\\} \\(\\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A5-risp-erm/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e5.plateau.min",
+   "tex_pattern": "the plateau \\$\\\\beta \\\\in \\[0.25, 4\\]\\$ gives \\$([\\d.]+)\\$--\\$([\\d.]+)\\$",
+   "expect": {
+    "expr": "min(a,b,c)",
+    "inputs": {
+     "a": "results_100seed/e5_ablations.json:beta_sweep/0.25/mean",
+     "b": "results_100seed/e5_ablations.json:beta_sweep/1.0/mean",
+     "c": "results_100seed/e5_ablations.json:beta_sweep/4.0/mean"
+    }
+   }
+  },
+  {
+   "id": "e5.plateau.max",
+   "tex_pattern": "the plateau \\$\\\\beta \\\\in \\[0.25, 4\\]\\$ gives \\$([\\d.]+)\\$--\\$([\\d.]+)\\$",
+   "expect": {
+    "expr": "max(a,b,c)",
+    "inputs": {
+     "a": "results_100seed/e5_ablations.json:beta_sweep/0.25/mean",
+     "b": "results_100seed/e5_ablations.json:beta_sweep/1.0/mean",
+     "c": "results_100seed/e5_ablations.json:beta_sweep/4.0/mean"
+    }
+   },
+   "group": 2
+  },
+  {
+   "id": "e5.beta16",
+   "tex_pattern": "\\$\\\\beta = 16\\$ degrades to \\$([\\d.]+)\\$---worse than the retained-ERM arm itself \\(\\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e5_ablations.json:beta_sweep/16.0/mean"
+   }
+  },
+  {
+   "id": "e5.beta16.a5ref",
+   "tex_pattern": "\\$\\\\beta = 16\\$ degrades to \\$([\\d.]+)\\$---worse than the retained-ERM arm itself \\(\\$([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e1_synth.json:post_react/A5-risp-erm/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e5.wc1",
+   "tex_pattern": "\\$W_c \\\\in \\\\\\{1, 5, 20, 60\\\\\\}\\$ days yields \\$([\\d.]+)\\$, \\$([\\d.]+)\\$, \\$([\\d.]+)\\$, \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e5_ablations.json:Wc_sweep/1/mean"
+   }
+  },
+  {
+   "id": "e5.wc5",
+   "tex_pattern": "\\$W_c \\\\in \\\\\\{1, 5, 20, 60\\\\\\}\\$ days yields \\$([\\d.]+)\\$, \\$([\\d.]+)\\$, \\$([\\d.]+)\\$, \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e5_ablations.json:Wc_sweep/5/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e5.wc20",
+   "tex_pattern": "\\$W_c \\\\in \\\\\\{1, 5, 20, 60\\\\\\}\\$ days yields \\$([\\d.]+)\\$, \\$([\\d.]+)\\$, \\$([\\d.]+)\\$, \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e5_ablations.json:Wc_sweep/20/mean"
+   },
+   "group": 3
+  },
+  {
+   "id": "e5.wc60",
+   "tex_pattern": "\\$W_c \\\\in \\\\\\{1, 5, 20, 60\\\\\\}\\$ days yields \\$([\\d.]+)\\$, \\$([\\d.]+)\\$, \\$([\\d.]+)\\$, \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e5_ablations.json:Wc_sweep/60/mean"
+   },
+   "group": 4
+  },
+  {
+   "id": "e5.lambda0",
+   "tex_pattern": "Competition alone \\(\\$\\\\lambda = 0\\$\\) reaches \\$([\\d.]+)\\$ versus \\$([\\d.]+)\\$ with the default",
+   "expect": {
+    "path": "results_100seed/e5_ablations.json:lambda/0.0/mean"
+   }
+  },
+  {
+   "id": "e5.lambda03",
+   "tex_pattern": "Competition alone \\(\\$\\\\lambda = 0\\$\\) reaches \\$([\\d.]+)\\$ versus \\$([\\d.]+)\\$ with the default",
+   "expect": {
+    "path": "results_100seed/e5_ablations.json:lambda/0.3/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e5.pin.never",
+   "tex_pattern": "Disabling pinning costs \\$([\\d.]+)\\$ versus \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e5_ablations.json:pinning/never/mean"
+   }
+  },
+  {
+   "id": "e5.pin.pinned",
+   "tex_pattern": "Disabling pinning costs \\$([\\d.]+)\\$ versus \\$([\\d.]+)\\$",
+   "expect": {
+    "path": "results_100seed/e5_ablations.json:pinning/pinned/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e6.penalty.snr05",
+   "tex_pattern": "grows from \\$([\\d.]+)\\\\times\\$ to \\$([\\d.]+)\\\\times\\$ with SNR",
+   "expect": {
+    "expr": "a/b",
+    "inputs": {
+     "a": "results_100seed/e6_snr_audit.json:0.5/post_react/A1-monolith-erm/mean",
+     "b": "results_100seed/e6_snr_audit.json:0.5/steady/A1-monolith-erm/mean"
+    }
+   }
+  },
+  {
+   "id": "e6.penalty.snr8",
+   "tex_pattern": "grows from \\$([\\d.]+)\\\\times\\$ to \\$([\\d.]+)\\\\times\\$ with SNR",
+   "expect": {
+    "expr": "a/b",
+    "inputs": {
+     "a": "results_100seed/e6_snr_audit.json:8.0/post_react/A1-monolith-erm/mean",
+     "b": "results_100seed/e6_snr_audit.json:8.0/steady/A1-monolith-erm/mean"
+    }
+   },
+   "group": 2
+  },
+  {
+   "id": "e6.steady.snr05",
+   "tex_pattern": "steady level collapses \\(\\$([\\d.]+) \\\\to ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e6_snr_audit.json:0.5/steady/A1-monolith-erm/mean"
+   }
+  },
+  {
+   "id": "e6.steady.snr8",
+   "tex_pattern": "steady level collapses \\(\\$([\\d.]+) \\\\to ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results_100seed/e6_snr_audit.json:8.0/steady/A1-monolith-erm/mean"
+   },
+   "group": 2
+  },
+  {
+   "id": "e6.adv.snr0_5",
+   "tex_pattern": "is \\$\\+([\\d.]+)\\\\%\\$ at \\$0.5\\\\times\\$, \\$\\+([\\d.]+)\\\\%\\$ at baseline, \\$\\+([\\d.]+)\\\\%\\$ at \\$2\\\\times\\$---then \\\\emph\\{inverts\\}: \\$(-[\\d.]+)\\\\%\\$ at \\$4\\\\times\\$ and \\$(-[\\d.]+)\\\\%\\$ at \\$8\\\\times\\$",
+   "expect": {
+    "expr": "(a-b)/a*100",
+    "inputs": {
+     "a": "results_100seed/e6_snr_audit.json:0.5/post_react/A1-monolith-erm/mean",
+     "b": "results_100seed/e6_snr_audit.json:0.5/post_react/A6-risp-inv/mean"
+    }
+   }
+  },
+  {
+   "id": "e6.adv.snr1_0",
+   "tex_pattern": "is \\$\\+([\\d.]+)\\\\%\\$ at \\$0.5\\\\times\\$, \\$\\+([\\d.]+)\\\\%\\$ at baseline, \\$\\+([\\d.]+)\\\\%\\$ at \\$2\\\\times\\$---then \\\\emph\\{inverts\\}: \\$(-[\\d.]+)\\\\%\\$ at \\$4\\\\times\\$ and \\$(-[\\d.]+)\\\\%\\$ at \\$8\\\\times\\$",
+   "expect": {
+    "expr": "(a-b)/a*100",
+    "inputs": {
+     "a": "results_100seed/e6_snr_audit.json:1.0/post_react/A1-monolith-erm/mean",
+     "b": "results_100seed/e6_snr_audit.json:1.0/post_react/A6-risp-inv/mean"
+    }
+   },
+   "group": 2
+  },
+  {
+   "id": "e6.adv.snr2_0",
+   "tex_pattern": "is \\$\\+([\\d.]+)\\\\%\\$ at \\$0.5\\\\times\\$, \\$\\+([\\d.]+)\\\\%\\$ at baseline, \\$\\+([\\d.]+)\\\\%\\$ at \\$2\\\\times\\$---then \\\\emph\\{inverts\\}: \\$(-[\\d.]+)\\\\%\\$ at \\$4\\\\times\\$ and \\$(-[\\d.]+)\\\\%\\$ at \\$8\\\\times\\$",
+   "expect": {
+    "expr": "(a-b)/a*100",
+    "inputs": {
+     "a": "results_100seed/e6_snr_audit.json:2.0/post_react/A1-monolith-erm/mean",
+     "b": "results_100seed/e6_snr_audit.json:2.0/post_react/A6-risp-inv/mean"
+    }
+   },
+   "group": 3
+  },
+  {
+   "id": "e6.adv.snr4_0",
+   "tex_pattern": "is \\$\\+([\\d.]+)\\\\%\\$ at \\$0.5\\\\times\\$, \\$\\+([\\d.]+)\\\\%\\$ at baseline, \\$\\+([\\d.]+)\\\\%\\$ at \\$2\\\\times\\$---then \\\\emph\\{inverts\\}: \\$(-[\\d.]+)\\\\%\\$ at \\$4\\\\times\\$ and \\$(-[\\d.]+)\\\\%\\$ at \\$8\\\\times\\$",
+   "expect": {
+    "expr": "(a-b)/a*100",
+    "inputs": {
+     "a": "results_100seed/e6_snr_audit.json:4.0/post_react/A1-monolith-erm/mean",
+     "b": "results_100seed/e6_snr_audit.json:4.0/post_react/A6-risp-inv/mean"
+    }
+   },
+   "group": 4
+  },
+  {
+   "id": "e6.adv.snr8_0",
+   "tex_pattern": "is \\$\\+([\\d.]+)\\\\%\\$ at \\$0.5\\\\times\\$, \\$\\+([\\d.]+)\\\\%\\$ at baseline, \\$\\+([\\d.]+)\\\\%\\$ at \\$2\\\\times\\$---then \\\\emph\\{inverts\\}: \\$(-[\\d.]+)\\\\%\\$ at \\$4\\\\times\\$ and \\$(-[\\d.]+)\\\\%\\$ at \\$8\\\\times\\$",
+   "expect": {
+    "expr": "(a-b)/a*100",
+    "inputs": {
+     "a": "results_100seed/e6_snr_audit.json:8.0/post_react/A1-monolith-erm/mean",
+     "b": "results_100seed/e6_snr_audit.json:8.0/post_react/A6-risp-inv/mean"
+    }
+   },
+   "group": 5
+  }
+ ]
+}
