@@ -14,6 +14,7 @@ import numpy as np
 
 from risp import (SynthConfig, SyntheticMarket, make_schedule,
                       make_dormancy_schedule, run_arm, ARM_FACTORIES,
+                      EXTRA_ARM_FACTORIES,
                       RISPArm, RISPTriggerArm, MonolithArm, welch, holm,
                       ci95, regret, solve_topk)
 
@@ -48,6 +49,7 @@ def summarize(per_arm_metric: dict) -> dict:
 def e1(seeds=SEEDS, K=2, het=1.0, memory="hard", tag="e1_synth",
        arms=None):
     arms = arms or list(ARM_FACTORIES.keys())
+    factories = {**ARM_FACTORIES, **EXTRA_ARM_FACTORIES}
     res = {a: {"overall": [], "post_react": [], "steady": []} for a in arms}
     t0 = time.time()
     for s in range(seeds):
@@ -56,7 +58,7 @@ def e1(seeds=SEEDS, K=2, het=1.0, memory="hard", tag="e1_synth",
         sched = make_schedule(rng)
         for a in arms:
             mkt = SyntheticMarket(cfg, seed=5000 + s)   # same data per arm
-            arm = ARM_FACTORIES[a](cfg, np.random.default_rng(99 * s + 7), K, memory)
+            arm = factories[a](cfg, np.random.default_rng(99 * s + 7), K, memory)
             m = run_arm(arm, mkt, sched, cfg, probe=PROBE, min_dormancy=MIN_DORM)
             for key in ("overall", "post_react", "steady"):
                 res[a][key].append(m[key])
@@ -80,7 +82,17 @@ def e1(seeds=SEEDS, K=2, het=1.0, memory="hard", tag="e1_synth",
              ("A6-risp-inv", "A10-oracle-inv"),
              ("A5-risp-erm", "A4-randomfixed"),
              ("A6-risp-inv", "A8b-hedge-learn"),
-             ("A2-router", "A1-monolith-erm")]
+             ("A2-router", "A1-monolith-erm"),
+             # PREREG D1 replay pairs -- only enter the family when the
+             # replay arms are actually in `arms` (guard below), so every
+             # existing run's welch/holm output is unchanged.
+             ("A1r-replay-erm", "A9-oracle-pinned"),
+             ("A1r-replay-erm", "A6-risp-inv"),
+             ("A1r-replay-erm", "A1-monolith-erm"),
+             ("A1r-replay-inv", "A6-risp-inv"),
+             ("A1r-replay-inv", "A9-oracle-pinned"),
+             ("A1r-replay-inv", "A10-oracle-inv"),
+             ("A1r-replay-inv", "A1r-replay-erm")]
     pv = {}
     for a, b in pairs:
         if a in res and b in res:

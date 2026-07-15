@@ -409,3 +409,11 @@ revised toward it — reported at full prominence either way.
   regime-conditional allocation deficit, and the synthetic/MLP forgetting
   transient remains a distinct, controlled-setting phenomenon; (4) gate 1
   does not price the pool and is demoted to a structure screen.
+
+- **D6 verdict, completed:** L3 at 100 seeds — walk-forward Γ=+0.00089
+  ±0.00011 with the full ordering (min Holm 1.4e-65; seed-noise precision,
+  single-history caveat unchanged), reproducing the 20-seed result;
+  stitched Γ turns marginally positive-significant (+0.00023±0.00016)
+  with the same ordering direction (family flat, min raw p=0.50) — the
+  schedule-resampling design now leans the deficit's way, disclosed as a
+  favorable wrinkle. Prediction "outcomes unchanged" CONFIRMED.

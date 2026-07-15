@@ -287,27 +287,90 @@ class Specialist:
         h = self.heads[r]
         eps = self.buf[r]
         for _ in range(n_steps):
-            if self.mode == "erm" or len(eps) < 2:
-                # plain ERM on pooled buffer
-                keys = list(eps.keys())
-                ekey = keys[int(self.rng.integers(len(keys)))]
+            self._sgd_step(h, eps)
+
+    def _sgd_step(self, h: Head, eps: dict):
+        """One SGD step on the regime objective over an episode buffer.
+        (Pure refactor of the former learn() inner loop -- identical RNG
+        consumption and arithmetic; shared with ReplaySpecialist's
+        pre-registered burst refit.)"""
+        if self.mode == "erm" or len(eps) < 2:
+            # plain ERM on pooled buffer
+            keys = list(eps.keys())
+            ekey = keys[int(self.rng.integers(len(keys)))]
+            Xb, yb = ep_sample(eps[ekey], self.rng)
+            _, g = spo_plus_loss_grad(h.w, Xb, yb, self.k, self.w_max)
+            h.w -= self.lr * g / max(1, Xb.shape[0])
+        else:
+            # invariance: Var_e[lbar_e] + beta * E_e[lbar_e]
+            losses, grads = [], []
+            for ekey in eps:
                 Xb, yb = ep_sample(eps[ekey], self.rng)
-                _, g = spo_plus_loss_grad(h.w, Xb, yb, self.k, self.w_max)
-                h.w -= self.lr * g / max(1, Xb.shape[0])
-            else:
-                # invariance: Var_e[lbar_e] + beta * E_e[lbar_e]
-                losses, grads = [], []
-                for ekey in eps:
-                    Xb, yb = ep_sample(eps[ekey], self.rng)
-                    l, g = spo_plus_loss_grad(h.w, Xb, yb, self.k, self.w_max)
-                    losses.append(l / max(1, Xb.shape[0]))
-                    grads.append(g / max(1, Xb.shape[0]))
-                E = len(losses)
-                lbar = float(np.mean(losses))
-                g_tot = np.zeros(self.d)
-                for l, g in zip(losses, grads):
-                    g_tot += (2.0 * (l - lbar) + self.beta) * g / E
-                h.w -= self.lr * g_tot
+                l, g = spo_plus_loss_grad(h.w, Xb, yb, self.k, self.w_max)
+                losses.append(l / max(1, Xb.shape[0]))
+                grads.append(g / max(1, Xb.shape[0]))
+            E = len(losses)
+            lbar = float(np.mean(losses))
+            g_tot = np.zeros(self.d)
+            for l, g in zip(losses, grads):
+                g_tot += (2.0 * (l - lbar) + self.beta) * g / E
+            h.w -= self.lr * g_tot
+
+
+class ReplaySpecialist(Specialist):
+    """PREREG D1/D2 replay variant (additive; no existing arm touched).
+
+    Episode buffer DECOUPLED from head eviction: hard-LRU eviction still
+    deletes the HEAD (parameter-space capacity K is unchanged) but the
+    episode BUFFER SURVIVES eviction and recreation. When the head is
+    recreated at reactivation with a retained non-empty buffer, a GENEROUS
+    burst-refit runs: burst_mult SGD steps per retained buffered day --
+    i.e. the full training budget the head would have received had it
+    trained through the entire retained multi-episode buffer day by day,
+    delivered at recreation, NOT the 2-steps/day trickle. Committed in
+    advance in PREREG_FRENCH49.md (pre-registration D, implementation
+    register) so the forgetting deficit cannot survive as an artifact of
+    our own SGD budget. mode="inv" applies the invariance objective on the
+    retained multi-episode buffer."""
+
+    def __init__(self, *args, burst_mult: int = 2, **kw):
+        super().__init__(*args, **kw)
+        self.burst_mult = burst_mult
+        self.n_burst_refits = 0
+
+    def _touch(self, r: int):
+        self.t += 1
+        burst = False
+        if r not in self.heads:
+            if self.memory == "hard" and len(self.heads) >= self.K:
+                lru = min(self.heads, key=lambda q: self.heads[q].last_used)
+                del self.heads[lru]
+                # NOTE: unlike Specialist._touch, the buffer is NOT popped —
+                # this is the pre-registered decoupling.
+            self.heads[r] = Head(w=np.zeros(self.d))
+            retained = self.buf.setdefault(r, {})   # do NOT reset if present
+            burst = any(len(days) > 0 for days in retained.values())
+        self.heads[r].last_used = self.t
+        if self.memory == "soft":
+            overflow = max(1.0, len(self.heads) / self.K)
+            rho_eff = min(0.5, self.rho_int * overflow)
+            for q, h in self.heads.items():
+                if q != r:
+                    h.strength *= (1.0 - rho_eff)
+                    h.w *= (1.0 - rho_eff)
+            self.heads[r].strength = 1.0
+        if burst:
+            self._burst_refit(r)
+
+    def _burst_refit(self, r: int):
+        """Full refit of the freshly recreated head on the retained
+        multi-episode buffer (generous: burst_mult steps per buffered day)."""
+        h = self.heads[r]
+        eps = self.buf[r]
+        n_days = sum(len(days) for days in eps.values())
+        for _ in range(self.burst_mult * n_days):
+            self._sgd_step(h, eps)
+        self.n_burst_refits += 1
 
 
 def ep_sample(ep_list, rng, m: int = 8):
@@ -342,6 +405,28 @@ class MonolithArm(ArmBase):
         self.s = Specialist(cfg.d, K, cfg.k, cfg.w_max, rng,
                             mode=mode, memory=memory, beta=beta)
         self.name = f"monolith-{mode}"
+
+    def decide(self, X, r):
+        return self.s.predict(X, r)
+
+    def observe(self, X, y, r, e, served_regret):
+        self.s.learn(X, y, r, e)
+
+
+class ReplayMonolithArm(ArmBase):
+    """A1r (PREREG D1/D2, additive): monolith with a replay buffer decoupled
+    from head eviction. Identical to MonolithArm except the Specialist is a
+    ReplaySpecialist -- buffer survives eviction; generous burst-refit on the
+    retained multi-episode buffer at head recreation. mode="erm" is
+    A1r-replay-erm; mode="inv" (invariance on the retained buffer) is
+    A1r-replay-inv."""
+
+    def __init__(self, cfg, rng, mode="erm", memory="hard", beta=1.0, K=2,
+                 burst_mult=2):
+        self.s = ReplaySpecialist(cfg.d, K, cfg.k, cfg.w_max, rng,
+                                  mode=mode, memory=memory, beta=beta,
+                                  burst_mult=burst_mult)
+        self.name = f"replay-monolith-{mode}"
 
     def decide(self, X, r):
         return self.s.predict(X, r)
@@ -774,10 +859,20 @@ ARM_FACTORIES = {
     "A10-oracle-inv":   lambda cfg, rng, K, mem: FixedNicheArm(cfg, rng, K=K, memory=mem, oracle=True, mode="inv"),
 }
 
+# PREREG D additive arms. Deliberately kept OUT of ARM_FACTORIES: several
+# drivers (e.g. e1) default their arm list to list(ARM_FACTORIES.keys()),
+# so registering here would silently change existing experiments' outputs.
+# Drivers that want the replay arms look them up in
+# {**ARM_FACTORIES, **EXTRA_ARM_FACTORIES}.
+EXTRA_ARM_FACTORIES = {
+    "A1r-replay-erm": lambda cfg, rng, K, mem: ReplayMonolithArm(cfg, rng, "erm", mem, K=K),
+    "A1r-replay-inv": lambda cfg, rng, K, mem: ReplayMonolithArm(cfg, rng, "inv", mem, K=K),
+}
+
 
 def run_arm(arm: ArmBase, market, sched: Schedule, cfg,
             probe: int = 15, min_dormancy: int = 90,
-            collect_react: bool = False):
+            collect_react: bool = False, cost_bps: float = 0.0):
     """Run one arm through the schedule; return metric dict.
 
     collect_react=False (default) leaves the output exactly as before.
@@ -785,15 +880,37 @@ def run_arm(arm: ArmBase, market, sched: Schedule, cfg,
     {t_start, regime, dormancy, mean_probe_regret, n_days} for every
     qualifying reactivation whose probe window intersects the evaluated
     second half (days >= T/2), with the window mean taken over exactly the
-    days that enter the aggregate post_react (clipped to [half, T))."""
+    days that enter the aggregate post_react (clipped to [half, T)).
+
+    cost_bps=0 (default) leaves behavior and output exactly as before.
+    cost_bps>0 (PREREG D3, additive) adds a "cost" sub-dict: per day the
+    arm is charged cost = (cost_bps/1e4) * 0.5*sum|z_t - z_{t-1}|*2 (two-
+    sided turnover of the served top-k weight vector, positions established
+    from z_0 = 0); per the lodged convention (PREREG addendum E) the oracle
+    benchmark pays its own turnover identically, net regret = net-of-cost
+    oracle utility - net-of-cost arm utility; the arm-only-pays variant is
+    recorded as sensitivity. Costs are accounting only -- they are never
+    fed back to the arm, so trajectories are unchanged."""
     T = sched.T
     daily = np.zeros(T)
+    track_cost = cost_bps != 0.0
+    if track_cost:
+        turn_arm = np.zeros(T)
+        turn_orc = np.zeros(T)
+        z_prev_a = np.zeros(cfg.n_assets)
+        z_prev_o = np.zeros(cfg.n_assets)
     for t in range(T):
         r = int(sched.regimes[t]); e = int(sched.episode[t])
         X, y = market.day_at(t, r, e)
         y_hat = arm.decide(X, r)
         rg = regret(y_hat, y, cfg.k, cfg.w_max)
         daily[t] = rg
+        if track_cost:
+            z_a = solve_topk(y_hat, cfg.k, cfg.w_max)
+            z_o = solve_topk(y, cfg.k, cfg.w_max)
+            turn_arm[t] = np.abs(z_a - z_prev_a).sum()   # 0.5*sum|dz|*2 sides
+            turn_orc[t] = np.abs(z_o - z_prev_o).sum()
+            z_prev_a, z_prev_o = z_a, z_o
         arm.observe(X, y, r, e, rg)
     react = sched.reactivation_days(min_dormancy)
     probe_mask = np.zeros(T, dtype=bool)
@@ -819,6 +936,30 @@ def run_arm(arm: ArmBase, market, sched: Schedule, cfg,
         "daily": daily,
         "react_days": [t0 for t0 in react if t0 >= half],
     }
+    if track_cost:
+        c = cost_bps / 1e4
+        net_both = daily + c * (turn_arm - turn_orc)   # both pay (lodged)
+        net_arm = daily + c * turn_arm                 # arm-only sensitivity
+        pm = probe_mask & (np.arange(T) >= half)
+        sm = late_mask & (np.arange(T) >= half)
+        out["cost"] = {
+            "cost_bps": float(cost_bps),
+            "turnover_arm": turn_arm,
+            "turnover_oracle": turn_orc,
+            "eval_probe_mask": pm,
+            "eval_steady_mask": sm,
+            "half": half,
+            "overall_net": float(net_both[half:].mean()),
+            "post_react_net": float(net_both[pm].mean()) if pm.any()
+            else float("nan"),
+            "steady_net": float(net_both[sm].mean()),
+            "overall_net_armonly": float(net_arm[half:].mean()),
+            "post_react_net_armonly": float(net_arm[pm].mean()) if pm.any()
+            else float("nan"),
+            "steady_net_armonly": float(net_arm[sm].mean()),
+            "mean_turnover_arm": float(turn_arm[half:].mean()),
+            "mean_turnover_oracle": float(turn_orc[half:].mean()),
+        }
     if collect_react:
         detail = []
         for t0 in react:
