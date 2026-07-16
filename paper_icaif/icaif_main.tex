@@ -1,0 +1,765 @@
+%% ICAIF 2026 submission -- protocol-first register.
+%% CFP (verified 2026-07-16, icaif2026.org): sigconf + anonymous, EIGHT (8)
+%% pages TOTAL including figures and references; deadline 2026-08-02 AoE;
+%% double-blind. NOTE: the limit INCLUDES references, so the reference list
+%% is trimmed and the body targets ~7.25pp.
+\documentclass[sigconf,anonymous]{acmart}
+
+\settopmatter{printacmref=false}
+\setcopyright{none}
+\acmConference[ICAIF '26]{7th ACM International Conference on AI in
+Finance}{November 14--17, 2026}{Milan, Italy}
+\acmYear{2026}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{array}
+
+% Visible TODO marker (kept deliberately loud for the pre-submission pass)
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+
+\newcommand{\G}{\hat\Gamma}
+\newcommand{\regret}{\rho}
+
+\begin{document}
+
+\title[Should You Pay to Remember?]{Should You Pay to Remember? A Two-Gate,
+Pre-Registered Protocol for Deciding When Regime Retention Pays in Trading
+Systems}
+
+\author{Anonymous Author(s)}
+\affiliation{%
+  \institution{Anonymous Institution}
+  \city{}
+  \country{}}
+\email{anonymous@example.com}
+
+\begin{abstract}
+Regime-aware trading systems carry an evaluation problem that is worse than
+overfitting: their evaluations cannot fail. A regime-conditioned learner
+happily trains, ``specializes,'' and beats a weak baseline on structureless
+labels, so a backtest win licenses nothing. We propose and field-test a
+pre-deployment protocol built around one number: the \emph{retention
+deficit} $\G$, the post-reactivation decision-regret difference between the
+deployed always-retrain learner and an identical twin whose per-regime
+parameters are protected during dormancy---a two-arm counterfactual any
+desk can run before buying retention machinery. The protocol pairs $\G$
+with a structure screen (regime-conditioning versus block-shuffled labels
+on the decision metric), which its own record demotes: across our field
+tests the screen's verdict dissociated from realized value three times,
+including its strongest pass coinciding with an inverted outcome. The field
+record spans daily crypto and commodities (screen fails, evaluations go
+flat, as required), 4-hour crypto (screen passes, $\G=0$, flat again),
+and daily U.S. industry portfolios 1926--2025, where $\G$'s sign predicted
+the outcome direction in both directions: a positive deficit
+($+0.00089\pm0.00011$) coincides with the full pre-registered arm ordering,
+a negative one with an inversion, and a frozen-specification replication on
+a withheld 64-year era scores 5 of 6 cells. Crisis-window transaction costs
+amplify rather than kill the deficit ($+0.00126\to+0.00230$ as costs sweep
+25--100\,bps). An externally lodged, announcement-lagged NBER-recession
+test---registered with the OSF before recession dates ever touched the
+panel---resolved as a hit, with its two-recession concentration disclosed.
+A break-even rule converts $\G$ into a dollar-denominated carrying-cost
+threshold. All claims are regret and retention claims, not alpha claims; a
+live temporal test (diagnostics frozen 2026-06-30, scored 2027-04-07) and a
+constituent-level replication are lodged in advance.
+\end{abstract}
+
+\begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10010405.10010481.10010487</concept_id>
+<concept_desc>Applied computing~Economics</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10010147.10010257</concept_id>
+<concept_desc>Computing methodologies~Machine learning</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+\ccsdesc[500]{Applied computing~Economics}
+\ccsdesc[300]{Computing methodologies~Machine learning}
+
+\keywords{regime switching, continual learning, decision-focused learning,
+evaluation protocols, pre-registration, transaction costs}
+
+\maketitle
+
+%=============================================================================
+\section{Introduction: the evaluation that cannot fail}
+\label{sec:intro}
+%=============================================================================
+
+Every multi-strategy desk faces the same quiet question: the crisis
+playbook has been idle for six years---who is paying to keep it
+calibrated, and is that money buying anything? The machine-learning
+literature now offers an inventory of retention machinery to answer
+``yes'': per-regime expert libraries, replay buffers, parameter isolation,
+continual-learning regularizers ported to finance
+\cite{philps2018continual,pan2026recap,kirkpatrick2017overcoming,
+rolnick2019experience,parisi2019continual}. What it does not offer is a
+way to find out that the answer is ``no.''
+
+The reason is structural. A regime-aware evaluation has more researcher
+degrees of freedom than an ordinary backtest---the labeler, its
+thresholds, the dormancy definition, the evaluation windows---and its
+machinery produces organized-looking behavior on any labels at all: a
+regime-conditioned learner trains, converges, and ``specializes'' whether
+or not the labels carry information. Beating a generic baseline is
+therefore not evidence. \emph{A method whose evaluation cannot go flat on
+structureless data should not be trusted when it goes sharp.} This paper
+is organized around engineering evaluations that can go flat, running
+them on real substrates, and reporting the flats, the inversions, and the
+hits in one ledger.
+
+We work in the register of decision regret, not P\&L: the per-day gap
+between the portfolio chosen from a model's predictions and the portfolio
+an oracle would have chosen, the predict-then-optimize
+lesson that prediction error and decision quality dissociate
+\cite{elmachtoub2022smart,mandi2024decision}. The question the protocol
+prices is narrow and universal: when a dormant market regime returns,
+does a capacity-bounded learner that spent the dormancy retraining on
+whatever was active pay a measurable penalty in the first days of the
+reactivation---the days when decisions matter most---relative to a twin
+that kept the dormant regime's parameters untouched? If yes, retention is
+worth money and the break-even arithmetic says how much; if no, every
+dollar of retention machinery is premium paid on a claim that will never
+be filed. Recent theory makes the same point from first principles: a
+bounded agent should not retain what it can cheaply relearn
+\cite{kumar2025continual}; our contribution is the measurement that
+decides the question per substrate, before deployment.
+
+\textbf{Contributions.} (1)~\emph{A two-gate pre-deployment protocol} for
+regime-aware trading systems: a cheap structure screen run first, a
+binding deficit diagnostic run second, and a break-even carrying-cost
+rule that converts the diagnostic into dollars
+(Section~\ref{sec:protocol}). (2)~\emph{The diagnostic itself}: $\G$, a
+two-arm counterfactual (deployed learner versus its dormancy-protected
+twin) measured in post-reactivation decision regret---one number, causal
+by construction, cheap enough to pre-register and run on any book.
+(3)~\emph{A resolved field record} (Section~\ref{sec:record}): seven
+substrates spanning crypto, commodities, and a century of daily U.S.
+equity industry data, every null and inversion included, with the
+screen's honest demotion, a costs battery in which the deficit
+strengthens net of crisis-window costs (Section~\ref{sec:costs}), an
+externally custodied forward test that has since resolved, and a live
+temporal test whose diagnostics are already frozen
+(Section~\ref{sec:signrule}). The retention mechanism, its theory, and
+the controlled dissociation studies are developed in a companion
+manuscript \cite{companion2026} \todo{arxiv-id}; this paper is the
+protocol, the number, and the record a practitioner needs to decide
+whether to pay to remember.
+
+\subsection{Position among existing practice}
+\label{sec:related}
+
+Three literatures meet at this question and each leaves it unpriced.
+\emph{Regime-switching finance}---Markov-switching models
+\cite{hamilton1989new}, regime effects in returns \cite{ang2012regime},
+regime-conditioned allocation \cite{guidolin2007asset,
+nystrup2018dynamic,nystrup2020greedy}, regime-weighted forecast
+combination \cite{elliott2005optimal}---conditions a model or its
+combination weights on an inferred state, implicitly assuming every
+component remains fully estimated while its state is dormant. That
+assumption is exactly what $\G$ measures the failure of under bounded
+capacity. \emph{Continual learning in finance} makes the opposite
+unconditional bet: retention machinery is deployed because forgetting
+is presumed harmful \cite{philps2018continual,pan2026recap,
+kirkpatrick2017overcoming,rolnick2019experience,parisi2019continual},
+with evaluation by averaged forgetting metrics
+\cite{lopez2017gradient} rather than by a pre-deployment test of
+whether the substrate offers anything to retain. Our record contains
+real substrates where that bet loses ($\G < 0$ with a realized
+inversion), which is why the protocol runs \emph{before} the purchase.
+\emph{The backtest-overfitting protocol literature}---deflated Sharpe
+ratios \cite{bailey2014deflated}, SPA and Reality-Check family tests
+\cite{hansen2005spa,white2000reality}, the broader discipline of
+\cite{harvey2016backtesting,lopez2018advances}---is our closest
+methodological ancestor: it converts an unfalsifiable claim (``my
+strategy works'') into a testable one by charging for selection. The
+two-gate protocol does the same for a different claim (``my system
+needs to remember''), and inherits that literature's stance: the
+deliverable is the test, and the test must be able to say no.
+
+%=============================================================================
+\section{The protocol}
+\label{sec:protocol}
+%=============================================================================
+
+\subsection{Decision regret and probe windows}
+
+A stream of trading periods presents per-asset features $X_t$ and
+next-period returns $y_t$, with a causal regime label $r_t$ computed from
+information through $t-1$ only. The decision layer is a
+cardinality-constrained long-only portfolio (top-$k$ by predicted return,
+position cap $w_{\max}$), and the per-period \emph{decision regret} of a
+prediction $\hat y$ is
+$\regret(\hat y; y) = y^\top z^*(y) - y^\top z(\hat y) \ge 0$: the return
+given up relative to the oracle portfolio. Regret, not prediction error,
+is the protocol's metric throughout---errors that do not change the
+selected book are free, and errors at the selection boundary are not
+\cite{elmachtoub2022smart}.
+
+Regimes recur with dormancy: the crisis label may sleep for years. The
+protocol's unit of account is the \emph{probe window}: the first
+$N_p = 15$ trading days of every regime block whose regime was dormant at
+least 90 days. Post-reactivation regret---mean daily regret inside probe
+windows---is the primary metric because the reactivation transient is
+where retention could pay and where a fresh learner is most exposed;
+regime-conditioned finance has long known returns behave differently
+across states \cite{hamilton1989new,ang2012regime,guidolin2007asset,
+nystrup2018dynamic}, but conditions a model on the state without asking
+who maintained the model through the state's absence
+\cite{elliott2005optimal}.
+
+\textbf{Conventions, fixed once.} Every comparison in this paper is
+walk-forward with causal features; every claim is a pre-registered
+ordering prediction tested across seeds (100 where stated, else 20)
+with Welch tests and Holm--Bonferroni correction inside each
+registered pair family; paired designs expose every arm to identical
+data streams per seed. Where a design's seeds vary only
+initialization---the walk-forward batteries---the resulting intervals
+are implementation noise conditional on one market history, and every
+table says so. Refuted predictions are reported at the same prominence
+as confirmed ones; this paper contains both.
+
+\subsection{The structure screen, honestly demoted}
+\label{sec:screen}
+
+\textbf{Screen (structure).} Fit one model per regime label, walk-forward;
+compare its decision regret against the identical machinery run on
+block-shuffled labels ($\ge 50$ draws), summarized as a $z$-score against
+the shuffle distribution (the empirical permutation $p$ cannot fall below
+$1/51$; a normal fit to the control distribution gives the indicative
+$p$), with a split-half stability check and a comparison against a pooled
+unconditioned model. Block-shuffling preserves label persistence while
+destroying the label-return association, so the control inherits the
+machinery's ability to look organized on nothing. The screen asks only:
+\emph{do these labels carry decision-relevant information at all?} It
+costs minutes and requires no retention machinery.
+
+We designed the screen as a gate---no pass, no claims---and its own field
+record demoted it. Across the substrates of Section~\ref{sec:record} the
+screen's verdict dissociated from realized retention value three times:
+a passing screen preceded an inverted outcome (daily equities under a
+volatility-band labeler), the strongest pass we ever measured
+($z = 23.5$, withheld 1926--1989 era) coincided with an inversion, and a
+failing screen preceded a positive, cost-robust deficit (the NBER
+labeler). The screen therefore \emph{licenses nothing}. It survives in
+the protocol for its original falsification role---where it fails,
+a null evaluation is the predicted outcome and a sharp one is suspect
+---and as a cheap negative control: machinery that ``wins'' where the
+screen fails is fitting noise.
+
+\subsection{The deficit \texorpdfstring{$\G$}{Gamma}: one number from two
+arms}
+\label{sec:gamma}
+
+\textbf{Diagnostic (binding).} Run two arms of identical capacity,
+features, and learning rates over the same walk-forward stream:
+\begin{itemize}
+  \item \textbf{A1 (deployed default)}: a capacity-bounded learner that
+  always trains on the currently active regime---the honest model of any
+  allocation policy that follows current reward, whether a retraining
+  schedule, a learned router, or recent-performance capital weighting;
+  \item \textbf{A9 (protected twin)}: the same learner with per-regime
+  parameters pinned---each regime's parameters are trained only on that
+  regime's data and are untouched during its dormancy.
+\end{itemize}
+The \emph{retention deficit} is
+$\G = \overline{\regret}_{\text{A1}} - \overline{\regret}_{\text{A9}}$
+over probe windows: what dormancy-period retraining actually cost, in
+regret per probe day. In continual-learning terms $\G$ is a
+decision-regret backward-transfer measure against a multi-head oracle
+\cite{lopez2017gradient}; in econometric terms it descends from the
+post-break estimation-window question---how much pre-break knowledge
+should a forecaster retain \cite{pesaran2007selection}. It is causal by
+construction (the arms differ in exactly one design bit), cheap (two
+arms, no mechanism), and signed: $\G \le 0$ is a finding, not a failure.
+Where $\G$ is positive, retention---however implemented---collects it;
+where it is not, no retention mechanism can be bought, because there is
+nothing to collect.
+
+Both arms are stand-ins for classes, which is what makes the two-arm
+run sufficient. A1 represents every allocation policy whose training
+resource follows current reward---a retraining schedule, a learned
+router over experts, recent-performance capital weighting across
+desks---all of which starve the dormant regime identically, because a
+dormant regime emits no reward to follow. A9 represents every
+\emph{isolation-preserving} implementation: a siloed desk, a frozen
+per-regime adapter store, an expert library with pinned members. The
+protocol prices the class boundary, not any implementation; choosing
+an implementation is a separate decision the companion studies
+\cite{companion2026}. Two practical notes. First, $\G$ is measured
+net of \emph{rehearsals}: if near-miss episodes keep the dormant
+specialist warm between major events, that recalibration is in the
+measurement, which is the economically relevant accounting. Second,
+$\G$ should be re-measured net of transaction costs before pricing
+(Section~\ref{sec:costs}); in our record costs move the number, in
+one case across zero.
+
+\subsection{Pricing the deficit: the break-even rule}
+\label{sec:breakeven}
+
+$\G$ is in return units per probe day, so it converts directly to
+dollars. Charging a carrying cost $c$ (dollars per idle trading day:
+infrastructure, data, attention, the calibration operation) against a
+sleeve of notional value $V$, retention of a regime whose dormancy is
+$D$ trading days pays over one dormancy--reactivation cycle iff
+
+\begin{center}
+\fbox{\parbox{0.88\columnwidth}{\centering
+\vspace{2pt}
+$c \cdot D \;\le\; \G_{\mathrm{net}} \cdot N_p \cdot V$
+\vspace{2pt}
+}}
+\end{center}
+
+\noindent where $\G_{\mathrm{net}}$ is the deficit measured net of
+transaction costs (Section~\ref{sec:costs}) and $N_p$ is the probe
+length. The rule is a special case of the break-even analysis developed
+in the companion \cite{companion2026}; here it is used only as
+arithmetic.
+
+\textbf{Worked example (a \$100M crisis sleeve).} Take the measured
+net-of-cost deficit at the 25\,bps crisis-cost tier,
+$\G_{\mathrm{net}} = +0.00126$ per probe day
+(Section~\ref{sec:costs}): on \$100M that is \$126{,}000 per probe day,
+or ${\approx}\$1.89$M of avoidable regret per reactivation
+($N_p = 15$). The June-2020 recession-cell reactivation in our record
+arrived after $D = 2{,}445$ trading days of dormancy; the rule prices
+retention as paying iff the sleeve's carrying cost is below
+$\$1.89\text{M}/2{,}445 \approx \$770$ per idle trading day---about
+\$195{,}000 per year. A fully staffed idle desk at \$1M/year does not
+pay on this deficit; a frozen parameter store with a nightly calibration
+job at \$50K/year pays roughly fourfold. The rule's two-sided honesty is
+the point: it prices some retention out, and that is the protocol
+working.
+
+%=============================================================================
+\section{The field record}
+\label{sec:record}
+%=============================================================================
+
+Table~\ref{tab:master} is the paper's spine: every substrate the
+protocol has touched, with the screen verdict, the measured deficit, and
+what the ten-arm evaluation machine (the companion's arm family,
+spanning reward-driven and retaining allocations \cite{companion2026})
+actually did. Conventions: all labels causal; all comparisons
+walk-forward; Welch tests with Holm correction inside each
+pre-registered family; 100 seeds where stated, else 20. One caveat
+governs every real-data row and is repeated in
+Section~\ref{sec:limits}: each walk-forward window is a single market
+history, so intervals are seed noise conditional on that history, not
+sampling uncertainty across markets.
+
+\begin{table*}[t]
+\centering
+\caption{The field record: substrate $\times$ (structure screen, deficit
+$\G$, evaluation outcome). $\G$ is in decision-regret units per probe
+day (A1$-$A9, probe 15 days, dormancy $\ge 90$ days; $\pm$ is a 95\% CI
+over seeds, conditional on each window's single history). ``Ordering''
+= the pre-registered arm ordering (retaining arms ahead of reward-driven
+arms); ``inversion'' = the deployed always-retrain baseline wins;
+``predates gate~2'' = the battery ran before the deficit diagnostic
+entered the protocol. Every row's result files are released.}
+\label{tab:master}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{148pt}>{\raggedright\arraybackslash}p{94pt}>{\raggedright\arraybackslash}p{96pt}>{\raggedright\arraybackslash}p{136pt}@{}}
+\toprule
+\textbf{Substrate (span; labeler)} & \textbf{Structure screen} &
+\textbf{Deficit $\G$ (A1$-$A9)} & \textbf{What the machine did} \\
+\midrule
+Crypto, daily (5 pairs, 2021--25; vol/trend + filtered-vol) &
+fail ($z=-0.66$ / $-0.17$) & --- (predates gate 2) &
+flat, as predicted (min Holm $p=0.17$; 100 seeds) \\
+Commodities, daily (3 series, 2015--25; both labelers) &
+fail ($z=-0.14$ / $+0.16$) & --- (predates gate 2) &
+no dissociation run; claims forbidden by screen \\
+Crypto, 4-hour (bar-native filtered-vol; confirmed cell) &
+pass ($+3.15\%$, $z=2.32$) & $+0.000002$ (zero to 4 dp) &
+flat ($p>0.57$ all pairs): structure, nothing to retain \\
+\addlinespace
+French 49 industries, daily (1990--2025; L1 vol-band) &
+pass ($+1.14\%$, $z=3.18$) & $-0.00013 \pm 0.00007$ (100 s) &
+\emph{inversion}: A1 beats pool (Holm $1.2{\times}10^{-26}$); reverses
+net of costs \\
+French 49 industries, daily (1990--2025; L3 drawdown@15\%) &
+fail by pooled letter ($z=2.24$) & $+0.00089 \pm 0.00011$ (100 s) &
+full ordering (joint Holm $5.2{\times}10^{-65}$); cost-amplified \\
+Withheld era: 36 industries (1926--89; frozen L3 spec, 6 cells) &
+strongest pass ($z=23.5$) & sign varies by cell &
+sign rule 5/6, both directions; screen's best pass $\to$ inversion \\
+NBER recession $\times$ trend, announce-lagged (1990--2025) &
+fail ($z=1.74$) & $+0.00081 \pm 0.00033$ &
+ordering (Holm $1.6{\times}10^{-4}$); two-recession concentration
+disclosed \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\textbf{Daily crypto and commodities: the protocol's floor.} Neither
+small daily panel shows decision-metric structure under either causal
+labeler (all $|z| < 0.7$): regime-conditioned regret is statistically
+identical to block-shuffled-label regret. The ten-arm evaluation run on
+regime-stitched crypto schedules goes flat exactly as the failed screen
+predicts (no pair survives Holm correction; min Holm $p = 0.17$), and
+the numerically best arm is the one that \emph{learns nothing}---a
+fixed-strategy combination---which sharpens the null: where labels carry
+no structure, machinery that adapts to them buys less than machinery
+that ignores them. This is the ``can go flat'' property demonstrated,
+not asserted.
+
+\textbf{4-hour crypto: structure without a deficit.} A richer intraday
+feature inventory locates the program's first screen pass (951 episodes;
+conditioning beats shuffled labels by $3.15\%$, $z = 2.32$, both halves
+positive)---with its selection caveats stated at the same prominence:
+it is one confirmed cell from a ten-cell screen, and the confirmation
+reused the screen's data span, so the gap estimate is biased upward by
+selection on the maximum. The evaluation is flat anyway---and the
+two-arm counterfactual explains why retrospectively: $\G = +0.000002$,
+zero to four decimals. Reactivations are elevated for every arm
+including the protected twin; regime onsets are intrinsically hard
+here, but nothing is forgotten---at this bar density a fresh learner
+refits within the probe window. We are explicit about the epistemic
+order: the pre-registered prediction for this cell was separation, it
+was refuted, and the zero deficit is the diagnosis made after the
+refutation; the diagnosis's honest test is every substrate scored
+since. This cell is why the deficit, not the screen, is the binding
+diagnostic: structure is necessary for anything to be learnable, and
+irrelevant to whether retention pays.
+
+\textbf{Daily equities, 1990--2025: the deficit exists, and its sign
+prices the pool.} On the Ken French 49 industry portfolios (daily,
+value-weighted, 1990--2025; 9{,}067 days), with designs and predictions
+pre-registered before each run, two labelers deliver the two halves of
+the story. Under the volatility-band labeler (L1) the screen passes and
+the deficit is \emph{negative} ($-0.00013 \pm 0.00007$): the machine
+run anyway produces a significant inversion---the always-retrain
+baseline beats the retaining arms in the probe window (Holm
+$1.2{\times}10^{-26}$), retention premium paid with no claim to
+collect. Under an index-drawdown labeler (L3, 15\% threshold fixed in
+the registration before any run) the screen \emph{fails} by the letter
+of its pooled sub-criterion while the deficit is positive---the first
+positive $\G$ on any real substrate in this program
+($+0.00089 \pm 0.00011$, 100 seeds)---and the full pre-registered arm
+ordering emerges (joint Holm $5.2{\times}10^{-65}$), with the retaining
+arms also ahead on overall regret. One labeler-anatomy fact matters for
+reading the number: the \emph{union} of the drawdown labeler's crisis
+states recurs every one to three years (the 2010, 2011, 2015--16, and
+2018 near-misses are all in the inventory), while the specific
+crisis-with-uptrend cell sleeps up to 2{,}953 trading days---so
+retained parameters do receive live-fire recalibration between major
+crises, and $\G$ is measured net of those rehearsals, as a desk's
+economics would be. The deficit's evaluated inventory is
+27 reactivations; under leave-one-reactivation-out it survives every
+single-event exclusion (range $[0.00071, 0.00101]$, all significant),
+survives excluding all of calendar-2020 ($+0.00080 \pm 0.00019$), and
+is independently positive within the 2010s ($+0.00077 \pm 0.00022$,
+$n{=}14$) and 2020s ($+0.00094 \pm 0.00040$, $n{=}12$).
+
+Three disclosures belong beside that result. First, \emph{threshold
+fragility}: the deficit lives at essentially one drawdown threshold per
+era---at 10/12/20\% on 1990--2025 it is null or negative
+($+0.00013 \pm 0.00027$, $-0.00010 \pm 0.00017$,
+$-0.00045 \pm 0.00026$)---and the pre-registered robustness prediction
+was refuted. Second, a \emph{favorable wrinkle we flag because it was
+not predicted}: at 100 seeds the schedule-resampled (stitched)
+counterparts, previously flat, turn marginally positive in $\G$ under
+both labelers ($+0.00023 \pm 0.00016$ and $+0.00023 \pm 0.00015$)
+while their arm families stay flat---consistent either with
+single-history optimism in the walk-forward precision or with
+stitching destroying exactly the multi-year dormancy structure that
+makes retention pay; the lodged constituent-level test discriminates.
+Third, \emph{mechanism honesty}: registered probes found
+the deficit does not decay across the probe window and follows no
+dormancy or rehearsal covariate; it behaves as a persistent
+regime-conditional allocation deficit---the reward-following learner
+serves crisis windows persistently worse, the learner-side analogue of
+slow-moving capital \cite{duffie2010presidential,mitchell2007slow}---not
+demonstrated eviction-forgetting, which remains a controlled-setting
+result in the companion \cite{companion2026}. The deployment
+consequence (the counterfactual prices retention either way) is
+unchanged; the mechanism attribution is open, and we say so.
+
+\textbf{The withheld era, 1926--1989.} The byte-identical frozen
+specification---same features, arms, tests, and the lodged sign
+hypothesis; zero new researcher degrees of freedom---was replicated on
+36 industries over 16{,}983 days the design had never seen, in the
+pre-discovery-sample tradition \cite{linnainmaa2018history,
+goyal2008comprehensive}. The screen delivers its strongest pass ever
+($z = 23.5$) while the frozen 15\% cell \emph{inverts}
+($\G = -0.00024 \pm 0.00008$; the always-retrain baseline wins, Holm
+$2.1{\times}10^{-3}$)---the dissociation that finally demoted the
+screen. The deficit's sign, by contrast, scored: of six withheld cells
+(thresholds 10/12/15/20\%; two sub-eras at 15\%), five are consistent
+with the lodged sign rule, in both directions, including two
+positive-deficit cells reproducing the full ordering out-of-sample
+(10\%: $\G = +0.00020 \pm 0.00009$, Holm $1.9{\times}10^{-6}$;
+1958--89: $\G = +0.00021 \pm 0.00015$, Holm $2.1{\times}10^{-4}$) and
+two negative-deficit cells with the predicted inversion. The single
+miss (12\%: $\G$ marginally negative, arm table flat) is scored against
+the rule under its strong form and for it under its weak form;
+Section~\ref{sec:signrule} carries the full accounting. The paying
+threshold \emph{relocated} across eras ($15\% \to 10\%$) as crisis
+density shifted---the fragility replicates in pattern, not in location,
+so any deployment must estimate the window's location for its own era.
+
+\textbf{The NBER cell: temporal custody.} The one cell whose ex-ante
+status a third party can certify used a labeler with no free threshold
+anywhere: regime = NBER recession state $\times$ 50-day trend, the
+causal primary variant admitting a recession only from its
+\emph{announcement} date. The registration was deposited with the Open
+Science Framework at 22:47 ET on 2026-07-15; NBER dates were first
+joined to the panel at 22:55 ET. Recession-cell dormancies are
+crisis-scale by construction (up to 2{,}557 trading days). The screen
+\emph{fails} both variants ($z = 1.74$ primary)---the third
+dissociation of screen from value---while the deficit prices positive:
+$\G = +0.00081 \pm 0.00033$, strengthening to $+0.00105 \pm 0.00033$
+net of 25\,bps crisis-window costs, with the ordering exactly as the
+rule demands (Holm $1.6{\times}10^{-4}$ gross; the full retaining chain
+at Holm $\le 3.1{\times}10^{-5}$ net). Disclosures at equal prominence:
+the lodged leave-one-out and era-blocked slices show the deficit
+survives every one of 20 single-event exclusions and all calendar
+exclusions (drop-2020: $+0.00042 \pm 0.00026$; drop-2008/09:
+$+0.00036 \pm 0.00030$), but its mass concentrates in the two
+deep-dormancy recession entries (January 2009, dormancy 1{,}378 days;
+June 2020, dormancy 2{,}445 days; dropping the former alone cuts $\G$
+to 41\% of headline), and the 2010s era block---which contains zero
+recession-cell reactivations---is negative-significant. The cell is
+event-robust in the strict sense, two-recession-concentrated, and not
+era-consistent; it is materially weaker than the drawdown cell's
+robustness profile, and we say so rather than average it away.
+
+%=============================================================================
+\section{Costs and economics}
+\label{sec:costs}
+%=============================================================================
+
+A retention effect that dies under transaction costs is a curiosity;
+this one strengthens. The pre-registered cost battery charges
+crisis-window effective costs of 25/50/100\,bps under a both-pay
+convention (every arm, including the protected twin, charged its own
+turnover; an arm-only variant was lodged as sensitivity and matches to
+the digit, because the twin's cost term cancels in the regret
+difference).
+
+\textbf{The deficit is cost-amplified.} On the positive-deficit equity
+cell, the net-of-cost deficit rises monotonically with the cost tier:
+$\G_{\mathrm{net}} = +0.00126 \pm 0.00020$ at 25\,bps,
+$+0.00161 \pm 0.00021$ at 50, $+0.00230 \pm 0.00024$ at 100, with the
+four-arm ordering intact at every tier and the headline contrast
+strengthening from Holm $4.6{\times}10^{-19}$ to
+$1.3{\times}10^{-29}$. The mechanism is turnover, and it is the
+economically interpretable one: a reactivated always-retrain learner
+churns its top-$k$ book hardest exactly when spreads are widest
+(measured turnover 1.03/day for the deployed baseline versus 0.62 for
+the calmest retaining arm). Paying to remember buys, among other
+things, \emph{not trading like a fresh learner during a crisis onset}.
+The same signature reproduced ex ante on the NBER cell
+($+0.00081 \to +0.00105$ net of 25\,bps; turnover 1.04 vs.\ 0.63)---a
+labeler the cost battery never saw.
+
+\textbf{The inversion was a gross-only phenomenon.} Under the
+volatility-band labeler, where $\G < 0$ and the always-retrain baseline
+won gross, the inversion \emph{reverses} net of costs at every tier
+(paired difference $-0.00075 \pm 0.00010$ at 25\,bps,
+$p = 1.2{\times}10^{-16}$): net of realistic crisis-window costs the
+retaining arm wins even where the parameter-level deficit is negative,
+because the turnover discipline alone is worth more than the deficit
+costs. We report this as economics, not vindication: the sign rule
+prices the \emph{parameter} claim, and the turnover product is
+separately purchasable---a no-trade hysteresis band on the deployed
+baseline is the obvious desk countermeasure, and a banded-baseline
+control battery is lodged as a forward registration with its adverse
+branch stated (if banding alone closes the net gap where $\G \le 0$,
+the net-cost sentence above is relabeled as buyable discipline, at
+full prominence). One sensitivity is
+disclosed and not acted on: charging costs inside the structure screen
+would flip the drawdown labeler's pooled sub-criterion from
+$-0.10\%$ to $+3.0\%$; the screen as registered is a gross-metric
+criterion and remains a fail.
+
+\textbf{What the cost model omits} is market impact, borrow, and
+capacity; every substrate outside the two equity batteries remains
+gross; and none of these numbers is a P\&L claim
+(Section~\ref{sec:limits}). For any future alpha claim the lodged
+protocol of record is deflated Sharpe \cite{bailey2014deflated} plus an
+SPA/Reality-Check family test \cite{hansen2005spa,white2000reality},
+per the backtest-overfitting literature
+\cite{harvey2016backtesting,lopez2018advances}.
+
+%=============================================================================
+\section{The sign rule: a lodged, once-resolved hypothesis}
+\label{sec:signrule}
+%=============================================================================
+
+The record above compresses to one deployment rule: \emph{the sign of
+$\G$ prices retention}. Positive deficit $\Rightarrow$ the retaining
+arms collect it; zero or negative $\Rightarrow$ retention pays premium
+without claims. This section states exactly how much evidence that rule
+has, in the register the evidence deserves.
+
+\textbf{The confession first.} When first formulated, the rule was
+postdictive---written after seeing both 1990--2025 outcomes, and
+sharing its A1 arm with the contrasts it prices (its non-circular
+content is that the protected twin sides with the retaining arms
+exactly when the deficit is positive). The weak/strong scoring
+taxonomy below was formalized only after the withheld-era runs, and
+the rule as lodged was scoped to walk-forward designs; we decline to
+hide behind that scoping and count the stitched designs against
+ourselves. One further scoring choice is confessed rather than buried:
+no registration fixed whether the gross or the net-of-cost register
+adjudicates the NBER cell's strong form---gross, its retaining chain
+is partial; net (the economically primary register by the cost
+battery's own argument, an argument that predates the cell), it is a
+full hit---and the amendment lodged for the constituent test fixes
+the net register in advance so the ambiguity cannot recur.
+
+\textbf{The inclusive scorecard.} Scoring every cell the rule could
+touch---six withheld-era cells, the two schedule-resampled (stitched)
+1990--2025 designs, and the four NBER cells---the record is
+\textbf{8/12 under the strong form} (sign predicts the arm-table
+direction: ordering when significantly positive, inversion when
+negative) and \textbf{12/12 under the weak form} (dissociation iff
+$\G$ significantly positive). The four strong-form misses share one
+shape: a marginally significant $\G$ with a flat arm table. Dependence
+caveats at full prominence: the withheld 15\% full-era cell is the
+union of its two sub-era cells; the four threshold cells share one
+history's crises; the stitched designs resample the same panels. The
+scorecard's evidential force is closer to two-to-three effectively
+independent observations, in both directions, than to twelve
+trials---and the two 1990--2025 walk-forward tests that motivated the
+rule are not counted at all.
+
+\textbf{Custody.} Because a rule of this shape is exactly the kind of
+thing a file drawer manufactures, every registration in the program is
+graded by the strength of its timestamp custody, against ourselves
+(Table~\ref{tab:custody}). The early batteries are self-attested; the
+later batteries have git-separated custody (specification pushed
+publicly before results existed); the NBER cell resolved under
+third-party (OSF) custody; and all future registrations are OSF-first,
+which is the only available answer to the unreportable-frozen-specs
+question.
+
+\begin{table}[t]
+\centering
+\caption{Provenance grades for the program's registrations (compact;
+the full ledger, with commit hashes and verification instructions, is
+released). OSF project ID anonymized for review. \todo{replace OSF ID
+with anonymized view-only link}}
+\label{tab:custody}
+\small
+\begin{tabular}{@{}p{0.48\columnwidth}p{0.40\columnwidth}@{}}
+\toprule
+\textbf{Registration} & \textbf{Custody grade} \\
+\midrule
+Gates + dissociation; drawdown labeler; threshold sweep (2026-07-14) &
+self-attested (spec and results entered the repository together) \\
+Costs, replay, seed parity; mechanism probes; withheld era (2026-07-15)
+& git-separated (spec pushed before runs; server timestamps) \\
+NBER announce-lagged forward test & \emph{resolved under third-party
+custody} (OSF 22:47 ET; data joined 22:55 ET; hit) \\
+CRSP constituents + T-split amendment; temporal-deployment test &
+forward, third-party custody (open) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{The live test.} The rule's standing changes register only with
+temporally split measurement, so the program's next cells are already
+committed. (1)~\emph{The deployment-form temporal test}: all
+diagnostics frozen on data through \textbf{2026-06-30}
+($\G = +0.00081 \pm 0.00033$ on the NBER cell;
+$+0.00091 \pm 0.00020$ on the drawdown cell---both positive, so the
+lodged prediction is that the retaining arms outperform in the outcome
+window), scored against realized reactivations in 2026-07-01 through
+2027-03-31 on a pre-named date, \textbf{2027-04-07}, with a void
+declared (not a hit) if no qualifying reactivation occurs. One clean
+refuting cell falsifies the deployment form of the rule.
+(2)~\emph{Constituent-level replication}: the CRSP S\&P~500 panel,
+registration lodged before any data access, with a T-split amendment
+fixing the net-cost register and the window estimator in advance---the
+test that decides whether the deficit survives disaggregation, the
+canonical worry for industry-level effects
+\cite{moskowitz1999industries,grundy2001understanding}. Both are
+reported at headline prominence regardless of outcome.
+
+%=============================================================================
+\section{Field kit and limitations}
+\label{sec:kit}
+%=============================================================================
+
+\subsection{Running the protocol on your own book}
+
+\begin{enumerate}
+  \item \textbf{Freeze the design.} Fix the labeler family, thresholds,
+  probe length, dormancy cutoff, and test family in writing; lodge the
+  document externally (OSF or equivalent) before any run. The record
+  above is the argument that this step is load-bearing.
+  \item \textbf{Label causally.} Regime labels must be computable from
+  information through $t-1$---announcement dates, not revision dates,
+  for any official indicator.
+  \item \textbf{Run the screen.} One model per regime versus the same
+  machinery on $\ge 50$ block-shuffled label draws, on \emph{your
+  decision metric}, walk-forward, with a split-half check. A fail
+  predicts your regime-aware evaluation should go flat; run it anyway
+  and distrust everything if it does not.
+  \item \textbf{Measure $\G$.} Two arms: your deployed allocation
+  policy, and its twin with per-regime parameters pinned through
+  dormancy. $\G$ = probe-window regret difference. Charge your own
+  crisis-window cost schedule (both-pay); keep $\G_{\mathrm{net}}$.
+  \item \textbf{Price it.} Apply the boxed rule of
+  Section~\ref{sec:breakeven} with your sleeve size, measured dormancy
+  scale, and honest carrying cost.
+  \item \textbf{Decide, and re-estimate.} $\G_{\mathrm{net}}$
+  significantly positive and the rule satisfied: retention pays, and
+  any isolation-preserving implementation collects it. Otherwise: do
+  not buy retention machinery this era---and re-run the diagnostic when
+  crisis density shifts, because the paying window's location moved
+  across eras in our record.
+\end{enumerate}
+
+\subsection{Limitations, register, and what we do not claim}
+\label{sec:limits}
+
+\textbf{Single histories.} Every real-data cell is one realized market
+history; seed intervals quantify implementation noise conditional on
+that history. The record spans 1926--2025 and scores in both
+directions, but it is three walk-forward windows and one country.
+
+\textbf{Aggregation.} The equity substrate is industry portfolios;
+aggregation itself can manufacture slow dynamics \cite{lo1988stock},
+crisis-conditional behavior is a documented feature of this territory
+\cite{cooper2004market,daniel2016momentum,henkel2011time,
+rapach2010out}, and industry-level effects need not survive
+disaggregation \cite{grundy2001understanding}. The lodged CRSP
+constituent test is the decider, and until it resolves, the deficit is
+a fact about the aggregate cross-section.
+
+\textbf{One labeler family, one era-dependent window.} The positive
+deficits live under drawdown- and recession-type labelers with slow
+crisis dynamics; the paying threshold relocated across eras. The
+protocol ships with the instruction to estimate the window locally,
+not with a universal constant.
+
+\textbf{Mechanism.} On real data the measured deficit is a persistent
+allocation-level service gap, not demonstrated forgetting; the
+controlled dissociation of mechanisms lives in the companion
+\cite{companion2026}, and buying our diagnostic does not require
+buying any mechanism story.
+
+\textbf{No alpha.} Every number here is decision regret at portfolio
+level, gross except where a modeled crisis-window cost schedule is
+stated; nothing is a claim of live trading profitability
+\cite{mclean2016does}. The protocol's product is a decision---pay to
+remember, or don't---and its warranty is the record of Table~
+\ref{tab:master}: three flats, two inversions, two orderings, all
+published under the same rule.
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references_icaif}
+
+\end{document}
