@@ -3071,6 +3071,28 @@
      "h": "results_100seed/e_french49_dissoc.json:walkforward/holm_p/A6-risp-inv vs A1-monolith-erm"
     }
    }
+  },
+  {
+   "id": "nber.gamma.wf.gross",
+   "tex_pattern": "\\$\\\\hat\\\\Gamma = \\+([\\d.]+) \\\\pm [\\d.]+\\$ on the causal walk-forward",
+   "expect": {
+    "expr": "a-b",
+    "inputs": {
+     "a": "results/e_french49_nber_dissoc.json:primary_announcement_lagged/walkforward/post_react/A1-monolith-erm/mean",
+     "b": "results/e_french49_nber_dissoc.json:primary_announcement_lagged/walkforward/post_react/A9-oracle-pinned/mean"
+    }
+   }
+  },
+  {
+   "id": "nber.gamma.wf.net",
+   "tex_pattern": "strengthening to \\$\\+([\\d.]+) \\\\pm [\\d.]+\\$ net of 25 bps",
+   "expect": {
+    "expr": "a-b",
+    "inputs": {
+     "a": "results/e_french49_nber_dissoc.json:primary_announcement_lagged/walkforward/post_react_net25/A1-monolith-erm/mean",
+     "b": "results/e_french49_nber_dissoc.json:primary_announcement_lagged/walkforward/post_react_net25/A9-oracle-pinned/mean"
+    }
+   }
   }
  ]
 }

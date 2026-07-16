@@ -428,3 +428,34 @@ Science Framework: project osf.io/nsx4e (created 2026-07-15 22:45 ET,
 files uploaded 22:47 ET). The NBER-labeler forward test is UNFROZEN as of
 this lodging; NBER dates had not been joined to any panel before this
 point. All future registrations in this program are OSF-first.
+
+---
+
+# ADDENDUM G — NBER forward-test verdicts (written 2026-07-15 ~23:15 ET, AFTER the run; registration lodged at osf.io/nsx4e 22:47 ET; NBER dates first joined to the panel 22:55 ET)
+
+- **PN1 (H-SIGN): HIT, weak AND strong forms, on the primary
+  (announcement-lagged, causal) walk-forward cell.** Γ̂ = +0.00081±0.00033
+  (net-25bps +0.00105±0.00033, the D3 amplification pattern on a labeler
+  D3 never saw) with the ordering Holm-significant (A6<A1 1.6e-4 gross;
+  full A6<A5<A1 chain ≤3.1e-5 net, A6<A9 1.7e-3 net). Neither lodged
+  refutation clause triggered. Primary stitched: Γ̂ n.s. with flat table —
+  hit under both forms. Calendar (non-causal robustness): wf hit/hit;
+  stitched Γ̂ negative-significant with flat table — weak hit, STRONG-FORM
+  MISS (the E-F 12% pattern), disclosed.
+- **PN2: CONFIRMED** (walk-forward; single-history seed-noise caveat
+  verbatim; stitched flat).
+- **PN3: the granularity/window branch obtains** — a labeler with no free
+  threshold anywhere reproduces the positive deficit with ordering; the
+  artifact reading of L3's 15% cutoff loses this discriminator.
+- **PN4: satisfied** — all four cells, both variants, gross and net, raw
+  seeds, and the strong-form miss in the JSONs; no selective emphasis.
+- Gate 1 FAILED in both cells (z=1.74/1.35; pooled edges conditioning)
+  while the pool priced positive — the third independent dissociation of
+  gate 1 from pool value.
+- **Disclosed omission (owed):** the lodged LORO + era-blocked analyses
+  for this cell were not run in this pass (recorded in the JSONs'
+  meta.disclosed_omissions); the cell is not to be cited as complete
+  until they exist.
+- Announcement dates verified against nber.org and recorded in the JSONs;
+  endpoints inclusive; recession-cell dormancies 2,445/2,557 trading days
+  (primary), matching the 1992→2001→2008→2020 gaps.

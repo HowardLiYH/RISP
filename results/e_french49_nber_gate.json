@@ -1,0 +1,122 @@
+{
+ "meta": {
+  "prereg": "osf_package/PREREG_NBER_FRENCH49.md (osf.io/nsx4e, lodged 2026-07-15 22:47 ET)",
+  "labeler": "L-NBER: NBER recession state x 50-day trend sign of the equal-weight log-price index (trend causal via t-1, label_L3 construction); no free threshold",
+  "regimes": {
+   "0": "expansion-up",
+   "1": "expansion-down",
+   "2": "recession-up",
+   "3": "recession-down"
+  },
+  "primary_variant": "announcement-lagged (causal): recession=1 from start-announcement date through end-announcement date, both endpoints inclusive",
+  "secondary_variant": "calendar recession months (peak month through trough month, inclusive); disclosed as non-causal robustness",
+  "nber_episodes": [
+   {
+    "calendar_peak": "1990-07",
+    "calendar_trough": "1991-03",
+    "start_announced": "1991-04-25",
+    "end_announced": "1992-12-22"
+   },
+   {
+    "calendar_peak": "2001-03",
+    "calendar_trough": "2001-11",
+    "start_announced": "2001-11-26",
+    "end_announced": "2003-07-17"
+   },
+   {
+    "calendar_peak": "2007-12",
+    "calendar_trough": "2009-06",
+    "start_announced": "2008-12-01",
+    "end_announced": "2010-09-20"
+   },
+   {
+    "calendar_peak": "2020-02",
+    "calendar_trough": "2020-04",
+    "start_announced": "2020-06-08",
+    "end_announced": "2021-07-19"
+   }
+  ],
+  "announcement_dates_verified": {
+   "date_verified": "2026-07-15",
+   "source": "https://www.nber.org/research/business-cycle-dating/business-cycle-dating-committee-announcements",
+   "note": "all four pairs match the registration's expected values exactly"
+  },
+  "regime_counts": {
+   "primary_announcement_lagged": {
+    "0": 5061,
+    "1": 2335,
+    "2": 1085,
+    "3": 485
+   },
+   "secondary_calendar": {
+    "0": 5836,
+    "1": 2295,
+    "2": 310,
+    "3": 525
+   }
+  },
+  "seeds": 20,
+  "K": 2,
+  "memory": "hard",
+  "probe": 15,
+  "min_dormancy": 90,
+  "k_sel": 5,
+  "w_max": 0.2,
+  "cost_bps_overlay": 25.0,
+  "disclosed_omissions": "DISCLOSED OMISSION (flagged, not silent): the lodged registration's design paragraph lists 'LORO + era-blocked analyses' among the inherited conventions; this run executed the gate + walk-forward + stitched battery with gross and net-25bps but did NOT run the LORO (leave-one-recession-out) or era-blocked slices. They remain owed to the register and should be run as a follow-up pass (cf. e_french_L3_loro.py) before any paper claim cites this cell as complete."
+ },
+ "primary_announcement_lagged": {
+  "real_mean_regret": 0.018168792608870266,
+  "shuffled_mean_regret": 0.01830661026393558,
+  "pooled_mean_regret": 0.01815336721068467,
+  "gap_pct": 0.7528300055051065,
+  "cond_vs_pooled_pct": -0.08497265551740892,
+  "z_vs_shuffled": 1.737603016939147,
+  "p_one_sided": 1.0264794543545891e-16,
+  "n_shuffle": 50,
+  "split_half": {
+   "first_half": {
+    "gap_pct": 0.973911271784113,
+    "z": 1.6413536623754315
+   },
+   "second_half": {
+    "gap_pct": 0.5422026171200786,
+    "z": 0.981155655365089
+   }
+  },
+  "regime_counts": {
+   "0": 5061,
+   "1": 2335,
+   "2": 1085,
+   "3": 485
+  },
+  "PASS": false
+ },
+ "secondary_calendar": {
+  "real_mean_regret": 0.01820884413930023,
+  "shuffled_mean_regret": 0.01831287239529157,
+  "pooled_mean_regret": 0.01815336721068467,
+  "gap_pct": 0.5680608357889716,
+  "cond_vs_pooled_pct": -0.3056013133467035,
+  "z_vs_shuffled": 1.345446558633002,
+  "p_one_sided": 7.085166285730338e-13,
+  "n_shuffle": 50,
+  "split_half": {
+   "first_half": {
+    "gap_pct": 0.19437859219636452,
+    "z": 0.29410237932885586
+   },
+   "second_half": {
+    "gap_pct": 0.9242489936188221,
+    "z": 1.5933876786511973
+   }
+  },
+  "regime_counts": {
+   "0": 5836,
+   "1": 2295,
+   "2": 310,
+   "3": 525
+  },
+  "PASS": false
+ }
+}

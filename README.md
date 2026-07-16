@@ -208,7 +208,11 @@ python3 code/audit_numbers.py --filter tab1
 
 The wave's registrations and verdicts live in [`PREREG_FRENCH49.md`](PREREG_FRENCH49.md), structured as an append-only ledger: registration A (L1/L2 French gates + dissociation) → Addendum A (verdicts) → registration B (the L3 slow-dormancy labeler) → registration C (threshold sweep) → Addenda B/C → registration D (replay, costs, CVaR, seed parity) → registration E (mechanism probes + the withheld era + the regional register) → Addendum F (verdicts and synthesis). Nothing above a verdict line is ever edited; refuted predictions stay in the record at full prominence.
 
-Forward tests — a CRSP-constituents battery and an NBER-anchored labeler, both inheriting the frozen L3 spec and the Γ̂-sign hypothesis with zero new researcher degrees of freedom — are written and **pending external lodging on OSF** (`osf_package/`: `PREREG_CRSP.md`, `PREREG_NBER_FRENCH49.md`, plus a frozen snapshot of the French-49 ledger). Until the OSF timestamp exists, those registrations are self-attested via the repo's commit history, and the NBER experiment stays frozen.
+**External custody established (2026-07-15):** both forward-test registrations and the frozen French-49 snapshot are lodged with the Open Science Framework — **[osf.io/nsx4e](https://osf.io/nsx4e/)** — under third-party timestamps (see `PROVENANCE.md` for the full custody ledger with per-registration grades).
+
+**The NBER forward test has since resolved — a hit under both scoring forms.** Immediately after lodging (spec deposited 22:47 ET; NBER dates first joined to the panel 22:55 ET), the announcement-lagged, threshold-free NBER-recession labeler reproduced the deficit with the ordering on the causal walk-forward (Γ̂ = +0.00081 ± 0.00033 gross, +0.00105 net of 25 bps crisis-window costs; A6 < A1 at Holm 1.6e-4; full ordering net at Holm ≤ 3.1e-5), while gate 1 failed — the third independent dissociation of gate 1 from pool value. Disclosed at equal prominence: the stitched designs are flat; the non-causal calendar-stitched robustness cell is a weak-form hit / strong-form miss; the registration's LORO and era-blocked slices are still owed before the cell is cited as complete. Verdicts: `PREREG_FRENCH49.md` Addendum G; results: `results/e_french49_nber_*.json`.
+
+The CRSP-constituents battery remains the lodged, unresolved forward test, awaiting data access.
 
 ---
 

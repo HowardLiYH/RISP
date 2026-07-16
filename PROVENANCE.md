@@ -25,7 +25,7 @@ of its timestamp custody*, honestly. Three grades:
 | Addendum D (replay D1/D2, costs D3, A3′ D4, CVaR D5, seeds D6) | c4345e9 2026-07-15T12:22-04:00 | ac90d7e / 49a640e 14:15 | **GIT-SEPARATED** | Addendum F: D1 refuted-favorably, D2/D3 confirmed, D6 confirmed; D4/D5 unrun |
 | Addendum E (X1/X2/X3/X4, withheld era E-F, regional register E-R) | 5c96c35 2026-07-15T13:09-04:00 | e1f804b / 49a640e 14:15 | **GIT-SEPARATED** | Addendum F: X1 neither-branch, X3 anti-branch, X4 confirmed + divergence, E-F 5/6 scorecard; X2/E-R unrun |
 | CRSP forward test (osf_package/PREREG_CRSP.md) | 40b69ad 2026-07-15T12:24-04:00; **OSF-mirrored 2026-07-15 22:47 ET (osf.io/nsx4e)** | — | **FORWARD, third-party custody** (data not yet obtained; WRDS pending) | open |
-| NBER-labeler forward test (osf_package/PREREG_NBER_FRENCH49.md) | 40b69ad 2026-07-15T12:24-04:00; **OSF-mirrored 2026-07-15 22:47 ET (osf.io/nsx4e)** | — | **FORWARD, third-party custody** (unfrozen 2026-07-15 upon OSF lodging; NBER dates never joined to any panel before this point) | open |
+| NBER-labeler forward test (osf_package/PREREG_NBER_FRENCH49.md) | 40b69ad 2026-07-15T12:24-04:00; **OSF-mirrored 22:47 ET (osf.io/nsx4e)** | run 22:55–23:10 ET same day; results committed | **RESOLVED under third-party custody** — the program's first temporal cell | Addendum G: PN1 HIT (weak+strong, causal primary); PN2 confirmed; PN3 granularity branch; one strong-form miss in the non-causal robustness cell, disclosed; LORO/era supplement owed |
 
 Notes:
 - The withheld-era battery (E-F) has git-separated custody for its
