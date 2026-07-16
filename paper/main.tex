@@ -279,11 +279,17 @@ related work thus becomes a supporting experiment.
     regret. A break-even analysis (Proposition~\ref{prop:breakeven}) gives
     the dormancy window in which retention pays once idle-specialist carrying
     costs are charged.
-    \item \textbf{Evaluation protocol (C4).} A diagnostic-first,
-    \emph{two-gate} standard for regime-aware financial ML:
+    \item \textbf{Evaluation protocol (C4).} A diagnostic-first
+    standard for regime-aware financial ML:
     \emph{post-reactivation regret} in a probe window after each
-    reactivation, leakage-free causal regime labelings, and two
-    pre-registered gates run \emph{before} claiming gains. \emph{Gate 1}
+    reactivation, leakage-free causal regime labelings, and a
+    pre-deployment protocol run \emph{before} claiming gains --- a
+    structure \emph{screen} plus a binding diagnostic. We state the
+    protocol as its own record left it, not as designed: the screen's
+    outcomes have not tracked pool value in any tested cell (three
+    dissociations, including its strongest pass coinciding with an
+    inversion), so it screens for learnable structure and licenses
+    nothing; the diagnostic is the measured deficit. \emph{Screen}
     (structure): regime-conditioning must beat block-shuffled labels on
     the decision metric. \emph{Gate 2} (harvestable deficit): the
     measured deficit---monolith minus oracle-pinned post-reactivation
@@ -1754,7 +1760,10 @@ hide behind that scoping: at 100 seeds the two \emph{stitched} designs
 now show positive-significant $\hat\Gamma$ ($+0.00023 \pm 0.00015$ and
 $+0.00023 \pm 0.00016$) with flat arm families (min raw $p \ge 0.34$)
 ---strong-form misses if scored. Counted inclusively the record is
-$5/8$ under the strong form and $8/8$ under the weak form. The honest
+$5/8$ under the strong form and $8/8$ under the weak form; folding in
+the four NBER cells of the temporal-custody paragraph below, $8/12$
+strong and $12/12$ weak (with the primary walk-forward's strong-form
+status register-dependent, as confessed there). The honest
 summary: the scorecard's evidential force is closer to two-to-three
 effectively independent observations, with both directions
 represented, than to six independent trials---and its first genuinely
@@ -1835,7 +1844,16 @@ with the ordering present exactly as the rule demands (A6 $<$ A1 at
 Holm $1.6\times10^{-4}$ gross; the full A6 $<$ A5 $<$ A1 chain at
 Holm $\le 3.1\times10^{-5}$ net, and A6 beating the pinned oracle at
 $1.7\times10^{-3}$ net). Under the lodged scoring this cell is a
-\textbf{hit under both the weak and the strong forms}. Disclosures at
+\textbf{hit under both the weak and the strong forms}. One scoring
+choice is confessed rather than buried: no registration fixed whether
+the gross or the net register adjudicates the strong-form
+chain---gross, A6-vs-A5 is flat (Holm $0.94$) and the full chain holds
+only net of costs, the economically primary register by the cost
+battery's own argument, but an argument that predates this cell rather
+than this scoring decision. Scored gross-only, the cell is a weak-form
+hit and a strong-form partial; the amendment lodged for the CRSP test
+fixes the net register in advance so this ambiguity cannot recur.
+Disclosures at
 equal prominence: the primary stitched design is flat
 ($\hat\Gamma$ n.s.)---itself a both-forms hit ($\hat\Gamma \approx 0$
 with a flat table); the non-causal calendar-dated robustness variant
