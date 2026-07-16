@@ -2309,7 +2309,7 @@
   },
   {
    "id": "e1.replay.closure",
-   "tex_pattern": "It closes only \\$([\\d.]+)\\\\%\\$ of the A1\\$-\\$A9 deficit",
+   "tex_pattern": "closes only \\$([\\d.]+)\\\\%\\$ of the A1\\$-\\$A9 deficit",
    "expect": {
     "expr": "(a - r) / (a - o) * 100",
     "inputs": {
@@ -2317,18 +2317,19 @@
      "r": "results/e1_replay.json:post_react/A1r-replay-erm/mean",
      "o": "results/e1_replay.json:post_react/A9-oracle-pinned/mean"
     }
-   }
+   },
+   "group": 1
   },
   {
    "id": "e1.replay.a1r.mean",
-   "tex_pattern": "\\(A1r \\$([\\d.]+)\\$; A1r\\$-\\$A9 \\$= \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ paired, \\$p\\{=\\}([\\d.]+)\\$\\)",
+   "tex_pattern": "\\(A1r \\$([\\d.]+)\\$; A1r\\$-\\$A9 \\$= \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ paired; paired-\\$t\\$\\s*\\$p\\{=\\}1\\.4\\{\\\\times\\}10\\^\\{-7\\}\\$, unpaired Welch \\$p\\{=\\}([\\d.]+)\\$\\)",
    "expect": {
     "path": "results/e1_replay.json:post_react/A1r-replay-erm/mean"
    }
   },
   {
    "id": "e1.replay.paired.mean",
-   "tex_pattern": "\\(A1r \\$([\\d.]+)\\$; A1r\\$-\\$A9 \\$= \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ paired, \\$p\\{=\\}([\\d.]+)\\$\\)",
+   "tex_pattern": "\\(A1r \\$([\\d.]+)\\$; A1r\\$-\\$A9 \\$= \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ paired; paired-\\$t\\$\\s*\\$p\\{=\\}1\\.4\\{\\\\times\\}10\\^\\{-7\\}\\$, unpaired Welch \\$p\\{=\\}([\\d.]+)\\$\\)",
    "expect": {
     "expr": "mean(vsub(a, b))",
     "inputs": {
@@ -2340,7 +2341,7 @@
   },
   {
    "id": "e1.replay.paired.ci",
-   "tex_pattern": "\\(A1r \\$([\\d.]+)\\$; A1r\\$-\\$A9 \\$= \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ paired, \\$p\\{=\\}([\\d.]+)\\$\\)",
+   "tex_pattern": "\\(A1r \\$([\\d.]+)\\$; A1r\\$-\\$A9 \\$= \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ paired; paired-\\$t\\$\\s*\\$p\\{=\\}1\\.4\\{\\\\times\\}10\\^\\{-7\\}\\$, unpaired Welch \\$p\\{=\\}([\\d.]+)\\$\\)",
    "expect": {
     "expr": "ci95(vsub(a, b))",
     "inputs": {
@@ -2352,7 +2353,7 @@
   },
   {
    "id": "e1.replay.p.vsA9",
-   "tex_pattern": "\\(A1r \\$([\\d.]+)\\$; A1r\\$-\\$A9 \\$= \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ paired, \\$p\\{=\\}([\\d.]+)\\$\\)",
+   "tex_pattern": "\\(A1r \\$([\\d.]+)\\$; A1r\\$-\\$A9 \\$= \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ paired; paired-\\$t\\$\\s*\\$p\\{=\\}1\\.4\\{\\\\times\\}10\\^\\{-7\\}\\$, unpaired Welch \\$p\\{=\\}([\\d.]+)\\$\\)",
    "expect": {
     "path": "results/e1_replay.json:welch_p/A1r-replay-erm vs A9-oracle-pinned"
    },
@@ -2363,37 +2364,40 @@
    "tex_pattern": "replay remains far above A6 \\(\\$p\\{=\\}([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
    "expect": {
     "path": "results/e1_replay.json:welch_p/A1r-replay-erm vs A6-risp-inv"
-   }
+   },
+   "group": 1
   },
   {
    "id": "e1.replay.inv.value",
-   "tex_pattern": "\\(A1r\\$\\^\\{\\+\\}\\$ \\$([\\d.]+)\\$, beating the ERM-trained oracle assignment A9 at Holm \\$([\\d.]+)\\$\\)",
+   "tex_pattern": "A1r\\$\\^\\{\\+\\}\\$ \\$([\\d.]+)\\$",
    "expect": {
     "path": "results/e1_replay.json:post_react/A1r-replay-inv/mean"
-   }
+   },
+   "group": 1
   },
   {
    "id": "e1.replay.inv.beatsA9.holm",
-   "tex_pattern": "\\(A1r\\$\\^\\{\\+\\}\\$ \\$([\\d.]+)\\$, beating the ERM-trained oracle assignment A9 at Holm \\$([\\d.]+)\\$\\)",
+   "tex_pattern": "beating the ERM-trained oracle assignment A9 at Holm \\$([\\d.]+)\\$",
    "expect": {
     "path": "results/e1_replay.json:holm_p/A1r-replay-inv vs A9-oracle-pinned"
    },
-   "group": 2
+   "group": 1
   },
   {
    "id": "e1.replay.inv.vsA6.holm",
-   "tex_pattern": "\\(vs\\.\\\\ A6 Holm \\$([\\d.]+)\\$; vs\\.\\\\ A10 Holm \\$([\\d.]+)\\$\\)",
+   "tex_pattern": "vs\\.\\\\ A6 Holm \\$([\\d.]+)\\$",
    "expect": {
     "path": "results/e1_replay.json:holm_p/A1r-replay-inv vs A6-risp-inv"
-   }
+   },
+   "group": 1
   },
   {
    "id": "e1.replay.inv.vsA10.holm",
-   "tex_pattern": "\\(vs\\.\\\\ A6 Holm \\$([\\d.]+)\\$; vs\\.\\\\ A10 Holm \\$([\\d.]+)\\$\\)",
+   "tex_pattern": "vs\\.\\\\\\s*A10 Holm \\$([\\d.]+)\\$",
    "expect": {
     "path": "results/e1_replay.json:holm_p/A1r-replay-inv vs A10-oracle-inv"
    },
-   "group": 2
+   "group": 1
   },
   {
    "id": "e1m.gamma.mean",
@@ -2692,7 +2696,7 @@
   },
   {
    "id": "x1.slopes.minp",
-   "tex_pattern": "all registered slopes n\\.s\\., \\$p \\\\ge ([\\d.]+)\\$ pooled",
+   "tex_pattern": "all registered\\s*slopes n\\.s\\., min \\$p = ([\\d.]+)\\$ pooled",
    "expect": {
     "expr": "min(a, b, c)",
     "inputs": {

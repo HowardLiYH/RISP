@@ -200,11 +200,14 @@ The retention half of this division has a recent formal ancestor in the
 average-reward account of continual learning \citep{kumar2025continual},
 which argues that a computationally bounded agent should forget freely
 whatever will not recur---forgetting non-recurring information is not
-catastrophic---and retain exactly what returns. Our forgetting deficit
-$\hat\Gamma_{\mathrm{forget}}$ (Contribution C4) is a decision-regret
-operationalization of that thesis for markets: a per-substrate
-measurement of whether the regime inventory recurs in a way a bounded
-learner is paying to relearn.
+catastrophic---and that even recurring information need not be retained
+when relearning on arrival is cheap: their capacity-bounded agent facing
+a two-season market relearns each season's function as it arrives. Our
+deficit $\hat\Gamma_{\mathrm{forget}}$ (Contribution C4) is a
+decision-regret operationalization of exactly that trade-off for
+markets---a per-substrate measurement of whether the regime inventory
+recurs in a way a bounded learner is paying to relearn---and
+Proposition~\ref{prop:breakeven} prices their relearn-quickly proviso.
 
 The paper's single falsifiable claim is the resulting $2{\times}2$:
 crossing allocation mechanism (reward-driven vs.\ reward-independent) with
@@ -275,10 +278,16 @@ related work thus becomes a supporting experiment.
     reactivation, leakage-free causal regime labelings, and two
     pre-registered gates run \emph{before} claiming gains. \emph{Gate 1}
     (structure): regime-conditioning must beat block-shuffled labels on
-    the decision metric. \emph{Gate 2} (harvestable forgetting): the
-    measured forgetting deficit---monolith minus oracle-pinned
-    post-reactivation regret, the empirical $\Gforget$ of
-    Proposition~\ref{prop:decomp}---must be positive. The record across
+    the decision metric. \emph{Gate 2} (harvestable deficit): the
+    measured deficit---monolith minus oracle-pinned post-reactivation
+    regret---must be positive. The decomposition of
+    Proposition~\ref{prop:decomp} bounds this quantity's
+    \emph{transient} branch (eviction-relearning), which is the
+    measured mechanism in our controlled settings; on the real
+    substrate where the probe profile shows no decay
+    (Section~\ref{sec:e1f}), $\hat\Gamma$ measures a persistent
+    quantity no proposition in this paper bounds---we say so rather
+    than borrow the theorem's authority. The record across
     the real substrates (Sections~\ref{sec:e0}--\ref{sec:e1f}): daily
     crypto/commodities fail gate 1 and dissociate null, as required;
     4-hour crypto passes gate 1, fails gate 2, dissociates null; on
@@ -343,7 +352,14 @@ oracle audit on the prediction metric \citep{li2026gause}.
 for persistent market states \citep{nystrup2020greedy} detect regimes and
 condition a \emph{single} model on them. None address bounded capacity or
 dormancy-driven forgetting of the specialist itself: the implicit assumption
-is that conditioning information is free to retain. Our monolith arm
+is that conditioning information is free to retain. Regime-switching
+forecast combination \citep{elliott2005optimal} conditions the
+combination \emph{weights} on an inferred regime but likewise assumes
+every component model remains fully estimated while its regime is
+dormant: the regime moves the weights, never the fitness of the
+experts; the regime-conditional allocation deficit of
+Section~\ref{sec:e1f} measures precisely that assumption's failure
+under bounded capacity. Our monolith arm
 (regime-conditioned, capacity-bounded, always trained on the active regime)
 is this literature's best case under a capacity budget, and the comparison
 isolates what conditioning alone cannot provide.
@@ -366,8 +382,24 @@ distributions \citep{capitaine2026online}; that analysis treats drift
 as unstructured, whereas our setting's difficulty is \emph{recurrence
 with dormancy}---the property that makes retention a design axis at
 all---which drift-only regret bounds do not touch.
-% TODO(related-work): consider citing ReCAP here once its internals
-% have been read in full; do not add it on the abstract alone.
+Closest in application is ReCAP \citep{pan2026recap}, which builds the
+retention machinery end to end for portfolio management: change-point
+detection on market-state features segments history into variable-length
+regimes, each distilled into a policy-difference vector stored in a
+library that is frozen at deployment (only a state-driven softmax gate
+and the current regime's vector keep training), so that a returning
+regime is served by re-weighting stored vectors. This is
+parameter-isolation retention realized by design---detected regime
+identity playing the role task identity plays in the PackNet family
+above---evaluated by the standard averaged forgetting/transfer metrics
+rather than post-reactivation decision regret, with no retention
+counterfactual. ReCAP therefore \emph{presumes} the question our
+protocol makes primary: it deploys retention unconditionally, with no
+pre-deployment test of whether the substrate offers a harvestable
+deficit. The diagnostic of Section~\ref{sec:e1f} prices exactly such
+machinery before it is bought---and our record contains real substrates
+where the sign is negative and an always-on retention stack pays the
+premium with no claim to collect.
 
 \paragraph{Online learning and ensembles.} Hedge/multiplicative weights
 \citep{freund1997decision, arora2012multiplicative}, universal portfolios
@@ -899,6 +931,10 @@ near-certain, short enough that cumulative carrying cost does not swamp the
 one-shot reactivation saving. Both endpoints are computed from measured
 quantities in Section~\ref{sec:e3}.
 \end{proposition}
+% TODO(restructure): six-line capacity-constrained service-gap
+% proposition (persistent branch of the deficit), anchored on
+% kumar2025continual, so both branches of the sign rule are creatures
+% of the same theory.
 
 \begin{remark}[Batching the competition: a prediction revised by experiment]
 \label{rem:batching}
@@ -1211,7 +1247,8 @@ burst-refit on the retained buffer at every head recreation---an
 implementation committed in advance (\texttt{PREREG\_FRENCH49.md}~D) so
 that the deficit could not survive as an artifact of our own SGD
 budget. It closes only $56.3\%$ of the A1$-$A9 deficit (A1r $0.0329$;
-A1r$-$A9 $= +0.00073 \pm 0.00025$ paired, $p{=}0.011$)---\emph{below}
+A1r$-$A9 $= +0.00073 \pm 0.00025$ paired; paired-$t$
+$p{=}1.4{\times}10^{-7}$, unpaired Welch $p{=}0.011$)---\emph{below}
 our lodged $60\%$ prediction, which activates the registered
 anti-branch: eviction-coupling is \emph{stronger} than the theory
 requires, i.e., the deficit is not merely a data-loss effect. And
@@ -1253,6 +1290,19 @@ It does: $\Gamma_{\mathrm{mlp}} = +0.01009 \pm 0.00037$ (A1$-$A9
 paired, 100 seeds, $p = 1.9\times10^{-78}$), and it is
 reactivation-localized---the probe-window gap is ${\approx}4\times$
 the steady-state gap---interference \emph{measured}, not injected.
+The A1-vs-A9 contrast is the classical single-head-versus-multi-head gap
+of task-incremental continual learning \citep{vandeven2019three,
+farquhar2018towards}, and interference carried by a shared
+representation is well documented \citep{ramasesh2021anatomy}; what this
+section adds is not the existence of trunk interference but its
+\emph{allocation} reading: at fixed architecture, with no eviction
+machinery and no task identity given, the gap opens under reward-driven
+assignment, is reactivation-localized in decision regret, and is closed
+by emergent competition that matches the oracle it was never handed.
+The paired steady-state gap ($+0.0026$) reflects the single readout's
+conditioning-capacity disadvantage; the reactivation-localized
+\emph{excess}---$+0.0075 \pm 0.0004$, the probe gap net of the steady
+gap---is the emergent-forgetting quantity proper.
 Emergent competition again matches the oracle it was never handed
 (A6 $0.0328$ vs.\ A9 $0.0329$ post-reactivation), pinning the three
 common regimes in every seed with the crisis niche uniquely owned but
@@ -1565,7 +1615,7 @@ cell-dormancy, log union-dormancy, and rehearsal count---with event
 fixed effects across thresholds, exploiting the same calendar crises
 appearing at multiple thresholds with different rehearsal
 histories---finds \emph{no} explanatory covariate (all registered
-slopes n.s., $p \ge 0.44$ pooled, within-event likewise; probe-overlap
+slopes n.s., min $p = 0.44$ pooled, within-event likewise; probe-overlap
 dilution ruled out at $\le 4.4\%$). The X3 half-life probe is sharper:
 at the $15\%$ threshold the A1$-$A9 gap does \emph{not} decay across
 the 15-day probe window (tail $\ge$ start; exponential fits
@@ -1605,7 +1655,11 @@ tier}: $\hat\Gamma_{\mathrm{net}} = +0.00126 \pm 0.00020 \to +0.00161
 (A6-vs-A1 Holm $4.6\times10^{-19}$ at 25 bps, strengthening to
 $1.3\times10^{-29}$ at 100 bps). The mechanism is the registered one: a
 reactivated monolith churns its top-5 book hardest exactly when spreads
-are widest (A1 turnover $1.03$/day vs.\ A6 $0.62$). Our own lodged
+are widest (A1 turnover $1.03$/day vs.\ A6 $0.62$). The lodged
+arm-only-pays sensitivity is not merely consistent but \emph{identical}:
+orderings, $\hat\Gamma_{\mathrm{net}}$ values, and $p$-values match the
+both-pay convention at every tier, because the oracle's cost term
+cancels in the regret difference. Our own lodged
 pessimism---``the overall-regret margin is expected \emph{not} to
 survive cost adjustment''---is refuted in the favorable direction. And
 the L1 inversion \textbf{reverses net of costs}: A6 beats A1 at every
@@ -1646,7 +1700,15 @@ byte-identical L3 protocol---frozen $15\%$ specification, same
 features, arms, tests, and the lodged sign hypothesis; zero new
 researcher degrees of freedom---on an era the design had never seen:
 the 36 industries with complete daily history, 1926-07-01 through
-1989-12-31 (16{,}983 days, Depression through the 1987 crash). Gate 1
+1989-12-31 (16{,}983 days, Depression through the 1987 crash). The
+design follows the pre-discovery-sample tradition of
+\citet{linnainmaa2018history}, whose base rate is the right prior
+here: most in-sample anomalies attenuate or die pre-sample, and
+generic pre-sample decay predicts attenuation \emph{everywhere}---not
+a sign record that scores in both directions with the paying window
+relocating as crisis density shifts; the out-of-sample discipline is
+the Goyal--Welch standard \citep{goyal2008comprehensive,
+mclean2016does}. Gate 1
 delivers its strongest pass in the program ($z = 23.5$; conditioning
 beats pooled by $+10.4\%$)---and the frozen $15\%$ cell
 \emph{inverts} ($\hat\Gamma = -0.00024 \pm 0.00008$; A1 beats A6,
@@ -1662,11 +1724,35 @@ A6 $<$ A5 $<$ A1 ordering emerges out-of-sample---$10\%$
 $1.9\times10^{-6}$) and 1958--89 ($\hat\Gamma = +0.00021 \pm 0.00015$,
 Holm $2.1\times10^{-4}$)---and two negative-deficit cells where the
 predicted inversion appears ($15\%$ full era; 1926--57, Holm $0.023$).
-The single miss is the $12\%$ cell: $\hat\Gamma$ marginally negative
-with a flat arm table---a hit under the weak scoring (``dissociation
+The single miss is the $12\%$ cell: $\hat\Gamma$ negative-significant
+in the seed-noise register ($-0.00010 \pm 0.00007$) with a flat arm
+table---a hit under the weak scoring (``dissociation
 iff $\hat\Gamma$ significantly positive'') and a miss under the strong
 directional scoring (negative $\Rightarrow$ inversion); we report both
-scorings rather than choose the flattering one. The sweep pattern is
+scorings rather than choose the flattering one.
+
+\textbf{Scorecard accounting, stated against ourselves.} Three
+qualifications bound what ``five of six'' can mean. First, the cells
+are not independent: the $15\%$ full-era cell is the \emph{union} of
+the two sub-era cells---its inversion largely restates the 1926--57
+inversion---and the four threshold cells share one history's crises.
+Alternative countings a reader may prefer: $3/4$ (thresholds only),
+$4/5$ (disjoint cells), $5/6$ (as published, conservatively scored),
+$6/6$ (weak form). Second, the weak/strong scoring taxonomy was
+formalized in the verdict addendum \emph{after} these runs: the
+registration lodged the sign hypothesis but not the hit/miss boundary
+for a negative-significant $\hat\Gamma$ with a flat table. Third, the
+lodged rule was stated for walk-forward designs, and we decline to
+hide behind that scoping: at 100 seeds the two \emph{stitched} designs
+now show positive-significant $\hat\Gamma$ ($+0.00023 \pm 0.00015$ and
+$+0.00023 \pm 0.00016$) with flat arm families (min raw $p \ge 0.34$)
+---strong-form misses if scored. Counted inclusively the record is
+$5/8$ under the strong form and $8/8$ under the weak form. The honest
+summary: the scorecard's evidential force is closer to two-to-three
+effectively independent observations, with both directions
+represented, than to six independent trials---and its first genuinely
+temporal test (diagnostic measured before the scored outcome) is the
+lodged forward commitment, not anything in this table. The sweep pattern is
 equally instructive: the fragility of the 1990--2025 result
 \emph{replicates in pattern}---the deficit again lives at essentially
 one threshold, flanked by flat and inverted neighbors---but the window
@@ -1692,7 +1778,7 @@ density rather than of the threshold per se.
     (full pre-registered ordering / flat / inversion, classified by the
     pre-stated rule). Positive deficits coincide with orderings and
     negative deficits with inversions in both eras; the single miss
-    ($12\%$ withheld: marginally negative $\hat\Gamma$, flat table) is
+    ($12\%$ withheld: negative-significant $\hat\Gamma$, flat table) is
     annotated. Walk-forward intervals are seed noise conditional on each
     window's single history.}
     \label{fig:signrule}
@@ -1744,6 +1830,14 @@ worth buying at all---and the replay-equipped monolith, whose buffer
 is not coupled to head eviction, has now been run as the natural
 competing baseline in both settings: it buys most of the deficit and
 still loses to the pool (this section and Section~\ref{sec:e1}).
+Finally, the persistent, non-decaying form of the deficit is the
+learner-side analogue of slow-moving capital
+\citep{duffie2010presidential, mitchell2007slow}: there the capital,
+here the training resource, follows recent reward and therefore
+arrives at the dislocation late---and the cost battery's finding that
+the deficit \emph{strengthens} net of crisis-window costs is that
+literature's signature, measured in an allocator's parameters rather
+than in prices.
 
 \paragraph{Caveats at the same prominence as the result.} (i) Each
 walk-forward design shares one market history per window; seeds vary
@@ -2000,6 +2094,9 @@ the decision-domain analogue of GAUSE's stale-specialist result under
 intra-regime drift: reward-independent retention is an asset under
 dormancy and a liability under exploitable drift, and the honest
 deliverable is the location of the boundary.
+
+One scope note belongs here rather than only in the limitations: the inversion documented in this section is established for the linear specialist class; under the shared-trunk gradient-descent replication of Section~\ref{sec:e1m} the high-SNR comparison diverges (the deficit grows rather than inverts, with the single-readout caveat discussed there), so the E6 boundary should be read as a property of the linear setting until the neural sweep is architecture-matched.
+
 
 \subsection{Statistical protocol and what we deliberately do not claim}
 \label{sec:stats}
