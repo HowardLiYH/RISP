@@ -473,3 +473,34 @@ point. All future registrations in this program are OSF-first.
   interpretation). Event-robust strictly; two-recession-concentrated;
   not era-consistent; materially weaker than the L3 cell's profile. The
   cell is now citable as complete, carrying this sentence.
+
+---
+
+# PRE-REGISTRATION H — the banded monolith (turnover-discipline control) (written 2026-07-16 BEFORE any run; motivated by the practitioner review's standing demand)
+
+**Question:** is the pool's net-of-cost advantage purchasable for free with
+a no-trade band on the monolith? The cost battery showed A1 churns
+1.03/day vs A6's 0.62 exactly when spreads are widest; a band is the
+cheapest desk countermeasure and must be tested before the net-cost
+claims are cited as pool-specific.
+
+**Arm A1b (banded monolith):** identical to A1 except the served
+portfolio updates only when the newly ranked top-k differs from the
+held book by more than a hysteresis band; two lodged variants,
+b ∈ {1 name, 2 names} (update only if ≥b+1 names would change). No other
+changes; training identical to A1.
+
+**Battery:** French-49 L3@15% walk-forward and L1 walk-forward (the two
+cells where the net claims live), arms {A1, A1b(1), A1b(2), A9, A6},
+20 seeds, standard conventions, gross and net-25bps (both-pay).
+
+**Predictions:** PH1 (~55%): banding materially cuts A1's net cost drag
+(turnover falls ≥30%) but does NOT close the net gap to A6 on L3
+(selection quality, not just churn, carries part of the deficit).
+PH2 (~30%): banding closes most of the L1 net reversal (where Γ≤0, the
+pool's net win was mostly discipline — the turnover-discipline product
+is buyable with a band there, and the paper's L1-reversal sentence is
+relabeled accordingly). PH3 (adverse, ~15–20%): banded-A1 ≈ A6 net on
+L3 too — the pool's net-of-cost superiority claim is withdrawn in favor
+of "any turnover-disciplined implementation collects it," reported at
+full prominence per the standing commitment.
