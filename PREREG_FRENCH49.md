@@ -504,3 +504,43 @@ relabeled accordingly). PH3 (adverse, ~15–20%): banded-A1 ≈ A6 net on
 L3 too — the pool's net-of-cost superiority claim is withdrawn in favor
 of "any turnover-disciplined implementation collects it," reported at
 full prominence per the standing commitment.
+
+---
+
+# ADDENDUM I — verdicts for addenda H, D4, D5 (written 2026-07-16 AFTER the runs; registrations above unedited)
+
+- **PH3 (adverse branch): REFUTED — the pool's net-of-cost superiority
+  SURVIVES the banded countermeasure.** A6 beats both banded monoliths
+  net-25bps on L3 (Holm ≤7.1e-17; gap ≥79% intact) and on L1 (residual
+  +0.00028±0.00011, Holm 2.1e-5). Banding is free (gross unharmed, net
+  improves) yet cannot buy the pool's advantage.
+- **PH1: substantive clause CONFIRMED a fortiori; lodged magnitude
+  FAILED.** The registered bands cut turnover only 4.1%/15.7% (<30%
+  lodged) — A1's churn comes from >2-name daily re-rankings that defeat
+  narrow bands — while the net gap to A6 stands. "Selection quality, not
+  just churn, carries the deficit" holds.
+- **PH2: PARTIAL; relabeling clause NOT triggered.** b=2 closes 62% of
+  the L1 net reversal on magnitude; the residual A6 advantage remains
+  significant. The L1-reversal sentence keeps its label with the
+  attenuation reported alongside.
+- **D4: a FOURTH, UNREGISTERED outcome — A3′ is strictly WORSE than A3**
+  (0.04580 vs 0.03748; Holm 1.7e-68), audited not-artifact (training
+  intensity matched 1.000 vs 1.001 calls/day; serving path verbatim
+  A3). Mechanism: under A3 the capital leader holds a head for the
+  active regime 94.6% of days (reward-coupled training is
+  self-correcting on the serving side); under A3′ only 39.7% — lagged
+  capital routes serving to the previous regime's owner, which under
+  siloed training holds nothing for the active regime.
+  Reward-coupled SERVING alone is anti-selective at switches. Reported
+  at full prominence as an unpredicted cell.
+- **D5: the upper-quantile concentration prediction FAILS on synthetic**
+  (gap ratios to median: q75 1.09, q90 0.68, CVaR@10% 0.43; all Holm
+  n.s.; CVaR leans OPPOSITE). Pre-committed language applies verbatim:
+  the tail interpretation of the CVaR-form decomposition is demoted to
+  an unconfirmed bound. The French-L3 panel (descriptive-only as
+  lodged) leans the predicted way (median +0.00062 → CVaR +0.00264),
+  unscored.
+- Regression proofs: byte-identical 2-seed e1 (sha256 match) before/
+  after all edits; banded battery reproduces the D3 cost series per-seed
+  exactly. All open registrations are now closed except the two
+  market-clock forward tests (temporal-deployment 2027-04-07; CRSP).

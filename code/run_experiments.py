@@ -92,7 +92,14 @@ def e1(seeds=SEEDS, K=2, het=1.0, memory="hard", tag="e1_synth",
              ("A1r-replay-inv", "A6-risp-inv"),
              ("A1r-replay-inv", "A9-oracle-pinned"),
              ("A1r-replay-inv", "A10-oracle-inv"),
-             ("A1r-replay-inv", "A1r-replay-erm")]
+             ("A1r-replay-inv", "A1r-replay-erm"),
+             # PREREG D4 A3' pairs -- same guard: they only enter the family
+             # when A3p-shadowtrain is actually in `arms`, so every existing
+             # run's welch/holm output is unchanged.
+             ("A3p-shadowtrain", "A3-recentperf"),
+             ("A3p-shadowtrain", "A5-risp-erm"),
+             ("A3p-shadowtrain", "A1-monolith-erm"),
+             ("A3p-shadowtrain", "A9-oracle-pinned")]
     pv = {}
     for a, b in pairs:
         if a in res and b in res:

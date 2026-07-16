@@ -435,6 +435,62 @@ class ReplayMonolithArm(ArmBase):
         self.s.learn(X, y, r, e)
 
 
+class BandedMonolithArm(ArmBase):
+    """A1b (PREREG H, additive): banded monolith -- the turnover-discipline
+    control. Identical to A1-monolith-erm except the SERVED portfolio z
+    updates only when the newly ranked top-k differs from the currently held
+    book by more than `band` names (update only if >= band+1 names would
+    change). TRAINING is identical to A1: the underlying Specialist sees the
+    same data, same RNG stream, same SGD path (observe() delegates exactly as
+    MonolithArm.observe); the band affects only the served decision, hence
+    served regret and turnover. Two lodged variants: band=1 (A1b1-banded)
+    and band=2 (A1b2-banded).
+
+    Serving mechanics: decide() computes the specialist's y_hat exactly as A1
+    would (same RNG consumption on missing heads), ranks the top-k book
+    z_new = solve_topk(y_hat). If the number of names that would enter or
+    leave the held book (max of entries, exits -- these are equal when both
+    books hold k names) exceeds the band, the book updates and decide()
+    returns y_hat unchanged (so run_arm's solve_topk reproduces z_new
+    exactly). Otherwise decide() returns a deterministic score vector (+1 on
+    held names, -1 elsewhere; no RNG) whose top-k is exactly the held book,
+    so run_arm's regret and turnover are computed on the held portfolio."""
+
+    def __init__(self, cfg, rng, mode="erm", memory="hard", beta=1.0, K=2,
+                 band=1):
+        self.s = Specialist(cfg.d, K, cfg.k, cfg.w_max, rng,
+                            mode=mode, memory=memory, beta=beta)
+        self.k, self.w_max = cfg.k, cfg.w_max
+        self.band = int(band)
+        self.held = None              # set of held names (weights all w_max)
+        self.n_rebalances = 0
+        self.n_days = 0
+        self.name = f"banded-monolith-{mode}-b{band}"
+
+    def decide(self, X, r):
+        y_hat = self.s.predict(X, r)
+        z_new = solve_topk(y_hat, self.k, self.w_max)
+        new_names = set(np.flatnonzero(z_new).tolist())
+        self.n_days += 1
+        if self.held is None:
+            self.held = new_names
+            self.n_rebalances += 1
+            return y_hat
+        changed = max(len(new_names - self.held),
+                      len(self.held - new_names))
+        if changed > self.band:
+            self.held = new_names
+            self.n_rebalances += 1
+            return y_hat
+        served = np.full(X.shape[0], -1.0)
+        if self.held:
+            served[sorted(self.held)] = 1.0
+        return served
+
+    def observe(self, X, y, r, e, served_regret):
+        self.s.learn(X, y, r, e)
+
+
 class RouterArm(ArmBase):
     """A2: Mixture-of-Experts with a gate trained on realized regret.
     The gate routes each regime to one expert; routed expert learns.
@@ -509,6 +565,33 @@ class RecentPerfArm(ArmBase):
             rg = regret(sp.predict(X, r), y, self.k, self.w_max)
             self.hist[i].append(rg)
             if self.rng.random() < v[i]:
+                sp.learn(X, y, r, e)
+
+
+class ShadowTrainRecentPerfArm(RecentPerfArm):
+    """A3' (PREREG D4, additive): shadow-trained recent-performance allocator.
+
+    Reward-driven CAPITAL/serving EXACTLY as A3-recentperf: capital share =
+    softmax of trailing performance over the same lookback/temp, the served
+    decision is the top-capital specialist's, and the per-specialist regret
+    history feeding the weights is updated identically (decide() and
+    _weights() are inherited untouched). TRAINING is reward-independent:
+    specialist i trains on every day of ITS OWN regime (own regime = i, the
+    same one-per-regime map A9-oracle-pinned uses: owner(r) = r % N)
+    regardless of capital share -- the capital-share training lottery
+    (rng.random() < v[i]) is the ONLY thing removed. Expertise is therefore
+    fully retained; only deployment is reward-routed. D4's dissociation:
+    strictly between A3 and A5 = organizational carrier (deployment
+    starvation); ~A5 = A3's failure was training starvation alone; ~A3 =
+    capital routing alone destroys the value of retained expertise."""
+
+    name = "recentperf-shadowtrain"
+
+    def observe(self, X, y, r, e, served_regret):
+        for i, sp in enumerate(self.specs):
+            rg = regret(sp.predict(X, r), y, self.k, self.w_max)
+            self.hist[i].append(rg)
+            if r % len(self.specs) == i:
                 sp.learn(X, y, r, e)
 
 
@@ -867,6 +950,13 @@ ARM_FACTORIES = {
 EXTRA_ARM_FACTORIES = {
     "A1r-replay-erm": lambda cfg, rng, K, mem: ReplayMonolithArm(cfg, rng, "erm", mem, K=K),
     "A1r-replay-inv": lambda cfg, rng, K, mem: ReplayMonolithArm(cfg, rng, "inv", mem, K=K),
+    # PREREG H banded-monolith variants (A1b): b=1 / b=2 name hysteresis on
+    # the SERVED book only; training identical to A1.
+    "A1b1-banded": lambda cfg, rng, K, mem: BandedMonolithArm(cfg, rng, "erm", mem, K=K, band=1),
+    "A1b2-banded": lambda cfg, rng, K, mem: BandedMonolithArm(cfg, rng, "erm", mem, K=K, band=2),
+    # PREREG D4 A3' (ASCII key "A3p"): A3 capital/serving, reward-independent
+    # own-regime training.
+    "A3p-shadowtrain": lambda cfg, rng, K, mem: ShadowTrainRecentPerfArm(cfg, rng, K=K, memory=mem),
 }
 
 
