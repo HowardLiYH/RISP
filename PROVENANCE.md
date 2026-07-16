@@ -27,6 +27,9 @@ of its timestamp custody*, honestly. Three grades:
 | CRSP forward test (osf_package/PREREG_CRSP.md) | 40b69ad 2026-07-15T12:24-04:00; **OSF-mirrored 2026-07-15 22:47 ET (osf.io/nsx4e)** | — | **FORWARD, third-party custody** (data not yet obtained; WRDS pending) | open |
 | NBER-labeler forward test (osf_package/PREREG_NBER_FRENCH49.md) | 40b69ad 2026-07-15T12:24-04:00; **OSF-mirrored 22:47 ET (osf.io/nsx4e)** | run 22:55–23:10 ET same day; results committed | **RESOLVED under third-party custody** — the program's first temporal cell | Addendum G: PN1 HIT (weak+strong, causal primary); PN2 confirmed; PN3 granularity branch; one strong-form miss in the non-causal robustness cell, disclosed; LORO/era supplement owed |
 
+| Temporal-deployment test (osf_package/PREREG_TEMPORAL_DEPLOYMENT.md) | git 2026-07-16; **OSF-mirrored 2026-07-15 23:35 ET (osf.io/nsx4e)** | frozen diagnostics committed on lodging; outcomes scored 2027-04-07 | **FORWARD, third-party custody — measurement-split** (the first cell whose diagnostic is computed on data ending before the outcome window begins) | open |
+| CRSP T-split amendment (osf_package/PREREG_CRSP_AMENDMENT_TSPLIT.md) | git 2026-07-16; **OSF-mirrored 2026-07-15 23:35 ET (osf.io/nsx4e)** | — | **FORWARD, third-party custody** (T-split primary design; net register and window estimator fixed pre-data; WRDS expected September) | open |
+
 Notes:
 - The withheld-era battery (E-F) has git-separated custody for its
   *specification* (addendum E pushed before the runs began), but the
