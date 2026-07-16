@@ -459,3 +459,17 @@ point. All future registrations in this program are OSF-first.
 - Announcement dates verified against nber.org and recorded in the JSONs;
   endpoints inclusive; recession-cell dormancies 2,445/2,557 trading days
   (primary), matching the 1992→2001→2008→2020 gaps.
+
+- **Addendum G supplement (2026-07-16): the owed LORO/era slices are run**
+  (results/e_french49_nber_loro.json; sanity-reproduces Γ̂ exactly).
+  Disposition, stated in full: survives all 20 single-event and all
+  calendar exclusions (drop-2020 +0.00042±0.00026; drop-2008/09
+  +0.00036±0.00030) — not single-event-carried — but concentrated in the
+  two deep-dormancy recession entries (2009-01-06 d=1378; 2020-06-08
+  d=2445; dropping the former cuts Γ̂ to 41% of headline and extinguishes
+  the A1−A6 contrast), and the 2010s era block is NEGATIVE-significant
+  for both contrasts (that block contains zero recession-cell
+  reactivations — premium-without-claims at cell level, flagged as
+  interpretation). Event-robust strictly; two-recession-concentrated;
+  not era-consistent; materially weaker than the L3 cell's profile. The
+  cell is now citable as complete, carrying this sentence.
