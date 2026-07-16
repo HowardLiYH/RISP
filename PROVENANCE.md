@@ -24,8 +24,8 @@ of its timestamp custody*, honestly. Three grades:
 | PREREG C (threshold sweep) | 69f007a (with results) | 69f007a | **SELF-ATTESTED** | Addendum C: P8 refuted |
 | Addendum D (replay D1/D2, costs D3, A3′ D4, CVaR D5, seeds D6) | c4345e9 2026-07-15T12:22-04:00 | ac90d7e / 49a640e 14:15 | **GIT-SEPARATED** | Addendum F: D1 refuted-favorably, D2/D3 confirmed, D6 confirmed; D4/D5 unrun |
 | Addendum E (X1/X2/X3/X4, withheld era E-F, regional register E-R) | 5c96c35 2026-07-15T13:09-04:00 | e1f804b / 49a640e 14:15 | **GIT-SEPARATED** | Addendum F: X1 neither-branch, X3 anti-branch, X4 confirmed + divergence, E-F 5/6 scorecard; X2/E-R unrun |
-| CRSP forward test (osf_package/PREREG_CRSP.md) | 40b69ad 2026-07-15T12:24-04:00 | — | **FORWARD** (data not yet obtained; WRDS pending) | open |
-| NBER-labeler forward test (osf_package/PREREG_NBER_FRENCH49.md) | 40b69ad 2026-07-15T12:24-04:00 | — | **FORWARD** (frozen until OSF lodging; NBER dates never joined to any panel) | open |
+| CRSP forward test (osf_package/PREREG_CRSP.md) | 40b69ad 2026-07-15T12:24-04:00; **OSF-mirrored 2026-07-15 22:47 ET (osf.io/nsx4e)** | — | **FORWARD, third-party custody** (data not yet obtained; WRDS pending) | open |
+| NBER-labeler forward test (osf_package/PREREG_NBER_FRENCH49.md) | 40b69ad 2026-07-15T12:24-04:00; **OSF-mirrored 2026-07-15 22:47 ET (osf.io/nsx4e)** | — | **FORWARD, third-party custody** (unfrozen 2026-07-15 upon OSF lodging; NBER dates never joined to any panel before this point) | open |
 
 Notes:
 - The withheld-era battery (E-F) has git-separated custody for its
@@ -33,10 +33,11 @@ Notes:
   1926–1989 data itself has been publicly available for decades; the
   custody proves the spec was frozen before these runs, not that the era
   was unexaminable in principle. Both statements appear in the paper.
-- What no self-hosted record can prove is the absence of unreported
-  frozen specs (the file-drawer question). The OSF mirror of this ledger
-  and of the two FORWARD registrations — pending, user action — is the
-  custody upgrade that addresses it; after lodging, all future
-  registrations will be OSF-first.
+- **OSF custody established 2026-07-15 22:47 ET**: project osf.io/nsx4e
+  holds PREREG_FRENCH49_snapshot_2026-07-15.md, PREREG_CRSP.md, and
+  PREREG_NBER_FRENCH49.md under third-party timestamps. All future
+  registrations are OSF-first. (No self-hosted record can prove the
+  absence of unreported frozen specs; the OSF mirror is the custody
+  answer to that file-drawer question from this date forward.)
 - Independent check of any push time: GitHub's public event archive
   (GH Archive) records push events for public repositories.

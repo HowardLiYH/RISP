@@ -417,3 +417,14 @@ revised toward it — reported at full prominence either way.
   with the same ordering direction (family flat, min raw p=0.50) — the
   schedule-resampling design now leans the deficit's way, disclosed as a
   favorable wrinkle. Prediction "outcomes unchanged" CONFIRMED.
+
+---
+
+# CUSTODY UPDATE (2026-07-15, 22:47 ET)
+
+This document (as the snapshot PREREG_FRENCH49_snapshot_2026-07-15.md),
+PREREG_CRSP.md, and PREREG_NBER_FRENCH49.md were lodged with the Open
+Science Framework: project osf.io/nsx4e (created 2026-07-15 22:45 ET,
+files uploaded 22:47 ET). The NBER-labeler forward test is UNFROZEN as of
+this lodging; NBER dates had not been joined to any panel before this
+point. All future registrations in this program are OSF-first.
