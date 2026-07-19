@@ -50,7 +50,7 @@ tests the screen's verdict dissociated from realized value three times,
 including its strongest pass coinciding with an inverted outcome. The field
 record spans daily crypto and commodities (screen fails, evaluations go
 flat, as required), 4-hour crypto (screen passes, $\G=0$, flat again),
-and daily U.S. industry portfolios 1926--2025, where $\G$'s sign predicted
+and daily U.S. industry portfolios 1926--2025, where $\G$'s sign tracked
 the outcome direction in both directions: a positive deficit
 ($+0.00089\pm0.00011$) coincides with the full pre-registered arm ordering,
 a negative one with an inversion, and a frozen-specification replication on
@@ -148,7 +148,7 @@ externally custodied forward test that has since resolved, and a live
 temporal test whose diagnostics are already frozen
 (Section~\ref{sec:signrule}). The retention mechanism, its theory, and
 the controlled dissociation studies are developed in a companion
-manuscript \cite{companion2026} \todo{arxiv-id}; this paper is the
+manuscript \cite{companion2026}; this paper is the
 protocol, the number, and the record a practitioner needs to decide
 whether to pay to remember.
 
@@ -290,7 +290,10 @@ router over experts, recent-performance capital weighting across
 desks---all of which starve the dormant regime identically, because a
 dormant regime emits no reward to follow. A9 represents every
 \emph{isolation-preserving} implementation: a siloed desk, a frozen
-per-regime adapter store, an expert library with pinned members. The
+per-regime adapter store, an expert library with pinned members---and,
+at the cheap end, data retention alone: in the pre-registered replay
+control on this panel, a monolith that rehearses stored crisis
+episodes collects roughly 99\% of the deficit. The
 protocol prices the class boundary, not any implementation; choosing
 an implementation is a separate decision the companion studies
 \cite{companion2026}. Two practical notes. First, $\G$ is measured
@@ -389,7 +392,8 @@ pass ($+1.14\%$, $z=3.18$) & $-0.00013 \pm 0.00007$ (100 s) &
 net of costs \\
 French 49 industries, daily (1990--2025; L3 drawdown@15\%) &
 fail by pooled letter ($z=2.24$) & $+0.00089 \pm 0.00011$ (100 s) &
-full ordering (joint Holm $5.2{\times}10^{-65}$); cost-amplified \\
+full ordering (headline pair Holm $5.2{\times}10^{-65}$; binding chain
+pair $1.6{\times}10^{-15}$); cost-amplified \\
 Withheld era: 36 industries (1926--89; frozen L3 spec, 6 cells) &
 strongest pass ($z=23.5$) & sign varies by cell &
 sign rule 5/6, both directions; screen's best pass $\to$ inversion \\
@@ -446,7 +450,9 @@ the registration before any run) the screen \emph{fails} by the letter
 of its pooled sub-criterion while the deficit is positive---the first
 positive $\G$ on any real substrate in this program
 ($+0.00089 \pm 0.00011$, 100 seeds)---and the full pre-registered arm
-ordering emerges (joint Holm $5.2{\times}10^{-65}$), with the retaining
+ordering emerges (headline contrast, retain-vs-retrain, at Holm
+$5.2{\times}10^{-65}$; the ordering's binding pair, pool-with-invariance
+vs.\ pool-without, at $1.6{\times}10^{-15}$), with the retaining
 arms also ahead on overall regret. One labeler-anatomy fact matters for
 reading the number: the \emph{union} of the drawdown labeler's crisis
 states recurs every one to three years (the 2010, 2011, 2015--16, and
@@ -485,6 +491,7 @@ result in the companion \cite{companion2026}. The deployment
 consequence (the counterfactual prices retention either way) is
 unchanged; the mechanism attribution is open, and we say so.
 
+{\sloppy
 \textbf{The withheld era, 1926--1989.} The byte-identical frozen
 specification---same features, arms, tests, and the lodged sign
 hypothesis; zero new researcher degrees of freedom---was replicated on
@@ -501,12 +508,13 @@ positive-deficit cells reproducing the full ordering out-of-sample
 (10\%: $\G = +0.00020 \pm 0.00009$, Holm $1.9{\times}10^{-6}$;
 1958--89: $\G = +0.00021 \pm 0.00015$, Holm $2.1{\times}10^{-4}$) and
 two negative-deficit cells with the predicted inversion. The single
-miss (12\%: $\G$ marginally negative, arm table flat) is scored against
+miss (12\%: $\G$ negative with a CI excluding zero, arm table flat) is scored against
 the rule under its strong form and for it under its weak form;
 Section~\ref{sec:signrule} carries the full accounting. The paying
 threshold \emph{relocated} across eras ($15\% \to 10\%$) as crisis
 density shifted---the fragility replicates in pattern, not in location,
 so any deployment must estimate the window's location for its own era.
+\par}
 
 \textbf{The NBER cell: temporal custody.} The one cell whose ex-ante
 status a third party can certify used a labeler with no free threshold
@@ -645,8 +653,11 @@ touch---six withheld-era cells, the two schedule-resampled (stitched)
 1990--2025 designs, and the four NBER cells---the record is
 \textbf{8/12 under the strong form} (sign predicts the arm-table
 direction: ordering when significantly positive, inversion when
-negative) and \textbf{12/12 under the weak form} (dissociation iff
-$\G$ significantly positive). The four strong-form misses share one
+negative) and \textbf{12/12 under the weak form}, which is
+one-directional: dissociation \emph{only if} $\G$ is significantly
+positive---no cell dissociates without a positive deficit; the converse
+fails in the two stitched cells, and those failures are counted above
+as strong-form misses. The four strong-form misses share one
 shape: a marginally significant $\G$ with a flat arm table. Dependence
 caveats at full prominence: the withheld 15\% full-era cell is the
 union of its two sub-era cells; the four threshold cells share one
@@ -664,10 +675,13 @@ later batteries have git-separated custody (specification pushed
 publicly before results existed); the NBER cell resolved under
 third-party (OSF) custody; and all future registrations are OSF-first,
 which is the only available answer to the unreportable-frozen-specs
-question. As of this record every registration in the program is
-closed except the two market-clock forward tests: the
+question. As of this record every \emph{run} registration in the
+program is closed; open are the two market-clock forward tests---the
 temporal-deployment scoring (2027-04-07) and the CRSP constituent
-battery.
+battery---and two lodged-but-unrun registrations we disclose at the
+prominence a file drawer would deny them: a granularity-window map and
+a regional battery with region-specific sign predictions, scheduled
+before any further reanalysis of the 1990--2025 panel.
 
 \begin{table}[t]
 \centering
@@ -683,7 +697,8 @@ with anonymized view-only link}}
 \midrule
 Gates + dissociation; drawdown labeler; threshold sweep (2026-07-14) &
 self-attested (spec and results entered the repository together) \\
-Costs, replay, seed parity; mechanism probes; withheld era (2026-07-15)
+Costs, replay, seed parity; mechanism probes; withheld era (2026-07-15);
+banded-baseline control with lodged adverse branch (2026-07-16)
 & git-separated (spec pushed before runs; server timestamps) \\
 NBER announce-lagged forward test & \emph{resolved under third-party
 custody} (OSF 22:47 ET; data joined 22:55 ET; hit) \\
@@ -696,7 +711,8 @@ forward, third-party custody (open) \\
 \textbf{The live test.} The rule's standing changes register only with
 temporally split measurement, so the program's next cells are already
 committed. (1)~\emph{The deployment-form temporal test}: all
-diagnostics frozen on data through \textbf{2026-06-30}
+diagnostics frozen \textbf{2026-06-30}, on the vendored panel through
+2026-05-29
 ($\G = +0.00081 \pm 0.00033$ on the NBER cell;
 $+0.00091 \pm 0.00020$ on the drawdown cell---both positive, so the
 lodged prediction is that the retaining arms outperform in the outcome

@@ -11,7 +11,8 @@ matches a hand-pinned oracle it is never shown, and forgetting emerges
 under a shared neural trunk with nothing evicted (p = 2×10⁻⁷⁸). On real
 data, Γ̂'s sign has tracked the outcome direction of every resolved
 test — dissociations where positive, inversions where negative — across
-two eras of U.S. industry returns (8/12 strong-form, 12/12 weak-form;
+two eras of U.S. industry returns (8/12 strong-form, 12/12 under the
+one-directional weak form;
 all misses disclosed), surviving leave-one-event-out, era blocks, and
 crisis-window transaction costs, which amplify rather than erase the
 deficit. One cell is externally certified: an announcement-lagged
