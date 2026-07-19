@@ -3093,6 +3093,203 @@
      "b": "results/e_french49_nber_dissoc.json:primary_announcement_lagged/walkforward/post_react_net25/A9-oracle-pinned/mean"
     }
    }
+  },
+  {
+   "id": "banded.l3.netholm.b2vsA1",
+   "tex_pattern": "net regret improves \\(\\$b\\{=\\}2\\$ vs\\.\\\\ A1 net Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$ on L3\\)",
+   "expect": {
+    "path": "results/e_french49_banded.json:L3_walkforward/holm_p_net25_bothpay/A1b2-banded vs A1-monolith-erm"
+   }
+  },
+  {
+   "id": "banded.l3.holm.le",
+   "tex_pattern": "A6 beats both banded monoliths net of 25 bps on L3 \\(Holm \\$\\\\le ([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$",
+   "expect": {
+    "expr": "max(h1, h2)",
+    "inputs": {
+     "h1": "results/e_french49_banded.json:L3_walkforward/holm_p_net25_bothpay/A6-risp-inv vs A1b1-banded",
+     "h2": "results/e_french49_banded.json:L3_walkforward/holm_p_net25_bothpay/A6-risp-inv vs A1b2-banded"
+    }
+   },
+   "cmp": "le",
+   "note": "both banded-vs-A6 net Holm p-values are <= the quoted bound"
+  },
+  {
+   "id": "banded.l3.gapshare.b1",
+   "tex_pattern": "net gap remains \\$(\\d+)\\\\%\\$/\\$(\\d+)\\\\%\\$ intact at \\$b\\{=\\}1\\$/\\$b\\{=\\}2\\$",
+   "expect": {
+    "expr": "a/b*100",
+    "inputs": {
+     "a": "results/e_french49_banded.json:L3_walkforward/paired/net_A1b1_minus_A6/mean",
+     "b": "results/e_french49_banded.json:L3_walkforward/paired/net_A1_minus_A6/mean"
+    }
+   }
+  },
+  {
+   "id": "banded.l3.gapshare.b2",
+   "tex_pattern": "net gap remains \\$(\\d+)\\\\%\\$/\\$(\\d+)\\\\%\\$ intact at \\$b\\{=\\}1\\$/\\$b\\{=\\}2\\$",
+   "group": 2,
+   "expect": {
+    "expr": "a/b*100",
+    "inputs": {
+     "a": "results/e_french49_banded.json:L3_walkforward/paired/net_A1b2_minus_A6/mean",
+     "b": "results/e_french49_banded.json:L3_walkforward/paired/net_A1_minus_A6/mean"
+    }
+   }
+  },
+  {
+   "id": "banded.l1.residual.mean",
+   "tex_pattern": "on L1 \\(residual \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$, Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e_french49_banded.json:L1_walkforward/paired/net_A1b2_minus_A6/mean"
+   }
+  },
+  {
+   "id": "banded.l1.residual.ci",
+   "tex_pattern": "on L1 \\(residual \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$, Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "group": 2,
+   "expect": {
+    "path": "results/e_french49_banded.json:L1_walkforward/paired/net_A1b2_minus_A6/ci95"
+   }
+  },
+  {
+   "id": "banded.l1.residual.holm",
+   "tex_pattern": "on L1 \\(residual \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$, Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "group": 3,
+   "expect": {
+    "path": "results/e_french49_banded.json:L1_walkforward/holm_p_net25_bothpay/A6-risp-inv vs A1b2-banded"
+   }
+  },
+  {
+   "id": "banded.l1.closure.b2",
+   "tex_pattern": "\\$b\\{=\\}2\\$ closes \\$(\\d+)\\\\%\\$ of the L1 net-reversal magnitude",
+   "expect": {
+    "expr": "(1 - a/b)*100",
+    "inputs": {
+     "a": "results/e_french49_banded.json:L1_walkforward/paired/net_A1b2_minus_A6/mean",
+     "b": "results/e_french49_banded.json:L1_walkforward/paired/net_A1_minus_A6/mean"
+    }
+   }
+  },
+  {
+   "id": "banded.turnovercut.b1",
+   "tex_pattern": "bands cut A1's turnover only \\$([\\d.]+)\\\\%\\$/\\$([\\d.]+)\\\\%\\$",
+   "expect": {
+    "path": "results/e_french49_banded.json:L3_walkforward/turnover_drop_vs_A1_pct/A1b1-banded"
+   }
+  },
+  {
+   "id": "banded.turnovercut.b2",
+   "tex_pattern": "bands cut A1's turnover only \\$([\\d.]+)\\\\%\\$/\\$([\\d.]+)\\\\%\\$",
+   "group": 2,
+   "expect": {
+    "path": "results/e_french49_banded.json:L3_walkforward/turnover_drop_vs_A1_pct/A1b2-banded"
+   }
+  },
+  {
+   "id": "a3p.post.mean",
+   "tex_pattern": "A3\\$'\\$ is strictly \\\\emph\\{worse\\} than A3 \\(\\$([\\d.]+) \\\\pm ([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ post-reactivation, 100 seeds; Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e1_a3prime.json:post_react/A3p-shadowtrain/mean"
+   }
+  },
+  {
+   "id": "a3p.post.ci",
+   "tex_pattern": "A3\\$'\\$ is strictly \\\\emph\\{worse\\} than A3 \\(\\$([\\d.]+) \\\\pm ([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ post-reactivation, 100 seeds; Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "group": 2,
+   "expect": {
+    "path": "results/e1_a3prime.json:post_react/A3p-shadowtrain/ci95"
+   }
+  },
+  {
+   "id": "a3p.a3.post.mean",
+   "tex_pattern": "A3\\$'\\$ is strictly \\\\emph\\{worse\\} than A3 \\(\\$([\\d.]+) \\\\pm ([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ post-reactivation, 100 seeds; Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "group": 3,
+   "expect": {
+    "path": "results/e1_a3prime.json:post_react/A3-recentperf/mean"
+   }
+  },
+  {
+   "id": "a3p.a3.post.ci",
+   "tex_pattern": "A3\\$'\\$ is strictly \\\\emph\\{worse\\} than A3 \\(\\$([\\d.]+) \\\\pm ([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ post-reactivation, 100 seeds; Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "group": 4,
+   "expect": {
+    "path": "results/e1_a3prime.json:post_react/A3-recentperf/ci95"
+   }
+  },
+  {
+   "id": "a3p.holm",
+   "tex_pattern": "A3\\$'\\$ is strictly \\\\emph\\{worse\\} than A3 \\(\\$([\\d.]+) \\\\pm ([\\d.]+)\\$ vs\\.\\\\ \\$([\\d.]+) \\\\pm ([\\d.]+)\\$ post-reactivation, 100 seeds; Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "group": 5,
+   "expect": {
+    "path": "results/e1_a3prime.json:holm_p/A3p-shadowtrain vs A3-recentperf"
+   }
+  },
+  {
+   "id": "cvar.ratio.q75",
+   "tex_pattern": "gap-to-median ratios are \\$([\\d.]+)\\$ \\(q75\\), \\$([\\d.]+)\\$ \\(q90\\), and \\$([\\d.]+)\\$ \\(CVaR@\\$10\\\\%\\$\\)",
+   "expect": {
+    "path": "results/e_cvar_panel.json:synthetic/concentration_tests/q75/ratio_gap_vs_median"
+   }
+  },
+  {
+   "id": "cvar.ratio.q90",
+   "tex_pattern": "gap-to-median ratios are \\$([\\d.]+)\\$ \\(q75\\), \\$([\\d.]+)\\$ \\(q90\\), and \\$([\\d.]+)\\$ \\(CVaR@\\$10\\\\%\\$\\)",
+   "group": 2,
+   "expect": {
+    "path": "results/e_cvar_panel.json:synthetic/concentration_tests/q90/ratio_gap_vs_median"
+   }
+  },
+  {
+   "id": "cvar.ratio.cvar10",
+   "tex_pattern": "gap-to-median ratios are \\$([\\d.]+)\\$ \\(q75\\), \\$([\\d.]+)\\$ \\(q90\\), and \\$([\\d.]+)\\$ \\(CVaR@\\$10\\\\%\\$\\)",
+   "group": 3,
+   "expect": {
+    "path": "results/e_cvar_panel.json:synthetic/concentration_tests/cvar10/ratio_gap_vs_median"
+   }
+  },
+  {
+   "id": "cvar.holm.min",
+   "tex_pattern": "all Holm-n\\.s\\.\\\\ \\(min corrected \\$p = ([\\d.]+)\\$\\)",
+   "expect": {
+    "expr": "min(a, b, c)",
+    "inputs": {
+     "a": "results/e_cvar_panel.json:synthetic/concentration_holm_p/gap(q75) - gap(median)",
+     "b": "results/e_cvar_panel.json:synthetic/concentration_holm_p/gap(q90) - gap(median)",
+     "c": "results/e_cvar_panel.json:synthetic/concentration_holm_p/gap(cvar10) - gap(median)"
+    }
+   }
+  },
+  {
+   "id": "cvar.excess.mean",
+   "tex_pattern": "excess gap \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$",
+   "abs": true,
+   "expect": {
+    "path": "results/e_cvar_panel.json:synthetic/concentration_tests/cvar10/mean_excess_gap"
+   }
+  },
+  {
+   "id": "cvar.excess.ci",
+   "tex_pattern": "excess gap \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$",
+   "group": 2,
+   "expect": {
+    "path": "results/e_cvar_panel.json:synthetic/concentration_tests/cvar10/ci95"
+   }
+  },
+  {
+   "id": "cvar.french.median",
+   "tex_pattern": "median gap \\$\\+([\\d.]+)\\$ rising to \\$\\+([\\d.]+)\\$ at CVaR@\\$10\\\\%\\$",
+   "expect": {
+    "path": "results/e_cvar_panel.json:french_L3_descriptive/gap_quantiles/median"
+   }
+  },
+  {
+   "id": "cvar.french.cvar10",
+   "tex_pattern": "median gap \\$\\+([\\d.]+)\\$ rising to \\$\\+([\\d.]+)\\$ at CVaR@\\$10\\\\%\\$",
+   "group": 2,
+   "expect": {
+    "path": "results/e_cvar_panel.json:french_L3_descriptive/gap_quantiles/cvar10"
+   }
   }
  ]
 }

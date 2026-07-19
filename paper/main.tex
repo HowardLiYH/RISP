@@ -268,7 +268,9 @@ related work thus becomes a supporting experiment.
     \Ginv(\delta) + \Gforget$
     (Proposition~\ref{prop:decomp})---allocation controls the mean of the
     reactivation transient, the invariance objective its tail across
-    episode draws---in which $\Gforget = 0$ for \emph{any}
+    episode draws, a tail reading whose pre-registered quantile test
+    subsequently \emph{failed}, demoting it to an unconfirmed bound
+    (see after Proposition~\ref{prop:decomp})---in which $\Gforget = 0$ for \emph{any}
     isolated covering assignment while reward-driven assignment
     drives it to the full relearning cost at an explicit rate
     (Proposition~\ref{prop:dichotomy}); $\Ginv(\delta)$ is controlled by
@@ -901,6 +903,22 @@ population-mean improvement, and its empirical mean advantage in E1
 operates through the finite-episode estimation term, where ERM loads on
 episode-specific regularities (the E4 construction).
 
+The tail half of that interpretation was put to its pre-registered
+test (D5) and \emph{failed}. On the 100-seed synthetic battery the
+A5$-$A6 gap does not concentrate in the upper quantiles of
+per-reactivation regret: the gap-to-median ratios are $1.09$ (q75),
+$0.68$ (q90), and $0.43$ (CVaR@$10\%$), all Holm-n.s.\ (min corrected
+$p = 0.090$), and the CVaR point estimate leans \emph{opposite} the
+prediction (excess gap $-0.00115 \pm 0.00103$). Per the lodged branch,
+the tail interpretation is demoted to an \emph{unconfirmed bound}: the
+invariance effect appears empirically as a uniform shift across
+quantiles of the reactivation transient, and the $\sigma_r$ mechanism,
+while it bounds the tail, is not established as the operative one. The
+French-L3 quantile panel leans the predicted way (median gap
+$+0.00062$ rising to $+0.00264$ at CVaR@$10\%$) but was lodged
+descriptive-only (27 events) and is not scored
+(\texttt{results/e\_cvar\_panel.json}).
+
 \begin{proposition}[Independent controls; the $2{\times}2$ prediction]
 \label{prop:additive}
 $\Gforget$ depends only on $(A, D, K, \text{memory model})$ and is zeroed
@@ -1272,6 +1290,31 @@ still loses to both invariant pool arms (vs.\ A6 Holm $0.040$; vs.\
 A10 Holm $0.017$): retention bought in data space at $O(\text{buffer})$
 memory is worth less than retention bought in parameter space, and the
 assignment---not just the storage---carries value.
+
+\textbf{A fourth, unregistered outcome: reward-coupled serving alone
+is anti-selective (pre-registered D4).} The organizational-carrier
+probe A3$'$ keeps A3's reward-driven capital and serving verbatim but
+makes training reward-independent: each specialist trains on its own
+regime's days regardless of capital share---dormant desks' research
+stays alive; only deployment is reward-routed. The registration lodged
+three outcomes (A3$'$ strictly between A3 and A5; ${\approx}$A5;
+${\approx}$A3); the data chose a fourth we did not register, reported
+here at full prominence: A3$'$ is strictly \emph{worse} than A3
+($0.04580 \pm 0.00040$ vs.\ $0.03748 \pm 0.00044$ post-reactivation,
+100 seeds; Holm $1.7\times10^{-68}$). Audited as no artifact: training
+intensity is matched ($1.000$ vs.\ $1.001$ specialist-updates/day) and
+the serving path is inherited verbatim from A3. The mechanism is
+identifiable in the served-head telemetry: under A3 the capital leader
+holds a head for the \emph{active} regime on $94.6\%$ of evaluated
+days---reward-coupled \emph{training} is self-correcting on the
+serving side, because whoever holds capital has also been training on
+the regimes it serves---while under A3$'$ it does on only $39.7\%$:
+lagged capital routes serving to the previous regime's owner, which
+under siloed training holds nothing for the active regime.
+Reward-coupled serving alone is anti-selective at regime switches. The
+practitioner translation is one sentence: keeping dormant desks'
+research alive does not help if capital still routes the serving
+decision.
 
 \begin{figure}[t]
     \centering
@@ -1682,6 +1725,27 @@ cost slice is reported as sensitivity, not re-adjudication: charging
 costs inside the gate-1 comparison flips L3's pooled sub-criterion
 ($-0.10\%$ gross $\to$ $+3.0\%$ net); the gate as registered is a
 gross-metric criterion and remains a FAIL, and we do not re-open it.
+The practitioner countermeasure these numbers invite was itself
+pre-registered (\texttt{PREREG\_FRENCH49.md}~H) and run: a
+\emph{trade-banded} monolith,
+identical to A1 except that the served book updates only when more
+than $b$ names would change, $b \in \{1, 2\}$
+(\texttt{results/e\_french49\_banded.json}). Banding is free---gross
+regret is unharmed and net regret improves ($b{=}2$ vs.\ A1 net Holm
+$1.3\times10^{-3}$ on L3)---yet it cannot buy the pool's advantage:
+A6 beats both banded monoliths net of 25 bps on L3 (Holm
+$\le 7.1\times10^{-17}$; the A1$-$A6 net gap remains $97\%$/$79\%$
+intact at $b{=}1$/$b{=}2$) and on L1 (residual
+$+0.00028 \pm 0.00011$, Holm $2.1\times10^{-5}$)---with the honest
+disclosure that $b{=}2$ closes $62\%$ of the L1 net-reversal
+magnitude, so the reversal sentence above keeps its label with the
+attenuation reported alongside. The lodged magnitude clause
+\emph{failed} and is disclosed rather than renarrated: the registered
+bands cut A1's turnover only $4.1\%$/$15.7\%$ (${\ge}30\%$ was
+lodged), because A1's crisis churn comes from daily re-rankings of
+more than two names, which defeat narrow bands. The conclusion the
+battery was built to force is the one it delivers: \emph{selection
+quality, not just churn, carries the deficit}.
 
 \paragraph{Replay: data retention versus parameter retention.} The
 decoupled-replay monolith of Section~\ref{sec:e1} was run on L3 (D2).
@@ -2276,6 +2340,11 @@ mechanism additionally shows the silo map need not be designed: at
 $N \gtrsim R$ it is recovered automatically, matching the hand-pinned
 skyline, with graceful degradation documented when competition's
 preconditions weaken (the unpinned crisis niche of Section~\ref{sec:e1}).
+The D4 probe sharpens the carrier attribution: keeping every silo's
+research alive while letting recent-performance capital route the
+serving decision (A3$'$, Section~\ref{sec:e1}) is strictly worse than
+the fully reward-coupled default---the deployment coupling, not
+training starvation, is the destructive half.
 
 \paragraph{What the diagnostic-first protocol buys.} The most consequential
 result in this paper for applied work is the pairing of a null and its
@@ -2308,13 +2377,13 @@ settled within their stated scope; rows 7--10 are the frontier; rows
 \toprule
 \textbf{Claim} & \textbf{Evidence (status)} & \textbf{What would refute it} \\
 \midrule
-1. Two orthogonal axes; 2$\times$2 dissociation & 100 seeds, joint $p{=}6.0{\times}10^{-23}$; TOST'd equivalences (\emph{established, controlled}) & a shared-backbone setting collapsing one axis \\
+1. Two orthogonal axes; 2$\times$2 dissociation & 100 seeds, joint $p{=}6.0{\times}10^{-23}$; TOST'd equivalences (\emph{established, controlled}; D5 quantile test failed---the bound's tail reading demoted to unconfirmed, disclosed) & a shared-backbone setting collapsing one axis \\
 2. Super-additivity: invariance inert in reward-driven allocation & $I$ CI excludes 0; A7$\approx$A1 TOST $p{=}9.6{\times}10^{-29}$ (\emph{established, controlled}) & A7 helping over A1 anywhere \\
 3. Emergent assignment recovers the oracle map unseen & A6$\approx$A10 $p{=}0.53$; covering 20/20 seeds (\emph{established}; crisis niche unpinned, disclosed) & non-coverage at $N \gtrsim R$ \\
 4. Interference emerges under gradient descent, nothing evicted & $\Gamma_{\text{mlp}}$ excess $+0.0075\pm0.0004$, $p{=}1.9{\times}10^{-78}$ (\emph{established}; invariance null under MLP, disclosed) & the gap vanishing at matched architecture \\
 5. Retention inverts at high SNR (linear class) & E6 sweep; oracle inverts identically (\emph{established, linear}; MLP diverges, disclosed) & inversion reproducing nowhere outside E6 \\
 6. Structure screen is demoted: it does not price the pool & three dissociations incl.\ $z{=}23.5$ pass with inversion (\emph{established by record}) & the screen tracking pool value out-of-sample \\
-7. The deficit is real economics where positive & cost-amplified $+0.00126 \to +0.00230$ net; replay collects it, pool still wins (\emph{frontier: one country, aggregate}) & banded/disciplined monolith closing the net gap \\
+7. The deficit is real economics where positive & cost-amplified $+0.00126 \to +0.00230$ net; replay collects it, pool still wins; banded-monolith countermeasure run, net edge stands (\emph{frontier: one country, aggregate}) & a disciplined implementation beyond $b{\le}2$ bands closing the net gap \\
 8. Real-data mechanism = regime-conditional allocation deficit & X1/X3: no dormancy/rehearsal covariate; non-decaying (\emph{honestly open}) & a covariate or transient found; or CRSP contradiction \\
 9. $\hat\Gamma$'s sign prices the pool & 8/12 strong, 12/12 weak incl.\ one temporal-custody hit; dependence caveats stated (\emph{frontier}) & one clean refuting cell (definitions lodged) \\
 10. Window location tracks crisis density & two eras: $15\% \leftrightarrow 10\%$ relocation (\emph{$n{=}2$; estimator lodged for CRSP}) & estimator missing on regionals/CRSP \\
