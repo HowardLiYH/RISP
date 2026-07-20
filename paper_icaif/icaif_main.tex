@@ -43,11 +43,10 @@ pre-deployment protocol built around one number: the \emph{retention
 deficit} $\G$, the post-reactivation decision-regret difference between the
 deployed always-retrain learner and an identical twin whose per-regime
 parameters are protected during dormancy---a two-arm counterfactual any
-desk can run before buying retention machinery. The protocol pairs $\G$
-with a structure screen (regime-conditioning versus block-shuffled labels
-on the decision metric), which its own record demotes: across our field
-tests the screen's verdict dissociated from realized value three times,
-including its strongest pass coinciding with an inverted outcome. The field
+desk can run before buying retention machinery. A structure screen the
+protocol once gated on is demoted by its own record---three
+dissociations from realized value---and survives only as a negative
+control. The field
 record spans daily crypto and commodities (screen fails, evaluations go
 flat, as required), 4-hour crypto (screen passes, $\G=0$, flat again),
 and daily U.S. industry portfolios 1926--2025, where $\G$'s sign tracked
@@ -61,7 +60,10 @@ sweep 25--100\,bps). An externally lodged, announcement-lagged NBER-recession
 test---registered with the OSF before recession dates ever touched the
 panel---resolved as a hit, with its two-recession concentration disclosed.
 A break-even rule converts $\G$ into a dollar-denominated carrying-cost
-threshold. All claims are regret and retention claims, not alpha claims; a
+threshold. All claims are regret and retention claims, not alpha claims,
+and the record's dependence structure is stated at the same prominence
+as its hits: its evidential force is closer to two-to-three effectively
+independent observations than to its twelve scored cells. A
 live temporal test (diagnostics frozen 2026-06-30, scored 2027-04-07) and a
 constituent-level replication are lodged in advance.
 \end{abstract}
@@ -235,18 +237,14 @@ $N_p = 15$ trading days of every regime block whose regime was dormant at
 least 90 days. Post-reactivation regret---mean daily regret inside probe
 windows---is the primary metric because the reactivation transient is
 where retention could pay and where a fresh learner is most exposed.
-Neither constant is load-bearing: a lodged sensitivity battery varying
+Neither constant is load-bearing: a lodged sensitivity battery (a
+10-seed re-read of shared trajectories) varying
 $N_p \in \{5, 10, 15, 30\}$ and the dormancy cutoff over
 $\{60, 90, 120\}$ days leaves the deficit's sign positive and
 significant in every cell; the per-day deficit concentrates early
 ($+13.4$\,bps at $N_p{=}5$ declining to $+5.7$ at $N_p{=}30$) while
 the cumulative harvest per reactivation saturates by
-$N_p \approx 15$--30;
-regime-conditioned finance has long known returns behave differently
-across states \cite{hamilton1989new,ang2012regime,guidolin2007asset,
-nystrup2018dynamic}, but conditions a model on the state without asking
-who maintained the model through the state's absence
-\cite{elliott2005optimal}.
+$N_p \approx 15$--30.
 
 \textbf{Conventions, fixed once.} Every comparison in this paper is
 walk-forward with causal features; every claim is a pre-registered
@@ -326,9 +324,13 @@ dormant regime emits no reward to follow. The most common desk
 default, \emph{expanding-window} retraining on all history, is
 \textbf{not} in A1's class, and we did not assume the answer: an
 expanding-window arm was lodged with branch predictions and run; it
-collected 73\% of the deficit (residual versus the protected twin
+collected 73\% of the deficit (the lodged modal branch, ${\ge}80\%$,
+missed low; residual versus the protected twin
 $+2.5 \pm 2.5$\,bps, not significant at 20 seeds), behaving as what it
-is---data retention without parameter isolation. A9 represents every
+is---data retention without parameter isolation. The narrowed class is
+still the modal one in systematic allocation: rolling-window retrains,
+learned routers, and performance-weighted capital are the default
+shapes of multi-strategy platforms. A9 represents every
 \emph{isolation-preserving} implementation: a siloed desk, a frozen
 per-regime adapter store, an expert library with pinned members---and,
 at the cheap end, data retention alone: replaying stored crisis
@@ -388,7 +390,9 @@ June-2020 draw:
 \centering
 \caption{Break-even carrying cost (\$K/year on a \$100M sleeve,
 252 trading days) across the $\G_{\mathrm{net}}$ 95\% CI and the
-record's deep-dormancy range. Retention pays below the number; a
+record's deep-dormancy range pooled across labelers ($D{=}1{,}378$
+and $2{,}445$ are NBER-cell entries; $2{,}953$ is the drawdown cell's
+maximum). Retention pays below the number; a
 \$1M/year staffed idle desk pays nowhere in this table, a \$50K/year
 frozen-parameter calibration job pays everywhere.}
 \label{tab:breakeven}
@@ -409,8 +413,15 @@ magnitude} separates a staffed desk from a calibration job at every
 cell---and that stability, not the point estimate, is what the rule
 should be trusted for. Nor is the harvest an artifact of the probe
 constant: in the lodged sensitivity battery the cumulative (gross)
-avoidable regret per reactivation is ${\sim}165$--$171$\,bps-days
-whether measured at $N_p{=}15$ or $N_p{=}30$. The rule's two-sided honesty is
+avoidable regret per reactivation is ${\sim}165$--$172$\,bps-days
+whether measured at $N_p{=}15$ or $N_p{=}30$. And a desk should price
+its own class: if the deployed default is expanding-window retraining,
+the relevant input is not the full deficit but the residual of
+Section~\ref{sec:gamma} ($+2.5 \pm 2.5$\,bps)---point estimate
+${\approx}\$39$K/year break-even at $D{=}2{,}445$, interval
+$[\$0, {\sim}\$77\text{K}]$---below the staffed-desk line and possibly
+below the calibration job. The full deficit is the price of
+recency-driven allocation, not of every desk. The rule's two-sided honesty is
 the point: it prices some retention out, and that is the protocol
 working.
 
@@ -435,8 +446,11 @@ sampling uncertainty across markets.
 \centering
 \caption{The field record: substrate $\times$ (structure screen, deficit
 $\G$, evaluation outcome). $\G$ is in bps of daily regret per probe
-day (A1$-$A9, probe 15 days, dormancy $\ge 90$ days; $\pm$ is a 95\% CI
-over seeds, conditional on each window's single history). The
+day (A1$-$A9, probe 15 days, dormancy $\ge 90$ days, bar-native cutoff
+on the 4-hour cell; $\pm$ is a 95\% CI
+over seeds, conditional on each window's single history). A screen can
+fail its registered pooled sub-criterion while its shuffle-$z$ is
+positive (Section~\ref{sec:record}). The
 evaluation family behind ``what the machine did'': the deployed
 always-retrain baseline (A1), its dormancy-protected twin (A9),
 specialist pools with and without an invariance penalty, a learned
@@ -618,8 +632,9 @@ exclusions (drop-2020: $+4.2 \pm 2.6$\,bps; drop-2008/09:
 $+3.6 \pm 3.0$\,bps), but its mass concentrates in the two
 deep-dormancy recession entries (January 2009, dormancy 1{,}378 days;
 June 2020, dormancy 2{,}445 days; dropping the former alone cuts $\G$
-to 41\% of headline), and the 2010s era block---which contains zero
-recession-cell reactivations---is negative-significant. The cell is
+to 41\% of headline), and the 2010s era block---which contains no
+deep-dormancy recession entry, only one shallow 140-day tail
+reactivation---is negative-significant. The cell is
 event-robust in the strict sense, two-recession-concentrated, and not
 era-consistent; it is materially weaker than the drawdown cell's
 robustness profile, and we say so rather than average it away.
@@ -754,9 +769,15 @@ than to twelve trials}---the withheld 15\% full-era cell is the
 union of its two sub-era cells, the four threshold cells share one
 history's crises, and the stitched designs resample the same panels.
 The four strong-form misses share one shape: a marginally significant
-$\G$ with a flat arm table. The two 1990--2025 walk-forward tests that
+$\G$ with a flat arm table---which is the rule stating its own
+detection floor: at the record's per-event dispersion
+(${\sim}25$\,bps), deficits below roughly 5\,bps per probe day sit
+where the arm table cannot resolve them, and should be read as
+unpriceable at current inventory, not as retention verdicts. The two
+1990--2025 walk-forward tests that
 motivated the rule are not counted at all.
 
+{\sloppy
 \textbf{Custody.} Because a rule of this shape is exactly the kind of
 thing a file drawer manufactures, every registration in the program is
 graded by the strength of its timestamp custody, against ourselves:
@@ -778,6 +799,7 @@ battery---and two lodged-but-unrun registrations we disclose at the
 prominence a file drawer would deny them: a granularity-window map and
 a regional battery with region-specific sign predictions, scheduled
 before any further reanalysis of the 1990--2025 panel.
+\par}
 
 \textbf{The live test.} The rule's standing changes register only with
 temporally split measurement, so the program's next cells are already
@@ -838,7 +860,7 @@ reported at headline prominence regardless of outcome.
   significantly positive and the rule satisfied: retention pays, and
   any isolation-preserving implementation collects it. Otherwise: do
   not buy retention machinery this era. Re-run on a concrete trigger,
-  not a vibe: whenever a new qualifying reactivation enters the
+  not a judgment call: whenever a new qualifying reactivation enters the
   inventory, and at least annually if the labeler's crisis occupancy
   over a rolling five years drifts from the calibration era---the
   paying window's location moved across eras in our record, and
