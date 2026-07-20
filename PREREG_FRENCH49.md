@@ -854,3 +854,76 @@ together wherever the L3 cell is quoted.
   No direction was lodged for magnitude; the sign, which is what the
   registered predictions and the sign rule consume, is stable. Post-hoc
   only.
+
+## Addendum L (2026-07-20): E-R operationalization — Japan
+
+This addendum fills the operational specifics of the E-R regional
+register (PRE-REGISTRATION E, lodged 2026-07-15, commit 5c96c35 —
+GIT-SEPARATED, still unrun) for its FIRST region in the lodged fixed
+order: Japan. Committed and pushed ALONE, before any experiment touches
+the Japanese data. E-R's lodged terms govern; nothing here overrides
+them.
+
+**Data (the lodged source, no substitution).** E-R lodged "the French
+international daily 25-portfolio panels." That panel exists daily:
+Ken French Data Library, `Japan_25_Portfolios_ME_BE-ME_daily_CSV.zip`
+(25 ME × BE/ME portfolios, Japan), built from the 202605 Bloomberg
+database, downloaded 2026-07-20; csv sha256
+`b14835fa67e270b5021919d8ca97892cb8060a56b97fec293698eba79b0512eb`,
+vendored under `data/french_intl/`. **Average Value Weighted Returns --
+Daily** section only (the file's first block); missing values coded
+-99.99. Coverage 1990-07-02 – 2026-05-29.
+
+**Operational choices (fixed before any statistic is computed):**
+- Window: **1990-07-02 – 2025-12-31** (start = first available day;
+  end matches the domestic primary window's end; 2026 partial year
+  excluded for symmetry with PREREG A).
+- Portfolios with any missing value inside the window are dropped
+  (expect 0–2 of 25), as in PREREG A.
+- Battery: byte-identical to the E-F/prewar convention — same 8
+  features, L3 labeler on the equal-weight log-price index of the
+  included portfolios, **dd 15% primary** (the frozen L3 spec; the
+  committed window-location estimator θ(era) may be quoted
+  descriptively but does NOT relocate the primary), {10,12,20%} sweep
+  secondary, gate50 structure screen (50 shuffles, same criteria,
+  reported under gate 1's Addendum-F demotion to structure screen),
+  walk-forward dissociation with arms {A1-monolith-erm, A5-risp-erm,
+  A6-risp-inv, A9-oracle-pinned}, PAIRS4 Welch/Holm family, 20 seeds,
+  seeding 1311*s+17 (sweep 2117*s+41), K=2, hard memory, probe 15,
+  min_dormancy 90, and **k=5 of 25, w_max=0.2 exactly as E-R lodged**.
+  Walk-forward only (no stitched design), matching E-F.
+- Crisis-occupancy inventory is computed and saved BEFORE the
+  dissociation stage; if the 15% crisis union occupies a majority of
+  Japanese trading days (plausible post-bubble), that is reported
+  as-is — no re-thresholding, no window change.
+- Outputs: `results/e_japan_L3_inventory.json`, `e_japan_L3_gate.json`,
+  `e_japan_L3_dissoc.json`, `e_japan_L3_sweep.json`. Script:
+  `code/e_japan.py` (mirrors `e_french_prewar.py`; only the loader and
+  window differ).
+
+**Region-specific sign prediction, restated verbatim from E-R:**
+"Japan's crisis-cell dormancy 1990–2012 is SHORT (crisis frequent) →
+Γ_Japan ≈ 0 or negative expected."
+
+**Lodged branch probabilities for the 15% primary cell (exclusive,
+sum 1):**
+- PL1 (p=0.45): Γ_Japan not significant in either direction (≈ 0).
+- PL2 (p=0.25): Γ_Japan negative-significant (inversion side).
+- PL3 (p=0.30): Γ_Japan positive-significant — this is the E-R region
+  prediction's MISS branch, and it is scored as a miss in the regional
+  scorecard at full prominence (no post-hoc reinterpretation of "≈ 0
+  or negative" as anything but a miss).
+- PL4 (p=0.75): the cell is **Γ-sign-rule consistent under the weak
+  form** (positive-significant Γ ↔ A6<A1 significant; negative ↔
+  A1<A6 significant; n.s. ↔ no significant A1/A6 separation), scored
+  exactly as in Addendum F's withheld-era scorecard, both forms
+  reported. A sign-rule violation in either direction is a refuting
+  cell in the running scorecard (currently 5/6) and is reported at
+  full prominence.
+- Sweep cells {10,12,20%} are scored for the sign rule only (weak and
+  strong forms), no per-threshold region prediction is lodged.
+
+**Adverse/void branches:** if fewer than 3 qualifying reactivations
+(min_dormancy 90) exist in the crisis cells at 15%, the Γ cell is
+reported as UNDER-POWERED with its n and no verdict is claimed (the
+occupancy inventory makes this legible); the sweep still runs.
