@@ -109,23 +109,44 @@ panels fail gate 1 and dissociate null, as required; 4-hour crypto
 passes gate 1 but measures a zero deficit and is null again; on
 \emph{drawdown-labeled daily equities} (49 industry portfolios,
 1990--2025, pre-registered) the deficit is \textbf{positive on real
-data} ($+0.00089 \pm 0.00011$, 100 seeds; seed-noise interval, single
-history) and the full pre-registered ordering emerges (headline
+data} ($+0.00089 \pm 0.00011$, 100 seeds; the interval is
+implementation precision only, single history) and the full
+pre-registered ordering emerges (headline
 contrast Holm $p{=}5.2{\times}10^{-65}$; the ordering's binding pair
-at $1.6{\times}10^{-15}$). The record now extends beyond one sample:
+at $1.6{\times}10^{-15}$)---though at event level (27 reactivations)
+the cell passes its registered Wilcoxon test ($p{=}0.016$) but
+\emph{misses} the registered sign test ($p{=}0.061$, 18 of 27
+positive), a lodged adverse branch we take in full. The record now
+extends beyond one sample:
 on a \textbf{withheld era} (36 industries, 1926--1989, frozen
 specification), the deficit's \emph{sign} predicted the arm-ordering
 direction in \textbf{5 of 6} pre-registered cells---in both
 directions, including two positive-deficit cells reproducing the full
 ordering out-of-sample (Holm $1.9{\times}10^{-6}$,
 $2.1{\times}10^{-4}$)---while gate 1's conditioning criterion tracked
-neither and is demoted to a structure screen. Transaction costs
-\emph{amplify} rather than kill the effect (net-of-cost deficit
+neither and is demoted to a structure screen. A first non-US cell
+(25 Japanese size--value portfolios, 1990--2025, frozen
+specification) resolves the lodged region-specific sign prediction
+as a hit: $\hat\Gamma$ negative-significant with the predicted
+inversion realized (Holm $3.9{\times}10^{-8}$), in a market whose
+crisis-union occupancy ($67\%$) is flagged occupancy-anomalous---the
+out-of-sample sign-rule record stands at 9 of 10 cells, both
+directions represented. Transaction costs
+\emph{amplify} rather than kill the effect on 1990--2025
+(net-of-cost deficit
 $+0.00126 \to +0.00230$ as crisis-window costs sweep 25--100\,bps;
 the one observed inversion, under the vol-band labeler, reverses net
-of costs); a decoupled-replay monolith closes only $56\%$ of the
+of costs), though the amplification is era-local: on the withheld
+era the net deficit survives only the 25 bps register---a cost
+level anachronistic for 1926--89, disclosed---fading at the
+era-realistic 50--100 bps tiers, with the crisis-churn turnover
+signature absent, while the pool's net edge over the monolith
+survives every tier; a decoupled-replay monolith closes only $56\%$ of the
 deficit in the controlled market and, on equities, collects the
-deficit yet still loses to the emergent pool (Holm $0.013$); and the
+deficit (${\approx}96\%$ at 100 seeds) yet still loses to the
+emergent pool (paired $p{=}2.7{\times}10^{-12}$), while an
+expanding-window retrainer that never discards data collects only
+$59\%$ and leaves a real $+3.7$ bps/day residual; and the
 deficit is not an artifact of the discrete memory model---a shared-trunk
 MLP with nothing evicted reproduces it as pure gradient interference
 ($+0.01009 \pm 0.00037$, 100 seeds). One attribution is honestly
@@ -139,10 +160,13 @@ threshold, its registration deposited with the Open Science Framework
 before the recession dates were ever joined to the panel---has since
 resolved as a hit under both scoring forms
 ($\hat\Gamma = +0.00081 \pm 0.00033$ with the ordering at Holm
-$1.6\times10^{-4}$, cost-amplified; its schedule-resampling
-counterpart flat, disclosed). Caveats carried at equal prominence:
-each walk-forward window is a single market history (four windows are
-now scored), the deficit's threshold window relocates across eras,
+$1.6\times10^{-4}$, cost-amplified, and both registered event-level
+tests passed---sign $p{=}0.021$, Wilcoxon $p{=}0.016$; its
+schedule-resampling counterpart flat, disclosed). Caveats carried at
+equal prominence: each walk-forward window is a single market history
+(five windows are now scored), the deficit's threshold window
+relocates across eras (and the committed window-location estimator
+failed its first calibration, disclosed pre-CRSP and retired),
 aggregation itself can manufacture slow dynamics, and the
 constituent-level CRSP test---its registration lodged with OSF
 before any data access---remains the decider. All claims are
@@ -289,7 +313,7 @@ related work thus becomes a supporting experiment.
     pre-deployment protocol run \emph{before} claiming gains --- a
     structure \emph{screen} plus a binding diagnostic. We state the
     protocol as its own record left it, not as designed: the screen's
-    outcomes have not tracked pool value in any tested cell (three
+    outcomes have not tracked pool value in any tested cell (four
     dissociations, including its strongest pass coinciding with an
     inversion), so it screens for learnable structure and licenses
     nothing; the diagnostic is the measured deficit. \emph{Screen}
@@ -905,20 +929,16 @@ operates through the finite-episode estimation term, where ERM loads on
 episode-specific regularities (the E4 construction).
 
 The tail half of that interpretation was put to its pre-registered
-test (D5) and \emph{failed}. On the 100-seed synthetic battery the
+test (D5) and \emph{failed}, demoting it to an \emph{unconfirmed
+bound} per the lodged branch: on the 100-seed synthetic battery the
 A5$-$A6 gap does not concentrate in the upper quantiles of
-per-reactivation regret: the gap-to-median ratios are $1.09$ (q75),
-$0.68$ (q90), and $0.43$ (CVaR@$10\%$), all Holm-n.s.\ (min corrected
-$p = 0.090$), and the CVaR point estimate leans \emph{opposite} the
-prediction (excess gap $-0.00115 \pm 0.00103$). Per the lodged branch,
-the tail interpretation is demoted to an \emph{unconfirmed bound}: the
-invariance effect appears empirically as a uniform shift across
-quantiles of the reactivation transient, and the $\sigma_r$ mechanism,
-while it bounds the tail, is not established as the operative one. The
-French-L3 quantile panel leans the predicted way (median gap
-$+0.00062$ rising to $+0.00264$ at CVaR@$10\%$) but was lodged
-descriptive-only (27 events) and is not scored
-(\texttt{results/e\_cvar\_panel.json}).
+per-reactivation regret (gap-to-median ratios $1.09$ at q75, $0.68$
+at q90, $0.43$ at CVaR@$10\%$, all Holm-n.s., min corrected
+$p = 0.090$; the CVaR point estimate leans \emph{opposite} the
+prediction, excess gap $-0.00115 \pm 0.00103$)---the invariance
+effect appears empirically as a uniform shift across quantiles of
+the reactivation transient, and the $\sigma_r$ mechanism, while it
+bounds the tail, is not established as the operative one.
 
 \begin{proposition}[Independent controls; the $2{\times}2$ prediction]
 \label{prop:additive}
@@ -1266,7 +1286,9 @@ serving throughout, an honest wrinkle we report rather than hide).
     (post-reactivation regret, mean $\pm$ 95\% CI). Left: synthetic
     (100 seeds) --- the replay monolith closes $56.3\%$ of the deficit,
     below the pre-registered $60\%$, and remains far from A6. Right:
-    French 49 L3 walk-forward (20 seeds) --- replay collects the deficit
+    French 49 L3 walk-forward (20-seed battery shown; the quoted
+    statistics are superseded by the 100-seed K2 re-measurement of
+    Section~\ref{sec:e1f}) --- replay collects the deficit
     (matching A9) yet the invariance-equipped emergent pool still wins.}
     \label{fig:replay}
 \end{figure}
@@ -1294,26 +1316,18 @@ assignment---not just the storage---carries value.
 
 \textbf{A fourth, unregistered outcome: reward-coupled serving alone
 is anti-selective (pre-registered D4).} The organizational-carrier
-probe A3$'$ keeps A3's reward-driven capital and serving verbatim but
-makes training reward-independent: each specialist trains on its own
-regime's days regardless of capital share---dormant desks' research
-stays alive; only deployment is reward-routed. The registration lodged
-three outcomes (A3$'$ strictly between A3 and A5; ${\approx}$A5;
-${\approx}$A3); the data chose a fourth we did not register, reported
-here at full prominence: A3$'$ is strictly \emph{worse} than A3
-($0.04580 \pm 0.00040$ vs.\ $0.03748 \pm 0.00044$ post-reactivation,
-100 seeds; Holm $1.7\times10^{-68}$). Audited as no artifact: training
-intensity is matched ($1.000$ vs.\ $1.001$ specialist-updates/day) and
-the serving path is inherited verbatim from A3. The mechanism is
-identifiable in the served-head telemetry: under A3 the capital leader
-holds a head for the \emph{active} regime on $94.6\%$ of evaluated
-days---reward-coupled \emph{training} is self-correcting on the
-serving side, because whoever holds capital has also been training on
-the regimes it serves---while under A3$'$ it does on only $39.7\%$:
-lagged capital routes serving to the previous regime's owner, which
-under siloed training holds nothing for the active regime.
-Reward-coupled serving alone is anti-selective at regime switches. The
-practitioner translation is one sentence: keeping dormant desks'
+probe A3$'$ (A3's reward-driven capital and serving kept verbatim,
+training made reward-independent: each specialist trains its own
+regime regardless of capital share) chose a fourth outcome the
+registration did not lodge, reported at full prominence: A3$'$ is
+strictly \emph{worse} than A3 ($0.04580 \pm 0.00040$ vs.\
+$0.03748 \pm 0.00044$ post-reactivation, 100 seeds; Holm
+$1.7\times10^{-68}$; training intensity matched, serving path
+inherited verbatim). The mechanism, identifiable in the served-head
+telemetry, is that lagged capital routes serving to the previous
+regime's owner---which under siloed training holds nothing for the
+active regime (the capital leader holds an active-regime head on
+$39.7\%$ of days against A3's $94.6\%$)---so keeping dormant desks'
 research alive does not help if capital still routes the serving
 decision.
 
@@ -1457,8 +1471,12 @@ pass: it is one confirmed cell from a ten-cell screen (fourteen
 real-vs-shuffled tests counting the daily battery), the confirmation
 reuses the same data span as the screen, and the selected cell's gap
 estimate is biased upward by selection on the maximum. A
-disjoint-period replication is the committed next test before any
-claim is built on this substrate. The pass sets up the sharper question
+disjoint-period replication was the committed next test before any
+claim is built on this substrate; the attempt is on record as
+unexecutable---the disjoint period's data proved unfetchable (the
+exchange archive is geo-blocked and tick-only)---so the commitment
+stands unmet rather than quietly dropped, and no claim is built on
+this substrate. The pass sets up the sharper question
 of Section~\ref{sec:e1r}: does a passing gate suffice for the mechanism
 to pay?
 
@@ -1563,12 +1581,16 @@ filtered-vol labelers; two cells, pre-registered together) and L3 (an
 index-drawdown $\times$ trend labeler with genuinely slow crisis
 dynamics, designed \emph{after} seeing the L1/L2 gate results and
 pre-registered separately before any L3 statistic was computed;
-family-wise accounting is over all three cells). In revision, five
-further batteries were added, each lodged in
+family-wise accounting is over all three cells). In revision, further
+batteries were added, each lodged in
 \texttt{PREREG\_FRENCH49.md} before its runs: mechanism probes
 (X1/X3), transaction costs (D3), a replay baseline (D2), 100-seed
-reruns of the main batteries (D6), and a withheld-era replication on
-1926--1989 (E-F). This section reports the whole record.
+reruns of the main batteries (D6), a withheld-era replication on
+1926--1989 (E-F), probe-window/dormancy and decision-layer
+robustness grids (D8, K3), event-level inference on the
+per-reactivation deficits (K1), an expanding-window/replay battery
+at the full seed budget (K2), and a first non-US regional cell
+(Japan, Addendum L). This section reports the whole record.
 
 \paragraph{Gates.} We report gate statistics in the permutation
 register: $z$ against the 50-control shuffle distribution, whose
@@ -1596,7 +1618,8 @@ while on the L3 walk-forward it is \textbf{positive for the first time
 on any real substrate in this program}:
 $\hat\Gamma_{\mathrm{forget}} = +0.00089 \pm 0.00011$ (100 seeds,
 reproducing the 20-seed registration battery; the $\pm$ is
-seed noise conditional on one history; see caveat (i)). One
+implementation precision only---seed noise conditional on one
+history; see caveat (i) and the event-level register below). One
 labeler-anatomy fact matters for interpretation and we state it
 precisely: the \emph{union} of L3's crisis regimes is not dormant for
 long stretches---the 2010, 2011, 2015--16, and 2018 near-miss episodes
@@ -1629,6 +1652,31 @@ qualifying reactivations become too few to harvest within one history
 by economics, inside the window. The second reading was post-hoc when
 first written; the withheld era below was its first discriminating
 test, and neither simple reading survived it intact.
+
+\paragraph{Measurement and decision-layer robustness (D8, K3).} The
+threshold is the fragile axis; the measurement and decision axes are
+not. Across the registered probe-window $\times$ dormancy-threshold
+grid (probe $\{5, 10, 15, 30\}$ days at dormancy 90; dormancy
+$\{60, 90, 120\}$ at probe 15; shared trajectories, measurement-only
+axes), $\hat\Gamma$ is positive-significant in every cell---from
+$+0.00134 \pm 0.00054$ at probe 5 to $+0.00057 \pm 0.00011$ at probe
+30, and $+0.00103 \pm 0.00014$ / $+0.001165 \pm 0.000323$ at dormancy
+60/120. Perturbing the decision layer itself at constant gross
+exposure ($k \cdot w_{\max} = 1$, K3) preserves both the sign and
+the A6-vs-A1 direction in both lodged cells: $k{=}10$/$w_{\max}{=}0.1$
+gives $\hat\Gamma = +0.000495 \pm 0.000123$ with A6 beating A1 at Holm
+$3.5\times10^{-13}$; $k{=}3$/$w_{\max}{=}1/3$ gives
+$\hat\Gamma = +0.00027 \pm 0.00024$---positive-significant with a
+thin margin, CI lower edge $+0.00002$, disclosed---with A1$-$A6
+$= +0.00058 \pm 0.00017$ paired (Holm $1.4\times10^{-4}$). No
+decision-layer fragility branch triggered. One aggregated disclosure
+is stated once rather than scattered: across all three swept axes the
+measured \emph{magnitude} peaks at the registered specification
+($k{=}5$ among $\{3,5,10\}$; the $15\%$ drawdown threshold among its
+sweep; and the probe profile's knee at the registered 15 days)---a
+selection-adjacent pattern we disclose rather than bury; the
+registered predictions and the sign rule consume only the sign,
+which is stable everywhere measured on these axes.
 
 \paragraph{Dissociations at 100 seeds.} The ten-arm
 walk-forward comparison ran on both labelers (registered at 20 seeds,
@@ -1663,6 +1711,36 @@ $+0.00023 \pm 0.00015$) while their arm families stay flat (min raw
 $p = 0.50$ and $0.34$)---the schedule-resampling design now leans the
 deficit's way without any arm separating, a favorable drift we flag
 precisely because it was not predicted.
+
+\paragraph{Event-level inference (K1, N1): the register in which
+most cells weaken.} Seed-level CIs on a walk-forward measure
+Monte-Carlo precision of the pipeline, not generality across crises,
+so the K1 and N1 addenda registered event-level tests on the
+per-reactivation deficits $\gamma_i$ of all four positive
+walk-forward cells (one-sided sign test and one-sided Wilcoxon,
+$\alpha{=}0.05$ per test per cell; the event-level $t$ is
+descriptive only, since events cluster by era). The program's
+event-level scoreboard, stated once and in full: the \textbf{NBER
+cell is the only cell that passes both registered tests}
+($n{=}20$; sign $p = 0.021$, 15 of 20 positive; Wilcoxon
+$p = 0.016$)---notable because its LORO concentration profile was
+the weaker one, and its pass was lodged in advance at deliberately
+low confidence. The L3 cell ($n{=}27$, median $+4.5$ bps) and the
+withheld-era $10\%$ cell ($n{=}56$, median $+1.5$ bps) pass the
+Wilcoxon only (Wilcoxon $p = 0.016$ and $p = 0.029$; sign tests
+$p = 0.061$ with 18 of 27 positive---19 were needed---and
+$p = 0.175$ with 32 of 56: the mean is carried by large positive
+events while the median is weak). The 1958--89 cell \emph{fails
+both} registered tests ($n{=}21$; sign $p = 0.332$, Wilcoxon
+$p = 0.393$), the weakest event-level showing in the program. The
+lodged adverse branches fire and are taken in full: the
+seed-register CIs of the L3 headline \emph{and of both withheld-era
+positive cells} are labeled \textbf{implementation-precision-only}
+wherever quoted (abstract included), and the L3 cell carries its
+three travel-together caveats (threshold fragility, single history,
+event-level sign-test miss)
+(\texttt{results/e\_event\_level\_inference.json},
+\texttt{results/e\_prewar\_event\_level.json}).
 
 \paragraph{Mechanism honesty: the deficit is not (yet) forgetting.}
 Two registered probes (E-X1, E-X3) asked \emph{why} the L3 deficit
@@ -1701,7 +1779,11 @@ real-data claims below.
     \label{fig:costs}
 \end{figure}
 
-\paragraph{Costs: the deficit survives and strengthens.} The
+\paragraph{Costs on 1990--2025: the deficit survives and
+strengthens---era scope stated up front.} Everything in this
+paragraph is the 1990--2025 record; the withheld era's net register
+is reported with the withheld era below, where the amplification
+clause \emph{fails} out-of-sample. The
 pre-registered cost battery (D3; both-pay convention---arm and oracle
 each charged their own turnover---with the arm-only variant as lodged
 sensitivity) charges crisis-window effective costs of 25/50/100 bps.
@@ -1748,17 +1830,39 @@ more than two names, which defeat narrow bands. The conclusion the
 battery was built to force is the one it delivers: \emph{selection
 quality, not just churn, carries the deficit}.
 
-\paragraph{Replay: data retention versus parameter retention.} The
-decoupled-replay monolith of Section~\ref{sec:e1} was run on L3 (D2).
-Replay collects essentially the entire deficit---$\hat\Gamma$ over the
-replay monolith is $+0.00001 \pm 0.00023$, n.s., ${\approx}99\%$
-closure against $56\%$ in the controlled market---so on this substrate
-\emph{data} retention matches \emph{parameter} retention against the
-ERM oracle, consistent with the allocation-deficit reading above. The
-registered relabeling branch does not trigger: A6 still beats replay
-(Holm $0.013$) and replay+INV (Holm $4.5\times10^{-4}$). The
-pool-superiority claim survives its most dangerous baseline, and the
-reason is informative: what a buffer cannot buy at any size is the
+\paragraph{Replay and expanding windows: data retention versus
+parameter retention.} The decoupled-replay monolith of
+Section~\ref{sec:e1} was run on L3 (D2, 20 seeds), then re-measured
+at the full 100-seed budget alongside an \emph{expanding-window}
+monolith A1e (K2,
+\texttt{results/e\_french49\_L3\_expwin\_100s.json})---a retrainer
+whose fit consumes the entire history to date, so no data is ever
+discarded; it sits outside A1's class, whose bounded capacity forces
+recency. The 100-seed register supersedes the 20-seed pilot
+throughout this paragraph (one reversal below); the pilot is
+retained in the custody ledger. Replay collects essentially the
+entire deficit---the residual over the replay monolith is
+$+0.00004 \pm 0.00012$, n.s., ${\approx}96\%$ closure against
+$56\%$ in the controlled market---so on this substrate \emph{data}
+retention matches \emph{parameter} retention against the ERM oracle,
+consistent with the allocation-deficit reading above. The
+expanding-window desk does worse: A1e collects $58.7\%$ of the
+deficit, and its residual is \emph{real}---A1e$-$A9
+$= +0.000366 \pm 0.000128$, positive-significant, ${\approx}3.7$
+bps/day on the post-reactivation register (the 20-seed pilot's null
+residual reversed at 100 seeds)---and A1e loses both to replay
+(Holm $4.4\times10^{-6}$) and to the pool (A1e$-$A6
+$= +0.00072 \pm 0.00011$ paired, Holm $1.4\times10^{-23}$). The
+registered relabeling branch does not trigger: A6 still beats
+replay---paired A1r$-$A6 $= +0.000389 \pm 0.000096$, paired
+$p = 2.7\times10^{-12}$ (Welch $2.9\times10^{-14}$), computed
+post-hoc from the K2 battery's released raw seeds because the lodged
+Holm family omitted exactly this pair, and superseding reliance on
+the 20-seed Holm $0.013$ previously carried here---and beats
+replay+INV (Holm $4.5\times10^{-4}$; 20 seeds, the only register in
+which that arm exists). The pool-superiority claim survives its most
+dangerous baseline, and the reason is informative: what neither a
+buffer nor an ever-growing training window buys is the
 invariance-equipped emergent assignment.
 
 \begin{figure}[t]
@@ -1800,7 +1904,9 @@ both directions}, including two positive-deficit cells where the full
 A6 $<$ A5 $<$ A1 ordering emerges out-of-sample---$10\%$
 ($\hat\Gamma = +0.00020 \pm 0.00009$, A6-vs-A1 Holm
 $1.9\times10^{-6}$) and 1958--89 ($\hat\Gamma = +0.00021 \pm 0.00015$,
-Holm $2.1\times10^{-4}$)---and two negative-deficit cells where the
+Holm $2.1\times10^{-4}$); both intervals are implementation
+precision only, per the event-level register above (K1,
+N1)---and two negative-deficit cells where the
 predicted inversion appears ($15\%$ full era; 1926--57, Holm $0.023$).
 The single miss is the $12\%$ cell: $\hat\Gamma$ negative-significant
 in the seed-noise register ($-0.00010 \pm 0.00007$) with a flat arm
@@ -1810,7 +1916,16 @@ one-directional) and a miss under the strong
 directional scoring (negative $\Rightarrow$ inversion); we report both
 scorings rather than choose the flattering one.
 
-\textbf{Scorecard accounting, stated against ourselves.} Three
+\textbf{Scorecard accounting, stated against ourselves.} The
+discount comes first, because it governs everything the arithmetic
+below can mean: the scorecard's evidential force is closer to
+\emph{two-to-three effectively independent observations}, with both
+directions represented, than to its nominal cell count---the cells
+share histories and crises, the thresholds overlap, and the record's
+first genuinely temporal-custody test is the lodged forward
+commitment, not anything in this table. (That commitment's first
+cell has since resolved as a both-forms hit; see ``The first
+temporal-custody cell'' below.) With the discount in front, three
 qualifications bound what ``five of six'' can mean. First, the cells
 are not independent: the $15\%$ full-era cell is the \emph{union} of
 the two sub-era cells---its inversion largely restates the 1926--57
@@ -1831,13 +1946,11 @@ form being one-directional, a positive-significant $\hat\Gamma$ with a
 flat table is a strong-form miss, not a weak-form violation); folding in
 the four NBER cells of the temporal-custody paragraph below, $8/12$
 strong and $12/12$ weak (with the primary walk-forward's strong-form
-status register-dependent, as confessed there). The honest
-summary: the scorecard's evidential force is closer to two-to-three
-effectively independent observations, with both directions
-represented, than to six independent trials---and its first genuinely
-temporal-custody test is the lodged forward commitment, not anything
-in this table. (That commitment's first cell has since resolved as a
-both-forms hit; see ``The first temporal-custody cell'' below.) The sweep pattern is
+status register-dependent, as confessed there); and folding in the
+four Japan cells of the regional battery below (all four consistent
+under both forms, per the addendum's own count), $12/16$ strong and
+$16/16$ weak, with the out-of-sample-only register at $9/10$ (five
+of six withheld cells plus four of four Japan cells). The sweep pattern is
 equally instructive: the fragility of the 1990--2025 result
 \emph{replicates in pattern}---the deficit again lives at essentially
 one threshold, flanked by flat and inverted neighbors---but the window
@@ -1853,7 +1966,59 @@ $\Rightarrow$ positive deficit) fails too: multi-year dormancy is
 present throughout this era and the sign still varies. What survives
 both eras is the deficit's sign as the pricing diagnostic, with the
 paying window's \emph{location} an era-dependent function of crisis
-density rather than of the threshold per se.
+density rather than of the threshold per se. One attempted
+operationalization of that function is already refuted: the
+window-location estimator $\theta(\mathrm{era})$ committed in the
+CRSP T-split amendment---the finest grid threshold whose
+crisis-union occupancy falls below a single calibration parameter
+$\kappa$---failed its first calibration on the two available eras
+(\texttt{results/window\_estimator\_calibration.json}): the $\kappa$
+intervals the two eras require are disjoint by roughly
+$3.5{\times}$ ($(0.129, 0.143]$ modern versus $(0.471, 0.486]$
+pre-war) and \emph{directionally} wrong---the denser-crisis era's
+paying window moved finer, not coarser. The failure occurred and is
+disclosed before any CRSP data access; per the amendment ledger the
+estimator is retired, the CRSP L3-family primary falls back to the
+frozen $15\%$ threshold, and the threshold set runs as a descriptive
+window-location map only.
+
+\paragraph{The withheld era, net of costs (N2).} The registered
+net-of-cost battery ran on both withheld-era positive cells at the
+adjudicating 25 bps both-pay register, and the lodged verdict
+sentence has two mandatory parts. First, the out-of-sample deficit
+\emph{survives}: $10\%$ gives
+$\hat\Gamma_{\mathrm{net}} = +0.00015 \pm 0.00010$ and 1958--89
+gives $+0.00020 \pm 0.00017$, both positive-significant (the latter
+barely). Second, the D3 \emph{amplification} clause is
+\emph{refuted} out-of-sample: net sits below gross in both cells
+($-24\%$ and $-7\%$) and fades to n.s.\ at the 50/100 bps tiers,
+where the modern batteries strengthened. The mechanism's absence is
+visible in the turnover telemetry: the modern amplification came
+from the monolith out-churning the pinned oracle in crisis windows,
+while on the withheld era the two churn equally (A1 $1.10$ vs.\ A9
+$1.13$ turnover per day---the oracle slightly \emph{more}), so costs
+subtract a little from $\hat\Gamma$ instead of adding.
+Net-of-cost amplification is therefore an era-local phenomenon of
+1990--2025, not a property of the deficit, and every ``costs
+amplify'' sentence in this paper is scoped accordingly. And the
+era-scoped economic verdict is weaker still, stated wherever this
+result is cited: 1926--89 effective costs sat well above 25 bps
+(50--100 bps is the plausible band), and at those era-realistic
+tiers the two-arm deficit does \emph{not} survive---%
+$\hat\Gamma_{\mathrm{net}}$ is n.s.\ at 50 bps
+($+0.000102 \pm 0.000110$; $+0.000182 \pm 0.000198$) and at 100 bps
+($+0.000005 \pm 0.000150$; $+0.000150 \pm 0.000280$)---so the
+registered 25 bps significance rests on a cost level anachronistic
+for the era it is applied to, and we do not present it as the era's
+economic verdict. The counterpoint, at the same prominence
+(descriptive, same JSON): the pool's A6-over-A1 \emph{net} edge is
+significant at every tier in both cells---the retention system's
+net superiority survives era-realistic costs even where the
+two-arm deficit does not (A1$-$A6
+${\approx}{+}10.6$ and ${+}11.3$ bps/day net of 25 bps, growing
+with tier), carried by
+A6's turnover discipline ($0.71$ vs.\ $1.10$)---consistent with the
+D3/H batteries, not scored (\texttt{results/e\_prewar\_costs.json}).
 
 \begin{figure}[t]
     \centering
@@ -1864,8 +2029,8 @@ density rather than of the threshold per se.
     pre-stated rule). Positive deficits coincide with orderings and
     negative deficits with inversions in both eras; the single miss
     ($12\%$ withheld: negative-significant $\hat\Gamma$, flat table) is
-    annotated. Walk-forward intervals are seed noise conditional on each
-    window's single history.}
+    annotated. Walk-forward intervals are implementation precision
+    (seed noise) conditional on each window's single history.}
     \label{fig:signrule}
 \end{figure}
 
@@ -1878,11 +2043,13 @@ inversion. When the sign rule was first formulated it was
 sharing arm A1 with the contrasts it prices (its non-circular content
 is that A9 sides with the retaining arms exactly when the deficit is
 positive)---and we said so. The withheld era was its first
-out-of-sample exposure, in both directions, and it scored 5 of 6.
+out-of-sample exposure, in both directions, and it scored 5 of 6;
+Japan, its first exposure outside the US (below), scored 4 of 4
+under a lodged region-specific sign prediction.
 The rule's standing therefore changes register: no longer merely a
 lodged hypothesis, not yet a validated deployment rule---the record
-is one country, one aggregate cross-section, one labeler family, and
-the miss at $12\%$ is real. The forward test is unchanged and
+is two countries, aggregate cross-sections only, one labeler family,
+and the miss at $12\%$ is real. The forward test is unchanged and
 pre-committed: $\hat\Gamma$'s sign prices the pool on CRSP
 constituents, with the registration lodged externally (OSF) before
 any data access, alongside the NBER-labeler forward test whose
@@ -1900,9 +2067,10 @@ only announcement-lagged information (a recession enters the labeler
 on the date the NBER committee \emph{announced} it, verified against
 the committee's published announcement records). Recession-cell
 dormancies are finally crisis-scale by construction (up to $2{,}557$
-trading days---the 1992${\to}$2001 and 2010${\to}$2020 gaps). Gate 1
-\emph{fails} both variants ($z = 1.74$ primary; pooled edges
-conditioning)---the third independent dissociation of gate 1 from
+trading days---the 1992${\to}$2001 and 2010${\to}$2020 gaps). The
+structure screen, one descriptive line per its demotion: null on
+both variants ($z = 1.74$ primary; pooled edges conditioning)---the
+third independent dissociation of the screen from
 pool value---while the deficit prices positive:
 $\hat\Gamma = +0.00081 \pm 0.00033$ on the causal walk-forward,
 strengthening to $+0.00105 \pm 0.00033$ net of 25 bps crisis-window
@@ -1912,7 +2080,9 @@ with the ordering present exactly as the rule demands (A6 $<$ A1 at
 Holm $1.6\times10^{-4}$ gross; the full A6 $<$ A5 $<$ A1 chain at
 Holm $\le 3.1\times10^{-5}$ net, and A6 beating the pinned oracle at
 $1.7\times10^{-3}$ net). Under the lodged scoring this cell is a
-\textbf{hit under both the weak and the strong forms}. One scoring
+\textbf{hit under both the weak and the strong forms}---and it holds
+the stronger event-level standing of the two K1 cells, passing both
+registered tests (the event-level paragraph above). One scoring
 choice is confessed rather than buried: no registration fixed whether
 the gross or the net register adjudicates the strong-form
 chain---gross, A6-vs-A5 is flat (Holm $0.94$) and the full chain holds
@@ -1922,12 +2092,13 @@ than this scoring decision. Scored gross-only, the cell is a weak-form
 hit and a strong-form partial; the amendment lodged for the CRSP test
 fixes the net register in advance so this ambiguity cannot recur.
 Disclosures at
-equal prominence: the primary stitched design is flat
-($\hat\Gamma$ n.s.)---itself a both-forms hit ($\hat\Gamma \approx 0$
-with a flat table); the non-causal calendar-dated robustness variant
-reproduces the walk-forward hit but its stitched cell is a weak-form
-hit and \emph{strong-form miss} (the same pattern as the withheld
-$12\%$ cell); and the registration's LORO and era-blocked slices,
+equal prominence: the NBER stitched variants are collapsed to the
+standing stitched caveat---schedule resampling cannot reproduce
+multi-year dormancy, and their full tables live in the released
+JSONs---entering the scorecard as one both-forms hit (the primary,
+flat with $\hat\Gamma$ n.s.) and one weak-form hit/\emph{strong-form
+miss} (the non-causal calendar-dated variant, the same pattern as
+the withheld $12\%$ cell); and the registration's LORO and era-blocked slices,
 initially owed, are now run
 (\texttt{results/e\_french49\_nber\_loro.json}) with a mixed
 disposition we state in full: the deficit survives every one of the 20
@@ -1952,6 +2123,38 @@ claimed. Because the labeler carries no threshold,
 this result also adjudicates the registered fragility discriminator:
 the granularity-window reading of the L3 threshold sensitivity gains,
 and the fixed-cutoff artifact reading loses its remaining support.
+
+\paragraph{The first non-US cell: Japan (E-R region 1).} The lodged
+regional register (E-R, a fixed region order with region-specific
+sign predictions lodged before any regional data was downloaded)
+opened with Japan: the 25 Japanese size--value portfolios (daily,
+value-weighted, 1990--2025, zero drops), run under the byte-identical
+frozen L3-at-$15\%$ battery. The lodged region prediction---%
+``$\Gamma_{\mathrm{Japan}} \approx 0$ or negative,'' reasoning from
+Japan's short post-bubble crisis dormancy---\textbf{hit, on the
+negative side}: $\hat\Gamma = -0.00060 \pm 0.00016$
+(negative-significant, $n_{\mathrm{react}}{=}26$), with the predicted
+inversion realized Holm-strong---A1 $0.00947$ beats A5, A9, and A6
+$0.01015$; A6-vs-A1 Holm $3.9\times10^{-8}$---the largest real-data
+inversion magnitude in the program ($-6.0$ bps/day post-reactivation):
+the retention-plus-invariance premium as a pure visible cost, exactly
+where the sign rule says it should be. The cell is flagged
+\textbf{occupancy-anomalous} in the same sentence as its verdict:
+the crisis union occupies $67.2\%$ of Japanese trading days at the
+$15\%$ threshold, so crisis is the \emph{majority} state and the
+rare-regime premise of the whole mechanism fails by inversion---with
+the custody grade stated honestly: the occupancy-anomaly scoring
+clause was written after Japan's results were seen (post-hoc for
+Japan; lodged ex-ante for the four remaining regions). All three
+sweep cells are sign-rule consistent as well, under both forms
+($10\%$ n.s.\ with a flat family; $12\%$ and $20\%$ negative with
+inversions at Holm $1.4\times10^{-6}$ and $3.5\times10^{-6}$),
+bringing the out-of-sample sign-rule record to 9 of 10 cells across
+the withheld era and Japan, both directions represented. The
+structure screen is one descriptive line, per its demotion:
+$z = -0.90$, conditioning below pooled---a fourth independent
+dissociation of the screen from pool value
+(\texttt{results/e\_japan\_L3\_dissoc.json}).
 
 \paragraph{Position in the finance and continual-learning literatures.}
 Crisis-conditional strategy behavior is a documented finance
@@ -1996,7 +2199,8 @@ arm initialization only (the deterministic A8a arm has a zero-width
 CI), so its intervals quantify implementation noise \emph{conditional
 on that history}, not sampling uncertainty across markets. The
 withheld era raises the count to three windows and six scored cells,
-but every cell is still a single realized history of one country's
+and the Japan panel adds a further market history (the first
+non-US), but every cell is still a single realized history of a country's
 aggregate cross-section. (ii) The stitched counterparts no longer
 simply support the null: at 100 seeds their $\hat\Gamma$ turns
 marginally positive under both labelers while their arm families stay
@@ -2016,7 +2220,11 @@ $\le 4.5\times10^{-12}$ corrected, including A6-vs-A9), as do the
 L1 inversion's three pairs (headline A1$<$A6 corrected
 $3.7\times10^{-26}$). (iv) Transaction costs are no longer deferred on
 this substrate: the L3 deficit and the L1 reversal are measured under
-modeled crisis-window costs (25--100 bps, both-pay). What the cost
+modeled crisis-window costs (25--100 bps, both-pay), and the two
+withheld-era positive cells across the same tiers (surviving only
+at 25 bps---anachronistic for that era---without the modern era's
+amplification, N2 above). What
+the cost
 model does not include---market impact, borrow, capacity---and every
 other substrate in the paper remain gross; the deflated-Sharpe/SPA
 battery stays reserved for any alpha claim
@@ -2025,7 +2233,10 @@ era-dependent: within each era the deficit lives at essentially one
 threshold, and the paying threshold moved ($15\% \to 10\%$) with
 crisis density across eras---specification robustness in the naive
 sense is refuted, and any deployment must estimate the window's
-location for its own era. (vi) The evaluated reactivation
+location for its own era, while the one committed estimator for
+doing so has already failed its first calibration (the $\kappa$
+infeasibility above), so no validated location procedure currently
+exists. (vi) The evaluated reactivation
 inventory behind $\hat\Gamma > 0$ is 27 events (deterministic across
 seeds; the evaluated half begins in 2008), right-skewed in
 contribution---the early-COVID windows, 2025-04, 2015-11, and 2011-11
@@ -2256,12 +2467,16 @@ All headline comparisons are Welch tests over 100 independent seeds with
 Holm--Bonferroni correction within each experiment's pre-registered pair
 family. At 100 seeds: the controlled batteries E1--E6, the stitched
 daily panel, the synthetic replay battery (D1), the MLP battery of
-Section~\ref{sec:e1m} (its SNR sweep at 20), and---per the
+Section~\ref{sec:e1m} (its SNR sweep at 20), the K2
+expanding-window/replay battery, and---per the
 pre-registered parity battery D6---the French L1/L3 walk-forward and
 stitched batteries of Section~\ref{sec:e1f}. At 20 seeds as run: the
 intraday retest of Section~\ref{sec:e1r}, the assignment diagnostic,
-and the French cost (D3), replay (D2), mechanism-probe (X1/X3), and
-withheld-era (E-F) batteries. In the walk-forward designs of
+and the French cost (D3), mechanism-probe (X1/X3), withheld-era
+(E-F), decision-layer (K3), and Japan (E-R) batteries; the D8
+probe/dormancy grid at 10 seeds. One register per cell: the 20-seed
+D2 replay cell is superseded by its 100-seed K2 re-measurement
+(Section~\ref{sec:e1f}), and no cell quotes both registers. In the walk-forward designs of
 Section~\ref{sec:e1f} seeds vary initialization only, so those
 intervals are conditional on a single history; tables report mean
 $\pm$ 95\% CI. The synthetic and stitched
@@ -2291,11 +2506,18 @@ evicted. On real data its \emph{protocol} was refuted
 twice and revised twice (E1r, E1f)---each time toward the
 decomposition's own central term. What survives that record, stated
 as the four claims we would defend: (1) the \emph{sign} of
-$\hat\Gamma$ prices the pool---two in-sample tests and five of six
-withheld cells, in both directions; (2) where the deficit is positive
-it is real economics---amplified, not killed, by crisis-window
-transaction costs, and collectible by replay on real data though the
-invariance-equipped pool still beats replay on both substrates;
+$\hat\Gamma$ prices the pool---two in-sample tests, five of six
+withheld cells, and four of four Japan cells (9 of 10 out-of-sample),
+in both directions; (2) where the deficit is positive
+it is real economics on the modern era---amplified by crisis-window
+transaction costs on 1990--2025 under both labelers---while the
+withheld era's cost verdict is split and disclosed: the two-arm
+deficit survives only an era-anachronistic 25 bps register, but the
+pool's net edge over the monolith survives every tier; the deficit is
+collectible by replay on real data though the
+invariance-equipped pool still beats replay on both substrates,
+while an expanding-window retrainer collects only ${\approx}59\%$
+and leaves a real $+3.7$ bps/day residual;
 (3) its mechanism on real data is honestly open---the measured
 quantity behaves as a regime-conditional \emph{allocation} deficit,
 while eviction-forgetting proper remains a controlled-setting result
@@ -2304,7 +2526,13 @@ structure screen. Retention is
 an allocation property: every isolated covering arm retains
 (A4--A6, A9, A10), every reward-chasing arm relearns (A1--A3, A8b), the
 boundary is crisp ($p \sim 10^{-23}$ for the class separation), and no
-training objective crosses it (A7). Invariance is an objective property:
+training objective crosses it (A7). Nor is the boundary about data
+access: the expanding-window retrainer A1e discards nothing and sits
+outside A1's class, yet on the substrate where the deficit is
+positive it still pays a real residual
+(Section~\ref{sec:e1f})---what defines the class is whether the
+\emph{capacity assignment} chases reward, not what the training set
+remembers. Invariance is an objective property:
 it pays only inside a retaining allocation (super-additive interaction,
 CI excluding zero), grows with episode heterogeneity (E4), requires
 both of its terms ($\beta$ sweep)---and is honestly bounded: it is
@@ -2386,13 +2614,13 @@ settled within their stated scope; rows 7--10 are the frontier; rows
 3. Emergent assignment recovers the oracle map unseen & A6$\approx$A10 $p{=}0.53$; covering 20/20 seeds (\emph{established}; crisis niche unpinned, disclosed) & non-coverage at $N \gtrsim R$ \\
 4. Interference emerges under gradient descent, nothing evicted & $\Gamma_{\text{mlp}}$ excess $+0.0075\pm0.0004$, $p{=}1.9{\times}10^{-78}$ (\emph{established}; invariance null under MLP, disclosed) & the gap vanishing at matched architecture \\
 5. Retention inverts at high SNR (linear class) & E6 sweep; oracle inverts identically (\emph{established, linear}; MLP diverges, disclosed) & inversion reproducing nowhere outside E6 \\
-6. Structure screen is demoted: it does not price the pool & three dissociations incl.\ $z{=}23.5$ pass with inversion (\emph{established by record}) & the screen tracking pool value out-of-sample \\
-7. The deficit is real economics where positive & cost-amplified $+0.00126 \to +0.00230$ net; replay collects it, pool still wins; banded-monolith countermeasure run, net edge stands (\emph{frontier: one country, aggregate}) & a disciplined implementation beyond $b{\le}2$ bands closing the net gap \\
+6. Structure screen is demoted: it does not price the pool & four dissociations incl.\ $z{=}23.5$ pass with inversion and Japan's screen-fail-with-priced-pool (\emph{established by record}) & the screen tracking pool value out-of-sample \\
+7. The deficit is real economics where positive & modern era: cost-amplified $+0.00126 \to +0.00230$ net, both labelers. Withheld era: gross yes; pool-vs-monolith net yes at every tier; two-arm $\hat\Gamma_{\mathrm{net}}$ only at the era-anachronistic 25 bps, disclosed. Replay collects it, expanding window leaves a real residual, pool still wins; banded countermeasure run, net edge stands (\emph{frontier: aggregate, two countries}) & a disciplined implementation beyond $b{\le}2$ bands closing the net gap \\
 8. Real-data mechanism = regime-conditional allocation deficit & X1/X3: no dormancy/rehearsal covariate; non-decaying (\emph{honestly open}) & a covariate or transient found; or CRSP contradiction \\
-9. $\hat\Gamma$'s sign prices the pool & 8/12 strong, 12/12 weak (one-directional) incl.\ one temporal-custody hit; dependence caveats stated (\emph{frontier}) & one clean refuting cell (definitions lodged) \\
-10. Window location tracks crisis density & two eras: $15\% \leftrightarrow 10\%$ relocation (\emph{$n{=}2$; estimator lodged for CRSP}) & estimator missing on regionals/CRSP \\
+9. $\hat\Gamma$'s sign prices the pool & 12/16 strong, 16/16 weak (one-directional); 9/10 out-of-sample incl.\ Japan and one temporal-custody hit; dependence caveats stated (\emph{frontier}) & one clean refuting cell (definitions lodged) \\
+10. Window location tracks crisis density & two eras: $15\% \leftrightarrow 10\%$ relocation; the committed $\theta(\mathrm{era})$ estimator failed calibration ($\kappa$ intervals disjoint) and is retired pre-CRSP (\emph{$n{=}2$; no validated estimator}) & a CRSP/regional window inconsistent with crisis density \\
 11. Live measurement-split prediction & frozen 2026-06-30, both cells positive; scored 2027-04-07 (\emph{lodged, unresolved}) & A1 outperforming A6 in the outcome window \\
-12. CRSP T-split forward battery & OSF-lodged design, register and estimator fixed pre-data (\emph{lodged, unresolved}) & sign-rule miss under the T-split \\
+12. CRSP T-split forward battery & OSF-lodged design, register fixed pre-data; window estimator retired pre-data, frozen-$15\%$ primary (\emph{lodged, unresolved}) & sign-rule miss under the T-split \\
 \bottomrule
 \end{tabular}
 \caption{The claims ledger. Grades and refutation conditions are lodged
@@ -2407,14 +2635,16 @@ in the pre-registration record (osf.io/nsx4e; \texttt{PROVENANCE.md}).}
 
 \begin{enumerate}
     \item \textbf{The controlled study carries the causal claims; the
-    real-data record is multi-era but still one country and one
-    aggregate cross-section.} The dissociation is demonstrated
+    real-data record is multi-era but still aggregate
+    cross-sections from two countries.} The dissociation is demonstrated
     with full causal control only in synthetic markets. On real data,
-    the record now spans 1926--2025 (three walk-forward windows, six
-    withheld scored cells, costs measured on the 1990--2025
-    batteries), but every cell is portfolio-level, single-history,
-    and drawn from one country's industry aggregate; the
-    crypto/commodity nulls and the L1/prewar inversions bound it, and
+    the record now spans 1926--2025 and two countries (US industry
+    walk-forwards plus the Japanese size--value panel; sixteen scored
+    cells, costs measured on the 1990--2025 US
+    batteries and, at 25--100 bps, on the withheld-era positive
+    cells), but every cell is portfolio-level and
+    single-history; the
+    crypto/commodity nulls and the L1/prewar/Japan inversions bound it, and
     the mechanism attribution on real data is open---allocation
     deficit versus eviction-forgetting
     (Section~\ref{sec:e1f})---with CRSP constituents and an
@@ -2424,7 +2654,12 @@ in the pre-registration record (osf.io/nsx4e; \texttt{PROVENANCE.md}).}
     crisis episodes) is the pre-committed forward test with its
     statistics fixed in advance (Section~\ref{sec:stats}), and it is
     where the sign rule, the aggregation caveat, and the mechanism
-    question are decided.
+    question are decided. The paying threshold must be estimated per
+    era---and the committed estimator for doing so failed its first
+    calibration (disjoint $\kappa$ requirements across the two
+    available eras), a failure disclosed before any CRSP access; the
+    estimator is retired and the CRSP battery runs at the frozen
+    $15\%$ with the threshold set as a descriptive map only.
     \item \textbf{Real universes remain modest.} Five crypto pairs,
     three commodities, and 49 (post-1990) or 36 (pre-1990) industry
     portfolios at daily frequency;
@@ -2453,7 +2688,10 @@ in the pre-registration record (osf.io/nsx4e; \texttt{PROVENANCE.md}).}
     invariant retention loses to episode-chasing ERM by up to $60\%$. Any
     deployment must locate itself on the E6 axis first; a staleness
     trigger in the GAUSE style (re-opening competition on confident
-    underperformance) is the known remedy and is future work here. The
+    underperformance) has been piloted at 20 seeds
+    (\texttt{results/e6\_trigger.json}): it tracks A6 where retention
+    pays ($0.0307$ vs.\ $0.0307$ at baseline SNR) but does \emph{not}
+    close the high-SNR inversion, so the remedy remains open. The
     boundary is established for the linear, regime-keyed model class:
     under the single-readout MLP of Section~\ref{sec:e1m} the
     high-SNR inversion does not reproduce (the lodged divergence,
