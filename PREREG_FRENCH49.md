@@ -1159,3 +1159,15 @@ lodge the fallback NOW, ex-ante for CRSP:
   A1−A6 net-25bps ≈ +10.6 and +11.3 bps/day (Welch p ≈ 1e-28 / 1e-14),
   carried by turnover discipline (A6 ≈ 0.71 vs A1 ≈ 1.10). Consistent
   with D3/H; not scored.
+- **Supplementary note (interpretive; the tiers were lodged in N2 and
+  the 25 bps adjudication stands as registered):** read in the prewar
+  era's own historically realistic cost terms (1926–89 effective
+  costs sat well above 25 bps; 50–100 bps is the plausible band), the
+  era-scoped economic claim is WEAKER, not stronger: Γ_net is not
+  significant at 50 bps (prewar-10% +0.000104±0.000107; 1958–89
+  +0.000180±0.000198) nor at 100 bps (+0.000005±0.000151;
+  +0.000146±0.000276). The registered 25 bps significance therefore
+  rests on a cost level anachronistic for the era it is applied to —
+  stated plainly wherever the N2 verdict is cited. The pool's
+  A6-over-A1 net edge, by contrast, is significant at every tier in
+  both cells (descriptive, as above).
