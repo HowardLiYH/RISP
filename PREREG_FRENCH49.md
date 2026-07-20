@@ -650,3 +650,53 @@ lodged for the magnitude. If any cell flips sign significantly, that is
 a MISS, reported with the specification-fragility sentence already
 attached to this cell (Addendum C) — the cell's honest state would then
 be fragile in BOTH the labeler threshold and the measurement window.
+
+## Addendum J verdicts (written 2026-07-20 AFTER the runs; registration above unedited)
+
+- **D7: the MIDDLE branch PJ2 (lodged p=0.30) won, not the modal PJ1
+  (p=0.55).** A1e collects **73.0%** of the A1−A9 deficit — inside PJ2's
+  20–80% band, below PJ1's ≥80% threshold. A1e post_react
+  0.021832±0.000228; paired contrasts: A1−A1e = +0.000667±0.000276
+  (positive-significant; Holm 4.1e-4), A1e−A9 = +0.000247±0.000254 (NOT
+  significant), A1−A9 = +0.000914±0.000201 (headline, reproduced
+  exactly). A1r's share on the common seeds: 98.7%. A6 beats A1e (paired
+  +0.000523±0.000276; Holm 1.8e-3), so the pool retains a significant
+  edge over the expanding window.
+- **The lodged adverse consequence for the ICAIF class sentence is
+  TAKEN, with the trigger scored honestly.** The lodged trigger was PJ1
+  (≥80%); the outcome fell in PJ2 at 73.0%. But the operative fact the
+  adverse branch was written for obtains regardless of the 80% line:
+  A1e's residual deficit vs A9 is statistically indistinguishable from
+  zero while A1's is Holm-significant at 8.2e-12 — an expanding-window
+  policy trained on all accumulated data is NOT in A1's behavioral
+  class. The sentence "A1 represents every allocation policy whose
+  training resource follows current reward" is therefore narrowed to
+  RECENCY-DRIVEN policies (training resource follows current reward AND
+  dormant-regime data is discarded or evicted), at full prominence in
+  both papers per the lodged commitment. Data retention without
+  parameter isolation collects most of the deficit (A1r 98.7%, A1e
+  73.0%); what parameter isolation (A6) still buys over A1e is
+  significant and reported alongside.
+- **Battery-level like-for-like proof:** the five arms shared with the
+  D2 replay battery reproduce e_french49_L3_replay.json's post_react
+  means EXACTLY (same seeds, same factories, same schedule) — the D7 run
+  is a strict superset re-read, not a new configuration.
+- **D8: PJ4 (p=0.8) CONFIRMED — Γ's sign is positive-significant in ALL
+  6 cells.** probe5/90: +0.001343±0.000541 (n_react 27); probe10/90:
+  +0.001242±0.000331 (27); probe15/90 (primary re-read, 10 seeds):
+  +0.001100±0.000255 (27; consistent with the 20-seed headline
+  +0.000914±0.000201, wider CI as declared); probe30/90:
+  +0.000574±0.000108 (27); probe15/60: +0.001034±0.000136 (44);
+  probe15/120: +0.001165±0.000323 (20). The L3 measurement window is
+  not carrying the sign.
+- **Unlodged descriptive observation (labeled as such, no lodged
+  direction existed):** per-day Γ declines monotonically with probe
+  length (13.4 → 5.7 bps/day from N_p=5 to 30) while the CUMULATIVE
+  deficit Γ×N_p saturates: 67 → 124 → 165 → 172 bps·day — the
+  relearning transient is mostly complete within ~15 days, consistent
+  with the registered probe sitting near the saturation knee. Post-hoc,
+  descriptive only.
+- Regression proofs: 2-seed e1 JSON byte-identical (sha256
+  cc5987144b11380f93b8ae07fe1aeda50e006debe00361d2518f9296ca57e33c)
+  before/after the additive risp.py edit, per the D1/H convention; plus
+  the battery-level exact reproduction above.

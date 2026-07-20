@@ -373,6 +373,40 @@ class ReplaySpecialist(Specialist):
         self.n_burst_refits += 1
 
 
+class ExpandingWindowSpecialist(Specialist):
+    """PREREG J D7 (additive; no existing arm touched): expanding-window
+    learner. ONE weight vector serves and trains for every regime (no
+    regime conditioning; per-regime heads are meaningless when training
+    pools all regimes). The episode buffer is GLOBAL, keyed
+    (regime, episode), appends every stored day and is NEVER evicted or
+    capped (A1 caps at buf_episodes=6 x buf_days=40 per regime; this
+    window expands without bound -- no recency weighting). Training
+    budget identical to A1: 2 SGD steps/day, same lr, `_sgd_step`
+    inherited unchanged, so each ERM step samples one stored episode
+    uniformly over ALL accumulated episodes -- how ReplaySpecialist
+    accesses its retained buffer at burst-refit, but unconditionally on
+    every day rather than only at reactivation. Lodged in
+    PREREG_FRENCH49.md Addendum J (implementation register) before this
+    class was written."""
+
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw)
+        self.gbuf: dict[tuple, list] = {}   # (regime, episode) -> [(X, y)]
+        self.head = Head(w=np.zeros(self.d))
+
+    def holds(self, r: int) -> bool:
+        return True                          # the one model serves everything
+
+    def predict(self, X: np.ndarray, r: int) -> np.ndarray:
+        return X @ self.head.w               # regime ignored by design
+
+    def learn(self, X, y, r: int, e: int, n_steps: int = 2):
+        self.t += 1
+        self.gbuf.setdefault((int(r), int(e)), []).append((X, y))
+        for _ in range(n_steps):
+            self._sgd_step(self.head, self.gbuf)
+
+
 def ep_sample(ep_list, rng, m: int = 8):
     """Sample a minibatch of days from one episode's stored data."""
     take = min(m, len(ep_list))
@@ -427,6 +461,28 @@ class ReplayMonolithArm(ArmBase):
                                   mode=mode, memory=memory, beta=beta,
                                   burst_mult=burst_mult)
         self.name = f"replay-monolith-{mode}"
+
+    def decide(self, X, r):
+        return self.s.predict(X, r)
+
+    def observe(self, X, y, r, e, served_regret):
+        self.s.learn(X, y, r, e)
+
+
+class ExpandingWindowArm(ArmBase):
+    """A1e (PREREG J D7, additive): expanding-window monolith -- the most
+    common desk deployment. Identical to MonolithArm except the Specialist
+    is an ExpandingWindowSpecialist: one weight vector, trained every day
+    on the union of ALL stored episodes across ALL regimes (expanding
+    window; no regime conditioning, no recency weighting), same 2-steps/
+    day budget and lr as A1. Parameter count d vs A1's K*d = 2d -- a
+    disclosed capacity disadvantage lodged in Addendum J."""
+
+    def __init__(self, cfg, rng, mode="erm", memory="hard", beta=1.0, K=2):
+        self.s = ExpandingWindowSpecialist(cfg.d, K, cfg.k, cfg.w_max, rng,
+                                           mode=mode, memory=memory,
+                                           beta=beta)
+        self.name = f"expwindow-monolith-{mode}"
 
     def decide(self, X, r):
         return self.s.predict(X, r)
@@ -957,6 +1013,9 @@ EXTRA_ARM_FACTORIES = {
     # PREREG D4 A3' (ASCII key "A3p"): A3 capital/serving, reward-independent
     # own-regime training.
     "A3p-shadowtrain": lambda cfg, rng, K, mem: ShadowTrainRecentPerfArm(cfg, rng, K=K, memory=mem),
+    # PREREG J D7 (A1e): expanding-window monolith -- trains daily on the
+    # union of all stored episodes across regimes, no recency weighting.
+    "A1e-expwindow": lambda cfg, rng, K, mem: ExpandingWindowArm(cfg, rng, "erm", mem, K=K),
 }
 
 
