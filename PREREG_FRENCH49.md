@@ -1117,3 +1117,45 @@ lodge the fallback NOW, ex-ante for CRSP:
 - **Custody obligation:** this section, the calibration JSON, and the
   fallback must be mirrored to osf.io/nsx4e BEFORE WRDS access;
   recorded as owed in PROVENANCE.md until done.
+
+## Addendum N verdicts (written 2026-07-20 AFTER the N1/N2 runs; registration above unedited)
+
+- **N1 — PN1a (p=0.55) MISS; PN1b (p=0.45) MISS; the binding adverse
+  branch is TAKEN for BOTH cells.** Re-read sanity: both cells reproduce
+  the published per-seed raws exactly (max|diff| = 0).
+  - prewar-10%: n=56 events, 32 positive, median +1.49 bps; sign test
+    p=0.1748 FAILS, Wilcoxon p=0.0287 passes — the modern-L3/K1 split
+    exactly (mean carried by large positive events, median weak).
+  - 1958–89@15%: n=21, 12 positive, median +1.21 bps; sign p=0.3318
+    AND Wilcoxon p=0.3927 — **fails BOTH registered tests**, the
+    weakest event-level showing in the program.
+  - Consequence, binding: BOTH withheld-era positive cells' seed CIs
+    are relabeled IMPLEMENTATION-PRECISION-ONLY wherever quoted;
+    Addendum F's "two positive-side confirmations" sentence now
+    carries this relabeling with it, abstract-adjacent, both papers
+    (edits owed to the paper wave). Program event-level scoreboard:
+    NBER passes both tests; modern-L3 and prewar-10% pass Wilcoxon
+    only; 1958–89 passes neither.
+- **N2 — PN2a (p=0.65) and PN2b (p=0.55): the PARTIAL-MISS branch in
+  both cells.** Gross sanity exact in both. At the adjudicating 25 bps
+  both-pay register: prewar-10% Γ_net = +0.000150±0.000096
+  (positive-significant) but BELOW gross (+0.000199) — the D3
+  amplification clause FAILS out-of-sample (−24% attenuation);
+  1958–89 Γ_net = +0.000198±0.000169 (positive-significant, barely)
+  vs gross +0.000213 (−7%). Higher tiers: prewar-10% n.s. at 50,
+  zero at 100; 1958–89 n.s. at 50/100. Verdict sentence, both parts
+  mandatory wherever cited: the out-of-sample deficit SURVIVES the
+  adjudicating 25 bps register in both cells, AND the amplification
+  clause is refuted out-of-sample — net-of-cost amplification was a
+  modern-era phenomenon, not a property of the deficit.
+  - Mechanism (descriptive): D3's modern amplification came from the
+    monolith out-churning the oracle in crisis windows; prewar the
+    turnovers are nearly equal (A1 1.10 vs A9 1.13 — the oracle
+    churns slightly MORE), so costs subtract a little from Γ instead
+    of adding.
+- **Unlodged descriptive observation (labeled as such; no family was
+  lodged):** the pool's NET edge over the monolith is large and
+  replicates out-of-sample in both cells even where Γ_net fades —
+  A1−A6 net-25bps ≈ +10.6 and +11.3 bps/day (Welch p ≈ 1e-28 / 1e-14),
+  carried by turnover discipline (A6 ≈ 0.71 vs A1 ≈ 1.10). Consistent
+  with D3/H; not scored.
