@@ -47,3 +47,19 @@ Notes:
   answer to that file-drawer question from this date forward.)
 - Independent check of any push time: GitHub's public event archive
   (GH Archive) records push events for public repositories.
+- **4H disjoint-era replication: attempted 2026-07-20, NOT RUN — data
+  unfetchable from this environment, no addendum lodged.** The vendored
+  4H panel ends 2024-12-31, so 2025–26 would be a clean disjoint span
+  for re-testing the E0 4H screen pass (whose confirmation reused the
+  screen's span — selection-on-maximum bias, disclosed). The source
+  (Bybit v5 kline API, all official domains incl. api.bytick.com) is
+  CloudFront-geo-blocked from this location; the free archive
+  (public.bybit.com) carries 2025–26 only as tick-level trading files
+  (~100 MB/day for BTCUSDT alone; tens of GB for the span) and its MT4
+  kline mirror is 15-minute bars ending 2024 with no DOGEUSDT. Per the
+  standing rule (no silent substitution, no sketchy sources), nothing
+  was lodged and nothing ran; the replication remains open for an
+  environment with API access, and the lodgeable prediction sketch
+  (screen pass replicates p≈0.55; Γ stays ≈0 p≈0.8) is recorded here
+  as UNLODGED — it has no registration standing until committed alone
+  before the data exists locally.
