@@ -700,3 +700,108 @@ be fragile in BOTH the labeler threshold and the measurement window.
   cc5987144b11380f93b8ae07fe1aeda50e006debe00361d2518f9296ca57e33c)
   before/after the additive risp.py edit, per the D1/H convention; plus
   the battery-level exact reproduction above.
+
+## Addendum K (2026-07-20): Event-level inference (K1), expanding-window at full seed budget (K2), decision-layer perturbation (K3)
+
+Lodged BEFORE any of the three scripts below exist. Same discipline as
+Addenda D/E/H/J: this section is committed and pushed ALONE; code and
+results follow in later commits; verdicts are appended below this line
+without editing the registration.
+
+### K1 — Event-level inference on the LORO per-reactivation Γ values
+
+**Honest scoping — analysis-plan registration, not data custody.** The
+per-reactivation Γ values this test will consume are ALREADY released:
+`results/e_french49_L3_loro.json` and `results/e_french49_nber_loro.json`,
+field `contrasts/A1_minus_A9/per_reactivation_gamma[*].gamma_i_mean`
+(n=27 for the L3 cell, n=20 for NBER), and their means/SDs were already
+quoted in the paper's power guidance. Nothing here is unseen data. What
+this addendum registers is the ANALYSIS PLAN — the tests, sidedness,
+alpha, and consequences — before any of these tests are computed.
+
+Plan, per cell (L3 walk-forward; NBER walk-forward):
+- One-sided sign test (H1: median per-event Γ > 0): scipy
+  `binomtest(n_positive, n, 0.5, alternative='greater')`. Zeros, if any,
+  are dropped from n (standard sign-test convention; none expected).
+- One-sided Wilcoxon signed-rank (H1: pseudomedian > 0),
+  `alternative='greater'`.
+- Event-level one-sample t on the gamma_i_mean values, reported as
+  DESCRIPTIVE only (the events are not iid draws — dormancy and era
+  cluster them; the sign test and Wilcoxon are the registered tests).
+- Alpha 0.05 per test, no multiplicity correction across the two cells
+  (each cell's verdict stands alone, as in the LORO registration).
+- Script: `code/e_event_level.py`; output
+  `results/e_event_level_inference.json` with per-cell n, n_positive,
+  median in bps, both p-values, and the descriptive t.
+
+**Lodged predictions:**
+- PK1a (p=0.75): L3 sign test p < 0.05.
+- PK1b (p=0.70): L3 Wilcoxon p < 0.05.
+- PK1c (p=0.45): NBER passes BOTH tests at p < 0.05. (Lower confidence
+  lodged deliberately: the NBER cell's mass sits in two recessions, and
+  the LORO supplement already showed drop-Jan-09 attenuation to 41% of
+  headline; 20 events with clustered mass can fail a median test even
+  when the mean survives.)
+
+**Adverse branch (binding):** if a cell fails at event level (either
+registered test at p ≥ 0.05 for that cell), the paper's headline claim
+for that cell is restated in the seed register explicitly labeled
+IMPLEMENTATION-PRECISION-ONLY (the seed-level CI measures Monte-Carlo
+precision of the pipeline, not event-level generality), and the
+event-level failure is disclosed in the abstract-adjacent text at full
+prominence — not in a footnote.
+
+### K2 — D7 expanding-window battery at the full 100-seed budget
+
+Rerun the Addendum J D7 battery exactly — same six arms {A1, A9, A5,
+A6, A1r-replay-erm, A1e-expwindow}, same config (L3 walk-forward, K=2,
+hard memory, probe 15, min_dormancy 90, dd 15%), same per-arm seeding
+1311*s+17 — at seeds=100 instead of 20. The 20-seed run left A1e−A9 at
++0.000247±0.000254 (n.s.); 100 seeds shrinks the CI by ~sqrt(5) to
+roughly ±0.000114, so this is a genuine test of whether the residual is
+a small positive effect or noise. Output:
+`results/e_french49_L3_expwin_100s.json`.
+
+**Lodged predictions:**
+- PK2a (p=0.60): A1e's deficit share collected lands in 55–85%
+  (20-seed point estimate was 73.0%).
+- PK2b (p=0.50): A1e−A9 is positive-significant at 100 seeds
+  (mean − 1.96·SE > 0).
+
+**Branches (both directions lodged):**
+- If PK2b HITS (residual significant): the paper says an
+  expanding-window desk faces a SMALL BUT REAL residual, ~2–3 bps on
+  the post-reactivation register, alongside the existing narrowed class
+  sentence. A6's edge over A1e is restated with the 100-seed numbers.
+- If PK2b MISSES (residual stays n.s. at the full budget): the current
+  wording stands — data retention without parameter isolation collects
+  most of the deficit and the residual is statistically
+  indistinguishable from zero — now backed by the full seed budget.
+
+### K3 — Decision-layer perturbation (top-k robustness)
+
+The headline decision layer is top-k selection with k=5, w_max=0.2
+(gross exposure k·w_max = 1.0). Test whether Γ's sign and the A6-vs-A1
+ordering survive perturbing the decision layer itself: L3 walk-forward,
+arms [A1-monolith-erm, A9-oracle-pinned, A5-risp-erm, A6-risp-inv],
+20 seeds, seeding 1311*s+17, K=2, hard memory, probe 15, min_dormancy
+90, at two cells:
+- k=3, w_max=1/3 (concentrated)
+- k=10, w_max=0.1 (diversified)
+
+w_max is scaled to hold gross exposure at 1.0 in both cells, matching
+the headline's exposure, so the perturbation moves concentration only,
+not leverage. Script: `code/e_french_L3_topk.py`; output
+`results/e_french49_L3_topk.json` with per-cell Γ = A1−A9 paired mean
+± ci95 and positive-significance flag, plus the four-arm Welch/Holm
+table per cell.
+
+**Lodged predictions:**
+- PK3a (p=0.70): Γ is positive AND significant in BOTH cells.
+- PK3b (p=0.65): the A6 < A1 ordering (A6 lower post-reactivation
+  regret than A1) is direction-preserved in BOTH cells.
+
+**Adverse branch (binding):** a Γ sign flip at either k is disclosed as
+a DECISION-LAYER FRAGILITY at the same prominence as the labeler
+threshold fragility (Addendum C) — the two fragility sentences travel
+together wherever the L3 cell is quoted.
