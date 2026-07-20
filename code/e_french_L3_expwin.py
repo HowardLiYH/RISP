@@ -53,7 +53,8 @@ def paired_gamma(res, a, b, key="post_react"):
                 d.mean() - 1.96 * d.std(ddof=1) / np.sqrt(len(d)) > 0)}
 
 
-def main(seeds=20):
+def main(seeds=20, out_name="e_french49_L3_expwin.json",
+         prereg="Addendum J D7, spec commit c742c5c"):
     ret, dropped = load_french_vw()
     X, Y, idx = build_xy_returns(ret)
     px = price_panel(ret)
@@ -106,7 +107,7 @@ def main(seeds=20):
                       "probe": PROBE, "min_dormancy": 90,
                       "dd_thresh": 0.15, "seeding": "1311*s+17",
                       "arms": ARMS, "diag": diag,
-                      "prereg": "Addendum J D7, spec commit c742c5c"},
+                      "prereg": prereg},
            "post_react": summarize({a: res[a]["post_react"] for a in ARMS}),
            "overall": summarize({a: res[a]["overall"] for a in ARMS}),
            "welch_p": pv, "holm_p": holm(pv),
@@ -114,7 +115,7 @@ def main(seeds=20):
            "deficit_share_collected": {"A1e-expwindow": float(share_a1e),
                                        "A1r-replay-erm": float(share_a1r)},
            "raw": res}
-    with open(RESULTS / "e_french49_L3_expwin.json", "w") as fh:
+    with open(RESULTS / out_name, "w") as fh:
         json.dump(out, fh, indent=1, default=float)
     for k, g in gammas.items():
         print(f"[D7] {k}: {g['mean']:+.5f} ± {g['ci95']:.5f} "
@@ -125,4 +126,9 @@ def main(seeds=20):
 
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) > 1 and sys.argv[1] == "k2":
+        # PREREG K K2 (spec commit a02b9f8): identical battery, 100 seeds.
+        main(seeds=100, out_name="e_french49_L3_expwin_100s.json",
+             prereg="Addendum K K2, spec commit a02b9f8")
+    else:
+        main()

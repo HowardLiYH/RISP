@@ -1,0 +1,43 @@
+{
+ "prereg": "Addendum K K1, spec commit a02b9f8",
+ "alpha": 0.05,
+ "registered_tests": [
+  "sign_test_one_sided",
+  "wilcoxon_one_sided"
+ ],
+ "t_test_status": "descriptive only (events cluster by era)",
+ "cells": {
+  "L3_walkforward": {
+   "source": "e_french49_L3_loro.json",
+   "n_events": 27,
+   "n_zero_dropped": 0,
+   "n_positive": 18,
+   "n_negative": 9,
+   "mean_bps": 11.998477406370734,
+   "median_bps": 4.510150766876092,
+   "sign_test_p_one_sided": 0.06103906035423279,
+   "wilcoxon_stat": 278.0,
+   "wilcoxon_p_one_sided": 0.015947915613651276,
+   "t_stat_descriptive": 2.6977279241706142,
+   "t_p_one_sided_descriptive": 0.006047331340224197,
+   "sign_test_pass_at_0.05": false,
+   "wilcoxon_pass_at_0.05": true
+  },
+  "NBER_walkforward": {
+   "source": "e_french49_nber_loro.json",
+   "n_events": 20,
+   "n_zero_dropped": 0,
+   "n_positive": 15,
+   "n_negative": 5,
+   "mean_bps": 9.548541221375608,
+   "median_bps": 4.467012230397877,
+   "sign_test_p_one_sided": 0.020694732666015625,
+   "wilcoxon_stat": 162.0,
+   "wilcoxon_p_one_sided": 0.016384124755859375,
+   "t_stat_descriptive": 1.549904446394114,
+   "t_p_one_sided_descriptive": 0.06883064390065288,
+   "sign_test_pass_at_0.05": true,
+   "wilcoxon_pass_at_0.05": true
+  }
+ }
+}

@@ -805,3 +805,52 @@ table per cell.
 a DECISION-LAYER FRAGILITY at the same prominence as the labeler
 threshold fragility (Addendum C) — the two fragility sentences travel
 together wherever the L3 cell is quoted.
+
+## Addendum K verdicts (written 2026-07-20 AFTER the runs; registration above unedited)
+
+- **K1 — PK1a (p=0.75) MISS; PK1b (p=0.70) HIT; PK1c (p=0.45) HIT.**
+  L3 cell (n=27, 18 positive, median +4.5 bps): sign test p=0.0610 —
+  FAILS the registered 0.05 line (19/27 positives were needed; 18
+  observed); Wilcoxon p=0.0159 passes; descriptive t p=0.006. NBER cell
+  (n=20, 15 positive, median +4.5 bps): sign test p=0.0207 AND Wilcoxon
+  p=0.0164 — both registered tests pass; the deliberately low-confidence
+  PK1c prediction was wrong in the favorable direction.
+- **K1 adverse branch: TRIGGERED for the L3 cell, taken in full.** The
+  lodged clause fires on "either registered test at p ≥ 0.05," and the
+  L3 sign test is at 0.0610. Consequence, binding: the L3 headline's
+  seed-register CI is restated as IMPLEMENTATION-PRECISION-ONLY
+  (Monte-Carlo precision of the pipeline, not event-level generality),
+  with the event-level failure disclosed abstract-adjacent at full
+  prominence — the L3 cell now carries THREE travel-together sentences
+  (threshold fragility, single-history, event-level sign-test miss),
+  while its Wilcoxon (p=0.016) is reported alongside as the passing
+  registered test. The corresponding paper edits are OWED to the next
+  paper wave (this campaign does not touch paper/). The NBER cell keeps
+  its event-level standing (both tests pass) — notable because its LORO
+  profile was the weaker one.
+- **K2 — PK2a (p=0.60) HIT; PK2b (p=0.50) HIT.** At 100 seeds the
+  headline reproduces (Γ = +0.000887±0.000110 vs +0.000914±0.000201 at
+  20 seeds). A1e's collected share lands at **58.7%** — inside the
+  lodged 55–85% band, though well below the 20-seed point estimate of
+  73.0% (drift disclosed). **A1e−A9 = +0.000366±0.000128 — positive-
+  significant at the full budget**: the PK2b HIT branch applies, and the
+  paper's wording upgrades to "an expanding-window desk faces a SMALL
+  BUT REAL residual (~3.7 bps/day on the post-reactivation register)"
+  alongside the narrowed class sentence. A6 beats A1e by +0.000718
+  ±0.000112 paired (Welch/Holm 1.4e-23). Replay remains the full
+  collector: A1r share 95.8%, A1r−A9 = +0.000038±0.000121 n.s.
+  (Welch p=0.52) even at 100 seeds.
+- **K3 — PK3a (p=0.70) HIT; PK3b (p=0.65) HIT; no decision-layer
+  fragility disclosure triggered.** k=3/w_max=1/3: Γ = +0.000268
+  ±0.000244 (positive-significant, thin margin — CI lower edge +0.00002,
+  disclosed); A6 < A1 direction holds with A1−A6 = +0.000580±0.000169
+  paired, Holm 1.4e-4 (A6-vs-A9 and A6-vs-A5 not Holm-significant in
+  this cell). k=10/w_max=0.1: Γ = +0.000495±0.000123; A6 < A1 at Holm
+  3.5e-13, A1−A6 = +0.000602±0.000083 paired. Γ's sign survives the
+  decision-layer perturbation in both directions.
+- **Unlodged descriptive observation (labeled as such):** Γ is
+  concentration-sensitive in magnitude — +0.00027 (k=3) / +0.00091
+  (k=5, headline) / +0.00049 (k=10) — peaking at the registered k=5.
+  No direction was lodged for magnitude; the sign, which is what the
+  registered predictions and the sign rule consume, is stable. Post-hoc
+  only.
