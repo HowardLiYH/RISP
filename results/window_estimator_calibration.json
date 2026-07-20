@@ -1,0 +1,170 @@
+{
+ "status": "calibration of the committed estimator (PREREG_CRSP_AMENDMENT_TSPLIT.md section C); NOT a new registered claim",
+ "estimator": "theta(era) = smallest 1pp grid threshold with crisis-union occupancy < kappa of feature days",
+ "grid_pct": [
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  21,
+  22,
+  23,
+  24,
+  25,
+  26,
+  27,
+  28,
+  29,
+  30
+ ],
+ "meta": {
+  "modern_1990_2025": {
+   "window": [
+    "1990-01-01",
+    "2025-12-31"
+   ],
+   "n_industries": 49,
+   "n_dropped": 0
+  },
+  "prewar_1926_1989": {
+   "window": [
+    "1926-07-01",
+    "1989-12-31"
+   ],
+   "n_industries": 36,
+   "n_dropped": 13
+  }
+ },
+ "kappa_interval_per_era": {
+  "modern_1990_2025": {
+   "lower_exclusive": 0.12915458398393934,
+   "upper_inclusive": 0.14287307606513494
+  },
+  "prewar_1926_1989": {
+   "lower_exclusive": 0.4708826473532356,
+   "upper_inclusive": 0.4858976623682506
+  }
+ },
+ "occupancy_tables": {
+  "modern_1990_2025": {
+   "0.05": 0.41021637296453267,
+   "0.06": 0.3563461967432523,
+   "0.07": 0.31006022752621015,
+   "0.08": 0.27124693285746154,
+   "0.09": 0.238679455721615,
+   "0.1": 0.21213473120678117,
+   "0.11": 0.18927057773812178,
+   "0.12": 0.1697523979478028,
+   "0.13": 0.15503011376310508,
+   "0.14": 0.14287307606513494,
+   "0.15": 0.12915458398393934,
+   "0.16": 0.11643988400624582,
+   "0.17": 0.10807494981039482,
+   "0.18": 0.09759089895159491,
+   "0.19": 0.08643765335712693,
+   "0.2": 0.07773812179344189,
+   "0.21": 0.06926165514164621,
+   "0.22": 0.06089672094579523,
+   "0.23": 0.05442783850100379,
+   "0.24": 0.047178228864599596,
+   "0.25": 0.04171313852331028,
+   "0.26": 0.03647111309391033,
+   "0.27": 0.03267900959179121,
+   "0.28": 0.030225295561008253,
+   "0.29": 0.029221503457506133,
+   "0.3": 0.027548516618335937
+  },
+  "prewar_1926_1989": {
+   "0.05": 0.5935935935935935,
+   "0.06": 0.56120826709062,
+   "0.07": 0.5287640581758228,
+   "0.08": 0.5042689748572101,
+   "0.09": 0.4858976623682506,
+   "0.1": 0.4708826473532356,
+   "0.11": 0.4563975740446329,
+   "0.12": 0.4428546193252076,
+   "0.13": 0.4285461932520756,
+   "0.14": 0.4165341812400636,
+   "0.15": 0.40628864158275924,
+   "0.16": 0.39521874815992464,
+   "0.17": 0.382441264794206,
+   "0.18": 0.369428251781193,
+   "0.19": 0.357121827710063,
+   "0.2": 0.3446387564034623,
+   "0.21": 0.33274450921509746,
+   "0.22": 0.3203203203203203,
+   "0.23": 0.3088971324265442,
+   "0.24": 0.2997114761820644,
+   "0.25": 0.2906435847612318,
+   "0.26": 0.2802802802802803,
+   "0.27": 0.27197786021315434,
+   "0.28": 0.26267443914502736,
+   "0.29": 0.2552552552552553,
+   "0.3": 0.24830713066007185
+  }
+ },
+ "targets": {
+  "modern_1990_2025": 0.15,
+  "prewar_1926_1989": 0.1
+ },
+ "kappa_feasible_interval": {
+  "lower_exclusive": 0.4708826473532356,
+  "upper_inclusive": 0.14287307606513494,
+  "non_empty": false
+ },
+ "kappa_star_rule": "midpoint of the feasible interval",
+ "kappa_star": null,
+ "recovery": {},
+ "calibration_succeeds": false,
+ "quoted_anchor_check": {
+  "amendment_quote": "15% <-> 13% occupancy modern",
+  "occ_modern_at_15pct": 0.12915458398393934
+ },
+ "directional_note": "The failure is DIRECTIONAL, not marginal: the prewar era has HIGHER crisis-union occupancy than the modern era at every grid threshold (e.g. 47.1% vs 21.2% at 10%; 40.6% vs 12.9% at 15%), so any occupancy rule that recovers modern theta=15% predicts a COARSER prewar threshold (theta > 30%, off-grid), while the era's actual paying window (Addendum F) was FINER (10%). Crisis occupancy does not transfer across eras as the committed estimator assumed.",
+ "consequence": "Per the amendment's own clause, this infeasibility must be lodged at osf.io/nsx4e BEFORE CRSP data access, together with whatever rule replaces or supersedes theta(era); until then the amendment's fixed-15% disclosed-robustness column is the only threshold choice with standing for CRSP L3-family cells.",
+ "japan_descriptive": {
+  "occupancy": {
+   "0.05": 0.8500327439423707,
+   "0.06": 0.8302772320454049,
+   "0.07": 0.8161973368260205,
+   "0.08": 0.793713163064833,
+   "0.09": 0.7749399694389871,
+   "0.1": 0.7571490940842611,
+   "0.11": 0.7406679764243614,
+   "0.12": 0.7265880812049771,
+   "0.13": 0.7079240340537001,
+   "0.14": 0.6893691333769919,
+   "0.15": 0.6722331368696791,
+   "0.16": 0.6546605544640908,
+   "0.17": 0.63152150185549,
+   "0.18": 0.6056537873826675,
+   "0.19": 0.5774939969438987,
+   "0.2": 0.5517354289456451,
+   "0.21": 0.5313250382012661,
+   "0.22": 0.5166994106090373,
+   "0.23": 0.5020737830168086,
+   "0.24": 0.484719493560358,
+   "0.25": 0.46627373935821875,
+   "0.26": 0.4446627373935822,
+   "0.27": 0.42370661427635886,
+   "0.28": 0.40580659244706396,
+   "0.29": 0.3861602270246671,
+   "0.3": 0.36793276577166556
+  },
+  "theta_at_kappa_star": null,
+  "note": "DESCRIPTIVE ONLY. Addendum L fixes Japan's primary at the frozen 15%; this row is what the committed estimator WOULD pick and is not used to relocate anything."
+ },
+ "owed": "kappa*, this table, and the resulting CRSP-era theta are to be committed to osf.io/nsx4e BEFORE WRDS/CRSP data access (expected September 2026), per the amendment."
+}
