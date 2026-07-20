@@ -1034,3 +1034,86 @@ Outputs: `results/e_french49_L3_x2.json` (modern),
   falls — in a majority-crisis market, coarser thresholds make the
   crisis label MORE dominant a regime for the monolith to specialize
   on. Post-hoc only.
+
+## Addendum N (2026-07-20): event-level tests and net-of-cost register for the withheld-era positive cells; κ-infeasibility fallback for CRSP
+
+Lodged BEFORE any of the statistics below were computed (this section
+is committed and pushed alone; scripts and results follow). Same honest
+scoping as K1: the two target cells' SEED-level results are long
+published (Addendum F); their per-reactivation γ values and net-of-cost
+registers do NOT yet exist anywhere and require instrumented re-read
+runs, declared as such below.
+
+### N1 — event-level inference, prewar 10% and 1958–89@15%
+
+The two out-of-sample POSITIVE cells (prewar sweep 10%: Γ=+0.000199
+±0.000089, n_react=56; sub-era 1958–89@15%: Γ=+0.000214±0.000153,
+n_react=21) get the K1 analysis plan verbatim: one-sided sign test and
+one-sided Wilcoxon (H1: median/pseudomedian per-event Γ > 0), α=0.05
+per test, no cross-cell correction, one-sample t descriptive-only.
+Per-reactivation γ_i come from a LORO-style instrumented re-read
+(collect_react=True, arms A1/A9 only), byte-identical config and
+seeding to the published cells (10%: 2117*s+41; 1958–89: 1311*s+17),
+with a hard sanity assertion that the re-read reproduces the published
+per-seed post_react raws exactly. Script `code/e_prewar_event_level.py`;
+output `results/e_prewar_event_level.json`.
+
+**Lodged predictions:** PN1a (p=0.55): the prewar-10% cell passes BOTH
+tests (n=56 events is the largest event count in the program; per-event
+magnitude is small). PN1b (p=0.45): 1958–89@15% passes BOTH (n=21,
+lodged at the same deliberately low confidence as the structurally
+similar PK1c). **Adverse branch (binding, K1 verbatim):** a cell
+failing EITHER registered test has its seed-register CI relabeled
+IMPLEMENTATION-PRECISION-ONLY wherever quoted, disclosed
+abstract-adjacent at full prominence; the relabeling travels with every
+citation of Addendum F's scorecard entries for that cell.
+
+### N2 — net-of-cost register, same two cells
+
+The D3 cost convention verbatim (lodged end of PRE-REGISTRATION E):
+both-pay adjudicating register (net regret = net-of-cost oracle utility
+minus net-of-cost arm utility), turnover = 0.5·Σ|z_t−z_{t−1}|·2 sides,
+arm-only-pays as sensitivity; one instrumented run at 25 bps with exact
+linear rescalings to {50, 100}; 25 bps adjudicates. Arms {A1, A9, A5,
+A6}, 20 seeds, each cell's own published seeding; gross per-seed
+post_react must reproduce the published raws exactly (costs are pure
+accounting). Script `code/e_prewar_costs.py`; output
+`results/e_prewar_costs.json`.
+
+**Lodged predictions:** PN2a (p=0.65): prewar-10% Γ_net@25bps is
+positive-significant AND ≥ its gross Γ (the D3 crisis-window
+amplification replicates on withheld data). PN2b (p=0.55): same for
+1958–89@15%. The A6-vs-A1 net direction is reported per cell (no new
+test family). **Adverse branches:** Γ_net n.s. or negative in a cell →
+the "deficit is real economics" sentence is withdrawn for the
+out-of-sample half, that cell relabeled gross-only at full prominence;
+Γ_net positive-significant but SMALLER than gross → amplification
+clause fails out-of-sample, reported as a partial miss.
+
+### N3 — κ infeasibility: pre-data disclosure and CRSP fallback (ex-ante for CRSP)
+
+The CRSP T-split amendment committed a window-location estimator
+θ(era) with a single calibration parameter κ. Calibration on the two
+available eras (2026-07-20, `results/window_estimator_calibration.json`,
+labeled calibration-not-claim) found it **INFEASIBLE**: modern requires
+κ∈(0.129, 0.143], prewar κ∈(0.471, 0.486] — disjoint by ~3.5×, and
+directionally wrong (the denser-crisis era's paying window moved FINER,
+not coarser). This failure occurred and is hereby disclosed BEFORE any
+WRDS/CRSP data access (expected September 2026). The amendment
+provides NO fallback for the estimator-based primary beyond retaining
+fixed-15% as a disclosed robustness column — we say so plainly and
+lodge the fallback NOW, ex-ante for CRSP:
+- **The θ(era) estimator is RETIRED.** No CRSP cell's threshold is
+  estimator-selected; no successor estimator is introduced unless
+  lodged at osf.io/nsx4e before data access.
+- **The L3-family CRSP primary is the frozen fixed 15%** (promoted
+  from robustness column to primary under the amendment's own terms —
+  it is the only threshold choice with committed standing).
+- The threshold set {10, 12, 15, 20%} runs as a DESCRIPTIVE
+  window-location map (sign-rule material, scored under the standing
+  weak/strong forms per cell; no estimator-based adjudication).
+- The NBER announcement-lagged labeler cell (threshold-free) is
+  unaffected and remains co-primary.
+- **Custody obligation:** this section, the calibration JSON, and the
+  fallback must be mirrored to osf.io/nsx4e BEFORE WRDS access;
+  recorded as owed in PROVENANCE.md until done.
