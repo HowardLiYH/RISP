@@ -544,3 +544,109 @@ full prominence per the standing commitment.
   after all edits; banded battery reproduces the D3 cost series per-seed
   exactly. All open registrations are now closed except the two
   market-clock forward tests (temporal-deployment 2027-04-07; CRSP).
+
+---
+
+## Addendum J (2026-07-20): Expanding-window baseline (D7) and probe/dormancy sensitivity (D8)
+
+Written and pushed BEFORE any implementation or run (git-separated
+custody; this commit contains PREREG_FRENCH49.md alone). Verdicts will be
+appended below after the runs, with this section unedited.
+
+### D7 — the expanding-window monolith (arm A1e-expwindow)
+
+**Question:** the most common desk deployment is not A1's implicit
+recency window — it is a single model retrained on ALL accumulated
+history. Does the ICAIF class sentence ("A1 represents every allocation
+policy whose training resource follows current reward") cover it, and
+does data retention WITHOUT parameter isolation collect the deficit, as
+the decoupled-buffer replay arm A1r did (98.7% of Γ)?
+
+**Arm A1e-expwindow (additive):** a capacity-matched monolith identical
+to A1 except trained, every day, on the union of ALL stored episodes
+across ALL regimes — an expanding window with no regime conditioning and
+no recency weighting.
+
+Implementation register (lodged before coding):
+- Additive only: new classes + one `EXTRA_ARM_FACTORIES` entry in
+  `code/risp.py`; no existing class or factory touched. Regression proof
+  owed: byte-identical 2-seed e1 JSON (sha256) before/after the edit,
+  per the D1/H convention.
+- One weight vector serves every regime (no regime conditioning makes
+  per-regime heads meaningless); `decide(X, r)` ignores `r`. Parameter
+  count is d vs A1's K·d = 2d — a capacity DISADVANTAGE for A1e that we
+  accept and disclose; if A1e nonetheless collects the deficit the
+  conclusion is a fortiori.
+- Training budget identical to A1: 2 SGD steps per day, same lr, same
+  minibatch sampler (`_sgd_step` inherited unchanged). The episode
+  buffer is global, keyed (regime, episode), appends every day, and is
+  NEVER evicted or capped (A1 caps at 6 episodes × 40 days per regime;
+  A1e's window expands without bound). Each ERM step samples one stored
+  episode uniformly — exactly how A1r accesses its retained buffer at
+  burst-refit, but unconditionally on every day rather than only at
+  reactivation.
+
+**Battery:** French-49 L3@15% walk-forward (the headline Γ>0 cell),
+arms {A1-monolith-erm, A9-oracle-pinned, A5-risp-erm, A6-risp-inv,
+A1r-replay-erm, A1e-expwindow}, 20 seeds, per-arm seeding 1311*s+17,
+K=2, hard memory, probe 15, min_dormancy 90 — mirroring
+`e_french_L3_replay.py` exactly. Output
+`results/e_french49_L3_expwin.json` with post_react means/ci95, paired Γ
+contrasts (A1−A9, A1−A1e, A1e−A9) and Welch/Holm p-values in the
+battery's convention.
+
+**Deficit-collection metric:** share = Γ(A1−A1e) / Γ(A1−A9), paired
+means over the 20 common seeds (A1r's share on this cell is 98.7%:
+0.00090/0.00091).
+
+**Lodged predictions (probabilities BEFORE running):**
+- **PJ1 (p=0.55):** A1e collects ≥80% of the A1−A9 deficit — it behaves
+  like A1r: retention of the data alone, without parameter isolation,
+  is enough on this cell.
+- **PJ2 (p=0.30):** A1e sits strictly between A1 and A1r, collecting
+  20–80% of the deficit (mixing all regimes into one head costs part of
+  what retention buys).
+- **PJ3 (p=0.15):** A1e ≤ A1 (collects <20%, or is worse than A1), or a
+  fourth unlodged outcome (e.g. A1e's steady-state degrades enough that
+  post-react comparisons are confounded).
+
+**Adverse branch, stated in advance at full prominence:** if A1e
+collects the deficit (PJ1), then the ICAIF class sentence "A1 represents
+every allocation policy whose training resource follows current reward"
+is FALSE as written — A1e's training resource follows current reward on
+serving-day mixture only trivially, and it escapes the deficit. The
+sentence must be narrowed to RECENCY-DRIVEN policies (training resource
+follows current reward AND discards or evicts dormant-regime data), and
+the narrowing is reported at full prominence in both papers, not in a
+footnote.
+
+### D8 — probe-length and dormancy-threshold sensitivity (L3 walk-forward cell)
+
+**Question:** the registered primary reads Γ at probe N_p=15,
+min_dormancy=90. Is the sign an artifact of that measurement window?
+
+**Cells (7 lodged, 6 unique):** N_p ∈ {5, 10, 15, 30} at fixed
+min_dormancy=90, and min_dormancy ∈ {60, 90, 120} at fixed N_p=15; the
+duplicate (15, 90) cell is the registered primary re-read at 10 seeds
+for like-for-like comparison.
+
+**Design (declared):** 10 seeds each (reduced-seed robustness register —
+seed-noise CIs will be wider than the 20-seed primary; this is a
+sensitivity scan, not a headline estimate). Seeding 1311*s+17, s ∈ 0..9,
+walk-forward only, arms {A1-monolith-erm, A9-oracle-pinned}. Because
+probe and min_dormancy enter `run_arm` ONLY through the post-hoc
+evaluation masks (they touch no training or serving path), each seed's
+daily trajectory is computed once and the 6 cells are measurement
+re-reads of the same 10 trajectories — exactly like-for-like across
+cells by construction; we declare this rather than pretend 60
+independent runs. Γ = paired A1−A9 post-react per cell. Output
+`results/e_french49_L3_sensitivity.json`: per cell Γ mean±ci95,
+positive-significance flag, n_react.
+
+**Lodged prediction PJ4 (p=0.8):** Γ's SIGN is stable (positive) across
+all 6 cells. Magnitude may drift with N_p (shorter probes concentrate on
+the relearning transient, longer probes dilute it) — no direction is
+lodged for the magnitude. If any cell flips sign significantly, that is
+a MISS, reported with the specification-fragility sentence already
+attached to this cell (Addendum C) — the cell's honest state would then
+be fragile in BOTH the labeler threshold and the measurement window.
