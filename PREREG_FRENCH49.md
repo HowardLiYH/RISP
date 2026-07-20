@@ -927,3 +927,67 @@ sum 1):**
 (min_dormancy 90) exist in the crisis cells at 15%, the Γ cell is
 reported as UNDER-POWERED with its n and no verdict is claimed (the
 occupancy inventory makes this legible); the sweep still runs.
+
+## Addendum L supplement (2026-07-20): occupancy-anomaly scoring, audit adoptions, X2 era extension — custody stated exactly
+
+**Custody of this section, stated first and plainly.** An internal audit
+flagged the Japan occupancy pathology (crisis union = 67.2% of trading
+days at dd=15%, a MAJORITY state — `e_japan_L3_inventory.json`, computed
+before any dissociation existed) and asked for an ex-ante scoring
+clause. That request arrived TOO LATE to be ex-ante for Japan: the
+Japan dissociation and sweep results had already been computed and seen
+by the campaign runner (run log, 16:08–16:20 ET) before this section
+was written. We therefore do NOT lodge any new scoring rule for Japan.
+This section is: (a) POST-HOC, disclosed as such, wherever it touches
+Japan; (b) EX-ANTE (forward) for the four remaining E-R regions
+(Europe, Asia-Pacific ex Japan, North America, Developed ex US), none
+of whose data has been downloaded, and for the X2 era extension below
+(no X2 output — modern or prewar — had been read when this section was
+committed; the modern tier-1 map was running unread in the background).
+
+**Japan is scored exactly as lodged, nothing added ex-post.** E-R's
+prediction ("Γ_Japan ≈ 0 or negative") and Addendum L's PL1–PL4 with
+their probabilities stand as the ONLY scored claims for Japan.
+Addendum L's lodged occupancy clause ("reported as-is — no
+re-thresholding") governs. The occupancy-conditioned reading the audit
+proposed (in a majority-crisis market the RARE state is calm — does the
+deficit attach to the rare state with roles reversed?) may be computed
+from the saved raws but carries EXPLORATORY/post-hoc standing only,
+reported outside the verdict block, never as a save of any missed
+prediction (as it happens, the lodged prediction was not missed).
+
+**Audit adoptions (forward, binding on the rest of this campaign and
+successors):**
+- **Gate/screen stages are descriptive-only.** Post-demotion (Addendum
+  F: gate 1 "demoted to a structure screen"), gates are reported as one
+  descriptive line, never as adjudicated PASS/FAIL cells, and nothing
+  downstream conditions on them. Japan's screen line (z=−0.90,
+  conditioning below pooled) changes nothing downstream.
+- **Remaining E-R regions run the minimal battery only:** the Γ cell
+  (A1/A9) + A5/A6 ordering at 20 seeds, walk-forward, frozen L3@15%
+  conventions; occupancy inventory first; NO gate stage; the {10,12,20%}
+  sweep only if the primary Γ is significant in either direction (as
+  sign-rule material), lodged region signs scored as in E-R.
+- **Occupancy-anomaly rule (ex-ante for the remaining regions):** if a
+  region's 15% crisis-union occupancy exceeds 50%, the cell is flagged
+  OCCUPANCY-ANOMALOUS in the same sentence as its verdict; the lodged
+  E-R sign prediction is still scored as lodged (primary), and the
+  occupancy-conditioned rare-state reading is reported alongside as
+  exploratory, with this rule cited as its ex-ante basis.
+
+**X2 era extension (ex-ante; lodged before reading ANY X2 output).**
+The lodged E-X2 map (8–22% × 1pp × hysteresis {0,2,4,6pp}, tier 1 A1/A9
+at 10 seeds, tier 2 +A5/A6 at 20 seeds where tier-1 CI excludes 0) runs
+on BOTH eras: 1990–2025 (as lodged) and byte-identically on the
+withheld era 1926–1989 (36 complete industries, E-F conventions). The
+lodged window criterion (Γ CI>0 in ≥3 contiguous thresholds at some
+hysteresis level = window) applies per era unchanged; the island clause
+is anchored at each era's own known paying threshold (15±0 modern as
+lodged; 10±0 prewar, since Addendum F located the prewar dissociation
+at 10%): only-the-anchor-positive = island for that era. Prediction,
+lodged now: PX2e (p=0.55) — the prewar map shows a window (≥3
+contiguous) that includes 10%, consistent with the relocation reading;
+adverse: a prewar island at 10±0 or an empty prewar map is reported at
+the same prominence and strengthens the one-specification reading.
+Outputs: `results/e_french49_L3_x2.json` (modern),
+`results/e_french49_prewar_L3_x2.json` (withheld era).
