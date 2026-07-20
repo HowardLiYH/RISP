@@ -991,3 +991,46 @@ adverse: a prewar island at 10±0 or an empty prewar map is reported at
 the same prominence and strengthens the one-specification reading.
 Outputs: `results/e_french49_L3_x2.json` (modern),
 `results/e_french49_prewar_L3_x2.json` (withheld era).
+
+## Addendum L verdicts — E-R region 1, Japan (written 2026-07-20 AFTER the runs; registrations above unedited)
+
+- **Data:** 25/25 portfolios complete in-window (zero drops), 9,162
+  feature days. Occupancy inventory (computed before dissociation):
+  crisis-union occupancy 67.2% at dd=15% (72.7% at 12%, 55.2% at 20%) —
+  the crisis union is the MAJORITY state in post-bubble Japan. Cell
+  flagged **OCCUPANCY-ANOMALOUS** (per the supplement, whose standing
+  for Japan is post-hoc and disclosed as such); reported as-is, no
+  re-thresholding, per Addendum L's lodged clause.
+- **Structure screen (descriptive one-liner, per the audit adoption):**
+  z=−0.90, gap −0.54%, conditioning below pooled — no exploitable
+  regime-conditional structure; nothing downstream conditions on this.
+- **Primary 15% cell: the PL2 branch (lodged p=0.25) obtained.**
+  Γ_Japan = **−0.000602 ± 0.000162, negative-significant**, n_react=26,
+  with a Holm-strong INVERSION: A1 0.009472 < A5 0.009969 < A9 0.010073
+  < A6 0.010152; A6-vs-A1 Holm 3.9e-8, A5-vs-A1 Holm 3.5e-5. The
+  monolith beats even the pinned oracle — the invariance/retention
+  premium is a pure visible cost here, the E1s-L1/E-F-1926-57 pattern
+  at its largest real-data magnitude so far (−6.0 bps/day post-react).
+- **E-R region prediction ("Γ_Japan ≈ 0 or negative"): HIT**, on the
+  negative side. PL1 (≈0, p=0.45) did not obtain; PL3 (the miss branch)
+  did not obtain. First region of the lodged fixed order scored.
+- **PL4 (sign-rule consistency, p=0.75): HIT — and in ALL FOUR cells,
+  weak and strong forms.** 15%: negative → inversion (consistent).
+  Sweep: 10% Γ=−0.00002±0.00009 n.s. → flat family (consistent);
+  12% Γ=−0.00029±0.00012 → inversion, Holm 1.4e-6 (consistent);
+  20% Γ=−0.00048±0.00020 → inversion, Holm 3.5e-6 (consistent).
+  Running sign-rule scorecard: 5/6 withheld-era cells (Addendum F)
+  + 4/4 Japan cells = **9/10 across out-of-sample cells, both
+  directions represented**.
+- Structure screen fail + significantly priced pool (negative side) =
+  the FOURTH independent dissociation of the structure screen from
+  pool value — consistent with its Addendum F demotion.
+- The occupancy-conditioned rare-state reading (calm is Japan's rare
+  state) is NOT computable from the saved per-seed scalars without a
+  rerun; left un-run, available as exploratory future work under the
+  supplement's post-hoc labeling for Japan.
+- Descriptive, not lodged: Γ magnitude grows with threshold coarseness
+  (−0.2 → −2.9 → −6.0 → −4.8 bps/day at 10/12/15/20%) while occupancy
+  falls — in a majority-crisis market, coarser thresholds make the
+  crisis label MORE dominant a regime for the monolith to specialize
+  on. Post-hoc only.

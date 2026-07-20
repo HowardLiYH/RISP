@@ -1,0 +1,32 @@
+{
+ "real_mean_regret": 0.008093380747320454,
+ "shuffled_mean_regret": 0.00805018642790909,
+ "pooled_mean_regret": 0.007985742102872052,
+ "gap_pct": -0.5365629702220288,
+ "cond_vs_pooled_pct": -1.3478853066919352,
+ "z_vs_shuffled": -0.9006463073321734,
+ "p_one_sided": 0.999999960362482,
+ "n_shuffle": 50,
+ "split_half": {
+  "first_half": {
+   "gap_pct": -0.8340160038890592,
+   "z": -0.9716812365227004
+  },
+  "second_half": {
+   "gap_pct": -0.22009521848130845,
+   "z": -0.2875826986899062
+  }
+ },
+ "regime_counts": {
+  "0": 2090,
+  "1": 913,
+  "2": 2979,
+  "3": 3180
+ },
+ "PASS": false,
+ "window": [
+  "1990-07-02",
+  "2025-12-31"
+ ],
+ "dropped_portfolios": []
+}
