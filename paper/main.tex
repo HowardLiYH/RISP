@@ -123,11 +123,14 @@ specification), the deficit's \emph{sign} predicted the arm-ordering
 direction in \textbf{5 of 6} pre-registered cells---in both
 directions, including two positive-deficit cells reproducing the full
 ordering out-of-sample (Holm $1.9{\times}10^{-6}$,
-$2.1{\times}10^{-4}$)---while gate 1's conditioning criterion tracked
+$2.1{\times}10^{-4}$; seed-precision registers---at event level, per
+the N1 battery, one cell is Wilcoxon-only and the other fails both
+registered tests)---while gate 1's conditioning criterion tracked
 neither and is demoted to a structure screen. A first non-US cell
 (25 Japanese size--value portfolios, 1990--2025, frozen
 specification) resolves the lodged region-specific sign prediction
-as a hit: $\hat\Gamma$ negative-significant with the predicted
+as a hit: $\hat\Gamma$ negative-significant with the
+sign-rule-predicted
 inversion realized (Holm $3.9{\times}10^{-8}$), in a market whose
 crisis-union occupancy ($67\%$) is flagged occupancy-anomalous---the
 out-of-sample sign-rule record stands at 9 of 10 cells, both
@@ -172,10 +175,14 @@ $1.6\times10^{-4}$, cost-amplified, and both registered event-level
 tests passed---sign $p{=}0.021$, Wilcoxon $p{=}0.016$; its
 schedule-resampling counterpart flat, disclosed). Caveats carried at
 equal prominence: each walk-forward window is a single market history
-(five windows are now scored), the deficit's paying threshold is a
+(three independent market histories are now scored---US 1990--2025,
+US 1926--1989, Japan---with the NBER labeler a second lodged test on
+the first), the deficit's paying threshold is a
 window, not a point---the lodged fine map finds windows on both
 eras overlapping at $13$--$16\%$ under exit hysteresis, superseding
-an earlier relocation reading (and the committed window-location
+an earlier relocation reading (on the withheld era the window exists
+only under exit hysteresis, and that era's lodged $10\%$ anchor
+missed its sub-criterion; the committed window-location
 estimator failed its first calibration, disclosed pre-CRSP and
 retired),
 aggregation itself can manufacture slow dynamics, and the
@@ -348,7 +355,13 @@ related work thus becomes a supporting experiment.
     positive deficit $\Rightarrow$ the full pre-registered ordering
     emerges---and on a withheld 64-year era (1926--1989, frozen
     specification) the same sign rule scored 5 of 6 pre-registered
-    cells, in both directions. The protocol was revised by its own
+    cells, in both directions. Japan, the first non-US cell, then
+    scored 4 of 4 under a lodged region-specific prediction (a
+    correctly priced inversion), taking the out-of-sample record to
+    9 of 10; the pooled cross-history event-level register keeps the
+    ledger honest---the frequency form of the claim is retired, and
+    the economics are region-conditional, priced by the rule cell by
+    cell. The protocol was revised by its own
     record---gate 2 was added after one refutation, and gate 1, whose
     strongest pass in the program ($z{=}23.5$, 1926--1989) coincides
     with an \emph{inverted} pool ordering, is demoted to a structure
@@ -388,9 +401,14 @@ costs: no decision-metric structure on small daily panels (gate 1), no
 harvestable forgetting on the intraday substrate where structure exists
 (gate 2), an inversion where the deficit is zero or negative, the
 dissociation where it is positive, and a 5-of-6 out-of-sample scorecard
-for that sign rule on a withheld 64-year era---each finding surfaced by
+for that sign rule on a withheld 64-year era, extended to 9 of 10 by
+Japan's correctly predicted inversion---each finding surfaced by
 the diagnostic-first protocol, the first consistent with the GAUSE
-oracle audit on the prediction metric \citep{li2026gause}.
+oracle audit on the prediction metric \citep{li2026gause}. The
+pooled cross-history register bounds the claim's register: the
+frequency form (``the typical reactivation pays'') is retired, and
+the economics are region-conditional---the sign rule prices cells,
+in both directions, and a pooled headline cannot.
 
 %=============================================================================
 \section{Related Work}
@@ -1765,8 +1783,10 @@ L3@$15\%$ ($n{=}27$), US-prewar $10\%$ ($n{=}56$), and Japan $15\%$
 registers split. The pooled sign test \textbf{fails} (63 of 109
 positive, $p = 0.0625$), so the lodged adverse branch fires
 \emph{program-wide}: the frequency form of the deficit claim
-(``the typical reactivation pays'') is retired, and no cell in this
-paper cites event-frequency language. The pooled Wilcoxon
+(``the typical reactivation pays'') is retired---no cell cites event
+frequency \emph{as support for the deficit claim}; per-cell
+registered test outcomes, including NBER's sign-test pass, continue
+to be reported as their lodged verdicts. The pooled Wilcoxon
 \textbf{passes} ($p = 0.0086$; median $+1.4$ bps, mean $+2.6$
 bps)---the magnitude register survives a pool deliberately hostile
 to it. And the dollar-weighted register, lodged as economically
@@ -2125,12 +2145,20 @@ D3/H batteries, not scored (\texttt{results/e\_prewar\_costs.json}).
     \centering
     \includegraphics[width=0.9\textwidth]{figures/fig10_signrule.pdf}
     \caption{The sign-rule scorecard: $\hat\Gamma$ (mean $\pm$ 95\% CI)
-    for every scored cell, colored and shaped by the observed outcome
+    for the walk-forward cells of all three market histories (US
+    1990--2025, US 1926--1989 with its sub-eras, Japan 1990--2025)
+    plus the 4H crypto gate cell; the NBER-labeler and stitched cells
+    of the inclusive scorecard are tabulated in the released JSONs.
+    Color and shape encode the observed outcome
     (full pre-registered ordering / flat / inversion, classified by the
     pre-stated rule). Positive deficits coincide with orderings and
-    negative deficits with inversions in both eras; the single miss
+    negative deficits with inversions in both directions and both
+    hemispheres; the annotated cell
     ($12\%$ withheld: negative-significant $\hat\Gamma$, flat table) is
-    annotated. Walk-forward intervals are implementation precision
+    the sign rule's one out-of-sample \emph{miss}---distinct from the
+    inclusive scorecard's strong-form-only misses, which are weak-form
+    hits, not rule violations. Walk-forward intervals are
+    implementation precision
     (seed noise) conditional on each window's single history.}
     \label{fig:signrule}
 \end{figure}
@@ -2225,6 +2253,22 @@ this result also adjudicates the registered fragility discriminator:
 the granularity-window reading of the L3 threshold sensitivity gains,
 and the fixed-cutoff artifact reading loses its remaining support.
 
+\paragraph{The live measurement-split commitment (ledger row 11).}
+One forward test is already running against data that did not exist
+at the freeze. On 2026-06-30 both diagnostic cells were frozen on
+the vendored panel (which ends 2026-05-29): the NBER cell at
+$\hat\Gamma = +0.00081 \pm 0.00033$ ($+8.1 \pm 3.3$ bps/day) and the
+drawdown L3@$15\%$ cell at $+0.00091 \pm 0.00020$
+($+9.1 \pm 2.0$ bps/day), both positive-significant
+(\texttt{results/temporal\_freeze\_2026-06-30.json}, mirrored in the
+OSF custody record). The outcome window is 2026-07-01 through
+2027-03-31, scored on 2027-04-07 under the lodged rule: a positive
+frozen diagnostic predicts A6 over A1 on the window's qualifying
+reactivations, and the cell is \textbf{VOID} if no qualifying
+reactivation occurs. Nothing in this paragraph can be revised by us
+after the fact; it is the cheapest fully temporal test the program
+owns while the CRSP battery waits on data access.
+
 \paragraph{The first non-US cell: Japan (E-R region 1).} The lodged
 regional register (E-R, a fixed region order with region-specific
 sign predictions lodged before any regional data was downloaded)
@@ -2247,8 +2291,8 @@ rare-regime premise of the whole mechanism fails by inversion---with
 the custody grade stated honestly: the occupancy-anomaly scoring
 clause was written after Japan's results were seen (post-hoc for
 Japan; lodged ex-ante for the four remaining regions). All three
-sweep cells are sign-rule consistent as well, under both forms, and
-the inversion is threshold-robust ($10\%$
+sweep cells are sign-rule-consistent across thresholds, under both
+forms ($10\%$
 $\hat\Gamma = -0.00002 \pm 0.00009$, n.s.\ with a flat family;
 $12\%$ and $20\%$ $\hat\Gamma = -0.00029 \pm 0.00012$ and
 $-0.00048 \pm 0.00020$, with
@@ -2302,9 +2346,11 @@ walk-forward design shares one market history per window; seeds vary
 arm initialization only (the deterministic A8a arm has a zero-width
 CI), so its intervals quantify implementation noise \emph{conditional
 on that history}, not sampling uncertainty across markets. The
-withheld era raises the count to three windows and six scored cells,
-and the Japan panel adds a further market history (the first
-non-US), but every cell is still a single realized history of a country's
+record now spans three independent market histories---US 1990--2025,
+US 1926--1989 (its sub-eras are slices, not new histories), and
+Japan 1990--2025---with the NBER labeler a second lodged test on the
+first, the same independence rule Addendum O's pooling uses; but
+every cell is still a single realized history of a country's
 aggregate cross-section. (ii) The stitched counterparts no longer
 simply support the null: at 100 seeds their $\hat\Gamma$ turns
 marginally positive under both labelers while their arm families stay
@@ -2583,7 +2629,13 @@ stitched batteries of Section~\ref{sec:e1f}. At 20 seeds as run: the
 intraday retest of Section~\ref{sec:e1r}, the assignment diagnostic,
 and the French cost (D3), mechanism-probe (X1/X3), withheld-era
 (E-F), decision-layer (K3), and Japan (E-R) batteries; the D8
-probe/dormancy grid at 10 seeds. One register per cell: the 20-seed
+probe/dormancy grid at 10 seeds; the E-X2 threshold maps at tier-1
+10 seeds with tier-2 four-arm re-reads at 20 (run where tier-1 CIs
+exclude zero). The K1/N1/O event-level values come from instrumented
+A1/A9 re-reads that reproduce the published per-seed raws exactly
+(max $|$diff$|$ $= 0$, asserted in-script), and the N2 cost register
+is a pure accounting pass over the same trajectories. One register
+per cell: the 20-seed
 D2 replay cell is superseded by its 100-seed K2 re-measurement
 (Section~\ref{sec:e1f}), and no cell quotes both registers. In the walk-forward designs of
 Section~\ref{sec:e1f} seeds vary initialization only, so those
@@ -2729,7 +2781,7 @@ settled within their stated scope; rows 7--10 are the frontier; rows
 6. Structure screen is demoted: it does not price the pool & four dissociations incl.\ $z{=}23.5$ pass with inversion and Japan's screen-fail-with-priced-pool (\emph{established by record}) & the screen tracking pool value out-of-sample \\
 7. The deficit is real economics where positive & modern era: cost-amplified $+0.00126 \to +0.00230$ net, both labelers. Withheld era: gross yes; pool-vs-monolith net yes at every tier; two-arm $\hat\Gamma_{\mathrm{net}}$ only at the era-anachronistic 25 bps, disclosed. Pooled dollar register CI covers 0 $\Rightarrow$ economic claim region-conditional (Addendum O). Replay collects it, expanding window leaves a real residual, pool still wins; banded countermeasure run, net edge stands (\emph{frontier: aggregate, two countries}) & a disciplined implementation beyond $b{\le}2$ bands closing the net gap \\
 8. Real-data mechanism = regime-conditional allocation deficit & X1/X3: no dormancy/rehearsal covariate; non-decaying (\emph{honestly open}) & a covariate or transient found; or CRSP contradiction \\
-9. $\hat\Gamma$'s sign prices the pool (cell-level rule; distinct from the retired pooled frequency claim) & 12/16 strong, 16/16 weak (one-directional); 9/10 out-of-sample incl.\ Japan and one temporal-custody hit; dependence caveats stated (\emph{frontier}) & one clean refuting cell (definitions lodged) \\
+9. $\hat\Gamma$'s sign prices the pool (cell-level rule; distinct from the retired pooled frequency claim) & 12/16 strong, 16/16 weak (one-directional); 9/10 out-of-sample = withheld era + Japan; separately, one temporal-custody hit (NBER---same US-modern history, so outside the 9/10); dependence caveats stated (\emph{frontier}) & one clean refuting cell (definitions lodged) \\
 10. The paying threshold is a window, not a point & lodged E-X2 criterion: WINDOW on both eras, overlapping $13$--$16\%$ under exit hysteresis ($h{=}0$ relocation $15\% \to 10\%$ superseded; prewar window hysteresis-only, its $10\%$ anchor isolated---PX2e miss); committed $\theta(\mathrm{era})$ estimator failed calibration and is retired pre-CRSP (\emph{no validated estimator}) & no window on CRSP under the lodged criterion \\
 11. Live measurement-split prediction & frozen 2026-06-30, both cells positive; scored 2027-04-07 (\emph{lodged, unresolved}) & A1 outperforming A6 in the outcome window \\
 12. CRSP T-split forward battery & OSF-lodged design, register fixed pre-data; window estimator retired pre-data, frozen-$15\%$ primary (\emph{lodged, unresolved}) & sign-rule miss under the T-split \\

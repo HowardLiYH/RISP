@@ -2160,14 +2160,14 @@
   },
   {
    "id": "abs.prewar.holm10",
-   "tex_pattern": "ordering out-of-sample \\(Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$, \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "tex_pattern": "ordering out-of-sample \\(Holm \\$([\\d.]+\\{\\\\times\\}10\\^\\{-\\d+\\})\\$, \\$([\\d.]+\\{\\\\times\\}10\\^\\{-\\d+\\})\\$; seed-precision",
    "expect": {
     "path": "results/e_french49_prewar_L3_sweep.json:10pct/sign_rule/holm_p_A6_vs_A1"
    }
   },
   {
    "id": "abs.prewar.holm5889",
-   "tex_pattern": "ordering out-of-sample \\(Holm \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$, \\$([\\d.]+ ?(?:\\{\\\\times\\}|\\\\times) ?10\\^\\{[+-]?\\d+\\})\\$\\)",
+   "tex_pattern": "ordering out-of-sample \\(Holm \\$([\\d.]+\\{\\\\times\\}10\\^\\{-\\d+\\})\\$, \\$([\\d.]+\\{\\\\times\\}10\\^\\{-\\d+\\})\\$; seed-precision",
    "expect": {
     "path": "results/e_french49_prewar_L3_subera.json:1958-1989/sign_rule/holm_p_A6_vs_A1"
    },
@@ -4435,6 +4435,81 @@
    "tex_pattern": "\\(\\$10\\\\%\\$ \\$\\\\hat\\\\Gamma = -([\\d.]+) \\\\pm ([\\d.]+)\\$, n\\.s\\.\\\\ with a flat family; \\$12\\\\%\\$ and \\$20\\\\%\\$ \\$\\\\hat\\\\Gamma = -([\\d.]+) \\\\pm ([\\d.]+)\\$ and \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$",
    "expect": {
     "path": "results/e_japan_L3_sweep.json:20pct/gate2_forgetting_deficit/ci95"
+   }
+  },
+  {
+   "id": "tf.nber.mean",
+   "tex_pattern": "the NBER cell at \\$\\\\hat\\\\Gamma = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\) and the drawdown L3@\\$15\\\\%\\$ cell at \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\)",
+   "expect": {
+    "path": "results/temporal_freeze_2026-06-30.json:cells/L-NBER-primary/gamma_frozen/mean"
+   }
+  },
+  {
+   "id": "tf.nber.ci",
+   "group": 2,
+   "tex_pattern": "the NBER cell at \\$\\\\hat\\\\Gamma = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\) and the drawdown L3@\\$15\\\\%\\$ cell at \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\)",
+   "expect": {
+    "path": "results/temporal_freeze_2026-06-30.json:cells/L-NBER-primary/gamma_frozen/ci95"
+   }
+  },
+  {
+   "id": "tf.nber.bps",
+   "group": 3,
+   "tex_pattern": "the NBER cell at \\$\\\\hat\\\\Gamma = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\) and the drawdown L3@\\$15\\\\%\\$ cell at \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\)",
+   "expect": {
+    "expr": "g*10000",
+    "inputs": {
+     "g": "results/temporal_freeze_2026-06-30.json:cells/L-NBER-primary/gamma_frozen/mean"
+    }
+   }
+  },
+  {
+   "id": "tf.nber.bps.ci",
+   "group": 4,
+   "tex_pattern": "the NBER cell at \\$\\\\hat\\\\Gamma = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\) and the drawdown L3@\\$15\\\\%\\$ cell at \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\)",
+   "expect": {
+    "expr": "g*10000",
+    "inputs": {
+     "g": "results/temporal_freeze_2026-06-30.json:cells/L-NBER-primary/gamma_frozen/ci95"
+    }
+   }
+  },
+  {
+   "id": "tf.l3.mean",
+   "group": 5,
+   "tex_pattern": "the NBER cell at \\$\\\\hat\\\\Gamma = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\) and the drawdown L3@\\$15\\\\%\\$ cell at \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\)",
+   "expect": {
+    "path": "results/temporal_freeze_2026-06-30.json:cells/L3-15pct/gamma_frozen/mean"
+   }
+  },
+  {
+   "id": "tf.l3.ci",
+   "group": 6,
+   "tex_pattern": "the NBER cell at \\$\\\\hat\\\\Gamma = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\) and the drawdown L3@\\$15\\\\%\\$ cell at \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\)",
+   "expect": {
+    "path": "results/temporal_freeze_2026-06-30.json:cells/L3-15pct/gamma_frozen/ci95"
+   }
+  },
+  {
+   "id": "tf.l3.bps",
+   "group": 7,
+   "tex_pattern": "the NBER cell at \\$\\\\hat\\\\Gamma = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\) and the drawdown L3@\\$15\\\\%\\$ cell at \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\)",
+   "expect": {
+    "expr": "g*10000",
+    "inputs": {
+     "g": "results/temporal_freeze_2026-06-30.json:cells/L3-15pct/gamma_frozen/mean"
+    }
+   }
+  },
+  {
+   "id": "tf.l3.bps.ci",
+   "group": 8,
+   "tex_pattern": "the NBER cell at \\$\\\\hat\\\\Gamma = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\) and the drawdown L3@\\$15\\\\%\\$ cell at \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ \\(\\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$ bps/day\\)",
+   "expect": {
+    "expr": "g*10000",
+    "inputs": {
+     "g": "results/temporal_freeze_2026-06-30.json:cells/L3-15pct/gamma_frozen/ci95"
+    }
    }
   }
  ]

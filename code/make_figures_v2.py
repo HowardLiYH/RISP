@@ -109,6 +109,8 @@ def fig10_signrule():
     psw = jload(RES / "e_french49_prewar_L3_sweep.json")
     p15 = jload(RES / "e_french49_prewar_L3_dissoc.json")["walkforward"]
     sub = jload(RES / "e_french49_prewar_L3_subera.json")
+    jp = jload(RES / "e_japan_L3_dissoc.json")["walkforward"]
+    jps = jload(RES / "e_japan_L3_sweep.json")
     cry = jload(RES / "e1r_4h_crypto.json")
 
     def g2(block):
@@ -133,11 +135,19 @@ def fig10_signrule():
                      ("1958-1989", "1958–89 @ 15% (20 seeds)")):
         rows.append(("withheld sub-eras · L3 @ 15%",
                      lbl, *g2(sub[key]), classify(sub[key]), None))
+    rows.append(("Japan 1990–2025 · 25 size–value portfolios (E-R region 1)",
+                 "L3 @ 15% (frozen spec, 20 seeds)", *g2(jp), classify(jp),
+                 None))
+    for key, lbl in (("10pct", "L3 @ 10% (20 seeds)"),
+                     ("12pct", "L3 @ 12% (20 seeds)"),
+                     ("20pct", "L3 @ 20% (20 seeds)")):
+        rows.append(("Japan 1990–2025 · 25 size–value portfolios (E-R region 1)",
+                     lbl, *g2(jps[key]), classify(jps[key]), None))
     gm, gc = paired(cry)
     rows.append(("crypto · 4H, confirmed gate cell",
                  "5 perp pairs (20 seeds)", gm, gc, classify(cry), None))
 
-    fig, ax = plt.subplots(figsize=(6.3, 4.3))
+    fig, ax = plt.subplots(figsize=(6.3, 5.8))
     ax.grid(False); ax.grid(True, axis="x", color="#d9d9d9", lw=0.5, alpha=0.6)
     ax.spines["left"].set_visible(False)
 
