@@ -421,3 +421,123 @@ audit manifest extended (347 claims, all PASS).
    sign-rule count as an eq-claim, X4 Γ, 100-seed values, stitched
    wrinkle). `python3 code/audit_numbers.py`: **347 claims checked,
    347 PASS**. main.tex recompiles clean.
+
+---
+
+## v1.3.0 — The addenda G–O wave: external custody resolves, event-level honesty, Japan, and the window map
+
+**Date**: 2026-07-21 (registrations and verdicts in
+`PREREG_FRENCH49.md` Addenda G–O; custody grades in `PROVENANCE.md`;
+results integrated into `paper/main.tex`, now 38 pp)
+
+Every battery below was registered before it ran (custody grade per
+registration in `PROVENANCE.md`; from Addendum J onward each spec was
+pushed alone, before its implementation existed).
+
+1. **The NBER forward test resolved — a hit under both scoring forms,
+   under third-party custody** (Addendum G; registration deposited at
+   osf.io/nsx4e 22:47 ET 2026-07-15, NBER dates first joined to the
+   panel 22:55 ET). Causal walk-forward: Γ = +0.00081 ± 0.00033 gross,
+   +0.00105 ± 0.00033 net of 25 bps; A6 < A1 at Holm 1.6e-4; gate 1
+   null again (third screen/pool-value dissociation). Stitched
+   variants flat, disclosed; the non-causal calendar cell is a
+   weak-form hit / strong-form miss. The owed LORO/era supplement
+   (2026-07-16, `results/e_french49_nber_loro.json`): the deficit
+   survives every single-event and calendar exclusion (drop-2020
+   +0.00042 ± 0.00026; drop-2008/09 +0.00036 ± 0.00030) but dropping
+   January 2009 alone leaves 41% of headline, and the 2010s era block
+   is negative-significant — two-recession concentration, stated
+   wherever the cell is cited.
+2. **Banded-monolith control (PREREG H / Addendum I,
+   `results/e_french49_banded.json`).** The practitioner
+   countermeasure: A1 that only re-trades when > b names change.
+   Banding is free but cannot buy the pool: A6 beats both bands net of
+   25 bps (L3 Holm ≤ 7.1e-17; L1 residual +0.00028 ± 0.00011, with the
+   62% b=2 attenuation of the L1 net reversal disclosed). The
+   registered ≥30% turnover-cut clause was NOT met (4.1%/15.7%) —
+   selection quality, not just churn, carries the deficit. Addendum I
+   also records D4's fourth outcome (A3′ strictly worse than A3) and
+   the D5 CVaR tail-reading refutation (interpretation demoted).
+3. **Expanding-window baseline + 100-seed reversal (Addenda J/K2,
+   `results/e_french49_L3_expwin*.json`).** The 20-seed pilot took the
+   middle branch (A1e collects 73.0% of Γ, residual n.s.) and the
+   ICAIF class sentence was narrowed to recency-driven policies. At
+   the registered 100-seed budget the pilot's null residual REVERSED:
+   A1e collects 58.7% and A1e−A9 = +0.000366 ± 0.000128 is
+   positive-significant (~+3.7 bps/day) — the residual is real. A6
+   beats A1e (Holm 1.4e-23). Replay remains the full collector
+   (share ≈96%, A1r−A9 n.s.), and A6 still beats replay: paired
+   A1r−A6 = +0.000389 ± 0.000096, p = 2.7e-12, computed post-hoc from
+   the released raw seeds (the lodged Holm family omitted exactly this
+   pair — disclosed; supersedes the 20-seed Holm 0.013). D8: Γ
+   positive-significant in all 6 probe/dormancy re-read cells. K3:
+   Γ's sign survives k=3 and k=10 decision layers.
+4. **The event-level program (K1, N1, O) — the register in which most
+   cells weaken, taken in full.** L3 (n=27): Wilcoxon p = 0.016
+   passes, sign test p = 0.061 MISSES → lodged adverse branch taken,
+   all walk-forward seed CIs relabeled implementation-precision-only.
+   NBER (n=20): passes BOTH registered tests (sign 0.021, Wilcoxon
+   0.016) — the program's strongest event-level cell. Prewar 10%
+   (n=56): Wilcoxon-only (0.029; sign 0.175); 1958–89 (n=21): fails
+   both. The pooled cross-history register (Addendum O, n=109,
+   independent histories once, Japan's negatives signed): sign test
+   p = 0.0625 FAILS → **the frequency claim is retired
+   program-wide**; Wilcoxon p = 0.0086 passes; the dollar register
+   (+4,274 bps-days; bootstrap CI [−1,881, +9,977] covers zero) makes
+   the economic claim region-conditional: +4,859 / +1,542 / −2,127
+   bps-days (US-modern / US-prewar / Japan).
+5. **Japan — the first non-US cell (Addendum L,
+   `results/e_japan_*.json`).** The E-R register's lodged
+   region-specific prediction ("Γ_Japan ≈ 0 or negative") HIT on the
+   negative side: Γ = −0.00060 ± 0.00016 with the predicted inversion
+   at Holm 3.9e-8 — the largest real-data inversion in the program
+   (−6.0 bps/day). Flagged OCCUPANCY-ANOMALOUS in the same sentence:
+   crisis union occupies 67.2% of Japanese trading days at 15%
+   (scoring clause post-hoc for Japan, lodged ex-ante for the
+   remaining regions). All three sweep cells sign-rule consistent;
+   screen z = −0.90, a fourth screen/pool-value dissociation.
+   Out-of-sample sign-rule record: 9 of 10 cells; full record 12/16
+   strong, 16/16 weak.
+6. **E-X2 resolved on both eras: WINDOW — and the relocation
+   narrative superseded** (`results/e_french49_L3_x2.json`,
+   `results/e_french49_prewar_L3_x2.json`). Modern era: window at
+   every hysteresis level; the registered 15%/h0 cell sits inside and
+   reproduces on tier-2 re-read (+0.00091 ± 0.00020, full ordering) —
+   the island clause is dead. Withheld era: window only under
+   hysteresis (h4 13–16%, h6 14–16%), and the lodged PX2e anchor
+   sub-criterion MISSED — the era's 10% anchor is an isolated h0
+   positive (cell solid on tier-2 re-read, +0.00013 ± 0.00006, full
+   ordering). Cross-era (descriptive): the windows OVERLAP at 13–16%
+   under hysteresis, and hysteresis flips the prewar 15% cell from
+   inversion to a positive full ordering. **This supersedes v1.2.0-dev
+   item 6's relocation claim ("the window RELOCATES (15%→10%)"): the
+   apparent relocation was an artifact of scanning only h=0.**
+7. **The window-location estimator (κ) failed calibration and is
+   retired pre-CRSP** (`results/window_estimator_calibration.json`).
+   The occupancy rule committed in the CRSP T-split amendment requires
+   disjoint κ intervals on the two eras ((0.129, 0.143] vs
+   (0.471, 0.486]) and is directionally wrong. Disclosed before any
+   CRSP data access; the CRSP L3-family primary falls back to the
+   frozen 15% threshold; any successor rule must be OSF-lodged
+   pre-data (Addendum N3).
+8. **The withheld era net of costs — the amplification clause refuted
+   out-of-sample (N2, `results/e_prewar_costs.json`).** Both prewar
+   positive cells survive the adjudicating 25 bps register
+   (+0.00015 ± 0.00010; +0.00020 ± 0.00017) but net sits BELOW gross
+   and fades to n.s. at 50/100 bps — the tiers realistic for 1926–89 —
+   with the crisis-churn turnover signature absent (A1 1.10 vs A9 1.13
+   per day). Cost amplification is an era-local 1990–2025 phenomenon
+   and every "costs amplify" sentence is now scoped accordingly. The
+   counterpoint at equal prominence: the pool's A6-over-A1 net edge is
+   significant at every tier in both cells (~+10.6/+11.3 bps/day at
+   25 bps, growing with tier).
+9. **Paper-wide integration + audit.** `paper/main.tex` (38 pp)
+   rewritten around the extended record: abstract, scorecard
+   accounting (12/16 strong, 16/16 weak, 9/10 out-of-sample, with the
+   dependence discount stated first), event-level paragraph, Japan and
+   X2/κ paragraphs, era-scoped cost claims, claims ledger and
+   limitations reconciled. `code/audit_manifest.json` extended
+   347 → **508 claims, all PASS** (`python3 code/audit_numbers.py`).
+   README and this changelog synced to the paper at HEAD; the README
+   had been two waves stale (badge said 272; its relocation section
+   and 20-seed replay/2×2 numbers superseded above).

@@ -65,3 +65,19 @@ Notes:
   (screen pass replicates p≈0.55; Γ stays ≈0 p≈0.8) is recorded here
   as UNLODGED — it has no registration standing until committed alone
   before the data exists locally.
+
+## Erratum (2026-07-21) — E-X2 verdict text, prewar 9% neighbor
+
+The E-X2 verdict entry in `PREREG_FRENCH49.md` ("E-X2 verdicts, both
+eras") describes the prewar 10%/h0 cell's 9% neighbor as
+"negative-significant". The authoritative result file
+(`results/e_french49_prewar_L3_x2.json`, tier-1 `th9_h0`:
+Γ = −0.000110 ± 0.000130) shows the cell is negative but **not**
+significant — its CI covers zero. Registration and verdict text in the
+append-only ledger cannot be edited post-hoc, so this note records the
+transcription slip instead; the paper follows the JSON
+(`paper/main.tex` states "both 1pp neighbors n.s."). No adjudicated
+verdict changes: under the lodged criterion the 9% cell enters no
+window either way, and the PX2e anchor-miss verdict rests on the
+"isolated positive" clause — neither 1pp neighbor is
+positive-significant — which holds under either reading.
