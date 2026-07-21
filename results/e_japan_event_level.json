@@ -1,0 +1,256 @@
+{
+ "prereg": "Addendum O, spec commit 851d060",
+ "cell": "Japan L3@15% walk-forward (primary)",
+ "window": [
+  "1990-07-02",
+  "2025-12-31"
+ ],
+ "seeding": "1311*s+17",
+ "sanity_vs_published": {
+  "A1-monolith-erm": {
+   "max_abs_diff": 0.0,
+   "match": true
+  },
+  "A9-oracle-pinned": {
+   "max_abs_diff": 0.0,
+   "match": true
+  }
+ },
+ "n_events": 26,
+ "per_reactivation_gamma": [
+  {
+   "i": 0,
+   "date": "2008-12-16",
+   "regime": 2,
+   "dormancy": 124,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": -9.656796488475526e-05,
+   "gamma_i_ci95": 0.00045106900928772685
+  },
+  {
+   "i": 1,
+   "date": "2009-10-26",
+   "regime": 3,
+   "dormancy": 132,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": 0.0005654266069160869,
+   "gamma_i_ci95": 0.0006372102007172343
+  },
+  {
+   "i": 2,
+   "date": "2011-03-15",
+   "regime": 3,
+   "dormancy": 106,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": -0.0012357548787222544,
+   "gamma_i_ci95": 0.0025666443523746944
+  },
+  {
+   "i": 3,
+   "date": "2013-03-22",
+   "regime": 0,
+   "dormancy": 1572,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": 0.0004667675751730008,
+   "gamma_i_ci95": 0.000665957077906736
+  },
+  {
+   "i": 4,
+   "date": "2013-06-07",
+   "regime": 1,
+   "dormancy": 1802,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": 0.0020596233476214525,
+   "gamma_i_ci95": 0.0009171270945156733
+  },
+  {
+   "i": 5,
+   "date": "2013-06-10",
+   "regime": 3,
+   "dormancy": 132,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": 0.0008153118231480321,
+   "gamma_i_ci95": 0.0007168178721006165
+  },
+  {
+   "i": 6,
+   "date": "2015-07-07",
+   "regime": 1,
+   "dormancy": 117,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": 0.00023738357291750893,
+   "gamma_i_ci95": 0.0005424810241384482
+  },
+  {
+   "i": 7,
+   "date": "2016-02-15",
+   "regime": 3,
+   "dormancy": 686,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": 0.0008011421560920353,
+   "gamma_i_ci95": 0.0010937961948761928
+  },
+  {
+   "i": 8,
+   "date": "2018-03-21",
+   "regime": 1,
+   "dormancy": 308,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": -3.3632576799950705e-06,
+   "gamma_i_ci95": 0.0003290053070186941
+  },
+  {
+   "i": 9,
+   "date": "2018-10-26",
+   "regime": 3,
+   "dormancy": 704,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": -0.0003317587445410824,
+   "gamma_i_ci95": 0.0007616945207676217
+  },
+  {
+   "i": 10,
+   "date": "2019-02-19",
+   "regime": 2,
+   "dormancy": 1530,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": 8.212030051522123e-05,
+   "gamma_i_ci95": 0.00026891025793143204
+  },
+  {
+   "i": 11,
+   "date": "2019-07-03",
+   "regime": 0,
+   "dormancy": 195,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": -9.031857203492363e-05,
+   "gamma_i_ci95": 0.00021107704622232577
+  },
+  {
+   "i": 12,
+   "date": "2020-01-29",
+   "regime": 1,
+   "dormancy": 300,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": 4.5400867380468054e-05,
+   "gamma_i_ci95": 0.0005460779289511426
+  },
+  {
+   "i": 13,
+   "date": "2020-02-26",
+   "regime": 3,
+   "dormancy": 114,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": -0.012745743430394297,
+   "gamma_i_ci95": 0.001070106925738254
+  },
+  {
+   "i": 14,
+   "date": "2020-05-11",
+   "regime": 2,
+   "dormancy": 159,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": -0.0002477200399602029,
+   "gamma_i_ci95": 0.0009367350119862715
+  },
+  {
+   "i": 15,
+   "date": "2020-08-10",
+   "regime": 1,
+   "dormancy": 119,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": -0.0001923614726052055,
+   "gamma_i_ci95": 0.0007771756878375779
+  },
+  {
+   "i": 16,
+   "date": "2021-03-01",
+   "regime": 1,
+   "dormancy": 144,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": -0.0009539305890028854,
+   "gamma_i_ci95": 0.0004916842442071357
+  },
+  {
+   "i": 17,
+   "date": "2022-01-20",
+   "regime": 3,
+   "dormancy": 439,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": 0.00036512706139173683,
+   "gamma_i_ci95": 0.0010900436790280308
+  },
+  {
+   "i": 18,
+   "date": "2022-07-22",
+   "regime": 2,
+   "dormancy": 513,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": -0.0006764603731334319,
+   "gamma_i_ci95": 0.0003824978219772233
+  },
+  {
+   "i": 19,
+   "date": "2023-04-07",
+   "regime": 3,
+   "dormancy": 106,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": 7.664082176162996e-05,
+   "gamma_i_ci95": 0.00022391618639593406
+  },
+  {
+   "i": 20,
+   "date": "2023-12-28",
+   "regime": 0,
+   "dormancy": 558,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": 0.0012285844621772784,
+   "gamma_i_ci95": 0.00038268965122742276
+  },
+  {
+   "i": 21,
+   "date": "2024-04-17",
+   "regime": 1,
+   "dormancy": 585,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": -0.00023794441660894938,
+   "gamma_i_ci95": 0.000436470313794098
+  },
+  {
+   "i": 22,
+   "date": "2024-04-22",
+   "regime": 3,
+   "dormancy": 103,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": -0.0005176252547825299,
+   "gamma_i_ci95": 0.00047565233481916487
+  },
+  {
+   "i": 23,
+   "date": "2024-08-08",
+   "regime": 2,
+   "dormancy": 144,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": 0.00041319556616805817,
+   "gamma_i_ci95": 0.0005799602164901313
+  },
+  {
+   "i": 24,
+   "date": "2025-04-08",
+   "regime": 3,
+   "dormancy": 170,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": -0.004192669773296923,
+   "gamma_i_ci95": 0.0005864403687070594
+  },
+  {
+   "i": 25,
+   "date": "2025-10-29",
+   "regime": 1,
+   "dormancy": 145,
+   "n_probe_days_counted": 15,
+   "gamma_i_mean": 0.00018293531061188345,
+   "gamma_i_ci95": 0.00031835353445909857
+  }
+ ]
+}

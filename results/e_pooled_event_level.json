@@ -1,0 +1,808 @@
+{
+ "prereg": "Addendum O, spec commit 851d060",
+ "checkpoint": "(a) US_modern + US_prewar_10 + Japan",
+ "pool_composition": {
+  "US_modern_L3_15pct": 27,
+  "US_prewar_10pct": 56,
+  "Japan_15pct": 26
+ },
+ "excluded_by_rule": [
+  "NBER (same US-modern history)",
+  "1958-89 (subset of prewar)",
+  "North America (overlaps US)",
+  "Developed ex US (composite)"
+ ],
+ "n_events": 109,
+ "n_zero_dropped": 0,
+ "n_positive": 63,
+ "n_negative": 46,
+ "median_bps": 1.3929277717431259,
+ "mean_bps": 2.614057321809506,
+ "sign_test_p_one_sided": 0.06250227066291666,
+ "wilcoxon_stat": 3786.0,
+ "wilcoxon_p_one_sided": 0.008566707937350745,
+ "t_stat_descriptive": 1.4193492590376788,
+ "t_p_one_sided_descriptive": 0.07933852348410023,
+ "sign_test_pass_at_0.05": false,
+ "wilcoxon_pass_at_0.05": true,
+ "dollar_register_economically_primary": {
+  "sum_bps_days": 4273.983721158543,
+  "bootstrap_ci95_bps_days": [
+   -1880.7526773867457,
+   9977.432914101179
+  ],
+  "ci_excludes_0": false,
+  "per_history_sum_bps_days": {
+   "US_modern_L3_15pct": 4859.383349580148,
+   "US_prewar_10pct": 1541.9842659443523,
+   "Japan_15pct": -2127.3838943659566
+  },
+  "n_resamples": 10000,
+  "bootstrap_seed": 20260721
+ },
+ "events": [
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2008-09-15",
+   "gamma_i": 0.0026997455173515513,
+   "n_days": 15,
+   "dollar_i": 0.04049618276027327
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2010-02-01",
+   "gamma_i": 0.0005682932070433067,
+   "n_days": 15,
+   "dollar_i": 0.008524398105649601
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2010-04-15",
+   "gamma_i": 0.001158928820464891,
+   "n_days": 15,
+   "dollar_i": 0.017383932306973365
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2010-10-14",
+   "gamma_i": -0.00048048309097628177,
+   "n_days": 15,
+   "dollar_i": -0.007207246364644227
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2011-03-17",
+   "gamma_i": -0.000628971984946728,
+   "n_days": 15,
+   "dollar_i": -0.00943457977420092
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2011-08-09",
+   "gamma_i": 0.00045101507668760915,
+   "n_days": 15,
+   "dollar_i": 0.006765226150314137
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2011-11-23",
+   "gamma_i": 0.003517206790297777,
+   "n_days": 15,
+   "dollar_i": 0.05275810185446665
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2012-04-20",
+   "gamma_i": 0.0015585453843450262,
+   "n_days": 15,
+   "dollar_i": 0.023378180765175394
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2013-06-21",
+   "gamma_i": -3.2232956637701617e-05,
+   "n_days": 15,
+   "dollar_i": -0.00048349434956552426
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2014-01-30",
+   "gamma_i": 0.0004697614203534274,
+   "n_days": 15,
+   "dollar_i": 0.007046421305301411
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2015-09-29",
+   "gamma_i": 0.0002469010125025423,
+   "n_days": 15,
+   "dollar_i": 0.0037035151875381344
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2015-11-03",
+   "gamma_i": 0.003828415832468863,
+   "n_days": 15,
+   "dollar_i": 0.05742623748703295
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2017-08-18",
+   "gamma_i": 0.00013162382627993394,
+   "n_days": 15,
+   "dollar_i": 0.0019743573941990093
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2018-02-12",
+   "gamma_i": -0.0005801264872241361,
+   "n_days": 15,
+   "dollar_i": -0.00870189730836204
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2018-12-18",
+   "gamma_i": 0.0005113852715105836,
+   "n_days": 15,
+   "dollar_i": 0.007670779072658754
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2020-02-26",
+   "gamma_i": 0.007447831955314432,
+   "n_days": 15,
+   "dollar_i": 0.11171747932971648
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2020-03-10",
+   "gamma_i": 0.006048781473485994,
+   "n_days": 15,
+   "dollar_i": 0.09073172210228991
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2020-05-20",
+   "gamma_i": 0.001783558203848348,
+   "n_days": 15,
+   "dollar_i": 0.026753373057725217
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2020-10-29",
+   "gamma_i": -0.0011733832785437606,
+   "n_days": 15,
+   "dollar_i": -0.01760074917815641
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2021-07-19",
+   "gamma_i": -0.0011492518474625678,
+   "n_days": 15,
+   "dollar_i": -0.017238777711938515
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2022-05-12",
+   "gamma_i": -0.0002504990100161926,
+   "n_days": 15,
+   "dollar_i": -0.0037574851502428885
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2022-09-06",
+   "gamma_i": 0.0007174658268446585,
+   "n_days": 15,
+   "dollar_i": 0.010761987402669877
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2023-10-30",
+   "gamma_i": 7.575317245123057e-05,
+   "n_days": 15,
+   "dollar_i": 0.0011362975867684586
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2024-06-04",
+   "gamma_i": 0.00037224032904218377,
+   "n_days": 15,
+   "dollar_i": 0.005583604935632757
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2024-12-19",
+   "gamma_i": -0.00022275698028879337,
+   "n_days": 15,
+   "dollar_i": -0.0033413547043319005
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2025-04-07",
+   "gamma_i": 0.006177614953804809,
+   "n_days": 15,
+   "dollar_i": 0.09266422430707213
+  },
+  {
+   "history": "US_modern_L3_15pct",
+   "date": "2025-11-05",
+   "gamma_i": -0.0008514734408000245,
+   "n_days": 15,
+   "dollar_i": -0.012772101612000366
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1957-09-24",
+   "gamma_i": 0.0008147458546645277,
+   "n_days": 15,
+   "dollar_i": 0.012221187819967916
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1958-01-03",
+   "gamma_i": 0.0005099589683651833,
+   "n_days": 15,
+   "dollar_i": 0.007649384525477749
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1958-02-04",
+   "gamma_i": -0.00034997065076671185,
+   "n_days": 15,
+   "dollar_i": -0.005249559761500678
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1959-09-09",
+   "gamma_i": 0.0005073161590663244,
+   "n_days": 15,
+   "dollar_i": 0.007609742385994866
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1960-10-26",
+   "gamma_i": -0.00010506437912138284,
+   "n_days": 15,
+   "dollar_i": -0.0015759656868207426
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1961-06-23",
+   "gamma_i": 0.0002165554972846738,
+   "n_days": 15,
+   "dollar_i": 0.0032483324592701072
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1962-05-01",
+   "gamma_i": 0.0002945094550974442,
+   "n_days": 15,
+   "dollar_i": 0.004417641826461663
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1962-08-09",
+   "gamma_i": -0.00019047856982028696,
+   "n_days": 15,
+   "dollar_i": -0.0028571785473043045
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1963-04-09",
+   "gamma_i": -0.000645490919041968,
+   "n_days": 15,
+   "dollar_i": -0.009682363785629521
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1963-07-16",
+   "gamma_i": -0.0007599590178099236,
+   "n_days": 15,
+   "dollar_i": -0.011399385267148855
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1964-06-05",
+   "gamma_i": 3.451546453479741e-05,
+   "n_days": 15,
+   "dollar_i": 0.0005177319680219612
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1964-12-16",
+   "gamma_i": 0.00023247376494866986,
+   "n_days": 15,
+   "dollar_i": 0.003487106474230048
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1965-06-08",
+   "gamma_i": -0.0002412416776611,
+   "n_days": 15,
+   "dollar_i": -0.0036186251649165
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1965-06-29",
+   "gamma_i": 0.00032613037087403666,
+   "n_days": 15,
+   "dollar_i": 0.00489195556311055
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1966-03-08",
+   "gamma_i": 0.0007531991263931135,
+   "n_days": 15,
+   "dollar_i": 0.011297986895896702
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1966-05-17",
+   "gamma_i": -0.00023055297063152708,
+   "n_days": 15,
+   "dollar_i": -0.003458294559472906
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1966-07-29",
+   "gamma_i": -0.001300218460469386,
+   "n_days": 15,
+   "dollar_i": -0.01950327690704079
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1967-01-10",
+   "gamma_i": 0.0004709095601754268,
+   "n_days": 15,
+   "dollar_i": 0.007063643402631402
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1967-11-09",
+   "gamma_i": 0.0011415146696498533,
+   "n_days": 15,
+   "dollar_i": 0.0171227200447478
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1968-03-05",
+   "gamma_i": 0.00039828431948700087,
+   "n_days": 15,
+   "dollar_i": 0.005974264792305013
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1969-02-26",
+   "gamma_i": -8.505675180473506e-05,
+   "n_days": 15,
+   "dollar_i": -0.001275851277071026
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1969-09-23",
+   "gamma_i": 0.0002551780542643889,
+   "n_days": 15,
+   "dollar_i": 0.003827670813965833
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1970-07-30",
+   "gamma_i": 0.000835943548294146,
+   "n_days": 15,
+   "dollar_i": 0.01253915322441219
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1971-03-16",
+   "gamma_i": -0.00015401987224884615,
+   "n_days": 15,
+   "dollar_i": -0.0023102980837326923
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1971-05-26",
+   "gamma_i": 5.932163581932482e-05,
+   "n_days": 15,
+   "dollar_i": 0.0008898245372898723
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1971-06-02",
+   "gamma_i": -0.00013139761932938156,
+   "n_days": 15,
+   "dollar_i": -0.0019709642899407233
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1972-05-09",
+   "gamma_i": 0.0021125325050169066,
+   "n_days": 15,
+   "dollar_i": 0.0316879875752536
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1972-10-13",
+   "gamma_i": -0.0019476378518901668,
+   "n_days": 15,
+   "dollar_i": -0.0292145677783525
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1973-07-26",
+   "gamma_i": 0.0018820255354417008,
+   "n_days": 15,
+   "dollar_i": 0.028230383031625512
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1973-10-09",
+   "gamma_i": 0.0003228647422050017,
+   "n_days": 15,
+   "dollar_i": 0.0048429711330750256
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1974-11-04",
+   "gamma_i": -0.00027868409368386705,
+   "n_days": 15,
+   "dollar_i": -0.004180261405258005
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1975-07-28",
+   "gamma_i": 0.0001392927771743126,
+   "n_days": 15,
+   "dollar_i": 0.0020893916576146887
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1976-02-05",
+   "gamma_i": 0.0008364879274084449,
+   "n_days": 15,
+   "dollar_i": 0.012547318911126672
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1976-04-19",
+   "gamma_i": -0.00018468122651132038,
+   "n_days": 15,
+   "dollar_i": -0.0027702183976698056
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1976-05-26",
+   "gamma_i": -0.00023052685353873442,
+   "n_days": 15,
+   "dollar_i": -0.0034579028030810163
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1978-10-18",
+   "gamma_i": -0.00041082589667987306,
+   "n_days": 15,
+   "dollar_i": -0.006162388450198096
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1978-10-23",
+   "gamma_i": -3.084425084480067e-05,
+   "n_days": 15,
+   "dollar_i": -0.00046266376267201006
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1979-01-05",
+   "gamma_i": -0.002058213724670394,
+   "n_days": 15,
+   "dollar_i": -0.030873205870055914
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1979-10-12",
+   "gamma_i": 0.0006199494246050465,
+   "n_days": 15,
+   "dollar_i": 0.009299241369075697
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1979-10-22",
+   "gamma_i": 0.0006551079371766449,
+   "n_days": 15,
+   "dollar_i": 0.009826619057649673
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1980-12-09",
+   "gamma_i": -0.0003293841432646864,
+   "n_days": 15,
+   "dollar_i": -0.004940762148970296
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1981-08-28",
+   "gamma_i": -0.0008594475899016618,
+   "n_days": 15,
+   "dollar_i": -0.012891713848524926
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1981-11-17",
+   "gamma_i": 0.0005401875486563156,
+   "n_days": 15,
+   "dollar_i": 0.008102813229844734
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1982-09-01",
+   "gamma_i": 0.0011398351557220115,
+   "n_days": 15,
+   "dollar_i": 0.017097527335830174
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1983-01-25",
+   "gamma_i": 0.00015805034139700357,
+   "n_days": 15,
+   "dollar_i": 0.0023707551209550537
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1983-08-05",
+   "gamma_i": -0.00012369603029572496,
+   "n_days": 15,
+   "dollar_i": -0.0018554404544358744
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1984-02-09",
+   "gamma_i": 0.00013584732361101277,
+   "n_days": 15,
+   "dollar_i": 0.0020377098541651917
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1984-04-26",
+   "gamma_i": 0.0010103256002347097,
+   "n_days": 15,
+   "dollar_i": 0.015154884003520644
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1984-11-20",
+   "gamma_i": 0.00045699486696975863,
+   "n_days": 15,
+   "dollar_i": 0.0068549230045463795
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1986-07-09",
+   "gamma_i": -0.00020854554074666828,
+   "n_days": 15,
+   "dollar_i": -0.003128183111200024
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1986-09-15",
+   "gamma_i": -0.00044271325372295596,
+   "n_days": 15,
+   "dollar_i": -0.00664069880584434
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1987-04-30",
+   "gamma_i": 0.00015843315251776977,
+   "n_days": 15,
+   "dollar_i": 0.0023764972877665467
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1987-10-16",
+   "gamma_i": 0.001483421342072914,
+   "n_days": 15,
+   "dollar_i": 0.02225132013109371
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1987-12-31",
+   "gamma_i": 0.0022141913047950177,
+   "n_days": 15,
+   "dollar_i": 0.03321286957192526
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1989-01-25",
+   "gamma_i": -9.45499857436952e-05,
+   "n_days": 15,
+   "dollar_i": -0.001418249786155428
+  },
+  {
+   "history": "US_prewar_10pct",
+   "date": "1989-10-16",
+   "gamma_i": 0.0009569925025719959,
+   "n_days": 15,
+   "dollar_i": 0.014354887538579938
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2008-12-16",
+   "gamma_i": -9.656796488475526e-05,
+   "n_days": 15,
+   "dollar_i": -0.001448519473271329
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2009-10-26",
+   "gamma_i": 0.0005654266069160869,
+   "n_days": 15,
+   "dollar_i": 0.008481399103741303
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2011-03-15",
+   "gamma_i": -0.0012357548787222544,
+   "n_days": 15,
+   "dollar_i": -0.018536323180833817
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2013-03-22",
+   "gamma_i": 0.0004667675751730008,
+   "n_days": 15,
+   "dollar_i": 0.0070015136275950116
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2013-06-07",
+   "gamma_i": 0.0020596233476214525,
+   "n_days": 15,
+   "dollar_i": 0.030894350214321787
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2013-06-10",
+   "gamma_i": 0.0008153118231480321,
+   "n_days": 15,
+   "dollar_i": 0.012229677347220483
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2015-07-07",
+   "gamma_i": 0.00023738357291750893,
+   "n_days": 15,
+   "dollar_i": 0.003560753593762634
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2016-02-15",
+   "gamma_i": 0.0008011421560920353,
+   "n_days": 15,
+   "dollar_i": 0.01201713234138053
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2018-03-21",
+   "gamma_i": -3.3632576799950705e-06,
+   "n_days": 15,
+   "dollar_i": -5.0448865199926056e-05
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2018-10-26",
+   "gamma_i": -0.0003317587445410824,
+   "n_days": 15,
+   "dollar_i": -0.004976381168116236
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2019-02-19",
+   "gamma_i": 8.212030051522123e-05,
+   "n_days": 15,
+   "dollar_i": 0.0012318045077283186
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2019-07-03",
+   "gamma_i": -9.031857203492363e-05,
+   "n_days": 15,
+   "dollar_i": -0.0013547785805238545
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2020-01-29",
+   "gamma_i": 4.5400867380468054e-05,
+   "n_days": 15,
+   "dollar_i": 0.0006810130107070208
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2020-02-26",
+   "gamma_i": -0.012745743430394297,
+   "n_days": 15,
+   "dollar_i": -0.19118615145591444
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2020-05-11",
+   "gamma_i": -0.0002477200399602029,
+   "n_days": 15,
+   "dollar_i": -0.0037158005994030433
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2020-08-10",
+   "gamma_i": -0.0001923614726052055,
+   "n_days": 15,
+   "dollar_i": -0.0028854220890780825
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2021-03-01",
+   "gamma_i": -0.0009539305890028854,
+   "n_days": 15,
+   "dollar_i": -0.014308958835043281
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2022-01-20",
+   "gamma_i": 0.00036512706139173683,
+   "n_days": 15,
+   "dollar_i": 0.005476905920876052
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2022-07-22",
+   "gamma_i": -0.0006764603731334319,
+   "n_days": 15,
+   "dollar_i": -0.010146905597001477
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2023-04-07",
+   "gamma_i": 7.664082176162996e-05,
+   "n_days": 15,
+   "dollar_i": 0.0011496123264244495
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2023-12-28",
+   "gamma_i": 0.0012285844621772784,
+   "n_days": 15,
+   "dollar_i": 0.018428766932659178
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2024-04-17",
+   "gamma_i": -0.00023794441660894938,
+   "n_days": 15,
+   "dollar_i": -0.0035691662491342405
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2024-04-22",
+   "gamma_i": -0.0005176252547825299,
+   "n_days": 15,
+   "dollar_i": -0.007764378821737948
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2024-08-08",
+   "gamma_i": 0.00041319556616805817,
+   "n_days": 15,
+   "dollar_i": 0.006197933492520872
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2025-04-08",
+   "gamma_i": -0.004192669773296923,
+   "n_days": 15,
+   "dollar_i": -0.06289004659945384
+  },
+  {
+   "history": "Japan_15pct",
+   "date": "2025-10-29",
+   "gamma_i": 0.00018293531061188345,
+   "n_days": 15,
+   "dollar_i": 0.0027440296591782517
+  }
+ ]
+}

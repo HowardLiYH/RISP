@@ -1282,3 +1282,33 @@ remains, and the retirement is disclosed abstract-adjacent in both
 papers. Pooled Σ D_i CI covering 0 → the program's economic headline
 is restated as region-conditional (sign-rule-priced), not pooled-
 positive, at the same prominence.
+
+## Addendum O verdicts — checkpoint (a) (written 2026-07-21 AFTER the computation; registration above unedited)
+
+- Pool as lodged: n=109 events (US-modern 27, US-prewar-10% 56,
+  Japan 26; NBER/1958–89/NA/Dev-ex-US excluded by rule). Japan re-read
+  sanity exact (max|diff|=0 vs `e_japan_L3_dissoc.json`).
+- **PO1 (p=0.30): the predicted-unlikely pass did NOT occur — pooled
+  sign test p=0.0625 (63/109 positive) FAILS at α=0.05. The binding
+  adverse branch is TAKEN: the FREQUENCY form of the deficit claim is
+  RETIRED PROGRAM-WIDE.** No cell may cite event-frequency language;
+  the retirement is disclosed abstract-adjacent in both papers (edits
+  owed to the paper wave).
+- **PO2 (p=0.35): the pass occurred against the lodged odds — pooled
+  Wilcoxon p=0.0086.** The pseudomedian-positive claim survives the
+  deliberately hostile signed pool (median +1.39 bps, mean +2.61 bps).
+- **PO3 (p=0.55): MISS — the second binding adverse branch is ALSO
+  TAKEN.** Pooled dollar register Σ γ_i·N_p = +4,274 bps·days but the
+  event-bootstrap 95% CI is [−1,881, +9,977] — covers 0. Per lodged
+  consequence, the program's economic headline is restated as
+  REGION-CONDITIONAL (sign-rule-priced), not pooled-positive, at the
+  same prominence. Per-history sums make the structure legible:
+  US-modern +4,859, US-prewar +1,542, Japan −2,127 bps·days — the
+  pooled dollar quantity is a difference of large opposite-signed
+  regional bets, exactly what the sign rule prices and a pooled
+  register cannot.
+- Net state of the event-level program after K1/N1/O: the frequency
+  claim is retired everywhere; the magnitude claim survives in
+  Wilcoxon form on the pool and in dollar form only PER REGION,
+  conditional on the sign rule (9/10 out-of-sample scorecard). This is
+  the honest shape of the phenomenon as of this addendum.
