@@ -1171,3 +1171,55 @@ lodge the fallback NOW, ex-ante for CRSP:
   stated plainly wherever the N2 verdict is cited. The pool's
   A6-over-A1 net edge, by contrast, is significant at every tier in
   both cells (descriptive, as above).
+- **Correction (2026-07-21, transcription only):** the supplementary
+  note's 50/100 bps figures were transcribed from run-log rounding and
+  drift slightly from the authoritative JSON (`e_prewar_costs.json`):
+  prewar-10% 50 bps is +0.000102±0.000110 (not +0.000104±0.000107)
+  and 100 bps +0.000005±0.000150; 1958–89 50 bps is +0.000182
+  ±0.000198 (not +0.000180) and 100 bps +0.000150±0.000280 (not
+  +0.000146±0.000276). No significance flag changes; the JSON is
+  authoritative.
+
+## E-X2 verdicts, both eras (written 2026-07-21 AFTER the runs; the E-X2 register of 2026-07-15 and the era extension of commit 1155f3c unedited)
+
+- **Modern era (1990–2025): verdict WINDOW, scored exactly as lodged.**
+  Γ CI>0 runs of length ≥3 exist at EVERY hysteresis level: h0 13–17%
+  (5 contiguous), h2 13–17% (5), h4 13–18% (6), h6 16–22% (7). The
+  registered 15%/h0 primary sits INSIDE its era's h0 window. The
+  island clause is dead: E1f does NOT demote to
+  one-specification-one-history; the granularity reading is vindicated
+  on the era that lodged it. Tier-2 (20 seeds, 36 cells): the 13–18%
+  band is positive-significant nearly everywhere with A6<A1 Holm-
+  significant throughout (10/36 cells show the full A6<A5<A1 chain;
+  the registered cell reproduces Γ=+0.00091±0.00020, ordering TRUE,
+  minHolm 3.3e-12). Negative side, disclosed with equal prominence:
+  8% is inversion territory at 20 seeds (−0.00040±0.00022 h0,
+  −0.00029±0.00015 h2, inversions Holm ≤1.6e-8) and the 12%/h0 wrinkle
+  is negative-significant at tier-2 (−0.00024±0.00022), reproducing
+  Addendum C's fine-threshold kill zone; tier-1 edge positives do not
+  all survive tier-2 re-read (20%/h0 → −0.00018 n.s.).
+- **Withheld era (1926–1989): verdict WINDOW — but only under
+  hysteresis, and PX2e (p=0.55) is a MISS at full prominence.**
+  Windows: h4 13–16% (4 contiguous), h6 14–16% (3); h0 and h2 have NO
+  ≥3 run. The era's own anchor 10% is NOT inside any window: (10, h0)
+  is an isolated positive (its neighbors: 9% negative-significant,
+  11%/h0 n.s.). The lodged adverse reading applies in modified form
+  and is stated plainly: the prewar 10% paying cell is
+  threshold-isolated exactly as the modern 15% cell was feared to be —
+  though the cell itself is solid on re-read (tier-2 20 seeds:
+  Γ=+0.00013±0.00006, FULL ordering, minHolm 1.8e-8).
+- **Cross-era descriptive synthesis (post-hoc, not adjudicated):**
+  (a) with the hysteresis dimension open, the two eras' windows
+  OVERLAP at 13–16% — the Addendum F "window relocation (15→10)"
+  narrative is superseded: at h≥4 there is a shared band, and the
+  apparent relocation was an artifact of scanning only h=0;
+  (b) hysteresis FLIPS the prewar 15% cell from inversion (h0:
+  −0.00024±0.00008, the Addendum F result) to positive with full
+  ordering (h4: +0.00017±0.00008, minHolm 1.7e-07; h6: +0.00023
+  ±0.00009) — exit-band dynamics, not the entry threshold alone,
+  determine which side of the sign rule a cell lands on;
+  (c) both eras show fine-threshold (8–9%) inversions, the
+  rehearsal-density side of the E6 axis;
+  (d) prewar tier-2 is ordering-rich: 23/38 cells show the full
+  A6<A5<A1 chain. All of (a)–(d) are descriptive; the lodged
+  window-vs-island criteria above are the only adjudicated claims.
