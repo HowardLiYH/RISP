@@ -4055,6 +4055,387 @@
    "expect": {
     "path": "results/e_prewar_costs.json:cells/subera_1958_1989_15pct/tiers/100.0/gamma_net_bothpay/ci95"
    }
+  },
+  {
+   "id": "x2.mod15h0.gamma.mean",
+   "tex_pattern": "reproducing on tier-2 re-read \\(\\$\\\\hat\\\\Gamma = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$, full ordering, min Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_x2.json:tier2/th15_h0/gamma_A1_minus_A9/mean"
+   }
+  },
+  {
+   "id": "x2.mod15h0.gamma.ci",
+   "group": 2,
+   "tex_pattern": "reproducing on tier-2 re-read \\(\\$\\\\hat\\\\Gamma = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$, full ordering, min Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_x2.json:tier2/th15_h0/gamma_A1_minus_A9/ci95"
+   }
+  },
+  {
+   "id": "x2.mod15h0.minholm",
+   "group": 3,
+   "tex_pattern": "reproducing on tier-2 re-read \\(\\$\\\\hat\\\\Gamma = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$, full ordering, min Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "expect": {
+    "expr": "min(a,b,c,d)",
+    "inputs": {
+     "a": "results/e_french49_L3_x2.json:tier2/th15_h0/holm_p/A6-risp-inv vs A1-monolith-erm",
+     "b": "results/e_french49_L3_x2.json:tier2/th15_h0/holm_p/A5-risp-erm vs A1-monolith-erm",
+     "c": "results/e_french49_L3_x2.json:tier2/th15_h0/holm_p/A6-risp-inv vs A5-risp-erm",
+     "d": "results/e_french49_L3_x2.json:tier2/th15_h0/holm_p/A6-risp-inv vs A9-oracle-pinned"
+    }
+   }
+  },
+  {
+   "id": "x2.mod8h0.gamma.mean",
+   "abs": true,
+   "tex_pattern": "\\(h0 \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$, Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$; h2 \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$, Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_x2.json:tier2/th8_h0/gamma_A1_minus_A9/mean"
+   }
+  },
+  {
+   "id": "x2.mod8h0.gamma.ci",
+   "group": 2,
+   "tex_pattern": "\\(h0 \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$, Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$; h2 \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$, Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_x2.json:tier2/th8_h0/gamma_A1_minus_A9/ci95"
+   }
+  },
+  {
+   "id": "x2.mod8h0.holm",
+   "group": 3,
+   "tex_pattern": "\\(h0 \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$, Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$; h2 \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$, Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_x2.json:tier2/th8_h0/holm_p/A6-risp-inv vs A1-monolith-erm"
+   }
+  },
+  {
+   "id": "x2.mod8h2.gamma.mean",
+   "abs": true,
+   "group": 4,
+   "tex_pattern": "\\(h0 \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$, Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$; h2 \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$, Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_x2.json:tier2/th8_h2/gamma_A1_minus_A9/mean"
+   }
+  },
+  {
+   "id": "x2.mod8h2.gamma.ci",
+   "group": 5,
+   "tex_pattern": "\\(h0 \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$, Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$; h2 \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$, Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_x2.json:tier2/th8_h2/gamma_A1_minus_A9/ci95"
+   }
+  },
+  {
+   "id": "x2.mod8h2.holm",
+   "group": 6,
+   "tex_pattern": "\\(h0 \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$, Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$; h2 \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$, Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_x2.json:tier2/th8_h2/holm_p/A6-risp-inv vs A1-monolith-erm"
+   }
+  },
+  {
+   "id": "x2.mod12h0.gamma.mean",
+   "abs": true,
+   "tex_pattern": "wrinkle is negative-significant at tier 2 \\(\\$-([\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_x2.json:tier2/th12_h0/gamma_A1_minus_A9/mean"
+   }
+  },
+  {
+   "id": "x2.mod12h0.gamma.ci",
+   "group": 2,
+   "tex_pattern": "wrinkle is negative-significant at tier 2 \\(\\$-([\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_L3_x2.json:tier2/th12_h0/gamma_A1_minus_A9/ci95"
+   }
+  },
+  {
+   "id": "x2.mod20h0.gamma.mean",
+   "abs": true,
+   "tex_pattern": "\\(\\$20\\\\%\\$/h0 \\$\\\\to -([\\d.]+)\\$, n\\.s\\.\\)",
+   "expect": {
+    "path": "results/e_french49_L3_x2.json:tier2/th20_h0/gamma_A1_minus_A9/mean"
+   }
+  },
+  {
+   "id": "x2.pre10h0.gamma.mean",
+   "tex_pattern": "solid on tier-2 re-read \\(\\$\\\\hat\\\\Gamma = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$, full ordering, min Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e_french49_prewar_L3_x2.json:tier2/th10_h0/gamma_A1_minus_A9/mean"
+   }
+  },
+  {
+   "id": "x2.pre10h0.gamma.ci",
+   "group": 2,
+   "tex_pattern": "solid on tier-2 re-read \\(\\$\\\\hat\\\\Gamma = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$, full ordering, min Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "expect": {
+    "path": "results/e_french49_prewar_L3_x2.json:tier2/th10_h0/gamma_A1_minus_A9/ci95"
+   }
+  },
+  {
+   "id": "x2.pre10h0.minholm",
+   "group": 3,
+   "tex_pattern": "solid on tier-2 re-read \\(\\$\\\\hat\\\\Gamma = \\+([\\d.]+) \\\\pm ([\\d.]+)\\$, full ordering, min Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$\\)",
+   "expect": {
+    "expr": "min(a,b,c,d)",
+    "inputs": {
+     "a": "results/e_french49_prewar_L3_x2.json:tier2/th10_h0/holm_p/A6-risp-inv vs A1-monolith-erm",
+     "b": "results/e_french49_prewar_L3_x2.json:tier2/th10_h0/holm_p/A5-risp-erm vs A1-monolith-erm",
+     "c": "results/e_french49_prewar_L3_x2.json:tier2/th10_h0/holm_p/A6-risp-inv vs A5-risp-erm",
+     "d": "results/e_french49_prewar_L3_x2.json:tier2/th10_h0/holm_p/A6-risp-inv vs A9-oracle-pinned"
+    }
+   }
+  },
+  {
+   "id": "x2.pre15h0.gamma.mean",
+   "abs": true,
+   "tex_pattern": "the inversion reported above \\(\\$-([\\d.]+) \\\\pm ([\\d.]+)\\$ at h0\\) to a positive with the full point ordering \\(h4 \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$, min Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$; h6 \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_prewar_L3_x2.json:tier2/th15_h0/gamma_A1_minus_A9/mean"
+   }
+  },
+  {
+   "id": "x2.pre15h0.gamma.ci",
+   "group": 2,
+   "tex_pattern": "the inversion reported above \\(\\$-([\\d.]+) \\\\pm ([\\d.]+)\\$ at h0\\) to a positive with the full point ordering \\(h4 \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$, min Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$; h6 \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_prewar_L3_x2.json:tier2/th15_h0/gamma_A1_minus_A9/ci95"
+   }
+  },
+  {
+   "id": "x2.pre15h4.gamma.mean",
+   "group": 3,
+   "tex_pattern": "the inversion reported above \\(\\$-([\\d.]+) \\\\pm ([\\d.]+)\\$ at h0\\) to a positive with the full point ordering \\(h4 \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$, min Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$; h6 \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_prewar_L3_x2.json:tier2/th15_h4/gamma_A1_minus_A9/mean"
+   }
+  },
+  {
+   "id": "x2.pre15h4.gamma.ci",
+   "group": 4,
+   "tex_pattern": "the inversion reported above \\(\\$-([\\d.]+) \\\\pm ([\\d.]+)\\$ at h0\\) to a positive with the full point ordering \\(h4 \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$, min Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$; h6 \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_prewar_L3_x2.json:tier2/th15_h4/gamma_A1_minus_A9/ci95"
+   }
+  },
+  {
+   "id": "x2.pre15h4.minholm",
+   "group": 5,
+   "tex_pattern": "the inversion reported above \\(\\$-([\\d.]+) \\\\pm ([\\d.]+)\\$ at h0\\) to a positive with the full point ordering \\(h4 \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$, min Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$; h6 \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "expr": "min(a,b,c,d)",
+    "inputs": {
+     "a": "results/e_french49_prewar_L3_x2.json:tier2/th15_h4/holm_p/A6-risp-inv vs A1-monolith-erm",
+     "b": "results/e_french49_prewar_L3_x2.json:tier2/th15_h4/holm_p/A5-risp-erm vs A1-monolith-erm",
+     "c": "results/e_french49_prewar_L3_x2.json:tier2/th15_h4/holm_p/A6-risp-inv vs A5-risp-erm",
+     "d": "results/e_french49_prewar_L3_x2.json:tier2/th15_h4/holm_p/A6-risp-inv vs A9-oracle-pinned"
+    }
+   }
+  },
+  {
+   "id": "x2.pre15h6.gamma.mean",
+   "group": 6,
+   "tex_pattern": "the inversion reported above \\(\\$-([\\d.]+) \\\\pm ([\\d.]+)\\$ at h0\\) to a positive with the full point ordering \\(h4 \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$, min Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$; h6 \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_prewar_L3_x2.json:tier2/th15_h6/gamma_A1_minus_A9/mean"
+   }
+  },
+  {
+   "id": "x2.pre15h6.gamma.ci",
+   "group": 7,
+   "tex_pattern": "the inversion reported above \\(\\$-([\\d.]+) \\\\pm ([\\d.]+)\\$ at h0\\) to a positive with the full point ordering \\(h4 \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$, min Holm \\$([\\d.]+\\\\times10\\^\\{-\\d+\\})\\$; h6 \\$\\+([\\d.]+) \\\\pm ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_french49_prewar_L3_x2.json:tier2/th15_h6/gamma_A1_minus_A9/ci95"
+   }
+  },
+  {
+   "id": "o.sign.npos",
+   "tex_pattern": "pooled sign test \\\\textbf\\{fails\\} \\((\\d+) of (\\d+) positive, \\$p = ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:n_positive"
+   }
+  },
+  {
+   "id": "o.sign.n",
+   "group": 2,
+   "tex_pattern": "pooled sign test \\\\textbf\\{fails\\} \\((\\d+) of (\\d+) positive, \\$p = ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:n_events"
+   }
+  },
+  {
+   "id": "o.sign.p",
+   "group": 3,
+   "tex_pattern": "pooled sign test \\\\textbf\\{fails\\} \\((\\d+) of (\\d+) positive, \\$p = ([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:sign_test_p_one_sided"
+   }
+  },
+  {
+   "id": "o.wilcox.p",
+   "tex_pattern": "pooled Wilcoxon \\\\textbf\\{passes\\} \\(\\$p = ([\\d.]+)\\$; median \\$\\+([\\d.]+)\\$ bps, mean \\$\\+([\\d.]+)\\$ bps\\)",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:wilcoxon_p_one_sided"
+   }
+  },
+  {
+   "id": "o.median.bps",
+   "group": 2,
+   "tex_pattern": "pooled Wilcoxon \\\\textbf\\{passes\\} \\(\\$p = ([\\d.]+)\\$; median \\$\\+([\\d.]+)\\$ bps, mean \\$\\+([\\d.]+)\\$ bps\\)",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:median_bps"
+   }
+  },
+  {
+   "id": "o.mean.bps",
+   "group": 3,
+   "tex_pattern": "pooled Wilcoxon \\\\textbf\\{passes\\} \\(\\$p = ([\\d.]+)\\$; median \\$\\+([\\d.]+)\\$ bps, mean \\$\\+([\\d.]+)\\$ bps\\)",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:mean_bps"
+   }
+  },
+  {
+   "id": "o.dollar.sum",
+   "tex_pattern": "sums to \\$\\+([\\d{},.]+)\\$ bps-days with a bootstrap 95\\\\% CI of \\$\\[-([\\d{},.]+), \\+([\\d{},.]+)\\]\\$ covering zero",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:dollar_register_economically_primary/sum_bps_days"
+   }
+  },
+  {
+   "id": "o.dollar.ci.lo",
+   "abs": true,
+   "group": 2,
+   "tex_pattern": "sums to \\$\\+([\\d{},.]+)\\$ bps-days with a bootstrap 95\\\\% CI of \\$\\[-([\\d{},.]+), \\+([\\d{},.]+)\\]\\$ covering zero",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:dollar_register_economically_primary/bootstrap_ci95_bps_days/0"
+   }
+  },
+  {
+   "id": "o.dollar.ci.hi",
+   "group": 3,
+   "tex_pattern": "sums to \\$\\+([\\d{},.]+)\\$ bps-days with a bootstrap 95\\\\% CI of \\$\\[-([\\d{},.]+), \\+([\\d{},.]+)\\]\\$ covering zero",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:dollar_register_economically_primary/bootstrap_ci95_bps_days/1"
+   }
+  },
+  {
+   "id": "o.per.usmodern",
+   "tex_pattern": "US-modern \\$\\+([\\d{},.]+)\\$, US-prewar \\$\\+([\\d{},.]+)\\$, Japan \\$-([\\d{},.]+)\\$ bps-days",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:dollar_register_economically_primary/per_history_sum_bps_days/US_modern_L3_15pct"
+   }
+  },
+  {
+   "id": "o.per.usprewar",
+   "group": 2,
+   "tex_pattern": "US-modern \\$\\+([\\d{},.]+)\\$, US-prewar \\$\\+([\\d{},.]+)\\$, Japan \\$-([\\d{},.]+)\\$ bps-days",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:dollar_register_economically_primary/per_history_sum_bps_days/US_prewar_10pct"
+   }
+  },
+  {
+   "id": "o.per.japan",
+   "abs": true,
+   "group": 3,
+   "tex_pattern": "US-modern \\$\\+([\\d{},.]+)\\$, US-prewar \\$\\+([\\d{},.]+)\\$, Japan \\$-([\\d{},.]+)\\$ bps-days",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:dollar_register_economically_primary/per_history_sum_bps_days/Japan_15pct"
+   }
+  },
+  {
+   "id": "o.pool.us",
+   "tex_pattern": "US-modern L3@\\$15\\\\%\\$ \\(\\$n\\{=\\}(\\d+)\\$\\), US-prewar \\$10\\\\%\\$ \\(\\$n\\{=\\}(\\d+)\\$\\), and Japan \\$15\\\\%\\$ \\(\\$n\\{=\\}(\\d+)\\$",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:pool_composition/US_modern_L3_15pct"
+   }
+  },
+  {
+   "id": "o.pool.prewar",
+   "group": 2,
+   "tex_pattern": "US-modern L3@\\$15\\\\%\\$ \\(\\$n\\{=\\}(\\d+)\\$\\), US-prewar \\$10\\\\%\\$ \\(\\$n\\{=\\}(\\d+)\\$\\), and Japan \\$15\\\\%\\$ \\(\\$n\\{=\\}(\\d+)\\$",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:pool_composition/US_prewar_10pct"
+   }
+  },
+  {
+   "id": "o.pool.japan",
+   "group": 3,
+   "tex_pattern": "US-modern L3@\\$15\\\\%\\$ \\(\\$n\\{=\\}(\\d+)\\$\\), US-prewar \\$10\\\\%\\$ \\(\\$n\\{=\\}(\\d+)\\$\\), and Japan \\$15\\\\%\\$ \\(\\$n\\{=\\}(\\d+)\\$",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:pool_composition/Japan_15pct"
+   }
+  },
+  {
+   "id": "abs.o.sign.p",
+   "tex_pattern": "sign test \\\\emph\\{fails\\} \\(\\$p\\{=\\}([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:sign_test_p_one_sided"
+   }
+  },
+  {
+   "id": "abs.o.wilcox.p",
+   "tex_pattern": "its Wilcoxon passes \\(\\$p\\{=\\}([\\d.]+)\\$\\)",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:wilcoxon_p_one_sided"
+   }
+  },
+  {
+   "id": "abs.o.dollar.sum",
+   "tex_pattern": "dollar-weighted register sums to \\$\\+([\\d{},.]+)\\$ bps-days",
+   "expect": {
+    "path": "results/e_pooled_event_level.json:dollar_register_economically_primary/sum_bps_days"
+   }
+  },
+  {
+   "id": "japan.sweep10.gamma.mean",
+   "abs": true,
+   "tex_pattern": "\\(\\$10\\\\%\\$ \\$\\\\hat\\\\Gamma = -([\\d.]+) \\\\pm ([\\d.]+)\\$, n\\.s\\.\\\\ with a flat family; \\$12\\\\%\\$ and \\$20\\\\%\\$ \\$\\\\hat\\\\Gamma = -([\\d.]+) \\\\pm ([\\d.]+)\\$ and \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_japan_L3_sweep.json:10pct/gate2_forgetting_deficit/mean"
+   }
+  },
+  {
+   "id": "japan.sweep10.gamma.ci",
+   "group": 2,
+   "tex_pattern": "\\(\\$10\\\\%\\$ \\$\\\\hat\\\\Gamma = -([\\d.]+) \\\\pm ([\\d.]+)\\$, n\\.s\\.\\\\ with a flat family; \\$12\\\\%\\$ and \\$20\\\\%\\$ \\$\\\\hat\\\\Gamma = -([\\d.]+) \\\\pm ([\\d.]+)\\$ and \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_japan_L3_sweep.json:10pct/gate2_forgetting_deficit/ci95"
+   }
+  },
+  {
+   "id": "japan.sweep12.gamma.mean",
+   "abs": true,
+   "group": 3,
+   "tex_pattern": "\\(\\$10\\\\%\\$ \\$\\\\hat\\\\Gamma = -([\\d.]+) \\\\pm ([\\d.]+)\\$, n\\.s\\.\\\\ with a flat family; \\$12\\\\%\\$ and \\$20\\\\%\\$ \\$\\\\hat\\\\Gamma = -([\\d.]+) \\\\pm ([\\d.]+)\\$ and \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_japan_L3_sweep.json:12pct/gate2_forgetting_deficit/mean"
+   }
+  },
+  {
+   "id": "japan.sweep12.gamma.ci",
+   "group": 4,
+   "tex_pattern": "\\(\\$10\\\\%\\$ \\$\\\\hat\\\\Gamma = -([\\d.]+) \\\\pm ([\\d.]+)\\$, n\\.s\\.\\\\ with a flat family; \\$12\\\\%\\$ and \\$20\\\\%\\$ \\$\\\\hat\\\\Gamma = -([\\d.]+) \\\\pm ([\\d.]+)\\$ and \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_japan_L3_sweep.json:12pct/gate2_forgetting_deficit/ci95"
+   }
+  },
+  {
+   "id": "japan.sweep20.gamma.mean",
+   "abs": true,
+   "group": 5,
+   "tex_pattern": "\\(\\$10\\\\%\\$ \\$\\\\hat\\\\Gamma = -([\\d.]+) \\\\pm ([\\d.]+)\\$, n\\.s\\.\\\\ with a flat family; \\$12\\\\%\\$ and \\$20\\\\%\\$ \\$\\\\hat\\\\Gamma = -([\\d.]+) \\\\pm ([\\d.]+)\\$ and \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_japan_L3_sweep.json:20pct/gate2_forgetting_deficit/mean"
+   }
+  },
+  {
+   "id": "japan.sweep20.gamma.ci",
+   "group": 6,
+   "tex_pattern": "\\(\\$10\\\\%\\$ \\$\\\\hat\\\\Gamma = -([\\d.]+) \\\\pm ([\\d.]+)\\$, n\\.s\\.\\\\ with a flat family; \\$12\\\\%\\$ and \\$20\\\\%\\$ \\$\\\\hat\\\\Gamma = -([\\d.]+) \\\\pm ([\\d.]+)\\$ and \\$-([\\d.]+) \\\\pm ([\\d.]+)\\$",
+   "expect": {
+    "path": "results/e_japan_L3_sweep.json:20pct/gate2_forgetting_deficit/ci95"
+   }
   }
  ]
 }

@@ -131,7 +131,15 @@ as a hit: $\hat\Gamma$ negative-significant with the predicted
 inversion realized (Holm $3.9{\times}10^{-8}$), in a market whose
 crisis-union occupancy ($67\%$) is flagged occupancy-anomalous---the
 out-of-sample sign-rule record stands at 9 of 10 cells, both
-directions represented. Transaction costs
+directions represented. The pooled cross-history event-level
+register (109 reactivations, independent histories counted once,
+Japan's negatives signed) then split the claim's registers: its
+sign test \emph{fails} ($p{=}0.063$)---the frequency form of the
+deficit claim is retired program-wide---its Wilcoxon passes
+($p{=}0.0086$), and its dollar-weighted register sums to
+$+4{,}274$ bps-days with a bootstrap CI covering zero, so the
+economic claim is \emph{region-conditional}, priced by the
+cell-level sign rule rather than pooled-positive. Transaction costs
 \emph{amplify} rather than kill the effect on 1990--2025
 (net-of-cost deficit
 $+0.00126 \to +0.00230$ as crisis-window costs sweep 25--100\,bps;
@@ -164,9 +172,12 @@ $1.6\times10^{-4}$, cost-amplified, and both registered event-level
 tests passed---sign $p{=}0.021$, Wilcoxon $p{=}0.016$; its
 schedule-resampling counterpart flat, disclosed). Caveats carried at
 equal prominence: each walk-forward window is a single market history
-(five windows are now scored), the deficit's threshold window
-relocates across eras (and the committed window-location estimator
-failed its first calibration, disclosed pre-CRSP and retired),
+(five windows are now scored), the deficit's paying threshold is a
+window, not a point---the lodged fine map finds windows on both
+eras overlapping at $13$--$16\%$ under exit hysteresis, superseding
+an earlier relocation reading (and the committed window-location
+estimator failed its first calibration, disclosed pre-CRSP and
+retired),
 aggregation itself can manufacture slow dynamics, and the
 constituent-level CRSP test---its registration lodged with OSF
 before any data access---remains the decider. All claims are
@@ -1651,7 +1662,11 @@ qualifying reactivations become too few to harvest within one history
 (premium dominates)---with $15\%$ landing, by pre-registered luck or
 by economics, inside the window. The second reading was post-hoc when
 first written; the withheld era below was its first discriminating
-test, and neither simple reading survived it intact.
+test, and neither simple reading survived it intact. (Both
+statements in this paragraph are the coarse-grid, zero-hysteresis
+record; the lodged fine threshold map has since adjudicated the
+window-vs-island question---\emph{window}, on both eras---and is
+reported with the withheld era below.)
 
 \paragraph{Measurement and decision-layer robustness (D8, K3).} The
 threshold is the fragile axis; the measurement and decision axes are
@@ -1741,6 +1756,35 @@ three travel-together caveats (threshold fragility, single history,
 event-level sign-test miss)
 (\texttt{results/e\_event\_level\_inference.json},
 \texttt{results/e\_prewar\_event\_level.json}).
+
+The capstone is the \emph{pooled} cross-history register (Addendum
+O), lodged with independent histories counted once---US-modern
+L3@$15\%$ ($n{=}27$), US-prewar $10\%$ ($n{=}56$), and Japan $15\%$
+($n{=}26$, its events pooled \emph{with their signs}; NBER and
+1958--89 excluded as overlapping the same histories)---and its three
+registers split. The pooled sign test \textbf{fails} (63 of 109
+positive, $p = 0.0625$), so the lodged adverse branch fires
+\emph{program-wide}: the frequency form of the deficit claim
+(``the typical reactivation pays'') is retired, and no cell in this
+paper cites event-frequency language. The pooled Wilcoxon
+\textbf{passes} ($p = 0.0086$; median $+1.4$ bps, mean $+2.6$
+bps)---the magnitude register survives a pool deliberately hostile
+to it. And the dollar-weighted register, lodged as economically
+primary (a desk collects $\gamma_i \times N_p$ per event, not a
+vote count), sums to $+4{,}274$ bps-days with a bootstrap 95\% CI
+of $[-1{,}881, +9{,}977]$ covering zero---so, per the lodged
+consequence, the program's economic headline is restated as
+\textbf{region-conditional}, not pooled-positive: US-modern
+$+4{,}859$, US-prewar $+1{,}542$, Japan $-2{,}127$ bps-days, a
+difference of large opposite-signed regional bets. One distinction
+must not be blurred, because the two objects share a word: the
+pooled \emph{sign test} is a frequency claim about individual
+reactivations, and it is retired; the \emph{sign rule} is a
+cell-level pricing diagnostic scored in both directions, and it
+stands at 9 of 10 out-of-sample---indeed the pooled dollar
+decomposition above is exactly the structure the sign rule prices
+and a pooled register cannot
+(\texttt{results/e\_pooled\_event\_level.json}).
 
 \paragraph{Mechanism honesty: the deficit is not (yet) forgetting.}
 Two registered probes (E-X1, E-X3) asked \emph{why} the L3 deficit
@@ -1868,11 +1912,14 @@ invariance-equipped emergent assignment.
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.85\textwidth]{figures/fig14_window.pdf}
-    \caption{The positive-deficit window relocates across eras:
-    $\hat\Gamma$ versus drawdown threshold for 1990--2025 (peak at the
-    pre-registered $15\%$) and the withheld 1926--1989 era (peak at
-    $10\%$, where the denser crisis inventory shifts the granularity
-    window). Fragility replicates in pattern, not in location.}
+    \caption{The zero-hysteresis coarse sweep: $\hat\Gamma$ versus
+    drawdown threshold for 1990--2025 (peak at the pre-registered
+    $15\%$) and the withheld 1926--1989 era (peak at $10\%$). At this
+    register the window appears to relocate with crisis density;
+    the lodged fine map (E-X2, text) adjudicates \emph{window} on
+    both eras with an overlapping $13$--$16\%$ band under exit
+    hysteresis, superseding the relocation reading---what this
+    figure shows is the $h{=}0$ slice.}
     \label{fig:window}
 \end{figure}
 
@@ -1887,8 +1934,8 @@ design follows the pre-discovery-sample tradition of
 \citet{linnainmaa2018history}, whose base rate is the right prior
 here: most in-sample anomalies attenuate or die pre-sample, and
 generic pre-sample decay predicts attenuation \emph{everywhere}---not
-a sign record that scores in both directions with the paying window
-relocating as crisis density shifts; the out-of-sample discipline is
+a sign record that scores in both directions with an era-stable
+paying band; the out-of-sample discipline is
 the Goyal--Welch standard \citep{goyal2008comprehensive,
 mclean2016does}. Gate 1
 delivers its strongest pass in the program ($z = 23.5$; conditioning
@@ -1950,11 +1997,13 @@ status register-dependent, as confessed there); and folding in the
 four Japan cells of the regional battery below (all four consistent
 under both forms, per the addendum's own count), $12/16$ strong and
 $16/16$ weak, with the out-of-sample-only register at $9/10$ (five
-of six withheld cells plus four of four Japan cells). The sweep pattern is
-equally instructive: the fragility of the 1990--2025 result
+of six withheld cells plus four of four Japan cells). The sweep pattern on the coarse
+grid was equally instructive at the time: the fragility of the
+1990--2025 result
 \emph{replicates in pattern}---the deficit again lives at essentially
 one threshold, flanked by flat and inverted neighbors---but the window
-\emph{relocates} ($15\% \to 10\%$) as the era's crisis density shifts
+appeared to \emph{relocate} ($15\% \to 10\%$) as the era's crisis
+density shifts
 (at $15\%$ the pre-war era spends $41\%$ of its days in the crisis
 union, against $13\%$ post-1990). Both simple readings of the original
 fragility are thereby refuted as stated: the fixed-threshold
@@ -1964,11 +2013,58 @@ reappears off-sample, with the full ordering, twice---and the naive
 \emph{granularity} reading (multi-year crisis-cell dormancy
 $\Rightarrow$ positive deficit) fails too: multi-year dormancy is
 present throughout this era and the sign still varies. What survives
-both eras is the deficit's sign as the pricing diagnostic, with the
-paying window's \emph{location} an era-dependent function of crisis
-density rather than of the threshold per se. One attempted
-operationalization of that function is already refuted: the
-window-location estimator $\theta(\mathrm{era})$ committed in the
+both eras is the deficit's sign as the pricing diagnostic; the
+window-location story itself was then adjudicated by the lodged
+threshold map, which supersedes the relocation reading.
+
+\paragraph{The lodged threshold map (E-X2): window, not island---and
+the relocation narrative superseded.} The window-vs-island question
+carried a lodged criterion ($\hat\Gamma$ CI $> 0$ in $\ge 3$
+contiguous 1pp thresholds at some hysteresis level $=$ window), run
+over the full $8$--$22\%$ $\times$ exit-hysteresis
+$\{0, 2, 4, 6\,\mathrm{pp}\}$ map on both eras (tier 1 A1/A9 at 10
+seeds; tier 2 four-arm at 20 where tier-1 CIs exclude zero).
+\textbf{Modern era: window at every hysteresis level} (h0 and h2
+$13$--$17\%$, h4 $13$--$18\%$, h6 $16$--$22\%$), with the registered
+$15\%$/h0 cell inside its era's window and reproducing on tier-2
+re-read ($\hat\Gamma = +0.00091 \pm 0.00020$, full ordering, min
+Holm $3.3\times10^{-12}$)---the island clause is dead, and the
+granularity reading is vindicated on the era that lodged it. The
+negative side at equal prominence: $8\%$ is inversion territory
+(h0 $-0.00040 \pm 0.00022$, Holm $4.0\times10^{-3}$; h2
+$-0.00029 \pm 0.00015$, Holm $1.6\times10^{-8}$), the $12\%$/h0
+wrinkle is negative-significant at tier 2 ($-0.00024 \pm 0.00022$),
+and not every tier-1 edge positive survives tier-2 re-read
+($20\%$/h0 $\to -0.00018$, n.s.). \textbf{Withheld era: window only
+under hysteresis} (h4 $13$--$16\%$, h6 $14$--$16\%$; no $\ge 3$ run
+at h0 or h2), and the lodged PX2e anchor sub-criterion
+\emph{missed}, at full prominence: the era's own $10\%$ anchor sits
+inside no window---an isolated positive at h0, with both 1pp
+neighbors n.s.---so the prewar paying cell is threshold-isolated
+exactly as the modern $15\%$ cell was feared to be, even though the
+cell itself is solid on tier-2 re-read
+($\hat\Gamma = +0.00013 \pm 0.00006$, full ordering, min Holm
+$1.8\times10^{-8}$). The cross-era synthesis is descriptive (the
+window-vs-island verdicts above are the only adjudicated claims),
+and it \textbf{supersedes the relocation narrative}: with the
+hysteresis dimension open, the two eras' windows \emph{overlap} at
+$13$--$16\%$---the apparent $15\% \to 10\%$ relocation was an
+artifact of scanning only $h{=}0$---and hysteresis \emph{flips} the
+prewar $15\%$ cell from the inversion reported above
+($-0.00024 \pm 0.00008$ at h0) to a positive with the full point
+ordering (h4 $+0.00017 \pm 0.00008$, min Holm $1.7\times10^{-7}$;
+h6 $+0.00023 \pm 0.00009$): exit-band dynamics, not the entry
+threshold alone, determine which side of the sign rule a cell lands
+on. Both eras keep fine-threshold ($8$--$9\%$) inversions---the
+rehearsal-density side of the E6 axis---and the maps are
+ordering-rich (the A6 $<$ A5 $<$ A1 point ordering holds in 23 of 38
+prewar and 10 of 36 modern tier-2 cells)
+(\texttt{results/e\_french49\_L3\_x2.json},
+\texttt{results/e\_french49\_prewar\_L3\_x2.json}).
+
+\paragraph{The window-location estimator ($\kappa$), retired.} One
+attempted operationalization of window location is already refuted:
+the window-location estimator $\theta(\mathrm{era})$ committed in the
 CRSP T-split amendment---the finest grid threshold whose
 crisis-union occupancy falls below a single calibration parameter
 $\kappa$---failed its first calibration on the two available eras
@@ -1976,11 +2072,16 @@ $\kappa$---failed its first calibration on the two available eras
 intervals the two eras require are disjoint by roughly
 $3.5{\times}$ ($(0.129, 0.143]$ modern versus $(0.471, 0.486]$
 pre-war) and \emph{directionally} wrong---the denser-crisis era's
-paying window moved finer, not coarser. The failure occurred and is
+h0 paying threshold moved finer, not coarser. The failure occurred
+and was
 disclosed before any CRSP data access; per the amendment ledger the
 estimator is retired, the CRSP L3-family primary falls back to the
 frozen $15\%$ threshold, and the threshold set runs as a descriptive
-window-location map only.
+window-location map only. One custody note: the estimator was
+committed and retired \emph{before} the hysteresis map above
+existed; the map's stable cross-era band does not un-retire it, and
+any successor estimator must be lodged at OSF before CRSP data
+access.
 
 \paragraph{The withheld era, net of costs (N2).} The registered
 net-of-cost battery ran on both withheld-era positive cells at the
@@ -2146,8 +2247,11 @@ rare-regime premise of the whole mechanism fails by inversion---with
 the custody grade stated honestly: the occupancy-anomaly scoring
 clause was written after Japan's results were seen (post-hoc for
 Japan; lodged ex-ante for the four remaining regions). All three
-sweep cells are sign-rule consistent as well, under both forms
-($10\%$ n.s.\ with a flat family; $12\%$ and $20\%$ negative with
+sweep cells are sign-rule consistent as well, under both forms, and
+the inversion is threshold-robust ($10\%$
+$\hat\Gamma = -0.00002 \pm 0.00009$, n.s.\ with a flat family;
+$12\%$ and $20\%$ $\hat\Gamma = -0.00029 \pm 0.00012$ and
+$-0.00048 \pm 0.00020$, with
 inversions at Holm $1.4\times10^{-6}$ and $3.5\times10^{-6}$),
 bringing the out-of-sample sign-rule record to 9 of 10 cells across
 the withheld era and Japan, both directions represented. The
@@ -2228,12 +2332,17 @@ the cost
 model does not include---market impact, borrow, capacity---and every
 other substrate in the paper remain gross; the deflated-Sharpe/SPA
 battery stays reserved for any alpha claim
-(Section~\ref{sec:stats}). (v) The threshold window is
-era-dependent: within each era the deficit lives at essentially one
-threshold, and the paying threshold moved ($15\% \to 10\%$) with
-crisis density across eras---specification robustness in the naive
-sense is refuted, and any deployment must estimate the window's
-location for its own era, while the one committed estimator for
+(Section~\ref{sec:stats}). (v) The threshold window is a
+two-register statement: at zero hysteresis each era's deficit lives
+at essentially one threshold and the paying point moved
+($15\% \to 10\%$) with crisis density, while the lodged E-X2 map
+adjudicates a \emph{window} on both eras (overlapping $13$--$16\%$
+under exit hysteresis, superseding the relocation
+reading)---specification robustness in the naive
+sense remains refuted (the prewar window exists only under
+hysteresis and its lodged $10\%$ anchor is isolated), any deployment
+must still locate its era's window, and the one committed estimator
+for
 doing so has already failed its first calibration (the $\kappa$
 infeasibility above), so no validated location procedure currently
 exists. (vi) The evaluated reactivation
@@ -2508,12 +2617,15 @@ decomposition's own central term. What survives that record, stated
 as the four claims we would defend: (1) the \emph{sign} of
 $\hat\Gamma$ prices the pool---two in-sample tests, five of six
 withheld cells, and four of four Japan cells (9 of 10 out-of-sample),
-in both directions; (2) where the deficit is positive
+in both directions; a cell-level rule, distinct from the pooled
+event-frequency claim, which is retired; (2) where the deficit is positive
 it is real economics on the modern era---amplified by crisis-window
 transaction costs on 1990--2025 under both labelers---while the
 withheld era's cost verdict is split and disclosed: the two-arm
 deficit survives only an era-anachronistic 25 bps register, but the
-pool's net edge over the monolith survives every tier; the deficit is
+pool's net edge over the monolith survives every tier; the pooled
+dollar register's CI covers zero, so the economic claim is
+region-conditional by construction (Addendum O); the deficit is
 collectible by replay on real data though the
 invariance-equipped pool still beats replay on both substrates,
 while an expanding-window retrainer collects only ${\approx}59\%$
@@ -2615,10 +2727,10 @@ settled within their stated scope; rows 7--10 are the frontier; rows
 4. Interference emerges under gradient descent, nothing evicted & $\Gamma_{\text{mlp}}$ excess $+0.0075\pm0.0004$, $p{=}1.9{\times}10^{-78}$ (\emph{established}; invariance null under MLP, disclosed) & the gap vanishing at matched architecture \\
 5. Retention inverts at high SNR (linear class) & E6 sweep; oracle inverts identically (\emph{established, linear}; MLP diverges, disclosed) & inversion reproducing nowhere outside E6 \\
 6. Structure screen is demoted: it does not price the pool & four dissociations incl.\ $z{=}23.5$ pass with inversion and Japan's screen-fail-with-priced-pool (\emph{established by record}) & the screen tracking pool value out-of-sample \\
-7. The deficit is real economics where positive & modern era: cost-amplified $+0.00126 \to +0.00230$ net, both labelers. Withheld era: gross yes; pool-vs-monolith net yes at every tier; two-arm $\hat\Gamma_{\mathrm{net}}$ only at the era-anachronistic 25 bps, disclosed. Replay collects it, expanding window leaves a real residual, pool still wins; banded countermeasure run, net edge stands (\emph{frontier: aggregate, two countries}) & a disciplined implementation beyond $b{\le}2$ bands closing the net gap \\
+7. The deficit is real economics where positive & modern era: cost-amplified $+0.00126 \to +0.00230$ net, both labelers. Withheld era: gross yes; pool-vs-monolith net yes at every tier; two-arm $\hat\Gamma_{\mathrm{net}}$ only at the era-anachronistic 25 bps, disclosed. Pooled dollar register CI covers 0 $\Rightarrow$ economic claim region-conditional (Addendum O). Replay collects it, expanding window leaves a real residual, pool still wins; banded countermeasure run, net edge stands (\emph{frontier: aggregate, two countries}) & a disciplined implementation beyond $b{\le}2$ bands closing the net gap \\
 8. Real-data mechanism = regime-conditional allocation deficit & X1/X3: no dormancy/rehearsal covariate; non-decaying (\emph{honestly open}) & a covariate or transient found; or CRSP contradiction \\
-9. $\hat\Gamma$'s sign prices the pool & 12/16 strong, 16/16 weak (one-directional); 9/10 out-of-sample incl.\ Japan and one temporal-custody hit; dependence caveats stated (\emph{frontier}) & one clean refuting cell (definitions lodged) \\
-10. Window location tracks crisis density & two eras: $15\% \leftrightarrow 10\%$ relocation; the committed $\theta(\mathrm{era})$ estimator failed calibration ($\kappa$ intervals disjoint) and is retired pre-CRSP (\emph{$n{=}2$; no validated estimator}) & a CRSP/regional window inconsistent with crisis density \\
+9. $\hat\Gamma$'s sign prices the pool (cell-level rule; distinct from the retired pooled frequency claim) & 12/16 strong, 16/16 weak (one-directional); 9/10 out-of-sample incl.\ Japan and one temporal-custody hit; dependence caveats stated (\emph{frontier}) & one clean refuting cell (definitions lodged) \\
+10. The paying threshold is a window, not a point & lodged E-X2 criterion: WINDOW on both eras, overlapping $13$--$16\%$ under exit hysteresis ($h{=}0$ relocation $15\% \to 10\%$ superseded; prewar window hysteresis-only, its $10\%$ anchor isolated---PX2e miss); committed $\theta(\mathrm{era})$ estimator failed calibration and is retired pre-CRSP (\emph{no validated estimator}) & no window on CRSP under the lodged criterion \\
 11. Live measurement-split prediction & frozen 2026-06-30, both cells positive; scored 2027-04-07 (\emph{lodged, unresolved}) & A1 outperforming A6 in the outcome window \\
 12. CRSP T-split forward battery & OSF-lodged design, register fixed pre-data; window estimator retired pre-data, frozen-$15\%$ primary (\emph{lodged, unresolved}) & sign-rule miss under the T-split \\
 \bottomrule
