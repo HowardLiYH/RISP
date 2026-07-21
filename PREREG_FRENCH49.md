@@ -1223,3 +1223,62 @@ lodge the fallback NOW, ex-ante for CRSP:
   (d) prewar tier-2 is ordering-rich: 23/38 cells show the full
   A6<A5<A1 chain. All of (a)–(d) are descriptive; the lodged
   window-vs-island criteria above are the only adjudicated claims.
+
+## Addendum O (2026-07-21): pooled cross-history event-level register
+
+Lodged ALONE, before any pooled statistic is computed and before any
+remaining E-R region's data is downloaded. Analysis-plan registration
+in the K1/N1 tradition: every constituent γ_i either already exists in
+released JSONs or comes from a re-read declared here; what is
+registered is the POOLING RULE, the tests, and the consequences.
+
+**Pooling rule (independent histories only, each counted once):**
+- US modern 1990–2025 enters ONCE, via its primary L3@15% walk-forward
+  cell (n=27; `e_french49_L3_loro.json`). The NBER cell is EXCLUDED
+  from the pool: same US-modern history, overlapping events.
+- US prewar 1926–1989 enters via its paying cell (10%, n=56;
+  `e_prewar_event_level.json`). The 1958–89 sub-era is EXCLUDED
+  (subset of the same history).
+- Japan 1990–2025 enters via its primary 15% cell, events pooled
+  WITH THEIR SIGNS (its γ_i do not yet exist; computed via an
+  N1-style A1/A9 re-read, seeds 1311*s+17, with the hard sanity
+  assertion against `e_japan_L3_dissoc.json` raws; output
+  `results/e_japan_event_level.json`).
+- Future E-R regions enter as they resolve, via their primary 15%
+  cells: Europe and Asia-Pacific ex Japan are ELIGIBLE; North America
+  is EXCLUDED (overlaps the US histories) and Developed ex US is
+  EXCLUDED (composite of member regions). Declared now, before any
+  of their data exists locally.
+
+**Registered tests (pooled signed γ_i):** one-sided sign test and
+one-sided Wilcoxon (H1: median/pseudomedian > 0), α=0.05; one-sample t
+descriptive-only. Computed at declared checkpoints: (a) immediately
+after this lodging, on {US-modern, US-prewar-10%, Japan}; (b) refreshed
+once per newly resolved eligible region, every refresh reported with
+its pool composition — no selective refresh. Script
+`code/e_pooled_event_level.py`; output
+`results/e_pooled_event_level.json`.
+
+**Dollar-weighted register (ECONOMICALLY PRIMARY):** each event's
+collected quantity D_i = γ_i × N_p,i (its per-day deficit times its
+counted probe days); the register is Σ D_i pooled and per history,
+with an event-level bootstrap 95% CI (10,000 resamples, rng seed
+20260721, percentile method). One-sentence justification: break-even
+against costs is a dollar computation — a desk collects γ_i × N_p per
+event, not a vote count. The frequency tests above are the
+frequency-secondary variant.
+
+**Lodged predictions (checkpoint (a)):**
+- PO1 (p=0.30): pooled sign test p < 0.05. (Japan's negative events
+  enter signed; the pool is deliberately hostile to the frequency
+  claim.)
+- PO2 (p=0.35): pooled Wilcoxon p < 0.05.
+- PO3 (p=0.55): pooled Σ D_i > 0 with bootstrap CI excluding 0.
+
+**Adverse branches (binding):** pooled sign test fails → the
+FREQUENCY form of the deficit claim is retired program-wide (no cell
+may cite event-frequency language); only the magnitude/dollar register
+remains, and the retirement is disclosed abstract-adjacent in both
+papers. Pooled Σ D_i CI covering 0 → the program's economic headline
+is restated as region-conditional (sign-rule-priced), not pooled-
+positive, at the same prominence.
